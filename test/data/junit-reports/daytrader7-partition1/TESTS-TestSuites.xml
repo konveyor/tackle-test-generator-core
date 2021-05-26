@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="0" hostname="LAPTOP-U215I4Q0" id="0" name="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" package="" skipped="0" tests="12" time="2.231" timestamp="2021-02-18T09:19:48">
+      <properties>
+          <property name="ant.project.invoked-targets" value="coverage-reports_daytrader7-partition1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin" />
+
+          <property name="java.vm.version" value="25.241-b07" />
+
+          <property name="ant.library.dir" value="C:\apache-ant-1.10.9\lib" />
+
+          <property name="user.country.format" value="IL" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.9 compiled on September 27 2020" />
+
+          <property name="ant.java.version" value="1.8" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="user.script" value="" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="user.dir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli" />
+
+          <property name="ant.file.type.m2m_tests" value="file" />
+
+          <property name="java.runtime.version" value="1.8.0_241-b07" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+
+          <property name="basedir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1" />
+
+          <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\endorsed" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="java.io.tmpdir" value="C:\Users\ELIRAN~1\AppData\Local\Temp\" />
+
+          <property name="ant.core.lib" value="C:\apache-ant-1.10.9\lib\ant.jar" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.variant" value="" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="ant.home" value="c:\apache-ant-1.10.9\bin\.." />
+
+          <property name="ant.project.name" value="m2m_tests" />
+
+          <property name="sun.jnu.encoding" value="Cp1252" />
+
+          <property name="_jacoco.agentFile" value="C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\venv\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;c:\Program Files\IBM\Java80\bin;c:\apache-ant-1.10.9\bin;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\ELIRANROFFE\AppData\Local\Microsoft\WindowsApps;C:\Users\ELIRANROFFE\AppData\Local\Box\Box Edit\;." />
+
+          <property name="java.class.version" value="52.0" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="ant.file" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="user.home" value="C:\Users\ELIRANROFFE" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+
+          <property name="java.specification.version" value="1.8" />
+
+          <property name="file.encoding" value="Cp1252" />
+
+          <property name="ant.file.m2m_tests" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="java.class.path" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\evosuite-tests;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\cardinal-utils\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-web\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-ejb\target\classes;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\org.apache.servicemix.specs.jaxrs-api-2.1-2.1_1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\cdi-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.interceptor-api-1.2.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\commons-logging-1.1.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-jaxrs-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-client-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.json-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ejb.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.persistence.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.transaction.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.servlet-api-3.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ws.rs-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.enterprise.concurrent-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.websocket-api-1.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.jms-api-2.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.annotation-api-1.3.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.faces-api-2.3-pfd.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.inject-1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.el-api-3.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\validation-api-2.0.1.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\evosuite-master-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\randoop-all-4.2.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\hamcrest-all-1.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\junit-4.13.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-analysis-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-commons-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-tree-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-util-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\axml-2.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-cli-1.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-io-2.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\failureaccess-1.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\focus.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\guava-29.0-jre.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\heros-1.2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpclient-4.5.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpcore-4.4.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-symbol-solver-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javax.json-1.0.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\m2m-testing.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\minijdd_103.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\slf4j-api-1.7.5.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\soot-4.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoagent.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoant.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacococli.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1;C:\apache-ant-1.10.9\lib\junit-4.13.1.jar;C:\apache-ant-1.10.9\lib\ant-launcher.jar;C:\apache-ant-1.10.9\lib\ant.jar;C:\apache-ant-1.10.9\lib\ant-junit.jar;C:\apache-ant-1.10.9\lib\ant-junit4.jar;C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="user.name" value="ELIRANROFFE" />
+
+          <property name="java.vm.specification.version" value="1.8" />
+
+          <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_241\jre" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junittestcases1194153782428287836.properties skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-m2mtest-reports\junit-reports\daytrader7-partition1\raw\IGNORETHIS.xml crashfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junitvmwatcher4156749551580779847.properties propsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junit5146642273959270148.properties" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.language" value="en" />
+
+          <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.version" value="1.8.0_241" />
+
+          <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext" />
+
+          <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_241\jre\classes" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="sun.desktop" value="windows" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+      </properties>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test10" time="1.494" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test11" time="0.07" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test0" time="0.062" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test1" time="0.063" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test2" time="0.061" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test3" time="0.066" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test4" time="0.059" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test5" time="0.061" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test6" time="0.063" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test7" time="0.06" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test8" time="0.062" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_beans_RunStatsDataBean_Test" name="test9" time="0.062" />
+
+      <system-out><![CDATA[11:19:48.345 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+11:19:48.352 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="2" failures="0" hostname="LAPTOP-U215I4Q0" id="1" name="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" package="" skipped="0" tests="18" time="10.456" timestamp="2021-02-18T09:19:50">
+      <properties>
+          <property name="ant.project.invoked-targets" value="coverage-reports_daytrader7-partition1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin" />
+
+          <property name="java.vm.version" value="25.241-b07" />
+
+          <property name="ant.library.dir" value="C:\apache-ant-1.10.9\lib" />
+
+          <property name="user.country.format" value="IL" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.9 compiled on September 27 2020" />
+
+          <property name="ant.java.version" value="1.8" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="user.script" value="" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="user.dir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli" />
+
+          <property name="ant.file.type.m2m_tests" value="file" />
+
+          <property name="java.runtime.version" value="1.8.0_241-b07" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+
+          <property name="basedir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1" />
+
+          <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\endorsed" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="java.io.tmpdir" value="C:\Users\ELIRAN~1\AppData\Local\Temp\" />
+
+          <property name="ant.core.lib" value="C:\apache-ant-1.10.9\lib\ant.jar" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.variant" value="" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="ant.home" value="c:\apache-ant-1.10.9\bin\.." />
+
+          <property name="ant.project.name" value="m2m_tests" />
+
+          <property name="sun.jnu.encoding" value="Cp1252" />
+
+          <property name="_jacoco.agentFile" value="C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\venv\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;c:\Program Files\IBM\Java80\bin;c:\apache-ant-1.10.9\bin;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\ELIRANROFFE\AppData\Local\Microsoft\WindowsApps;C:\Users\ELIRANROFFE\AppData\Local\Box\Box Edit\;." />
+
+          <property name="java.class.version" value="52.0" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="ant.file" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="user.home" value="C:\Users\ELIRANROFFE" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+
+          <property name="java.specification.version" value="1.8" />
+
+          <property name="file.encoding" value="Cp1252" />
+
+          <property name="ant.file.m2m_tests" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="java.class.path" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\evosuite-tests;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\cardinal-utils\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-web\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-ejb\target\classes;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\org.apache.servicemix.specs.jaxrs-api-2.1-2.1_1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\cdi-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.interceptor-api-1.2.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\commons-logging-1.1.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-jaxrs-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-client-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.json-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ejb.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.persistence.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.transaction.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.servlet-api-3.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ws.rs-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.enterprise.concurrent-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.websocket-api-1.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.jms-api-2.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.annotation-api-1.3.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.faces-api-2.3-pfd.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.inject-1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.el-api-3.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\validation-api-2.0.1.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\evosuite-master-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\randoop-all-4.2.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\hamcrest-all-1.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\junit-4.13.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-analysis-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-commons-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-tree-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-util-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\axml-2.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-cli-1.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-io-2.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\failureaccess-1.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\focus.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\guava-29.0-jre.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\heros-1.2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpclient-4.5.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpcore-4.4.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-symbol-solver-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javax.json-1.0.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\m2m-testing.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\minijdd_103.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\slf4j-api-1.7.5.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\soot-4.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoagent.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoant.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacococli.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1;C:\apache-ant-1.10.9\lib\junit-4.13.1.jar;C:\apache-ant-1.10.9\lib\ant-launcher.jar;C:\apache-ant-1.10.9\lib\ant.jar;C:\apache-ant-1.10.9\lib\ant-junit.jar;C:\apache-ant-1.10.9\lib\ant-junit4.jar;C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="user.name" value="ELIRANROFFE" />
+
+          <property name="java.vm.specification.version" value="1.8" />
+
+          <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_241\jre" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junittestcases1194153782428287836.properties skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-m2mtest-reports\junit-reports\daytrader7-partition1\raw\IGNORETHIS.xml crashfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junitvmwatcher4156749551580779847.properties propsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junit5146642273959270148.properties" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.language" value="en" />
+
+          <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.version" value="1.8.0_241" />
+
+          <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext" />
+
+          <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_241\jre\classes" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="sun.desktop" value="windows" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+      </properties>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test10" time="10.081" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test11" time="0.021" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test12" time="0.024" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test13" time="0.029" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test14" time="0.021" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test15" time="0.008">
+          <error message="ERROR: dummy function called at daytrader-ee7-web/src/main/java/com/ibm/websphere/samples/daytrader/web/prims/PingBean.java:PingBean:getMsg" type="com.ibm.cardinal.util.CardinalException">com.ibm.cardinal.util.CardinalException: ERROR: dummy function called at daytrader-ee7-web/src/main/java/com/ibm/websphere/samples/daytrader/web/prims/PingBean.java:PingBean:getMsg
+	at com.ibm.websphere.samples.daytrader.web.prims.PingBean.getMsg(PingBean.java:34)
+	at com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test.test15(com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test.java:133)
+</error>
+
+      </testcase>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test16" time="0.018" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test17" time="0.027" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test0" time="0.025">
+          <error message="Invalid token=EOF at (line no=1, column no=0, offset=-1). Expected tokens are: [CURLYOPEN, SQUAREOPEN]" type="javax.json.stream.JsonParsingException">javax.json.stream.JsonParsingException: Invalid token=EOF at (line no=1, column no=0, offset=-1). Expected tokens are: [CURLYOPEN, SQUAREOPEN]
+	at org.glassfish.json.JsonParserImpl.parsingException(JsonParserImpl.java:238)
+	at org.glassfish.json.JsonParserImpl.access$1200(JsonParserImpl.java:61)
+	at org.glassfish.json.JsonParserImpl$NoneContext.getNextEvent(JsonParserImpl.java:232)
+	at org.glassfish.json.JsonParserImpl$StateIterator.next(JsonParserImpl.java:172)
+	at org.glassfish.json.JsonParserImpl.next(JsonParserImpl.java:149)
+	at org.glassfish.json.JsonReaderImpl.readObject(JsonReaderImpl.java:101)
+	at com.ibm.websphere.samples.daytrader.direct.TradeDirect.updateAccountProfile(TradeDirect.java:1068)
+	at com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test.test0(com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test.java:34)
+</error>
+
+      </testcase>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test1" time="0.023" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test2" time="0.025" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test3" time="0.028" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test4" time="0.005" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test5" time="0.021" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test6" time="0.025" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test7" time="0.018" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test8" time="0.018" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_direct_TradeDirect_Test" name="test9" time="0.023" />
+
+      <system-out><![CDATA[11:19:50.366 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+11:19:50.367 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="LAPTOP-U215I4Q0" id="2" name="com_ibm_websphere_samples_daytrader_util_MDBStats_Test" package="" skipped="0" tests="1" time="0.064" timestamp="2021-02-18T09:20:00">
+      <properties>
+          <property name="ant.project.invoked-targets" value="coverage-reports_daytrader7-partition1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin" />
+
+          <property name="java.vm.version" value="25.241-b07" />
+
+          <property name="ant.library.dir" value="C:\apache-ant-1.10.9\lib" />
+
+          <property name="user.country.format" value="IL" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.9 compiled on September 27 2020" />
+
+          <property name="ant.java.version" value="1.8" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="user.script" value="" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="user.dir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli" />
+
+          <property name="ant.file.type.m2m_tests" value="file" />
+
+          <property name="java.runtime.version" value="1.8.0_241-b07" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+
+          <property name="basedir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1" />
+
+          <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\endorsed" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="java.io.tmpdir" value="C:\Users\ELIRAN~1\AppData\Local\Temp\" />
+
+          <property name="ant.core.lib" value="C:\apache-ant-1.10.9\lib\ant.jar" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.variant" value="" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="ant.home" value="c:\apache-ant-1.10.9\bin\.." />
+
+          <property name="ant.project.name" value="m2m_tests" />
+
+          <property name="sun.jnu.encoding" value="Cp1252" />
+
+          <property name="_jacoco.agentFile" value="C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\venv\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;c:\Program Files\IBM\Java80\bin;c:\apache-ant-1.10.9\bin;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\ELIRANROFFE\AppData\Local\Microsoft\WindowsApps;C:\Users\ELIRANROFFE\AppData\Local\Box\Box Edit\;." />
+
+          <property name="java.class.version" value="52.0" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="ant.file" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="user.home" value="C:\Users\ELIRANROFFE" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+
+          <property name="java.specification.version" value="1.8" />
+
+          <property name="file.encoding" value="Cp1252" />
+
+          <property name="ant.file.m2m_tests" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="java.class.path" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\evosuite-tests;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\cardinal-utils\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-web\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-ejb\target\classes;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\org.apache.servicemix.specs.jaxrs-api-2.1-2.1_1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\cdi-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.interceptor-api-1.2.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\commons-logging-1.1.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-jaxrs-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-client-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.json-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ejb.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.persistence.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.transaction.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.servlet-api-3.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ws.rs-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.enterprise.concurrent-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.websocket-api-1.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.jms-api-2.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.annotation-api-1.3.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.faces-api-2.3-pfd.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.inject-1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.el-api-3.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\validation-api-2.0.1.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\evosuite-master-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\randoop-all-4.2.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\hamcrest-all-1.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\junit-4.13.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-analysis-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-commons-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-tree-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-util-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\axml-2.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-cli-1.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-io-2.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\failureaccess-1.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\focus.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\guava-29.0-jre.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\heros-1.2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpclient-4.5.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpcore-4.4.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-symbol-solver-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javax.json-1.0.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\m2m-testing.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\minijdd_103.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\slf4j-api-1.7.5.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\soot-4.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoagent.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoant.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacococli.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1;C:\apache-ant-1.10.9\lib\junit-4.13.1.jar;C:\apache-ant-1.10.9\lib\ant-launcher.jar;C:\apache-ant-1.10.9\lib\ant.jar;C:\apache-ant-1.10.9\lib\ant-junit.jar;C:\apache-ant-1.10.9\lib\ant-junit4.jar;C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="user.name" value="ELIRANROFFE" />
+
+          <property name="java.vm.specification.version" value="1.8" />
+
+          <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_241\jre" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junittestcases1194153782428287836.properties skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-m2mtest-reports\junit-reports\daytrader7-partition1\raw\IGNORETHIS.xml crashfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junitvmwatcher4156749551580779847.properties propsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junit5146642273959270148.properties" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.language" value="en" />
+
+          <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.version" value="1.8.0_241" />
+
+          <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext" />
+
+          <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_241\jre\classes" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="sun.desktop" value="windows" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+      </properties>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_util_MDBStats_Test" name="test0" time="0.059" />
+
+      <system-out><![CDATA[11:20:00.813 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+11:20:00.815 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+11:20:00.845 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+11:20:00.846 [main] DEBUG o.j.r.p.providers.DocumentProvider - Unable to retrieve config: expandEntityReferences defaults to true
+]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="LAPTOP-U215I4Q0" id="3" name="com_ibm_websphere_samples_daytrader_util_TimerStat_Test" package="" skipped="0" tests="4" time="0.14" timestamp="2021-02-18T09:20:00">
+      <properties>
+          <property name="ant.project.invoked-targets" value="coverage-reports_daytrader7-partition1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin" />
+
+          <property name="java.vm.version" value="25.241-b07" />
+
+          <property name="ant.library.dir" value="C:\apache-ant-1.10.9\lib" />
+
+          <property name="user.country.format" value="IL" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.9 compiled on September 27 2020" />
+
+          <property name="ant.java.version" value="1.8" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="user.script" value="" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="user.dir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli" />
+
+          <property name="ant.file.type.m2m_tests" value="file" />
+
+          <property name="java.runtime.version" value="1.8.0_241-b07" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+
+          <property name="basedir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1" />
+
+          <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\endorsed" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="java.io.tmpdir" value="C:\Users\ELIRAN~1\AppData\Local\Temp\" />
+
+          <property name="ant.core.lib" value="C:\apache-ant-1.10.9\lib\ant.jar" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.variant" value="" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="ant.home" value="c:\apache-ant-1.10.9\bin\.." />
+
+          <property name="ant.project.name" value="m2m_tests" />
+
+          <property name="sun.jnu.encoding" value="Cp1252" />
+
+          <property name="_jacoco.agentFile" value="C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\venv\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;c:\Program Files\IBM\Java80\bin;c:\apache-ant-1.10.9\bin;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\ELIRANROFFE\AppData\Local\Microsoft\WindowsApps;C:\Users\ELIRANROFFE\AppData\Local\Box\Box Edit\;." />
+
+          <property name="java.class.version" value="52.0" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="ant.file" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="user.home" value="C:\Users\ELIRANROFFE" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+
+          <property name="java.specification.version" value="1.8" />
+
+          <property name="file.encoding" value="Cp1252" />
+
+          <property name="ant.file.m2m_tests" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="java.class.path" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\evosuite-tests;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\cardinal-utils\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-web\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-ejb\target\classes;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\org.apache.servicemix.specs.jaxrs-api-2.1-2.1_1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\cdi-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.interceptor-api-1.2.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\commons-logging-1.1.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-jaxrs-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-client-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.json-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ejb.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.persistence.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.transaction.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.servlet-api-3.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ws.rs-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.enterprise.concurrent-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.websocket-api-1.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.jms-api-2.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.annotation-api-1.3.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.faces-api-2.3-pfd.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.inject-1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.el-api-3.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\validation-api-2.0.1.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\evosuite-master-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\randoop-all-4.2.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\hamcrest-all-1.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\junit-4.13.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-analysis-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-commons-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-tree-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-util-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\axml-2.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-cli-1.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-io-2.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\failureaccess-1.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\focus.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\guava-29.0-jre.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\heros-1.2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpclient-4.5.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpcore-4.4.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-symbol-solver-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javax.json-1.0.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\m2m-testing.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\minijdd_103.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\slf4j-api-1.7.5.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\soot-4.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoagent.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoant.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacococli.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1;C:\apache-ant-1.10.9\lib\junit-4.13.1.jar;C:\apache-ant-1.10.9\lib\ant-launcher.jar;C:\apache-ant-1.10.9\lib\ant.jar;C:\apache-ant-1.10.9\lib\ant-junit.jar;C:\apache-ant-1.10.9\lib\ant-junit4.jar;C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="user.name" value="ELIRANROFFE" />
+
+          <property name="java.vm.specification.version" value="1.8" />
+
+          <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_241\jre" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junittestcases1194153782428287836.properties skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-m2mtest-reports\junit-reports\daytrader7-partition1\raw\IGNORETHIS.xml crashfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junitvmwatcher4156749551580779847.properties propsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junit5146642273959270148.properties" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.language" value="en" />
+
+          <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.version" value="1.8.0_241" />
+
+          <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext" />
+
+          <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_241\jre\classes" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="sun.desktop" value="windows" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+      </properties>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_util_TimerStat_Test" name="test0" time="0.034" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_util_TimerStat_Test" name="test1" time="0.036" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_util_TimerStat_Test" name="test2" time="0.03" />
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_util_TimerStat_Test" name="test3" time="0.035" />
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="1" failures="0" hostname="LAPTOP-U215I4Q0" id="4" name="com_ibm_websphere_samples_daytrader_web_websocket_ActionMessage_Test" package="" skipped="0" tests="1" time="0.003" timestamp="2021-02-18T09:20:01">
+      <properties>
+          <property name="ant.project.invoked-targets" value="coverage-reports_daytrader7-partition1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin" />
+
+          <property name="java.vm.version" value="25.241-b07" />
+
+          <property name="ant.library.dir" value="C:\apache-ant-1.10.9\lib" />
+
+          <property name="user.country.format" value="IL" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.9 compiled on September 27 2020" />
+
+          <property name="ant.java.version" value="1.8" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="java.vendor.url" value="http://java.oracle.com/" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="file.encoding.pkg" value="sun.io" />
+
+          <property name="user.script" value="" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="user.dir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli" />
+
+          <property name="ant.file.type.m2m_tests" value="file" />
+
+          <property name="java.runtime.version" value="1.8.0_241-b07" />
+
+          <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+
+          <property name="basedir" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1" />
+
+          <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\endorsed" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="java.io.tmpdir" value="C:\Users\ELIRAN~1\AppData\Local\Temp\" />
+
+          <property name="ant.core.lib" value="C:\apache-ant-1.10.9\lib\ant.jar" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.variant" value="" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="ant.home" value="c:\apache-ant-1.10.9\bin\.." />
+
+          <property name="ant.project.name" value="m2m_tests" />
+
+          <property name="sun.jnu.encoding" value="Cp1252" />
+
+          <property name="_jacoco.agentFile" value="C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\venv\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;c:\Program Files\IBM\Java80\bin;c:\apache-ant-1.10.9\bin;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\ELIRANROFFE\AppData\Local\Microsoft\WindowsApps;C:\Users\ELIRANROFFE\AppData\Local\Box\Box Edit\;." />
+
+          <property name="java.class.version" value="52.0" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="ant.file" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="user.home" value="C:\Users\ELIRANROFFE" />
+
+          <property name="user.timezone" value="" />
+
+          <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+
+          <property name="java.specification.version" value="1.8" />
+
+          <property name="file.encoding" value="Cp1252" />
+
+          <property name="ant.file.m2m_tests" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\build_micro.xml" />
+
+          <property name="java.class.path" value="C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\evosuite-tests;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\cardinal-utils\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-web\target\classes;C:\Users\ELIRANROFFE\IBM\mono2micro-samples\daytrader\microservices\daytrader7-partition1\daytrader-ee7-ejb\target\classes;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\org.apache.servicemix.specs.jaxrs-api-2.1-2.1_1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\cdi-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.interceptor-api-1.2.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\commons-logging-1.1.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-jaxrs-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\resteasy-client-3.0.8.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.json-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ejb.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.persistence.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.transaction.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.servlet-api-3.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.ws.rs-api-2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.enterprise.concurrent-api-1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.websocket-api-1.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.jms-api-2.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.annotation-api-1.3.2.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.faces-api-2.3-pfd.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.inject-1.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\javax.el-api-3.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-test-generation\test\data\daytrader7\externalJars\validation-api-2.0.1.Final.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\evosuite-master-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\randoop-all-4.2.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\hamcrest-all-1.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_execute_tools\junit-4.13.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-analysis-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-commons-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-tree-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\asm-util-7.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\axml-2.0.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-cli-1.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\commons-io-2.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\failureaccess-1.0.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\focus.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\guava-29.0-jre.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\heros-1.2.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpclient-4.5.3.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\httpcore-4.4.6.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javaparser-symbol-solver-core-3.16.1.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\javax.json-1.0.4.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\m2m-testing.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\minijdd_103.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\slf4j-api-1.7.5.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_generate_tools\soot-4.1.0.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoagent.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacocoant.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\lib\m2m_testing_report\jacococli.jar;C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1;C:\apache-ant-1.10.9\lib\junit-4.13.1.jar;C:\apache-ant-1.10.9\lib\ant-launcher.jar;C:\apache-ant-1.10.9\lib\ant.jar;C:\apache-ant-1.10.9\lib\ant-junit.jar;C:\apache-ant-1.10.9\lib\ant-junit4.jar;C:\Users\ELIRAN~1\AppData\Local\Temp\jacocoagent6535252563627972375.jar" />
+
+          <property name="user.name" value="ELIRANROFFE" />
+
+          <property name="java.vm.specification.version" value="1.8" />
+
+          <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_241\jre" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner testsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junittestcases1194153782428287836.properties skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.SummaryJUnitResultFormatter showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-m2mtest-reports\junit-reports\daytrader7-partition1\raw\IGNORETHIS.xml crashfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junitvmwatcher4156749551580779847.properties propsfile=C:\Users\ELIRANROFFE\IBM\m2m-diff-testing-cli\DayTrader-ctd-amplified-tests\daytrader7-partition1\junit5146642273959270148.properties" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="user.language" value="en" />
+
+          <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+
+          <property name="java.vm.info" value="mixed mode" />
+
+          <property name="java.version" value="1.8.0_241" />
+
+          <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext" />
+
+          <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_241\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_241\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_241\jre\classes" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="sun.desktop" value="windows" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+      </properties>
+
+      <testcase classname="com_ibm_websphere_samples_daytrader_web_websocket_ActionMessage_Test" name="test0" time="0.002">
+          <error message="ERROR: dummy function called at daytrader-ee7-web/src/main/java/com/ibm/websphere/samples/daytrader/web/websocket/ActionMessage.java:ActionMessage:ActionMessage" type="com.ibm.cardinal.util.CardinalException">com.ibm.cardinal.util.CardinalException: ERROR: dummy function called at daytrader-ee7-web/src/main/java/com/ibm/websphere/samples/daytrader/web/websocket/ActionMessage.java:ActionMessage:ActionMessage
+	at com.ibm.websphere.samples.daytrader.web.websocket.ActionMessage.&lt;init&gt;(ActionMessage.java:48)
+	at com_ibm_websphere_samples_daytrader_web_websocket_ActionMessage_Test.test0(com_ibm_websphere_samples_daytrader_web_websocket_ActionMessage_Test.java:15)
+</error>
+
+      </testcase>
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+</testsuites>

@@ -1,0 +1,86 @@
+
+{
+    "test_sequences":{
+        "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.util.TradeConfig":{
+            "sequences":[
+                "{\r\n    TradeConfig tradeConfig0 = new TradeConfig();\r\n    TradeConfig.setRunTimeModeNames(tradeConfig0.webInterfaceNames);\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.AccountDataBean":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.OrderDataBean":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        }
+    },
+    "test_generation_tool":"EvoSuiteTestGenerator"
+}

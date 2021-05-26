@@ -1,0 +1,111 @@
+
+{
+    "test_sequences":{
+        "irs.Employer":{
+            "sequences":[
+                "{\r\n    Employer employer0 = new Employer();\r\n    employer0.setEmployerName(\"\");\r\n}",
+                "{\r\n    Employer employer0 = new Employer();\r\n    Employee[] employeeArray0 = new Employee[7];\r\n    employer0.addEmployees(employeeArray0);\r\n}",
+                "{\r\n    Employer employer0 = new Employer();\r\n    employer0.setEmployerId((-1401));\r\n}"
+            ],
+            "imports":[
+                "irs.Employer",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "irs.Employee",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "irs.Salary":{
+            "sequences":[
+                "{\r\n    Salary salary0 = new Salary();\r\n    salary0.setSalary(1.0);\r\n}",
+                "{\r\n    Salary salary0 = new Salary();\r\n    salary0.setEmployerId(0);\r\n}",
+                "{\r\n    Salary salary0 = new Salary();\r\n    salary0.setEmployeeId((-607));\r\n}"
+            ],
+            "imports":[
+                "irs.Salary",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "irs.BusinessProcess":{
+            "sequences":[
+                "{\r\n    String[] stringArray0 = new String[6];\r\n    BusinessProcess.main(stringArray0);\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "irs.BusinessProcess",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "irs.IRS":{
+            "sequences":[
+                "{\r\n    IRS iRS0 = new IRS();\r\n    iRS0.setYear(551);\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "irs.IRS",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "irs.Employee":{
+            "sequences":[
+                "{\r\n    Employee employee0 = new Employee();\r\n    employee0.setName((String) null);\r\n}",
+                "{\r\n    Employee employee0 = new Employee();\r\n    employee0.setRate(0.0);\r\n}",
+                "{\r\n    Employee employee0 = new Employee();\r\n    employee0.setEmployeeId(1);\r\n}",
+                "{\r\n    Employee employee0 = new Employee();\r\n    employee0.setHours(1);\r\n}",
+                "{\r\n    Employee.setLevel(\"\");\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "irs.Employee",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        }
+    },
+    "test_generation_tool":"EvoSuiteTestGenerator"
+}

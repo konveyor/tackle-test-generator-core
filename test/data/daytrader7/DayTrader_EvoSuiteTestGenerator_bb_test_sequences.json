@@ -1,0 +1,479 @@
+
+{
+    "test_sequences":{
+        "com.ibm.websphere.samples.daytrader.util.FinancialUtils":{
+            "sequences":[
+                "{\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    String string0 = FinancialUtils.printGainPercentHTML(financialUtils0.ONE);\r\n}",
+                "{\r\n    String string0 = FinancialUtils.printChangeHTML(0);\r\n}",
+                "{\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    BigDecimal bigDecimal0 = FinancialUtils.computeGainPercent(financialUtils0.HUNDRED, financialUtils0.HUNDRED);\r\n}",
+                "{\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    String string0 = FinancialUtils.printGainHTML(financialUtils0.HUNDRED);\r\n}",
+                "{\r\n    BigDecimal bigDecimal0 = new BigDecimal((-3229L));\r\n    String string0 = FinancialUtils.printGainPercentHTML(bigDecimal0);\r\n}",
+                "{\r\n    String string0 = FinancialUtils.printChangeHTML((-437.184629));\r\n}",
+                "{\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    BigDecimal bigDecimal0 = FinancialUtils.computeGain(financialUtils0.ZERO, financialUtils0.ONE);\r\n    String string0 = FinancialUtils.printGainHTML(bigDecimal0);\r\n}",
+                "{\r\n    String string0 = FinancialUtils.printQuoteLink(\"\");\r\n}"
+            ],
+            "imports":[
+                "com.ibm.websphere.samples.daytrader.util.FinancialUtils",
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.web.prims.PingBean":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean":{
+            "sequences":[
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setOpenOrderCount(0);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setTradeStockCount((-1));\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setDeletedOrderCount((-1));\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setBuyOrderCount(0);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setOrderCount(0);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setHoldingCount((-1));\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setSumLoginCount((-1));\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setTradeUserCount(0);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setSellOrderCount((-897));\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setSumLogoutCount(1893);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setNewUserCount(0);\r\n}",
+                "{\r\n    RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setCancelledOrderCount(0);\r\n}"
+            ],
+            "imports":[
+                "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean":{
+            "sequences":[
+                "{\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    boolean boolean0 = holdingDataBean0.equals(holdingDataBean0);\r\n}",
+                "{\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    Object object0 = new Object();\r\n    boolean boolean0 = holdingDataBean0.equals(object0);\r\n}",
+                "{\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    MockDate mockDate0 = new MockDate((-7L));\r\n    Integer integer0 = new Integer(0);\r\n    holdingDataBean0.setHoldingID(integer0);\r\n    Integer integer1 = new Integer(0);\r\n    HoldingDataBean holdingDataBean1 = new HoldingDataBean(integer1, (-1145.16669421468), (BigDecimal) null, mockDate0, \"\");\r\n    boolean boolean0 = holdingDataBean0.equals(holdingDataBean1);\r\n}",
+                "{\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    Integer integer0 = new Integer(0);\r\n    MockDate mockDate0 = new MockDate(0, 1842, (-4729), (-4729), 0, 0);\r\n    HoldingDataBean holdingDataBean1 = new HoldingDataBean(integer0, 0, (BigDecimal) null, mockDate0, \"*v+6w*zb5ed@`pX3um\");\r\n    boolean boolean0 = holdingDataBean0.equals(holdingDataBean1);\r\n}",
+                "{\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    MockDate mockDate0 = new MockDate((-120));\r\n    BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\n    AccountDataBean accountDataBean0 = new AccountDataBean((Integer) null, 3019, (-120), mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"r)s8e3&^8w_-/\");\r\n    Integer integer0 = new Integer((-4166));\r\n    holdingDataBean0.setHoldingID(integer0);\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"lpY*3\", \"lpY*3\", 3019, bigDecimal0, bigDecimal0, bigDecimal0, bigDecimal0, 1.0);\r\n    HoldingDataBean holdingDataBean1 = new HoldingDataBean(1.0, bigDecimal0, mockDate0, accountDataBean0, quoteDataBean0);\r\n    boolean boolean0 = holdingDataBean0.equals(holdingDataBean1);\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.util.MockDate",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.web.TradeBuildDB":{
+            "sequences":[
+                "{\r\n    TradeBuildDB.main((String[]) null);\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.web.TradeBuildDB",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.util.TradeConfig":{
+            "sequences":[
+                "{\r\n    TradeConfig.setConfigParam(\"primiterations\", \"(\");\r\n}",
+                "{\r\n    TradeConfig.setPrimIterations(1);\r\n}",
+                "{\r\n    // Undeclared exception!\r\n    try {\r\n        TradeConfig.getPage(54);\r\n    } catch (ArrayIndexOutOfBoundsException e) {\r\n        // \r\n        // 54\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.util.TradeConfig\", e);\r\n    }\r\n}",
+                "{\r\n    TradeConfig tradeConfig0 = new TradeConfig();\r\n    TradeConfig.setRunTimeModeNames(tradeConfig0.orderProcessingModeNames);\r\n}",
+                "{\r\n    TradeConfig.setPublishQuotePriceChange(false);\r\n}",
+                "{\r\n    TradeConfig.setMAX_HOLDINGS(2);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"webinterface\", \"webinterface\");\r\n}",
+                "{\r\n    Random.setNextRandom((-639));\r\n    char char0 = TradeConfig.getScenarioAction(false);\r\n}",
+                "{\r\n    TradeConfig.setWebInterface(5684);\r\n}",
+                "{\r\n    BigDecimal bigDecimal0 = TradeConfig.getOrderFee(\"@,PV?F\");\r\n}",
+                "{\r\n    TradeConfig.setPercentSentToWebsocket((-1014));\r\n}",
+                "{\r\n    float float0 = TradeConfig.rndFloat(0);\r\n    float float1 = TradeConfig.rndFloat(3227);\r\n    char char0 = TradeConfig.getScenarioAction(false);\r\n}",
+                "{\r\n    TradeConfig.setMAX_QUOTES(0);\r\n}",
+                "{\r\n    TradeConfig.setMarketSummaryInterval(1225);\r\n}",
+                "{\r\n    TradeConfig.setScenarioCount((-1014));\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"maxquotes\", \"t6YYVRIn=V\");\r\n}",
+                "{\r\n    TradeConfig.setAccessMode(20);\r\n}",
+                "{\r\n    TradeConfig.setUpdateQuotePrices(false);\r\n}",
+                "{\r\n    TradeConfig.setDisplayOrderAlerts(true);\r\n}",
+                "{\r\n    TradeConfig.setOrderProcessingMode((-1));\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"maxusers\", \"\");\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"orderProcessingMode\", \"]X`Dw|Xz9%&\");\r\n}",
+                "{\r\n    TradeConfig.setRunTimeMode((-1));\r\n}",
+                "{\r\n    String string0 = TradeConfig.rndEmail(\"9d8PZogzbnsd!\");\r\n}",
+                "{\r\n    TradeConfig.setLongRun(true);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"@\", (String) null);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"accessMode\", \"oss9owm09]]\\\"|sz(z\");\r\n}",
+                "{\r\n    char char0 = TradeConfig.getScenarioAction(true);\r\n}",
+                "{\r\n    TradeConfig.setJDBCDriverNeedsGlobalTransation(true);\r\n}",
+                "{\r\n    TradeConfig.setActionTrace(false);\r\n}",
+                "{\r\n    TradeConfig.incrementSellDeficit();\r\n    Random.setNextRandom((-639));\r\n    char char0 = TradeConfig.getScenarioAction(false);\r\n}",
+                "{\r\n    TradeConfig.setMAX_USERS(6);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"runTimeMode\", \"runTimeMode\");\r\n}",
+                "{\r\n    BigDecimal bigDecimal0 = TradeConfig.getOrderFee(\"BUY\");\r\n}",
+                "{\r\n    TradeConfig.setUseRemoteEJBInterface(true);\r\n}",
+                "{\r\n    BigDecimal bigDecimal0 = TradeConfig.rndBigDecimal(0.0F);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"\", \"\");\r\n}",
+                "{\r\n    TradeConfig.setConfigParam((String) null, (String) null);\r\n}",
+                "{\r\n    TradeConfig.setTrace(true);\r\n}",
+                "{\r\n    TradeConfig.setConfigParam(\"/portfolio.jsp\", \"full ejb3\");\r\n}",
+                "{\r\n    BigDecimal bigDecimal0 = TradeConfig.getOrderFee(\"SELL\");\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.Random",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+                "org.junit.runner.RunWith",
+                "static org.evosuite.runtime.EvoAssertions.*",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.AccountDataBean":{
+            "sequences":[
+                "{\r\n    AccountDataBean accountDataBean0 = new AccountDataBean();\r\n    boolean boolean0 = accountDataBean0.equals(accountDataBean0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-495));\r\n    MockDate mockDate0 = new MockDate(100030, 100030, (-495), (-2838), (-495));\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-495), (-495), mockDate0, mockDate0, (BigDecimal) null, (BigDecimal) null, \"JYV0Pa_ Y?|:-\");\r\n    AccountDataBean accountDataBean1 = new AccountDataBean();\r\n    boolean boolean0 = accountDataBean0.equals(accountDataBean1);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-495));\r\n    MockDate mockDate0 = new MockDate(100030, 100030, (-495), (-2838), (-495));\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-495), (-495), mockDate0, mockDate0, (BigDecimal) null, (BigDecimal) null, \"JYV0Pa_ Y?|:-\");\r\n    boolean boolean0 = accountDataBean0.equals(mockDate0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-495));\r\n    MockDate mockDate0 = new MockDate(100030, 100030, (-495), (-2838), (-495));\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-495), (-495), mockDate0, mockDate0, (BigDecimal) null, (BigDecimal) null, \"JYV0Pa_ Y?|:-\");\r\n    AccountDataBean accountDataBean1 = new AccountDataBean();\r\n    Integer integer1 = new Integer((-495));\r\n    accountDataBean1.setAccountID(integer1);\r\n    boolean boolean0 = accountDataBean0.equals(accountDataBean1);\r\n}",
+                "{\r\n    AccountDataBean accountDataBean0 = new AccountDataBean();\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean();\r\n    accountProfileDataBean0.setPassword(\"ZiFa^'c&!C\");\r\n    accountDataBean0.setProfile(accountProfileDataBean0);\r\n    accountDataBean0.login(\"ZiFa^'c&!C\");\r\n}",
+                "{\r\n    AccountDataBean accountDataBean0 = new AccountDataBean();\r\n    // Undeclared exception!\r\n    try {\r\n        accountDataBean0.login(\"AYC$E|;\");\r\n    } catch (EJBException e) {\r\n        // \r\n        // AccountBean:Login failure for account: nullnull AccountProfile\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.entities.AccountDataBean\", e);\r\n    }\r\n}",
+                "{\r\n    AccountDataBean accountDataBean0 = new AccountDataBean();\r\n    BigDecimal bigDecimal0 = new BigDecimal(4081);\r\n    Integer integer0 = new Integer(0);\r\n    MockDate mockDate0 = new MockDate(0, 3016, (-2169), 3016, 4081, 2888);\r\n    AccountDataBean accountDataBean1 = new AccountDataBean(integer0, 2888, (-1363), mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"e@$+~o+L!Lb3NVG\");\r\n    boolean boolean0 = accountDataBean0.equals(accountDataBean1);\r\n}",
+                "{\r\n    AccountDataBean accountDataBean0 = new AccountDataBean();\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean(\"\", \"\", \"\", \"\", \"\", \"\");\r\n    accountDataBean0.setProfile(accountProfileDataBean0);\r\n    // Undeclared exception!\r\n    try {\r\n        accountDataBean0.login(\"JYV0Pa_ Y?|:-\");\r\n    } catch (EJBException e) {\r\n        // \r\n        // AccountBean:Login failure for account: null\r\n        // \\tIncorrect password-->:\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.entities.AccountDataBean\", e);\r\n    }\r\n}"
+            ],
+            "imports":[
+                "javax.ejb.EJBException",
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.util.MockDate",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "org.junit.runner.RunWith",
+                "static org.evosuite.runtime.EvoAssertions.*",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.util.Log":{
+            "sequences":[
+                "{\r\n    Object object0 = new Object();\r\n    Log.trace(\"\", object0, object0);\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.printObject(mockThrowable0);\r\n}",
+                "{\r\n    Log.setActionTrace(true);\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, \"\", \"8()&,H$xJO/[;5\", \"6z$k\");\r\n}",
+                "{\r\n    Object object0 = new Object();\r\n    Log.trace(\"(\", object0);\r\n}",
+                "{\r\n    Log.log(\".Be*YT5kp(NUzpTng0s\", \"\");\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, (String) null, \"F|{sby#\");\r\n}",
+                "{\r\n    Log.setTrace(true);\r\n}",
+                "{\r\n    Log.stat(\"EiS92D~,x;\");\r\n}",
+                "{\r\n    Log.traceExit(\".Be*YT5kp(NUzpTng0s\");\r\n}",
+                "{\r\n    Log.print(\"}X^c6^07\");\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.trace(\"Method exit  --\", (Object) \"~ aD:\", (Object) \"Method exit  --\", (Object) mockThrowable0, (Object) \"Method exit  --\");\r\n}",
+                "{\r\n    Log.trace(\"TradeConfig.setConfigParm(..): minor exception caughttrying to set WebInterface to \", (Object) \"gzUVIinZgpr[V;\", (Object) \".Be*YT5kp(NUzpTng0s\", (Object) \"TradeConfig.setConfigParm(..): minor exception caughttrying to set WebInterface to \", (Object) \"RAb\", (Object) \"RAb\");\r\n}",
+                "{\r\n    Log.trace(\"Method exit  --\", (Object) \"\\t---Log.printCollection -- collection size=\", (Object) \"Method exit  --\", (Object) \"\\t---Log.printCollection -- collection size=\");\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Object object0 = new Object();\r\n    Log.trace(\"(\", (Object) \"(\", object0, object0, (Object) \"Method exit  --\", (Object) mockThrowable0, object0);\r\n}",
+                "{\r\n    Log.traceEnter(\"RAb\");\r\n}",
+                "{\r\n    Log.debug(\"supoyE$6\");\r\n}",
+                "{\r\n    Log log0 = new Log();\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Object object0 = new Object();\r\n    Log.trace(\"s+NJoolpW>PWM*q)7e\", (Object) mockThrowable0, (Object) log0, (Object) null, object0, (Object) \"s+NJoolpW>PWM*q)7e\", (Object) null, (Object) null);\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error(\"Lyh\\\"^_qgya!cAMJY\", \"'[)slTUO/\", \"%B|L;Q`lLfHP/IlyW?U\", (Throwable) mockThrowable0);\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, \"~ aD:\");\r\n}",
+                "{\r\n    Log.log(\"Lyh\\\"^_qgya!cAMJY\", \"%B|L;Q`lLfHP/IlyW?U\", \"%B|L;Q`lLfHP/IlyW?U\");\r\n}",
+                "{\r\n    MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error(\"gwtt%ac6gi\", \"\", (Throwable) mockThrowable0);\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.util.Log",
+                "org.evosuite.runtime.mock.java.lang.MockThrowable"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean":{
+            "sequences":[
+                "{\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\");\r\n    boolean boolean0 = quoteDataBean0.equals(quoteDataBean0);\r\n}",
+                "{\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean();\r\n    BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\n    QuoteDataBean quoteDataBean1 = new QuoteDataBean(\"\", \"\", (-1637.1), bigDecimal0, (BigDecimal) null, bigDecimal0, (BigDecimal) null, 0.01);\r\n    boolean boolean0 = quoteDataBean0.equals(quoteDataBean1);\r\n}",
+                "{\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\");\r\n    boolean boolean0 = quoteDataBean0.equals(\"fX;)y,pH$ts&ZTIT\");\r\n}",
+                "{\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\");\r\n    QuoteDataBean quoteDataBean1 = new QuoteDataBean(\"R|oS\");\r\n    boolean boolean0 = quoteDataBean0.equals(quoteDataBean1);\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.direct.TradeDirect":{
+            "sequences":[
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    Object[] objectArray0 = new Object[5];\r\n    boolean boolean0 = tradeDirect0.recreateDBTables(objectArray0, (PrintWriter) null);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(false);\r\n    Integer integer0 = new Integer((-1227));\r\n    try {\r\n        tradeDirect0.cancelOrder(integer0, false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    QuoteDataBean quoteDataBean0 = tradeDirect0.getQuote(\"\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    BigDecimal bigDecimal0 = BigDecimal.ONE;\r\n    try {\r\n        tradeDirect0.updateQuotePriceVolumeInt(\"\", bigDecimal0, (-4340.874), false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    Integer integer0 = new Integer((-859));\r\n    OrderDataBean orderDataBean0 = tradeDirect0.completeOrder(integer0, false);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    Integer integer0 = new Integer(6);\r\n    try {\r\n        tradeDirect0.orderCompleted(\"\", integer0);\r\n    } catch (UnsupportedOperationException e) {\r\n        // \r\n        // TradeDirect:orderCompleted method not supported\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.getAccountData(\"]FS?%tA!5&.oqk\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.login(\"\\n\\t          price: \", \"\\n\\t          price: \");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    Integer integer0 = new Integer(1);\r\n    HoldingDataBean holdingDataBean0 = tradeDirect0.getHolding(integer0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect();\r\n    Integer integer0 = new Integer((-1));\r\n    try {\r\n        tradeDirect0.sell(\"\\n\\t\\t        high \", integer0, 0);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    BigDecimal bigDecimal0 = BigDecimal.TEN;\r\n    try {\r\n        tradeDirect0.updateQuotePriceVolume(\"\", bigDecimal0, (-3431.7654772733));\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    try {\r\n        tradeDirect0.resetTrade(false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect();\r\n    Integer integer0 = new Integer(0);\r\n    try {\r\n        tradeDirect0.completeOrder(integer0, true);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(false);\r\n    TradeConfig.setTrace(true);\r\n    try {\r\n        tradeDirect0.getAccountProfileData(\"updateQuote\");\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    AccountProfileDataBean accountProfileDataBean0 = tradeDirect0.getAccountProfileData(\"1D$;|;{pud$(~siAxP\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect();\r\n    Integer integer0 = new Integer(0);\r\n    try {\r\n        tradeDirect0.cancelOrder(integer0, true);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(false);\r\n    Integer integer0 = new Integer(1244);\r\n    try {\r\n        tradeDirect0.queueOrder(integer0, false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect();\r\n    Integer integer0 = new Integer(1269);\r\n    try {\r\n        tradeDirect0.sell(\"\", integer0, 1);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    Object[] objectArray0 = new Object[4];\r\n    MockFileOutputStream mockFileOutputStream0 = new MockFileOutputStream(\"\\n\\t          price: \");\r\n    MockPrintWriter mockPrintWriter0 = new MockPrintWriter(mockFileOutputStream0, true);\r\n    boolean boolean0 = tradeDirect0.recreateDBTables(objectArray0, mockPrintWriter0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.login(\"openBalance\", \"openBalance\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    Integer integer0 = new Integer((-859));\r\n    try {\r\n        tradeDirect0.queueOrder(integer0, false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    BigInteger bigInteger0 = BigInteger.TEN;\r\n    MathContext mathContext0 = new MathContext(1);\r\n    BigDecimal bigDecimal0 = new BigDecimal(bigInteger0, 1, mathContext0);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.register(\"1l>h?Kp\\u0005\\\"4Fu&>>OcD\", \"\", \"\", (String) null, \"\", \"volume\", bigDecimal0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean(\"\", \"\", \"\", \"\", \"quote_symbol\", \"~dpb,ZmWsd$:s-wK#WY\");\r\n    AccountProfileDataBean accountProfileDataBean1 = tradeDirect0.updateAccountProfile(accountProfileDataBean0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.getAccountData(0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    Integer integer0 = new Integer(0);\r\n    HoldingDataBean holdingDataBean0 = tradeDirect0.getHolding(integer0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    try {\r\n        tradeDirect0.resetTrade(true);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    tradeDirect0.logout(\"\\n\\t          price: \");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(false);\r\n    BigDecimal bigDecimal0 = new BigDecimal((-2055.47279305266));\r\n    TradeConfig.setTrace(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.register(\"*v\", \"cvM.xy\", \"sm\", \"TradeDirect:completeOrder--> Completing Order \", \"\", (String) null, bigDecimal0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(false);\r\n    BigDecimal bigDecimal0 = BigDecimal.TEN;\r\n    QuoteDataBean quoteDataBean0 = tradeDirect0.createQuote(\"4G8Nac<r\", \"#mARB0[z2jYkpnX3\", bigDecimal0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect();\r\n    Integer integer0 = new Integer((-4363));\r\n    try {\r\n        tradeDirect0.completeOrder(integer0, false);\r\n    } catch (NullPointerException e) {\r\n        // \r\n        // no message in exception (getMessage() returned null)\r\n        // \r\n        verifyException(\"com.ibm.websphere.samples.daytrader.direct.TradeDirect\", e);\r\n    }\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.getAccountData(\"b\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    AccountDataBean accountDataBean0 = tradeDirect0.getAccountData((-356));\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    tradeDirect0.logout(\"volume\");\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    BigDecimal bigDecimal0 = new BigDecimal(3);\r\n    QuoteDataBean quoteDataBean0 = tradeDirect0.createQuote(\"cf.|x\", \"$wtLTQ1KE>ugl\", bigDecimal0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    Integer integer0 = new Integer(602);\r\n    TradeConfig.setTrace(true);\r\n    OrderDataBean orderDataBean0 = tradeDirect0.sell(\"\", integer0, 0);\r\n}",
+                "{\r\n    TradeDirect tradeDirect0 = new TradeDirect(true);\r\n    TradeConfig.setTrace(true);\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean();\r\n    AccountProfileDataBean accountProfileDataBean1 = tradeDirect0.updateAccountProfile(accountProfileDataBean0);\r\n}"
+            ],
+            "imports":[
+                "java.io.PrintWriter",
+                "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+                "java.math.MathContext",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+                "org.junit.runner.RunWith",
+                "static org.evosuite.runtime.EvoAssertions.*",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+                "com.ibm.websphere.samples.daytrader.direct.TradeDirect",
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.io.MockPrintWriter",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.evosuite.runtime.mock.java.io.MockFileOutputStream",
+                "java.math.BigInteger",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean",
+                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean":{
+            "sequences":[
+                "{\r\n    BigDecimal bigDecimal0 = BigDecimal.ONE;\r\n    LinkedList<QuoteDataBean> linkedList0 = new LinkedList<QuoteDataBean>();\r\n    MarketSummaryDataBean marketSummaryDataBean0 = new MarketSummaryDataBean(bigDecimal0, bigDecimal0, (-1967.4333844793168), linkedList0, linkedList0);\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+                "java.util.LinkedList"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.web.jsf.OrderData":{
+            "sequences":[
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setOpenDate(mockDate0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer(849);\r\n    MockDate mockDate0 = new MockDate((-807), (-807), 0, 0, 1036, 214);\r\n    BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, bigDecimal0, \"\", 1036, \"\", bigDecimal0);\r\n    orderData0.setOrderStatus(\"\");\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setOrderType(\"\");\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setOrderID(integer0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setOrderFee((BigDecimal) null);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setSymbol(\"At\");\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setCompletionDate(mockDate0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setQuantity(574.52671);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-594), (-1), (-1), (-594), (-1));\r\n    OrderData orderData0 = new OrderData(integer0, \"\", mockDate0, mockDate0, (BigDecimal) null, \"At\", 3763.46753862, \"\");\r\n    orderData0.setPrice((BigDecimal) null);\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.util.MockDate",
+                "com.ibm.websphere.samples.daytrader.web.jsf.OrderData",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.web.websocket.ActionMessage":{
+            "sequences":[
+                "{\r\n// EvoSuite did not generate any tests\r\n}"
+            ],
+            "imports":[
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals"
+            ],
+            "before_after_code_segments":[
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean":{
+            "sequences":[
+                "{\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean();\r\n    boolean boolean0 = accountProfileDataBean0.equals(accountProfileDataBean0);\r\n}",
+                "{\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean(\"DM$CCuh5mK\", \"\\n\", \"DM$CCuh5mK\", \"DM$CCuh5mK\", \"DM$CCuh5mK\", \"U)`&uR1Y@_f[4t<\");\r\n    Integer integer0 = new Integer((-1));\r\n    MockDate mockDate0 = new MockDate((-1), (-1), (-1), 0, (-1));\r\n    BigDecimal bigDecimal0 = new BigDecimal(808.4);\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-1), (-1), mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"\\n\");\r\n    accountProfileDataBean0.setAccount(accountDataBean0);\r\n}",
+                "{\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean(\"bLI>    address:\", \"U8J<X\", \"bLI>    address:\", \"U8J<X\", \"U8J<X\", \"U8J<X\");\r\n    AccountProfileDataBean accountProfileDataBean1 = new AccountProfileDataBean(\"bLI>   +ad]rens:\", \"U8J<X\", \"U8J<X\", \"U8J<X\", \"bLI>   +ad]rens:\", \"U8J<X\");\r\n    boolean boolean0 = accountProfileDataBean0.equals(accountProfileDataBean1);\r\n}",
+                "{\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean();\r\n    AccountProfileDataBean accountProfileDataBean1 = new AccountProfileDataBean();\r\n    accountProfileDataBean0.setUserID(\"\");\r\n    boolean boolean0 = accountProfileDataBean1.equals(accountProfileDataBean0);\r\n}",
+                "{\r\n    AccountProfileDataBean accountProfileDataBean0 = new AccountProfileDataBean(\"DM$CCuh5mK\", \"\\n\", \"DM$CCuh5mK\", \"DM$CCuh5mK\", \"DM$CCuh5mK\", \"U)`&uR1Y@_f[4t<\");\r\n    boolean boolean0 = accountProfileDataBean0.equals(\"DM$CCuh5mK\");\r\n}"
+            ],
+            "imports":[
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.util.MockDate",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        },
+        "com.ibm.websphere.samples.daytrader.entities.OrderDataBean":{
+            "sequences":[
+                "{\r\n    Integer integer0 = new Integer((-1293));\r\n    MockDate mockDate0 = new MockDate((-1L));\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(integer0, \"k^izpw}0/>38o\", \"\", mockDate0, mockDate0, 2807.9963613544, (BigDecimal) null, (BigDecimal) null, \"\");\r\n    BigDecimal bigDecimal0 = new BigDecimal(0.0);\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-464), (-464), mockDate0, mockDate0, (BigDecimal) null, (BigDecimal) null, \"k^izpw}0/>38o\");\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    OrderDataBean orderDataBean1 = new OrderDataBean(\"\", \"k^izpw}0/>38o\", mockDate0, mockDate0, (-5101.0), bigDecimal0, bigDecimal0, accountDataBean0, (QuoteDataBean) null, holdingDataBean0);\r\n    boolean boolean0 = orderDataBean1.equals(orderDataBean0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1293));\r\n    MockDate mockDate0 = new MockDate((-1293), (-1293), (-1293), (-1293), (-1293), (-1293));\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(integer0, \"\", \"\", mockDate0, mockDate0, (-1293), (BigDecimal) null, (BigDecimal) null, \"\");\r\n    boolean boolean0 = orderDataBean0.equals(orderDataBean0);\r\n}",
+                "{\r\n    Integer integer0 = new Integer(1590);\r\n    BigDecimal bigDecimal0 = BigDecimal.ONE;\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(integer0, \"\", \"\", (Date) null, (Date) null, 1590, bigDecimal0, bigDecimal0, \"3hYY\");\r\n    Integer integer1 = new Integer(1590);\r\n    orderDataBean0.setOrderID(integer1);\r\n    OrderDataBean orderDataBean1 = new OrderDataBean(integer0, \"3hYY\", \"\", (Date) null, (Date) null, (-867.4), bigDecimal0, bigDecimal0, \"ZXNn\");\r\n    boolean boolean0 = orderDataBean0.equals(orderDataBean1);\r\n}",
+                "{\r\n    Integer integer0 = new Integer(1590);\r\n    BigDecimal bigDecimal0 = BigDecimal.ONE;\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(integer0, \"\", \"\", (Date) null, (Date) null, 1590, bigDecimal0, bigDecimal0, \"3hYY\");\r\n    boolean boolean0 = orderDataBean0.equals(\"\");\r\n}",
+                "{\r\n    Integer integer0 = new Integer((-1293));\r\n    MockDate mockDate0 = new MockDate((-1L));\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(integer0, \"k^izpw}0/>38o\", \"\", mockDate0, mockDate0, 2807.9963613544, (BigDecimal) null, (BigDecimal) null, \"\");\r\n    BigDecimal bigDecimal0 = new BigDecimal(0.0);\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-464), (-464), mockDate0, mockDate0, (BigDecimal) null, (BigDecimal) null, \"k^izpw}0/>38o\");\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean();\r\n    OrderDataBean orderDataBean1 = new OrderDataBean(\"\", \"k^izpw}0/>38o\", mockDate0, mockDate0, (-5101.0), bigDecimal0, bigDecimal0, accountDataBean0, (QuoteDataBean) null, holdingDataBean0);\r\n    boolean boolean0 = orderDataBean0.equals(orderDataBean1);\r\n}"
+            ],
+            "imports":[
+                "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+                "java.util.Date",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "org.junit.runner.RunWith",
+                "org.junit.Test",
+                "static org.junit.Assert.*",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+                "java.math.BigDecimal",
+                "org.evosuite.runtime.mock.java.util.MockDate",
+                "org.evosuite.runtime.EvoRunnerParameters",
+                "org.evosuite.runtime.EvoRunner",
+                "static org.junit.Assert.assertEquals",
+                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"
+            ],
+            "before_after_code_segments":[
+                "initEvoSuiteFramework",
+                "clearEvoSuiteFramework",
+                "initTestCase",
+                "doneWithTestCase"
+            ]
+        }
+    },
+    "test_generation_tool":"EvoSuiteTestGenerator"
+}
