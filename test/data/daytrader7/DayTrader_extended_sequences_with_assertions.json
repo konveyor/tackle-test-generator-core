@@ -1,0 +1,124 @@
+
+{
+    "seq4":{
+        "class_name":"com.ibm.websphere.samples.daytrader.entities.OrderDataBean",
+        "sequence":"MockDate mockDate0 = new MockDate(1887, (-1744), 1887);\r\n    BigInteger bigInteger0 = BigInteger.TEN;\r\nassertEquals(\"0\", bigInteger0.getLowestSetBit());\r\n    BigDecimal bigDecimal0 = new BigDecimal(bigInteger0);\r\nassertEquals(\"1\", getFieldValue(bigDecimal0, \"ROUND_DOWN\"));\r\nassertEquals(\"7\", getFieldValue(bigDecimal0, \"ROUND_UNNECESSARY\"));\r\nassertEquals(\"2\", getFieldValue(bigDecimal0, \"ROUND_CEILING\"));\r\nassertEquals(\"5\", getFieldValue(bigDecimal0, \"ROUND_HALF_DOWN\"));\r\nassertEquals(\"4\", getFieldValue(bigDecimal0, \"ROUND_HALF_UP\"));\r\nassertEquals(\"0\", getFieldValue(bigDecimal0, \"ROUND_UP\"));\r\nassertEquals(\"3\", getFieldValue(bigDecimal0, \"ROUND_FLOOR\"));\r\nassertEquals(\"6\", getFieldValue(bigDecimal0, \"ROUND_HALF_EVEN\"));\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean();\r\nassertEquals(\"0.0\", quoteDataBean0.getVolume(), 1.0E-4);\r\nassertEquals(\"\\\"__m2m_null\\\"\", quoteDataBean0.getCompanyName());\r\nassertEquals(\"\\\"__m2m_null\\\"\", quoteDataBean0.getSymbol());\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean(0.0, bigDecimal0, mockDate0, (AccountDataBean) null, quoteDataBean0);\r\nassertEquals(\"0.0\", holdingDataBean0.getQuantity(), 1.0E-4);\r\nassertEquals(\"__m2m_null\", holdingDataBean0.getHoldingID().intValue());\r\nassertEquals(\"\\\"__m2m_null\\\"\", holdingDataBean0.getQuoteID());\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(\"K%I**.E=?kHJ\", \"r5{n{dev r3?];\", mockDate0, mockDate0, (-1744), bigDecimal0, bigDecimal0, (AccountDataBean) null, quoteDataBean0, holdingDataBean0);\r\nassertEquals(\"-1744.0\", orderDataBean0.getQuantity(), 1.0E-4);\r\nassertEquals(\"\\\"K%I**.E=?kHJ\\\"\", orderDataBean0.getOrderType());\r\nassertEquals(\"\\\"r5{n{dev r3?];\\\"\", orderDataBean0.getOrderStatus());\r\nassertEquals(\"__m2m_null\", orderDataBean0.getOrderID().intValue());\r\nassertEquals(\"\\\"__m2m_null\\\"\", orderDataBean0.getSymbol());\r\n",
+        "imports":[
+            "java.math.BigDecimal",
+            "org.evosuite.runtime.mock.java.util.MockDate",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+            "org.evosuite.runtime.EvoRunner",
+            "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "java.math.BigInteger",
+            "org.junit.Assert",
+            "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+            "com.ibm.websphere.samples.daytrader.entities.OrderDataBean",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq3":{
+        "class_name":"com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+        "sequence":"BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\nassertEquals(\"1\", getFieldValue(bigDecimal0, \"ROUND_DOWN\"));\r\nassertEquals(\"7\", getFieldValue(bigDecimal0, \"ROUND_UNNECESSARY\"));\r\nassertEquals(\"2\", getFieldValue(bigDecimal0, \"ROUND_CEILING\"));\r\nassertEquals(\"5\", getFieldValue(bigDecimal0, \"ROUND_HALF_DOWN\"));\r\nassertEquals(\"4\", getFieldValue(bigDecimal0, \"ROUND_HALF_UP\"));\r\nassertEquals(\"0\", getFieldValue(bigDecimal0, \"ROUND_UP\"));\r\nassertEquals(\"3\", getFieldValue(bigDecimal0, \"ROUND_FLOOR\"));\r\nassertEquals(\"6\", getFieldValue(bigDecimal0, \"ROUND_HALF_EVEN\"));\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\\t\", \"\", 1179, bigDecimal0, bigDecimal0, bigDecimal0, bigDecimal0, 1179);\r\nassertEquals(\"1179.0\", quoteDataBean0.getVolume(), 1.0E-4);\r\nassertEquals(\"\\\"\\\"\", quoteDataBean0.getCompanyName());\r\nassertEquals(\"\\\"\\t\\\"\", quoteDataBean0.getSymbol());\r\n",
+        "imports":[
+            "java.math.BigDecimal",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "org.junit.Assert",
+            "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq6":{
+        "class_name":"com.ibm.websphere.samples.daytrader.util.FinancialUtils",
+        "sequence":"BigDecimal bigDecimal0 = FinancialUtils.ZERO;\r\nassertEquals(\"1\", getFieldValue(bigDecimal0, \"ROUND_DOWN\"));\r\nassertEquals(\"7\", getFieldValue(bigDecimal0, \"ROUND_UNNECESSARY\"));\r\nassertEquals(\"2\", getFieldValue(bigDecimal0, \"ROUND_CEILING\"));\r\nassertEquals(\"5\", getFieldValue(bigDecimal0, \"ROUND_HALF_DOWN\"));\r\nassertEquals(\"4\", getFieldValue(bigDecimal0, \"ROUND_HALF_UP\"));\r\nassertEquals(\"0\", getFieldValue(bigDecimal0, \"ROUND_UP\"));\r\nassertEquals(\"3\", getFieldValue(bigDecimal0, \"ROUND_FLOOR\"));\r\nassertEquals(\"6\", getFieldValue(bigDecimal0, \"ROUND_HALF_EVEN\"));\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\nassertEquals(\"4\", getFieldValue(financialUtils0, \"ROUND\"));\r\nassertEquals(\"2\", getFieldValue(financialUtils0, \"SCALE\"));\r\n    BigDecimal bigDecimal1 = FinancialUtils.computeGainPercent(financialUtils0.ZERO, bigDecimal0);\r\nassertEquals(\"1\", getFieldValue(bigDecimal1, \"ROUND_DOWN\"));\r\nassertEquals(\"7\", getFieldValue(bigDecimal1, \"ROUND_UNNECESSARY\"));\r\nassertEquals(\"2\", getFieldValue(bigDecimal1, \"ROUND_CEILING\"));\r\nassertEquals(\"5\", getFieldValue(bigDecimal1, \"ROUND_HALF_DOWN\"));\r\nassertEquals(\"4\", getFieldValue(bigDecimal1, \"ROUND_HALF_UP\"));\r\nassertEquals(\"0\", getFieldValue(bigDecimal1, \"ROUND_UP\"));\r\nassertEquals(\"3\", getFieldValue(bigDecimal1, \"ROUND_FLOOR\"));\r\nassertEquals(\"6\", getFieldValue(bigDecimal1, \"ROUND_HALF_EVEN\"));\r\n",
+        "imports":[
+            "com.ibm.websphere.samples.daytrader.util.FinancialUtils",
+            "java.math.BigDecimal",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "org.junit.Assert",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq2":{
+        "class_name":"com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+        "sequence":"Integer integer0 = new Integer((-1880));\r\nassertEquals(\"-1880\", integer0.intValue());\r\n    MockDate mockDate0 = new MockDate((-1880), 1606, 0, 1606, (-1880), 0);\r\n    BigDecimal bigDecimal0 = BigDecimal.TEN;\r\nassertEquals(\"1\", getFieldValue(bigDecimal0, \"ROUND_DOWN\"));\r\nassertEquals(\"7\", getFieldValue(bigDecimal0, \"ROUND_UNNECESSARY\"));\r\nassertEquals(\"2\", getFieldValue(bigDecimal0, \"ROUND_CEILING\"));\r\nassertEquals(\"5\", getFieldValue(bigDecimal0, \"ROUND_HALF_DOWN\"));\r\nassertEquals(\"4\", getFieldValue(bigDecimal0, \"ROUND_HALF_UP\"));\r\nassertEquals(\"0\", getFieldValue(bigDecimal0, \"ROUND_UP\"));\r\nassertEquals(\"3\", getFieldValue(bigDecimal0, \"ROUND_FLOOR\"));\r\nassertEquals(\"6\", getFieldValue(bigDecimal0, \"ROUND_HALF_EVEN\"));\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-1880), 1606, mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"\");\r\nassertEquals(\"-1880\", accountDataBean0.getAccountID().intValue());\r\nassertEquals(\"-1880\", accountDataBean0.getLoginCount());\r\nassertEquals(\"1606\", accountDataBean0.getLogoutCount());\r\nassertEquals(\"\\\"\\\"\", accountDataBean0.getProfileID());\r\n",
+        "imports":[
+            "java.math.BigDecimal",
+            "org.evosuite.runtime.mock.java.util.MockDate",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "org.junit.Assert",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq1":{
+        "class_name":"com.ibm.websphere.samples.daytrader.util.TradeConfig",
+        "sequence":"TradeConfig tradeConfig0 = new TradeConfig();\r\nassertEquals(\"6\", getFieldValue(tradeConfig0, \"ORDER_PAGE\"));\r\nassertEquals(\"10\", getFieldValue(tradeConfig0, \"QUOTES_PER_PAGE\"));\r\nassertEquals(\"1\", getFieldValue(tradeConfig0, \"JSP_Images\"));\r\nassertEquals(\"1\", getFieldValue(tradeConfig0, \"REGISTER_PAGE\"));\r\nassertEquals(\"3\", getFieldValue(tradeConfig0, \"QUOTE_PAGE\"));\r\nassertEquals(\"true\", getFieldValue(tradeConfig0, \"RND_USER\"));\r\nassertEquals(\"1000\", getFieldValue(tradeConfig0, \"KEYBLOCKSIZE\"));\r\nassertEquals(\"4\", getFieldValue(tradeConfig0, \"REGISTER_OP\"));\r\nassertEquals(\"\\\"java:comp/env/jdbc/TradeDataSource\\\"\", getFieldValue(tradeConfig0, \"DS_NAME\"));\r\nassertEquals(\"6\", getFieldValue(tradeConfig0, \"PORTFOLIO_OP\"));\r\nassertEquals(\"1\", getFieldValue(tradeConfig0, \"ASYNCH_2PHASE\"));\r\nassertEquals(\"\\\"ru:\\\"\", getFieldValue(tradeConfig0, \"newUserPrefix\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"webInterface\"));\r\nassertEquals(\"\\\"__m2m_null\\\"\", getFieldValue(tradeConfig0, \"JDBC_UID\"));\r\nassertEquals(\"2\", getFieldValue(tradeConfig0, \"PORTFOLIO_PAGE\"));\r\nassertEquals(\"\\\"java:comp/env/jdbc/TradeDataSource\\\"\", getFieldValue(tradeConfig0, \"DATASOURCE\"));\r\nassertEquals(\"8\", getFieldValue(tradeConfig0, \"SELL_OP\"));\r\nassertEquals(\"5\", getFieldValue(tradeConfig0, \"ACCOUNT_OP\"));\r\nassertEquals(\"9\", getFieldValue(tradeConfig0, \"MARKET_SUMMARY_PAGE\"));\r\nassertEquals(\"1\", getFieldValue(tradeConfig0, \"DIRECT\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"STANDARD\"));\r\nassertEquals(\"2\", getFieldValue(tradeConfig0, \"LOGIN_OP\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"orderProcessingMode\"));\r\nassertEquals(\"\\\"__m2m_null\\\"\", getFieldValue(tradeConfig0, \"JDBC_PWD\"));\r\nassertEquals(\"1\", getFieldValue(tradeConfig0, \"QUOTE_OP\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"JSP\"));\r\nassertEquals(\"2\", getFieldValue(tradeConfig0, \"ASYNCH_MANAGEDTHREAD\"));\r\nassertEquals(\"false\", getFieldValue(tradeConfig0, \"JDBCDriverNeedsGlobalTransation\"));\r\nassertEquals(\"5\", getFieldValue(tradeConfig0, \"verifyPercent\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"HOME_OP\"));\r\nassertEquals(\"5\", getFieldValue(tradeConfig0, \"ACCOUNT_PAGE\"));\r\nassertEquals(\"7\", getFieldValue(tradeConfig0, \"BUY_OP\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"runTimeMode\"));\r\nassertEquals(\"8\", getFieldValue(tradeConfig0, \"STATS_PAGE\"));\r\nassertEquals(\"7\", getFieldValue(tradeConfig0, \"CONFIG_PAGE\"));\r\nassertEquals(\"4\", getFieldValue(tradeConfig0, \"HOME_PAGE\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"EJB3\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"SYNCH\"));\r\nassertEquals(\"9\", getFieldValue(tradeConfig0, \"UPDATEACCOUNT_OP\"));\r\nassertEquals(\"0\", getFieldValue(tradeConfig0, \"WELCOME_PAGE\"));\r\nassertEquals(\"3\", getFieldValue(tradeConfig0, \"LOGOUT_OP\"));\r\nassertEquals(\"10000\", tradeConfig0.getMAX_QUOTES());\r\nassertEquals(\"0\", tradeConfig0.getScenarioCount());\r\nassertEquals(\"15000\", tradeConfig0.getMAX_USERS());\r\nassertEquals(\"20\", tradeConfig0.getMarketSummaryInterval());\r\nassertEquals(\"true\", tradeConfig0.getUpdateQuotePrices());\r\nassertEquals(\"true\", tradeConfig0.getLongRun());\r\nassertEquals(\"1\", tradeConfig0.getPrimIterations());\r\nassertEquals(\"true\", tradeConfig0.getPublishQuotePriceChange());\r\nassertEquals(\"0\", tradeConfig0.getAccessMode());\r\nassertEquals(\"false\", tradeConfig0.getActionTrace());\r\nassertEquals(\"false\", tradeConfig0.getTrace());\r\nassertEquals(\"10\", tradeConfig0.getMAX_HOLDINGS());\r\nassertEquals(\"5\", tradeConfig0.getPercentSentToWebsocket());\r\nassertEquals(\"true\", tradeConfig0.getDisplayOrderAlerts());\r\n    TradeConfig.setRunTimeModeNames(tradeConfig0.orderProcessingModeNames);\r\n",
+        "imports":[
+            "java.math.BigDecimal",
+            "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "org.junit.Assert",
+            "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+            "java.util.LinkedList",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq10":{
+        "class_name":"com.ibm.websphere.samples.daytrader.util.TradeConfig",
+        "sequence":"TradeConfig.setRunTimeModeNames((String[]) null);\r\n",
+        "imports":[
+            "java.math.BigDecimal",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "static org.junit.Assert.*",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq8":{
+        "class_name":"com.ibm.websphere.samples.daytrader.util.Log",
+        "sequence":"MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, (String) null);\r\n",
+        "imports":[
+            "javax.ejb.EJBException",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "static org.junit.Assert.*",
+            "com.ibm.websphere.samples.daytrader.util.Log",
+            "org.evosuite.runtime.mock.java.lang.MockThrowable",
+            "static org.junit.Assert.*"
+        ]
+    },
+    "seq7":{
+        "class_name":"com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
+        "sequence":"RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\nassertEquals(\"0\", runStatsDataBean0.getSumLogoutCount());\r\nassertEquals(\"0\", runStatsDataBean0.getTradeUserCount());\r\nassertEquals(\"0\", runStatsDataBean0.getDeletedOrderCount());\r\nassertEquals(\"0\", runStatsDataBean0.getTradeStockCount());\r\nassertEquals(\"0\", runStatsDataBean0.getSellOrderCount());\r\nassertEquals(\"0\", runStatsDataBean0.getOpenOrderCount());\r\nassertEquals(\"0\", runStatsDataBean0.getHoldingCount());\r\nassertEquals(\"0\", runStatsDataBean0.getCancelledOrderCount());\r\nassertEquals(\"0\", runStatsDataBean0.getNewUserCount());\r\nassertEquals(\"0\", runStatsDataBean0.getSumLoginCount());\r\nassertEquals(\"0\", runStatsDataBean0.getBuyOrderCount());\r\nassertEquals(\"0\", runStatsDataBean0.getOrderCount());\r\n    runStatsDataBean0.setNewUserCount((-43));\r\n",
+        "imports":[
+            "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
+            "org.evosuite.runtime.EvoRunnerParameters",
+            "org.evosuite.runtime.EvoRunner",
+            "org.junit.runner.RunWith",
+            "org.junit.Test",
+            "org.junit.Assert",
+            "static org.junit.Assert.*"
+        ]
+    }
+}
