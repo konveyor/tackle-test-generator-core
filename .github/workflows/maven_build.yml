@@ -5,7 +5,13 @@ name: Java CI with Maven
 
 on:
   push:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
   pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
 
 jobs:
   build:
