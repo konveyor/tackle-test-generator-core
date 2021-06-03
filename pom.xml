@@ -71,19 +71,12 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar</systemPath>
   	</dependency>
-    <dependency>
-      <groupId>com.ibm.focus</groupId>
-      <artifactId>focus</artifactId>
-      <version>1.0</version>
+     <dependency>
+      <groupId>edu.uta.cse.fireeye.acts</groupId>
+      <artifactId>acts</artifactId>
+      <version>3.2</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/focus.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>minijdd</groupId>
-      <artifactId>minijdd</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/minijdd_103.jar</systemPath>
+      <systemPath>${project.basedir}/lib/acts_3.2.jar</systemPath>
     </dependency>
     <dependency>
     	<groupId>com.github.javaparser</groupId>
