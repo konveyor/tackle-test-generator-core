@@ -14,10 +14,8 @@ on:
       - '**.md'
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -26,6 +24,24 @@ jobs:
         java-version: '8'
         distribution: 'adopt'
     - name: Download Randoop jars
-      run: mvn -B download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
     - name: Build with Maven
-      run: mvn -B package
+      run: mvn --batch-mode package
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+#    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java for publishing to GitHub Packages
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Download Randoop jars
+        run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy -Dmaven.test.skip=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
