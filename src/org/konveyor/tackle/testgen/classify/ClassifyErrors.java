@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class ClassifyErrors {
-    public enum ErrorType { SERIALIZATION, JSON_PARSING, DUMMY_FUNCTION, KLU_INTERFACE, SERVICE_INVOCATION, OTHER }
+    public enum ErrorType { SERIALIZATION, JSON_PARSING, DUMMY_FUNCTION, SERVICE_INVOCATION, OTHER }
 
     Map<String,Set<ClassifiedError>> errorTypes = new HashMap<>();
     ClassifiedError unclassifiedError = new ClassifiedError("UnclassifiedError", "", "UnclassifiedError","", null);
