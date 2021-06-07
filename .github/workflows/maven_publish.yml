@@ -1,0 +1,28 @@
+name: Publish package to GitHub Packages
+on:
+  # triggered by completion of the "CI build" workflow and release creation
+  workflow_run:
+    workflows: ["CI build"]
+    types: [completed]
+  #    branches: [main]
+  release:
+    types: [created]
+jobs:
+  # publish only if CI build succeeds
+  publish-on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java for publishing to GitHub Packages
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
