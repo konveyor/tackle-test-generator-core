@@ -10,6 +10,7 @@
       <id>github</id>
       <name>GitHub Konveyor-Tackle Test Generator Maven Packages</name>
       <url>https://maven.pkg.github.com/konveyor/tackle-test-generator-core</url>
+      <uniqueVersion>false</uniqueVersion>
     </repository>
   </distributionManagement>
 
