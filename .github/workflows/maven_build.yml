@@ -45,7 +45,7 @@ jobs:
       - name: Delete old package version
         uses: actions/delete-package-versions@v1
         with:
-          package-name: 'tackle-test-generator-core'
+          package-name: 'org.konveyor.tackle-test-generator-core'
       - name: Publish to GitHub Packages
         run: mvn --batch-mode deploy -Dmaven.test.skip=true
         env:
