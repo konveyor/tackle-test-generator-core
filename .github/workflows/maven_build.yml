@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: CI build and publish
 
 on:
   push:
@@ -15,9 +15,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -26,6 +24,29 @@ jobs:
         java-version: '8'
         distribution: 'adopt'
     - name: Download Randoop jars
-      run: mvn -B download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
     - name: Build with Maven
-      run: mvn -B package
+      run: mvn --batch-mode package
+
+  # publish to GitHub Packages if tests pass and the workflow is running on the main branch
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java for publishing to GitHub Packages
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Download Randoop jars
+        run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      - name: Delete old package version
+        uses: actions/delete-package-versions@v1
+        with:
+          package-name: 'org.konveyor.tackle-test-generator-core'
+      - name: Publish to GitHub Packages
+        run: mvn --batch-mode deploy -Dmaven.test.skip=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
