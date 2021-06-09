@@ -1,6 +1,5 @@
 package org.konveyor.tackle.testgen.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -19,32 +18,15 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import com.ibm.contest.shared.applicationLimitation.LimitationException;
-import com.ibm.contest.shared.java5.focusutils.Task;
-import com.ibm.focus.exceptions.ErrorMessageException;
-import com.ibm.focus.model.Attribute;
-import com.ibm.focus.model.Status;
-import com.ibm.focus.model.cp.CartesianProductAttribute;
-import com.ibm.focus.model.cp.CartesianProductModel;
-import com.ibm.focus.model.cp.CoverageRequirements;
-import com.ibm.focus.reports.CombinatorialAlgorithmsInputProcessor;
-import com.ibm.focus.reports.CombinatorialAlgorithmsInputProcessor.BadPathHandling;
-import com.ibm.focus.reports.CombinatorialTestDesign;
-import com.ibm.focus.reports.ctdInputs.CtdEnhancementInput;
-import com.ibm.focus.traces.DifferentAttributesEncounteredException;
-import com.ibm.focus.traces.IllegalTaskInfo.IllegalTasksEncounteredException;
-import com.ibm.focus.usage.UsageReportSender.ReportMode;
-import com.ibm.focus.utils.ILicenseHandler;
-import com.ibm.focus.utils.InvalidFileException;
-import com.ibm.focus.utils.LicenseFactory;
-import com.ibm.focus.utils.LimitedVersionExceptions.ClientNetworkLicenseException;
-import com.ibm.focus.utils.LimitedVersionExceptions.DisabledFeatureException;
-import com.ibm.focus.utils.LimitedVersionExceptions.InternalLicenseException;
-import com.ibm.focus.utils.LimitedVersionExceptions.LicenseExpiredException;
-import com.ibm.focus.utils.LimitedVersionExceptions.LimitedVersionException;
-import com.ibm.focus.utils.OperationInterruptedException;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
+
+import edu.uta.cse.fireeye.common.Parameter;
+import edu.uta.cse.fireeye.common.Relation;
+import edu.uta.cse.fireeye.common.SUT;
+import edu.uta.cse.fireeye.common.TestGenProfile;
+import edu.uta.cse.fireeye.common.TestSet;
+import edu.uta.cse.fireeye.service.engine.IpoEngine;
 
 /**
  * Collection/non-Collection, user versus non-user types, and remove versus local types.
@@ -55,24 +37,18 @@ import org.konveyor.tackle.testgen.util.Utils;
 
 class CTDModeler {
 
-	private ILicenseHandler ctdModelLicense;
 	private CTDTestPlanGenerator.TargetFetcher targetClassesFetcher;
 
 	private static final Logger logger = TackleTestLogger.getLogger(CTDModeler.class);
 
-	CTDModeler(CTDTestPlanGenerator.TargetFetcher fetcher)
-			throws LicenseExpiredException, InternalLicenseException, ClientNetworkLicenseException, LimitedVersionException, LimitationException {
+	CTDModeler(CTDTestPlanGenerator.TargetFetcher fetcher) {
 		targetClassesFetcher = fetcher;
-		/* Read the license once to avoid performance overhead */
-		ctdModelLicense = LicenseFactory.getLicenseHandler(false);
 	}
 
 
 	public int analyzeParams(JavaMethodModel method, TypeAnalysisResults typeAnalysisResults, JsonObjectBuilder models, boolean addLocalRemoteTag,
                              int interactionLevel, Class<?> cls)
-			throws ClassNotFoundException, LimitedVersionException, IOException, InvalidFileException, ErrorMessageException,
-			SecurityException, IllegalArgumentException, IllegalTasksEncounteredException, DifferentAttributesEncounteredException,
-			OperationInterruptedException, NoSuchFieldException, IllegalAccessException {
+			throws ClassNotFoundException, IOException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		Type[] paramTypes = method.getParameterTypes();
 
@@ -81,18 +57,17 @@ class CTDModeler {
 		}
 
 		Class<?>[] paramClasses = method.getParameterClasses();
+		
+		// Define a new CTD model for the current method 
 
-		File parentFolder = new File(System.getProperty("user.dir"));
-
-		File modelFile = new File(parentFolder, method.proxyPartition + "::" + method.proxySootClass.getName()+"::"+
-			method.getFormattedSignature() + ".model");
-
-		CartesianProductModel ctdModel = new CartesianProductModel(modelFile, true, ctdModelLicense, ReportMode.UNDEFINED);
+		SUT methodModel = new SUT(method.proxyPartition + "::" + method.proxySootClass.getName()+"::"+method.getFormattedSignature());
 
 		int attrInd=0;
 		int paramInd=0;
 
 		boolean isCollection;
+		
+		// Go over each parameter of the method and define one (or more in case of a collection) CTD attributes for it
 
 		for (Type paramType : paramTypes) {
 
@@ -138,10 +113,8 @@ class CTDModeler {
 					return 0; // param has no concrete type - skip this method as it is not being called from the code
 				}
 
-				ctdModel.addAttribute();
-				CartesianProductAttribute currentAttr = ctdModel.getAttributes().get(ctdModel.getAttributes().size()-1);
-				currentAttr.setName(param.getName());
-				currentAttr.setType(Attribute.AttributeType.STRING);
+				Parameter currentAttr = methodModel.addParam(param.getName());
+				currentAttr.setType(Parameter.PARAM_TYPE_ENUM);
 				String valName = "";
 				for (Class<?> type : param.getTypes()) {
 					String valType = type.getTypeName().trim();
@@ -174,70 +147,54 @@ class CTDModeler {
 							valName+= (" "+label);
 						}
 
-						currentAttr.addValue(new Attribute.Value(valName.trim(), ""));
+						currentAttr.addValue(valName.trim());
 					}
 				}
 
 				if (isCollection) {
-					currentAttr.addValue(new Attribute.Value(valName.trim(), ""));
+					currentAttr.addValue(valName.trim());
 				}
 			}
 		}
 
-		int numAttributes = ctdModel.getAttributes().size();
+		int numAttributes = methodModel.getNumOfParams();
 
 		if (numAttributes > 0) {
+			// Define interaction coverage requirements for this model via a relation between the model attributes
 			int actualInteractionCoverage = interactionLevel <= numAttributes? interactionLevel : numAttributes;
-			CoverageRequirements tWay = CoverageRequirements.createSingleRequirement(actualInteractionCoverage, ctdModel.getAttributes().getNames(), ctdModel);
-			tWay.setName(actualInteractionCoverage+"-way");
-			ctdModel.getCoverageRequirementsAlternatives().addCoverageRequirementsAlternative(tWay);
-			if (! validateModel(ctdModel)) {
-				throw new RuntimeException("Encountered a model with problems. See console log for details");
-			}
+			Relation r = new Relation(actualInteractionCoverage);
+			for (Parameter attr : methodModel.getParameters()) {
+				r.addParam (attr);
+			}			
+			// add this relation into the CTD model
+			methodModel.addRelation(r);
 
+			TestSet resultTestPlan = generatePlan(methodModel);
+			addModel(methodModel, models, resultTestPlan, method);
 
-			List<Task> resultTestPlan = generatePlan(ctdModel);
-			addModel(ctdModel, models, resultTestPlan, method);
-
-			return resultTestPlan.size();
+			return resultTestPlan.getNumOfTests();
 		}
 
 		return 0;
 	}
 
-	private boolean validateModel(CartesianProductModel ctdModel) throws IOException {
+	private TestSet generatePlan(SUT methodModel) {
 
-		ctdModel.attributesChanged();
-		ctdModel.changed(); // triggers model validation
-		if (ctdModel.getStatus() != Status.VALID && ctdModel.getStatus() != Status.WARNING) {
-			logger.warning("Model "+ctdModel.getName()+" has problems");
-		}
-		Set<Attribute> attrsWithProblems = ctdModel.getAttributes().getProblems();
-		for (Attribute attr : attrsWithProblems) {
-			logger.warning("Attribute "+attr.getName()+" has problems");
-			for (String problem : attr.getProblemsStrToStatusMap().keySet()) {
-				logger.warning(problem);
-            }
-		}
-		return attrsWithProblems.size() == 0;
-	}
+		TestGenProfile.instance().setRandstar(TestGenProfile.ON);
+		
+		// Create an IPO engine object
+		IpoEngine engine = new IpoEngine(methodModel);
+		
+		// build a test set
+		engine.build();
 
-	private List<Task> generatePlan(CartesianProductModel ctdModel)
-			throws ErrorMessageException, IOException, IllegalTasksEncounteredException, DifferentAttributesEncounteredException, DisabledFeatureException, OperationInterruptedException {
-
-		CombinatorialAlgorithmsInputProcessor inputProcessor = new CombinatorialAlgorithmsInputProcessor(ctdModel, null,
-				ctdModel.getDefaultCoverageRequirements(), ctdModel.getNegativeCoverageRequirements(),
-				Collections.emptyList(), false, false, BadPathHandling.CREATE_ONLY_GOOD_PATH, ctdModel.getDontCares(), null, null);
-
-		CtdEnhancementInput ctdInput = new CtdEnhancementInput(ctdModel, null, inputProcessor, null, false, -1, -1, 0, 0, null);
-		CombinatorialTestDesign result = new CombinatorialTestDesign(ctdInput, null);
-
-		return result.solution.goodPathSolution;
+		// get the resulting test set
+		return engine.getTestSet();
 	}
 
 
-	private void addModel(CartesianProductModel ctdModel, JsonObjectBuilder models,
-			List<Task> testPlan, JavaMethodModel method) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	private void addModel(SUT methodModel, JsonObjectBuilder models,
+			TestSet testPlan, JavaMethodModel method) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
 		JsonObjectBuilder modelObject = Json.createObjectBuilder();
 
@@ -245,20 +202,28 @@ class CTDModeler {
 
 		JsonArrayBuilder attrList = Json.createArrayBuilder();
 
-		int[] refersTo = new int[ctdModel.getAttributes().size()];
+		int[] refersTo = new int[methodModel.getNumOfParams()];
 
 		Arrays.fill(refersTo, -1);
 
 		int attrIndex=0;
-
-		for (CartesianProductAttribute attr : ctdModel.getAttributes()) {
+		
+		List<String> attrNames = new ArrayList<>();
+		
+		for (Parameter attr : methodModel.getParameters()) {
+			attrNames.add(attr.getName());
+		}
+		
+		for (Parameter attr : methodModel.getParameters()) {
 
 			JsonObjectBuilder attrObject = Json.createObjectBuilder();
 
 			String  attrName = attr.getName();
+			
+			// Handle attributes that are detailing the content of collections represented by other attributes
 
 			if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
-				setReferredAttr(attrName, attrIndex, ctdModel.getAttributes().getNames(), refersTo);
+				setReferredAttr(attrName, attrIndex, attrNames, refersTo);
 			}
 
 			attrObject.add("attribute_name", attrName);
@@ -266,7 +231,7 @@ class CTDModeler {
 			JsonArrayBuilder valList = Json.createArrayBuilder();
 
 			int i=0;
-			for (String val : attr.getSetOfValues()) {
+			for (String val : attr.getValues()) {
 				valList.add(getValObject("val_"+(i++), val));
 			}
 
@@ -285,12 +250,19 @@ class CTDModeler {
 		Map<Integer, List<Integer>> relatedAttributes = computeRelatedComponents(refersTo);
 
 		JsonArrayBuilder testsList = Json.createArrayBuilder();
+		
+		/* In ACTS, the order of parameters in the test plan may be different from their order in the model, because 
+		 * they are sorted according to their domain size. Hence we need to sync the two orders */
+		
+		List<Parameter> sortedParams = testPlan.getParams();
+		Map<Parameter, Integer> paramToTestLoc = getParamsTestLocations(methodModel.getParameters(), sortedParams);
+		List<int[]> testPlanRows = testPlan.getMatrix();
 
-		for (Task test : testPlan) {
+		for (int[] test : testPlanRows) {
 
 			JsonArrayBuilder testArray = Json.createArrayBuilder();
 
-			for (int i=0; i < test.size(); i++) {
+			for (int i=0; i < methodModel.getNumOfParams(); i++) {
 
 				List<Integer> combinedAttrs = relatedAttributes.get(i);
 
@@ -298,11 +270,13 @@ class CTDModeler {
 					continue; // handled as part of another attribute
 				} else if (combinedAttrs.isEmpty()) {
 					// not a collection attribute
-					testArray.add(getSingleValTestObject(test.getValueAt(i)));
+					testArray.add(getSingleValTestObject(getParamTestValue(methodModel.getParam(i), test, paramToTestLoc)));
 				} else {
+					
+					// this is a collection attribute - capture all related attributes and values that relate to this single collection
 
 					JsonObjectBuilder attrValObject = Json.createObjectBuilder();
-					getValueRecursive(attrValObject, test, i, combinedAttrs, refersTo, ctdModel.getAttributes().getNames());
+					getValueRecursive(methodModel, attrValObject, test, i, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 
 					testArray.add(attrValObject.build());
 				}
@@ -316,11 +290,32 @@ class CTDModeler {
 
 	}
 
-	private void getValueRecursive(JsonObjectBuilder attrValObject, Task test, int indexToAdd, List<Integer> combinedAttrs,
-			int[] refersTo, ArrayList<String> attrNames) {
+	private Map<Parameter, Integer> getParamsTestLocations(ArrayList<Parameter> parameters,
+			List<Parameter> sortedParams) {
+		Map<Parameter, Integer> paramToTestLoc = new HashMap<>();
+		
+		for (int i=0; i<parameters.size(); i++) {
+			
+			Parameter current = parameters.get(i);
+			
+			for (int j=0; i<parameters.size(); j++) {
+				
+				if (current.getName().equals(sortedParams.get(j).getName())) {
+					paramToTestLoc.put(current, j);
+					break;
+				}
+			}
+		}
+		
+		return paramToTestLoc;
+	}
+
+
+	private void getValueRecursive(SUT methodModel, JsonObjectBuilder attrValObject, int[] test, int indexToAdd, List<Integer> combinedAttrs,
+			int[] refersTo, List<String> attrNames, Map<Parameter, Integer> paramToTestLoc) {
 
 		String attrName = attrNames.get(indexToAdd);
-		String valueToAdd = test.getValueAt(indexToAdd);
+		String valueToAdd = getParamTestValue(methodModel.getParam(indexToAdd), test, paramToTestLoc);
 
 		if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
 
@@ -329,7 +324,7 @@ class CTDModeler {
 
 			for (int ind : combinedAttrs) {
 				if (refersTo[ind] == indexToAdd) {
-					getValueRecursive(collectObject, test, ind, combinedAttrs, refersTo, attrNames);
+					getValueRecursive(methodModel, collectObject, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 				}
 			}
 
@@ -340,10 +335,15 @@ class CTDModeler {
 			attrValObject.add("type", actualVal);
 			for (int ind : combinedAttrs) {
 				if (refersTo[ind] == indexToAdd) {
-					getValueRecursive(attrValObject, test, ind, combinedAttrs, refersTo, attrNames);
+					getValueRecursive(methodModel, attrValObject, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 				}
 			}
 		}
+	}
+
+
+	private String getParamTestValue(Parameter param, int[] test, Map<Parameter, Integer> paramToTestLoc) {
+		return param.getValue(test[paramToTestLoc.get(param)]);
 	}
 
 
