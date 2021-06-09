@@ -1,15 +1,5 @@
 package org.konveyor.tackle.testgen.model;
 
-import com.ibm.contest.shared.applicationLimitation.LimitationException;
-import com.ibm.focus.exceptions.ErrorMessageException;
-import com.ibm.focus.traces.DifferentAttributesEncounteredException;
-import com.ibm.focus.traces.IllegalTaskInfo.IllegalTasksEncounteredException;
-import com.ibm.focus.utils.InvalidFileException;
-import com.ibm.focus.utils.LimitedVersionExceptions.ClientNetworkLicenseException;
-import com.ibm.focus.utils.LimitedVersionExceptions.InternalLicenseException;
-import com.ibm.focus.utils.LimitedVersionExceptions.LicenseExpiredException;
-import com.ibm.focus.utils.LimitedVersionExceptions.LimitedVersionException;
-import com.ibm.focus.utils.OperationInterruptedException;
 import org.konveyor.tackle.testgen.rta.RapidTypeAnalysis;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
@@ -91,9 +81,7 @@ public class CTDTestPlanGenerator {
 	}
 
 	void modelPartitions()
-			throws IOException, LicenseExpiredException, InternalLicenseException, ClientNetworkLicenseException, ClassNotFoundException, InvalidFileException,
-			ErrorMessageException, LimitedVersionException, LimitationException, SecurityException, IllegalArgumentException, IllegalTasksEncounteredException,
-			DifferentAttributesEncounteredException, OperationInterruptedException, NoSuchFieldException, IllegalAccessException {
+			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		proxyModelsCounter = 0;
 		proxyTestsCounter = 0;
@@ -131,7 +119,7 @@ public class CTDTestPlanGenerator {
 	}
 
 	private JsonObject modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults)
-			throws LicenseExpiredException, InternalLicenseException, ClientNetworkLicenseException, IOException, InvalidFileException, ErrorMessageException, LimitedVersionException, LimitationException, ClassNotFoundException, SecurityException, IllegalArgumentException, IllegalTasksEncounteredException, DifferentAttributesEncounteredException, OperationInterruptedException, NoSuchFieldException, IllegalAccessException {
+			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		logger.fine("Analyzing partition "+partitionName);
 		URLClassLoader classLoader = targetFetcher.loadCurrentClasses(partitionName);
@@ -745,9 +733,7 @@ public class CTDTestPlanGenerator {
 
 
 	public static void main(String args[])
-			throws IOException, ClassNotFoundException, InvalidFileException, ErrorMessageException, LimitedVersionException, LimitationException,
-		    SecurityException, IllegalArgumentException, IllegalTasksEncounteredException,
-			DifferentAttributesEncounteredException, OperationInterruptedException, NoSuchFieldException, IllegalAccessException {
+			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 
 		 // parse command-line options
