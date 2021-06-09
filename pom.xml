@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.konveyor</groupId>
-  <artifactId>tackle-test-generator-core</artifactId>
+  <groupId>org.konveyor.tackle</groupId>
+  <artifactId>testgen-core</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-
+  
   <distributionManagement>
     <repository>
       <id>github</id>
@@ -25,6 +25,7 @@
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <evosuite.version>1.0.7</evosuite.version>
     <randoop.version>4.2.6</randoop.version>
+    <acts.version>3.2</acts.version>
 
     <!-- JaCoCo thresholds. Increase gradually as you add tests. -->
     <jacoco.unit-tests.limit.instruction-ratio>0%</jacoco.unit-tests.limit.instruction-ratio>
@@ -71,21 +72,21 @@
       <artifactId>evosuite-master</artifactId>
       <version>${evosuite.version}</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/evosuite-master-1.0.7-SNAPSHOT.jar</systemPath>
+      <systemPath>${project.basedir}/lib/evosuite-master-${evosuite.version}-SNAPSHOT.jar</systemPath>
 	  </dependency>
 	  <dependency>
 	  <groupId>org.evosuite</groupId>
       <artifactId>evosuite-master-runtime</artifactId>
       <version>${evosuite.version}</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar</systemPath>
+      <systemPath>${project.basedir}/lib/evosuite-standalone-runtime-${evosuite.version}-SNAPSHOT.jar</systemPath>
   	</dependency>
      <dependency>
       <groupId>edu.uta.cse.fireeye.acts</groupId>
       <artifactId>acts</artifactId>
-      <version>3.2</version>
+      <version>${acts.version}</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/acts_3.2.jar</systemPath>
+      <systemPath>${project.basedir}/lib/acts_${acts.version}.jar</systemPath>
     </dependency>
     <dependency>
     	<groupId>com.github.javaparser</groupId>
