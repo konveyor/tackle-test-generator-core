@@ -1,3 +1,16 @@
+/*
+Copyright IBM Corporation 2021
+
+Licensed under the Eclipse Public License 2.0, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package org.konveyor.tackle.testgen.model;
 
 import static org.junit.Assert.assertEquals;
@@ -28,34 +41,6 @@ public class CTDModelingTest {
 	 */
 	public void cleanUp() {
 		FileUtils.deleteQuietly(new File("DayTrader_"+ Constants.CTD_OUTFILE_SUFFIX));
-	}
-
-	@Test
-	public void testGenerateModelsAndTestPlansForProxy() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				"test/data/daytrader7/refactored4Partitions/DayTraderPartitionFileSummary.json", null,
-				"test/data/daytrader7/refactored4Partitions", "WebContent/WEB-INF/classes",
-				"test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, true, 1);
-		analyzer.modelPartitions();
-
-		// assert that output file for CTD modeling is  created
-
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
-
-		assertTrue(new File(outFilename).exists());
-
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
-
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_new_format.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
-
-		compareModels(resultObject, standardObject);
 	}
 
 	@Test
