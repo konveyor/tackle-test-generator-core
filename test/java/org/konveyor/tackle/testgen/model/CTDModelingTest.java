@@ -44,34 +44,6 @@ public class CTDModelingTest {
 	}
 
 	@Test
-	public void testGenerateModelsAndTestPlansForProxy() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				"test/data/daytrader7/refactored4Partitions/DayTraderPartitionFileSummary.json", null,
-				"test/data/daytrader7/refactored4Partitions", "WebContent/WEB-INF/classes",
-				"test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, true, 1);
-		analyzer.modelPartitions();
-
-		// assert that output file for CTD modeling is  created
-
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
-
-		assertTrue(new File(outFilename).exists());
-
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
-
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_new_format.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
-
-		compareModels(resultObject, standardObject);
-	}
-
-	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
