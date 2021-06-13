@@ -90,9 +90,8 @@ public class TestSequenceExtenderTest {
         projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
         projectClasspath += (File.pathSeparator + "test"+File.separator+"data"+File.separator+"daytrader7"+
             File.separator+"monolith"+File.separator+"bin");
-        projectClasspath += (File.pathSeparator + "lib" + File.separator + "evosuite-master-1.0.7-SNAPSHOT.jar");
-        projectClasspath += (File.pathSeparator + "lib" + File.separator
-            + "evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar");
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
         projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
 
         String testPlanFilename = "test"+File.separator+"data"+File.separator+
@@ -147,9 +146,8 @@ public class TestSequenceExtenderTest {
         projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
         projectClasspath += (File.pathSeparator + irsRootDir + File.separator + "monolith" +
             File.separator + "target"+File.separator + "classes");
-        projectClasspath += (File.pathSeparator + "lib" + File.separator + "evosuite-master-1.0.7-SNAPSHOT.jar");
-        projectClasspath += (File.pathSeparator + "lib" + File.separator
-            + "evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar");
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
         projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
 
         String testPlanFilename = irsRootDir+File.separator+"irs_ctd_models_and_test_plans.json";

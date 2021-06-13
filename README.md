@@ -14,12 +14,31 @@ The main capabilities enabled by these tools are:
 
 ## Building the Tool
 
-The tool can be built using `maven`. To build the test generator jar, run these commands:
+The tool can be built using `maven`, following these steps:
 
-```dtd
-mvn download:wget@get-randoop-jar download:wget@get-replacecall-jar
-mvn package
-```
+1. Download Randoop jars
+   ```dtd
+   mvn download:wget@get-randoop-jar download:wget@get-replacecall-jar
+   ```
+
+2. Add the following server entry to Maven `settings.xml` (`~/.m2/settings.xml`; create one if
+   it doesn't exist), replacing `USERNAME` with your GitHub username and `PASSWORD` with your
+   password or a personal access token. This is needed for downloading the specific builds of
+   EvoSuite jars that are hosted in a [Maven registry on GitHub Packages](https://github.com/sinha108/maven-packages/packages).
+   ```
+   <servers>
+     <server>
+     <id>github-sinha108</id>
+     <username>USERNAME</username>
+     <password>PASSWORD</password>
+    </server>
+   </servers>
+   ```
+
+3. Build test-generator-core jar
+   ```dtd
+   mvn package
+   ```
 
 ## Tool Usage
 

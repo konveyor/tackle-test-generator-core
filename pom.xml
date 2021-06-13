@@ -34,6 +34,14 @@
     <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>github-sinha108</id>
+      <name>Test Generator Maven Packages</name>
+      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -61,25 +69,15 @@
       <artifactId>httpclient</artifactId>
       <version>4.5.3</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.evosuite/evosuite-master -->
     <dependency>
-      <!-- <groupId>org.evosuite</groupId>
+      <groupId>org.evosuite</groupId>
       <artifactId>evosuite-master</artifactId>
       <version>${evosuite.version}</version>
-	  <scope>system</scope>
-      <systemPath>${project.basedir}/lib/focus.jar</systemPath>-->
-	    <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-master</artifactId>
-      <version>${evosuite.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/evosuite-master-${evosuite.version}-SNAPSHOT.jar</systemPath>
 	  </dependency>
 	  <dependency>
-	  <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-master-runtime</artifactId>
+      <groupId>org.evosuite</groupId>
+      <artifactId>evosuite-standalone-runtime</artifactId>
       <version>${evosuite.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/evosuite-standalone-runtime-${evosuite.version}-SNAPSHOT.jar</systemPath>
   	</dependency>
      <dependency>
       <groupId>edu.uta.cse.fireeye.acts</groupId>

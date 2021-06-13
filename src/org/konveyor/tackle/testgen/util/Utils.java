@@ -13,34 +13,20 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.util;
 
+import soot.G;
+import soot.Scene;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-
-import soot.G;
-import soot.Scene;
+import java.util.Optional;
 
 public class Utils {
 
@@ -166,28 +152,7 @@ public class Utils {
 	    Scene.v().loadNecessaryClasses();
 	}
 
-	/* Temporarily using Json as config file, will switch to toml later */
-
-	public static JsonObject readConfig() throws IOException {
-
-		InputStream fis = new FileInputStream("config.json");
-        JsonReader reader = Json.createReader(fis);
-        JsonObject configObject = reader.readObject();
-        reader.close();
-
-        return configObject;
-	}
-
-	public static void writeConfig(JsonObject config) throws IOException {
-
-		JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-		JsonWriter writer = writerFactory.createWriter(new FileOutputStream(new File("config.json")));
-
-		writer.writeObject(config);
-        writer.close();
-	}
-
-	public static boolean isPrivateInnerClass(Class<?> theClass) {
+    public static boolean isPrivateInnerClass(Class<?> theClass) {
 
 		return theClass.getEnclosingClass() != null && Modifier.isPrivate(theClass.getModifiers());
 	}
@@ -217,4 +182,16 @@ public class Utils {
 
 		return false;
 	}
+
+	public static String getEvoSuiteJarPath(String jarName) {
+        Optional<String> evosuiteJarPath = Arrays.stream(
+            System.getProperty("java.class.path").split(File.pathSeparator))
+            .filter(elem -> elem.contains(jarName))
+            .findFirst();
+        if (!evosuiteJarPath.isPresent()) {
+            throw new RuntimeException("EvoSuite jar \""+ jarName +"\" not found");
+        }
+        return evosuiteJarPath.get();
+    }
+
 }

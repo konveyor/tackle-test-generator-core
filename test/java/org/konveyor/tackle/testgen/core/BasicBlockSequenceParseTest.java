@@ -13,6 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 import org.junit.Test;
@@ -45,9 +46,8 @@ public class BasicBlockSequenceParseTest {
 		projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
 		projectClasspath += (File.pathSeparator + "test/data/daytrader7/monolith/bin");
 
-		projectClasspath += (File.pathSeparator + "lib" + File.separator + "evosuite-master-1.0.7-SNAPSHOT.jar");
-		projectClasspath += (File.pathSeparator + "lib" + File.separator
-				+ "evosuite-standalone-runtime-1.0.7-SNAPSHOT.jar");
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
 		// For SequenceExecutor class:
 		projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
 
