@@ -16,6 +16,7 @@ package org.konveyor.tackle.testgen.core;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.apache.commons.io.FileUtils;
+import org.konveyor.tackle.testgen.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +47,6 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 	static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
 	private int timeLimit = 0;
 	private CoverageCriterion criterion = null;
-	private static final String EVOSUITE_JAR = "lib"+File.separator+"evosuite-master-"+ Constants.EVOSUITE_VERSION+"-SNAPSHOT.jar";
 
 	private static final Logger logger = TackleTestLogger.getLogger(EvoSuiteTestGenerator.class);
 
@@ -90,10 +90,10 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 			logger.fine("Evosuite method targets list: "+methodTargetList);
 		}
 
-		List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<String>();
 		args.add("java");
 		args.add("-jar");
-		args.add(EVOSUITE_JAR);
+		args.add(Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
 		if (methodTargetList != null) {
 			args.add("-Dtarget_method_list="+methodTargetList);
 		}

@@ -129,5 +129,7 @@ public class Constants {
     /** Evosuite used version **/
 
     public static final String EVOSUITE_VERSION = "1.0.7";
+    public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-master-"+ EVOSUITE_VERSION+".jar";
+    public static final String EVOSUITE_RUNTIME_JAR_NAME = "evosuite-standalone-runtime-"+ EVOSUITE_VERSION+".jar";
 
 }
