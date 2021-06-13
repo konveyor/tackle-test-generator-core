@@ -46,6 +46,12 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      - name: Create maven settings.xml
+        uses: s4u/maven-settings-action@v2.4.0
+        with:
+          servers: '[
+          {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
+        ]'
       - name: Download Randoop jars
         run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
       - name: Delete old package version
