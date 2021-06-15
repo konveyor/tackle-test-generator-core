@@ -13,6 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
@@ -55,7 +56,9 @@ public class BasicBlockSequenceParseTest {
 		args.add("java");
 		args.add("-cp");
 		args.add("\"" + projectClasspath + "\""); // add double quotes in case path contains spaces
-		args.add(ParseRunner.class.getName());
+        // add jacoco agent argument to collect coverage data for process
+        args.add(TestUtils.getJacocoAgentArg(BasicBlockSequenceParseTest.class.getSimpleName()));
+        args.add(ParseRunner.class.getName());
 
 		ProcessBuilder seuqenceParserPB = new ProcessBuilder(args);
 		seuqenceParserPB.inheritIO();

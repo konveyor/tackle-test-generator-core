@@ -19,8 +19,8 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>4.13</junit.version>
+    <jacoco.version>0.8.7</jacoco.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <evosuite.version>1.0.7</evosuite.version>
@@ -48,6 +48,13 @@
       <artifactId>junit</artifactId>
       <version>4.13</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>org.jacoco.agent</artifactId>
+      <version>${jacoco.version}</version>
+      <scope>test</scope>
+      <classifier>runtime</classifier>
     </dependency>
     <dependency>
       <groupId>org.soot-oss</groupId>
@@ -121,6 +128,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <argLine>${surefire.jacoco.args}</argLine>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -159,6 +169,52 @@
                 https://github.com/randoop/randoop/releases/download/v${randoop.version}/replacecall-${randoop.version}.jar
               </url>
               <outputDirectory>${project.basedir}/lib/download</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Code Coverage report generation -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
+              <propertyName>surefire.jacoco.args</propertyName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>merge-execution-data</id>
+            <phase>package</phase>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <directory>${project.build.directory}/jacoco-output/</directory>
+                  <includes>
+                    <include>*.exec</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+              <destFile>${project.build.directory}/jacoco-output/merged.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-code-coverage-report</id>
+            <phase>package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/jacoco-output/merged.exec</dataFile>
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco-merged-test-coverage-report</outputDirectory>
             </configuration>
           </execution>
         </executions>

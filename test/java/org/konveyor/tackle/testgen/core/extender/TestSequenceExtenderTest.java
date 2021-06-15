@@ -13,6 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.Utils;
 import org.junit.Before;
@@ -332,6 +333,8 @@ public class TestSequenceExtenderTest {
 
             // build command line to be executed via process builder
             List<String> args = getCommandLine(app.classpath);
+            // add jacoco agent argument to collect coverage data for process
+            args.add(TestUtils.getJacocoAgentArg(TestSequenceExtenderTest.class.getSimpleName()));
             args.add(SequenceExtenderRunner.class.getName());
             args.add(app.appName);
             args.add(app.testPlanFilename);
@@ -369,6 +372,8 @@ public class TestSequenceExtenderTest {
 
             // build command line to be executed via process builder
             List<String> args = getCommandLine(app.classpath);
+            // add jacoco agent argument to collect coverage data for process
+            args.add(TestUtils.getJacocoAgentArg(TestSequenceExtenderTest.class.getSimpleName()));
             args.add(SequenceExtenderRunner.class.getName());
             args.add(app.appName);
             args.add(app.testPlanFilename);
