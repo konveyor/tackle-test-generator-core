@@ -13,8 +13,18 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen;
 
+import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
+import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
+import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
+import org.konveyor.tackle.testgen.core.extender.TestSequenceExtenderTest;
+import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.Utils;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class TestUtils {
@@ -59,6 +69,86 @@ public class TestUtils {
             testName + "-" + COVERAGE_FILE_COUNTER++ +".exec";
         System.out.println("jacoco agent args: "+jacocoAgentArgs);
         return "-javaagent:" + jacocoAgentJar + jacocoAgentArgs;
+    }
+
+    public static void launchProcess(String testClassName, String appName, String appPath,
+                                     String appClasspathFileName, String seqFile, String testPlanFile,
+                                     Boolean allResults, Boolean jeeSupport, String resultsFile)
+        throws IOException, InterruptedException {
+        String projectClasspath = "";
+
+        File file = new File(appClasspathFileName);
+        if (!file.isFile()) {
+            throw new IOException(file.getAbsolutePath() + " is not a valid file");
+        }
+        projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
+        projectClasspath += (File.pathSeparator + appPath);
+
+        // Adding evosuite runtime classes in case in what used to generate the tests
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
+
+        // For SequenceExecutor class:
+        projectClasspath += (File.pathSeparator+System.getProperty("java.class.path"));
+
+        List<String> processArgs = new ArrayList<String>();
+        processArgs.add("java");
+        processArgs.add("-cp");
+        processArgs.add("\""+projectClasspath+"\""); // add double quotes in case path contains spaces
+
+        // add jacoco agent argument to collect coverage data for process
+        String jacocoAgentArg = TestUtils.getJacocoAgentArg(testClassName+"Test");
+        if (!jacocoAgentArg.isEmpty()) {
+            processArgs.add(jacocoAgentArg);
+        }
+        if (testClassName.equals(SequenceExecutor.class.getSimpleName())) {
+            processArgs.add(SequenceExecutor.class.getName());
+            processArgs.add("-app");
+            processArgs.add(appName);
+            processArgs.add("-seq");
+            processArgs.add(seqFile);
+            processArgs.add("-all");
+            processArgs.add(String.valueOf(allResults));
+        }
+        else if (testClassName.equals(DiffAssertionsGenerator.class.getSimpleName())) {
+            processArgs.add(DiffAssertionsGenerator.class.getName());
+            processArgs.add("-app");
+            processArgs.add(appName);
+            processArgs.add("-seq");
+            processArgs.add(seqFile);
+            processArgs.add("-seqr");
+            processArgs.add(resultsFile);
+        }
+        else {
+            processArgs.add(TestSequenceExtender.class.getName());
+            processArgs.add("-app");
+            processArgs.add(appName);
+            processArgs.add("-tp");
+            processArgs.add(testPlanFile);
+            processArgs.add("-ts");
+            processArgs.add(seqFile);
+            if (jeeSupport) {
+                processArgs.add("-jee");
+            }
+            processArgs.add("-da");
+        }
+
+        ProcessBuilder processExecutorPB = new ProcessBuilder(processArgs);;
+//        processExecutorPB.inheritIO();
+        processExecutorPB.redirectOutput(getDevNullFile());
+        processExecutorPB.redirectError(getDevNullFile());
+        long startTime = System.currentTimeMillis();
+        Process processExecutorP = processExecutorPB.start();
+        processExecutorP.waitFor();
+        System.out.println("Execution took "+(System.currentTimeMillis()-startTime)+" milliseconds");
+    }
+
+    private static File getDevNullFile() {
+        String osname = System.getProperty("os.name").toLowerCase();
+        if (osname.startsWith("win")) {
+            return new File("nul");
+        }
+        return new File("/dev/null");
     }
 
 }

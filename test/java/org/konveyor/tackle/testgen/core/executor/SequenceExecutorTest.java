@@ -27,6 +27,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.core.util.ProcessLauncher;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -51,8 +52,15 @@ public class SequenceExecutorTest {
 	@Test
 	public void testExecuteSequences() throws Exception {
 
-		new ProcessLauncher("SequenceExecutor", "DayTrader", "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", "test/data/daytrader7/DayTrader_extended_sequences.json", true, null);
+		TestUtils.launchProcess(SequenceExecutor.class.getSimpleName(),
+            "DayTrader",
+            "test/data/daytrader7/monolith/bin",
+            "test/data/daytrader7/DayTraderMonoClasspath.txt",
+            "test/data/daytrader7/DayTrader_extended_sequences.json",
+            null,
+            true,
+            null,
+            null);
 
 		assertTrue(outputFile.exists());
 

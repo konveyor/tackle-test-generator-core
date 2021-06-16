@@ -90,7 +90,7 @@ public class BasicBlockSequenceParseTest {
 			}
 
 			for (String cls : initialTestSeq.keySet()) {
-				JsonObject clsInfo = (JsonObject) initialTestSeq.getJsonObject(cls);
+				JsonObject clsInfo = initialTestSeq.getJsonObject(cls);
 				JsonArray sequences = clsInfo.getJsonArray("sequences");
 				JsonArray imports = clsInfo.getJsonArray("imports");
 				List<String> importList = imports.getValuesAs(JsonString.class).stream().map(JsonString::getString)

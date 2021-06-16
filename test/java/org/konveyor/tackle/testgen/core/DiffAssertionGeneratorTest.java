@@ -26,6 +26,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.core.util.ProcessLauncher;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -50,9 +51,15 @@ public class DiffAssertionGeneratorTest {
 	@Test
 	public void testDiffAssertionGenerator() throws Exception {
 
-		new ProcessLauncher("DiffAssertionsGenerator", "DayTrader", "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt",
-				"test/data/daytrader7/DayTrader_extended_sequences.json", null,
-				 "test/data/daytrader7/DayTrader_extended_sequences_results.json");
+		TestUtils.launchProcess(DiffAssertionsGenerator.class.getSimpleName(),
+            "DayTrader",
+            "test/data/daytrader7/monolith/bin",
+            "test/data/daytrader7/DayTraderMonoClasspath.txt",
+            "test/data/daytrader7/DayTrader_extended_sequences.json",
+            null,
+            null,
+            null,
+            "test/data/daytrader7/DayTrader_extended_sequences_results.json");
 
 		assertTrue(outputFile.exists());
 
