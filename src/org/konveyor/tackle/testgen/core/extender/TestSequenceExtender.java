@@ -1840,8 +1840,7 @@ public class TestSequenceExtender {
 		CommandLine cmd = parseCommandLineOptions(args);
 
 		// if parser command-line is empty (which occurs if the help option is specified
-		// or a
-		// parse exception occurs, exit
+		// or a parse exception occurs, exit
 		if (cmd == null) {
 			System.exit(0);
 		}
@@ -1882,7 +1881,8 @@ public class TestSequenceExtender {
         }
 
 		// create extended sequences
-		TestSequenceExtender testSeqExt = new TestSequenceExtender(appName, testPlanFilename, testSeqFilename, true,
+		TestSequenceExtender testSeqExt = new TestSequenceExtender(appName, testPlanFilename,
+            testSeqFilename, true,
 				outputDir, jee, numExecutions, addDiffAsserts);
 		testSeqExt.createExtendedSequences();
 

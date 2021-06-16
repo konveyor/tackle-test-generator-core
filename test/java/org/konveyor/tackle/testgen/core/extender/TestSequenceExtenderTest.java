@@ -13,11 +13,11 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import org.konveyor.tackle.testgen.util.Constants;
-import org.konveyor.tackle.testgen.util.Utils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.konveyor.tackle.testgen.TestUtils;
+import org.konveyor.tackle.testgen.util.Constants;
 
 import javax.json.*;
 import java.io.*;
@@ -33,7 +33,6 @@ import static org.junit.Assert.assertTrue;
 
 public class TestSequenceExtenderTest {
 
-    private static final String JEE_SUPPORT_OPTION = "JEE_SUPPORT";
     private static List<String> OUTDIRS;
     private static List<AppUnderTest> appsUnderTest;
 
@@ -43,7 +42,8 @@ public class TestSequenceExtenderTest {
     static class AppUnderTest {
         String appName;
         String appOutdir;
-        String classpath;
+        String appPath;
+        String appClasspathFilename;
         String testPlanFilename;
         String testSeqFilename;
 
@@ -69,9 +69,11 @@ public class TestSequenceExtenderTest {
         Map<String, String> exp__tatget_method_coverage;
         int exp__test_classes_count;
 
-        AppUnderTest(String appName, String classpath, String testPlanFilename, String testSeqFilename) {
+        AppUnderTest(String appName, String appPath, String appClasspathFilename, String testPlanFilename,
+                     String testSeqFilename) {
             this.appName = appName;
-            this.classpath = classpath;
+            this.appPath = appPath;
+            this.appClasspathFilename = appClasspathFilename;
             this.appOutdir = appName+"-"+ Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
             this.testPlanFilename = testPlanFilename;
             this.testSeqFilename = testSeqFilename;
@@ -82,25 +84,15 @@ public class TestSequenceExtenderTest {
         // create classpath string
         String classpathFilename = "test"+File.separator+"data"+File.separator+
             "daytrader7"+File.separator+"DayTraderMonoClasspath.txt";
-        String projectClasspath = "";
-        File file = new File(classpathFilename);
-        if (!file.isFile()) {
-            throw new IOException(file.getAbsolutePath() + " is not a valid file");
-        }
-        projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
-        projectClasspath += (File.pathSeparator + "test"+File.separator+"data"+File.separator+"daytrader7"+
-            File.separator+"monolith"+File.separator+"bin");
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
-        projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
-
+        String appPath = "test"+File.separator+"data"+File.separator+"daytrader7"+
+            File.separator+"monolith"+File.separator+"bin";
         String testPlanFilename = "test"+File.separator+"data"+File.separator+
             "daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json";
         String testSeqFilename = "test"+File.separator+"data"+File.separator+
             "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json";
 
         // construct app object
-        AppUnderTest app = new AppUnderTest("DayTrader", projectClasspath, testPlanFilename,
+        AppUnderTest app = new AppUnderTest("DayTrader", appPath, classpathFilename, testPlanFilename,
             testSeqFilename);
 
         // set expected values
@@ -138,23 +130,13 @@ public class TestSequenceExtenderTest {
         // create classpath string
         String irsRootDir = "test"+File.separator+"data"+File.separator+"irs";
         String classpathFilename = irsRootDir+File.separator+"irsMonoClasspath.txt";
-        String projectClasspath = "";
-        File file = new File(classpathFilename);
-        if (!file.isFile()) {
-            throw new IOException(file.getAbsolutePath() + " is not a valid file");
-        }
-        projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
-        projectClasspath += (File.pathSeparator + irsRootDir + File.separator + "monolith" +
-            File.separator + "target"+File.separator + "classes");
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
-        projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
-
+        String appPath = irsRootDir + File.separator + "monolith" +
+            File.separator + "target"+File.separator + "classes";
         String testPlanFilename = irsRootDir+File.separator+"irs_ctd_models_and_test_plans.json";
         String testSeqFilename = irsRootDir+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json";
 
         // construct app object
-        AppUnderTest app = new AppUnderTest("irs", projectClasspath, testPlanFilename,
+        AppUnderTest app = new AppUnderTest("irs", appPath, classpathFilename, testPlanFilename,
             testSeqFilename);
 
         // set expected values
@@ -219,22 +201,6 @@ public class TestSequenceExtenderTest {
         }
         Files.deleteIfExists(Paths.get(Constants.COVERAGE_FILE_JSON));
         Files.deleteIfExists(Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON));
-    }
-
-    private List<String> getCommandLine(String classpath)  {
-        List<String> args = new ArrayList<String>();
-        args.add("java");
-        args.add("-cp");
-        args.add("\"" + classpath + "\""); // add double quotes in case path contains spaces
-        return args;
-    }
-
-    private File getDevNullFile() {
-        String osname = System.getProperty("os.name").toLowerCase();
-        if (osname.startsWith("win")) {
-            return new File("nul");
-        }
-        return new File("/dev/null");
     }
 
     private void assertSummaryFile(AppUnderTest app) throws FileNotFoundException {
@@ -330,23 +296,10 @@ public class TestSequenceExtenderTest {
                  continue;
             }
 
-            // build command line to be executed via process builder
-            List<String> args = getCommandLine(app.classpath);
-            args.add(SequenceExtenderRunner.class.getName());
-            args.add(app.appName);
-            args.add(app.testPlanFilename);
-            args.add(app.testSeqFilename);
-            args.add(JEE_SUPPORT_OPTION);
-
-            // execute test case via process builder
-            ProcessBuilder sequenceParserPB = new ProcessBuilder(args);
-//        sequenceParserPB.inheritIO();
-            sequenceParserPB.redirectOutput(getDevNullFile());
-//        sequenceParserPB.redirectError(ProcessBuilder.Redirect.INHERIT);
-            sequenceParserPB.redirectError(getDevNullFile());
-            Process sequenceExecutorP = sequenceParserPB.start();
-            sequenceExecutorP.waitFor();
-            assertEquals(0, sequenceExecutorP.exitValue());
+            // execute test cases via process launcher
+            TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
+                app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
+                app.testPlanFilename, null, true,null);
 
             // assert over summary file
             assertSummaryFile(app);
@@ -367,20 +320,10 @@ public class TestSequenceExtenderTest {
 //                continue;
 //            }
 
-            // build command line to be executed via process builder
-            List<String> args = getCommandLine(app.classpath);
-            args.add(SequenceExtenderRunner.class.getName());
-            args.add(app.appName);
-            args.add(app.testPlanFilename);
-            args.add(app.testSeqFilename);
-
-            // execute test case via process builder
-            ProcessBuilder sequenceParserPB = new ProcessBuilder(args);
-            sequenceParserPB.redirectOutput(getDevNullFile());
-            sequenceParserPB.redirectError(getDevNullFile());
-            Process sequenceExecutorP = sequenceParserPB.start();
-            sequenceExecutorP.waitFor();
-            assertEquals(0, sequenceExecutorP.exitValue());
+            // execute test cases via process launcher
+            TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
+                app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
+                app.testPlanFilename, null, false,null);
 
             // assert over summary file
             assertSummaryFile(app);
@@ -391,38 +334,6 @@ public class TestSequenceExtenderTest {
             // assert over generated test classes dir
             assertTestClassesDir(app);
         }
-    }
-
-
-    static class SequenceExtenderRunner {
-
-        public static void main(String[] args) throws IOException {
-
-            // get app name from command-line args
-            String appName = args[0];
-            String testPlanFilename = args[1];
-            String testSeqFilename = args[2];
-
-            // set jee support option
-            boolean jeeSupportOpt = false;
-            if (args.length == 4 && args[3].equals(JEE_SUPPORT_OPTION)) {
-                jeeSupportOpt = true;
-            }
-
-            // compute extended sequences with diff assertions for test plan and sequence file name
-            TestSequenceExtender testSeqExt = new TestSequenceExtender(appName,
-                testPlanFilename, testSeqFilename, true, null, jeeSupportOpt,
-                Constants.NUM_SEQUENCE_EXECUTION, true
-            );
-            testSeqExt.createExtendedSequences();
-
-            // write test classes
-            testSeqExt.writeTestClasses(true);
-
-            // write coverage information to JSON file and assert over file content
-            testSeqExt.writeTestCoverageFile(null);
-        }
-
     }
 
 }
