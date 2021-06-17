@@ -24,9 +24,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,153 +35,23 @@ import static org.junit.Assert.assertTrue;
 public class TestSequenceExtenderTest {
 
     private static List<String> OUTDIRS;
-    private static List<AppUnderTest> appsUnderTest;
-
-    /**
-     * Class containing information about an application under test
-     */
-    static class AppUnderTest {
-        String appName;
-        String appOutdir;
-        String appPath;
-        String appClasspathFilename;
-        String testPlanFilename;
-        String testSeqFilename;
-
-        // expected values
-        int exp__bb_sequences;
-        int exp__parsed_sequences;
-        int exp__method_sequence_pool_keys;
-        int exp__class_sequence_pool_keys;
-        int exp__generated_sequences;
-        int exp__executed_sequences;
-        int exp__test_plan_rows;
-        int exp__rows_covered_bb_sequences;
-        int expmin_final_sequences;
-        int exp__no_bb_sequence_for_target_method;
-        int exp__non_instantiable_param_type;
-        int exp__excp_during_extension;
-        List<String> exp__execution_exception_types_other;
-        int exp__class_not_found_types;
-        Set<String> exp__parse_exception_types;
-        int exp__randoop_sequence_SequenceParseException;
-        int exp__java_lang_Error;
-        int exp__partition_count;
-        Map<String, String> exp__tatget_method_coverage;
-        int exp__test_classes_count;
-
-        AppUnderTest(String appName, String appPath, String appClasspathFilename, String testPlanFilename,
-                     String testSeqFilename) {
-            this.appName = appName;
-            this.appPath = appPath;
-            this.appClasspathFilename = appClasspathFilename;
-            this.appOutdir = appName+"-"+ Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
-            this.testPlanFilename = testPlanFilename;
-            this.testSeqFilename = testSeqFilename;
-        }
-    }
-
-    private static AppUnderTest createDaytraderApp() throws IOException {
-        // create classpath string
-        String classpathFilename = "test"+File.separator+"data"+File.separator+
-            "daytrader7"+File.separator+"DayTraderMonoClasspath.txt";
-        String appPath = "test"+File.separator+"data"+File.separator+"daytrader7"+
-            File.separator+"monolith"+File.separator+"bin";
-        String testPlanFilename = "test"+File.separator+"data"+File.separator+
-            "daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json";
-        String testSeqFilename = "test"+File.separator+"data"+File.separator+
-            "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json";
-
-        // construct app object
-        AppUnderTest app = new AppUnderTest("DayTrader", appPath, classpathFilename, testPlanFilename,
-            testSeqFilename);
-
-        // set expected values
-        app.exp__bb_sequences = 159;
-        app.exp__parsed_sequences = 141;
-        app.exp__method_sequence_pool_keys = 102;
-        app.exp__class_sequence_pool_keys = 39;
-        app.exp__generated_sequences = 1486;
-        app.exp__executed_sequences = 1471;
-        app.exp__test_plan_rows = 1486;
-        app.exp__rows_covered_bb_sequences = 282;
-        app.expmin_final_sequences = 1146;
-        app.exp__no_bb_sequence_for_target_method = 0;
-        app.exp__non_instantiable_param_type = 0;
-        app.exp__excp_during_extension = 15;
-        app.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
-        app.exp__class_not_found_types = 0;
-        app.exp__parse_exception_types = Stream.of("java.lang.Error", "randoop.sequence.SequenceParseException").
-            collect(Collectors.toSet());
-        app.exp__randoop_sequence_SequenceParseException = 1;
-        app.exp__java_lang_Error = 17;
-        app. exp__partition_count = 4;
-        app.exp__tatget_method_coverage =
-            Stream.of(new String[][] {
-                {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
-                .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-        app.exp__test_classes_count = 42;
-
-        return app;
-    }
-
-    private static AppUnderTest createIrsApp() throws IOException {
-        // create classpath string
-        String irsRootDir = "test"+File.separator+"data"+File.separator+"irs";
-        String classpathFilename = irsRootDir+File.separator+"irsMonoClasspath.txt";
-        String appPath = irsRootDir + File.separator + "monolith" +
-            File.separator + "target"+File.separator + "classes";
-        String testPlanFilename = irsRootDir+File.separator+"irs_ctd_models_and_test_plans.json";
-        String testSeqFilename = irsRootDir+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json";
-
-        // construct app object
-        AppUnderTest app = new AppUnderTest("irs", appPath, classpathFilename, testPlanFilename,
-            testSeqFilename);
-
-        // set expected values
-        app.exp__bb_sequences = 13;
-        app.exp__parsed_sequences = 12;
-        app.exp__method_sequence_pool_keys = 11;
-        app.exp__class_sequence_pool_keys = 5;
-        app.exp__generated_sequences = 25;
-        app.exp__executed_sequences = 25;
-        app.exp__test_plan_rows = 25;
-        app.exp__rows_covered_bb_sequences = 11;
-        app.expmin_final_sequences = 23;
-        app.exp__no_bb_sequence_for_target_method = 0;
-        app.exp__non_instantiable_param_type = 0;
-        app.exp__excp_during_extension = 0;
-        app.exp__execution_exception_types_other = Arrays.asList();
-        app.exp__class_not_found_types = 0;
-        app.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
-            collect(Collectors.toSet());
-        app.exp__randoop_sequence_SequenceParseException = 1;
-        app.exp__java_lang_Error = 0;
-        app.exp__partition_count = 2;
-        app.exp__tatget_method_coverage =
-            Stream.of(new String[][] {
-                {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setAllSalarySets(java.util.Map)::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setAllSalaryMaps(java.util.Map)::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setEmployerSalaryListMap(java.util.List)::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setEmployerSalaryListSet(java.util.List)::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setEmployerArrayList(java.util.List[])::test_plan_row_1", "COVERED"},
-                {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
-                {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
-                .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-        app.exp__test_classes_count = 5;
-
-        return app;
-    }
+    private static List<TestUtils.AppUnderTest> appsUnderTest;
 
     @BeforeClass
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(createDaytraderApp());
-        appsUnderTest.add(createIrsApp());
+        appsUnderTest.add(TestUtils.createDaytraderApp(
+            "test"+File.separator+"data"+File.separator+"daytrader7"+
+                File.separator+"DayTrader_ctd_models_new_format.json",
+            "test"+File.separator+"data"+File.separator+
+                "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(TestUtils.createIrsApp(
+            "test"+File.separator+"data"+File.separator+"irs"+
+                File.separator+"irs_ctd_models_and_test_plans.json",
+            "test"+File.separator+"data"+File.separator+"irs"+
+                File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -203,7 +74,7 @@ public class TestSequenceExtenderTest {
         Files.deleteIfExists(Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON));
     }
 
-    private void assertSummaryFile(AppUnderTest app) throws FileNotFoundException {
+    private void assertSummaryFile(TestUtils.AppUnderTest app) throws FileNotFoundException {
         Path summaryFilePath = Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON);
         assertTrue(Files.exists(summaryFilePath));
 
@@ -253,7 +124,7 @@ public class TestSequenceExtenderTest {
         }
     }
 
-    private void assertCoverageFile(AppUnderTest app) throws FileNotFoundException {
+    private void assertCoverageFile(TestUtils.AppUnderTest app) throws FileNotFoundException {
         Path testCovFilePath = Paths.get(Constants.COVERAGE_FILE_JSON);
         assertTrue(Files.exists(testCovFilePath));
         File testCovFile = new File(testCovFilePath.toString());
@@ -274,7 +145,7 @@ public class TestSequenceExtenderTest {
         }
     }
 
-    private void assertTestClassesDir(AppUnderTest app) throws IOException {
+    private void assertTestClassesDir(TestUtils.AppUnderTest app) throws IOException {
         Path testClassesDir = Paths.get(app.appOutdir);
         assertTrue(Files.exists(testClassesDir));
 
@@ -289,14 +160,14 @@ public class TestSequenceExtenderTest {
     @Test
     public void testGenerateTestsWithJEESupport() throws Exception {
 
-        for (AppUnderTest app : appsUnderTest) {
+        for (TestUtils.AppUnderTest app : appsUnderTest) {
 
             // skip irs app for execution with JEE support
             if (app.appName.equals("irs")) {
                  continue;
             }
 
-            // execute test cases via process launcher
+            // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
                 app.testPlanFilename, null, true,null);
@@ -314,7 +185,7 @@ public class TestSequenceExtenderTest {
 
     @Test
     public void testGenerateTestsWithoutJEESupport() throws Exception {
-        for (AppUnderTest app : appsUnderTest) {
+        for (TestUtils.AppUnderTest app : appsUnderTest) {
 
 //            if (app.appName.equals("DayTrader")) {
 //                continue;

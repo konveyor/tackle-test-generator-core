@@ -14,6 +14,7 @@ limitations under the License.
 package org.konveyor.tackle.testgen.model;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +41,7 @@ import edu.uta.cse.fireeye.common.SUT;
 import edu.uta.cse.fireeye.common.TestGenProfile;
 import edu.uta.cse.fireeye.common.TestSet;
 import edu.uta.cse.fireeye.service.engine.IpoEngine;
+import randoop.org.apache.commons.io.output.NullPrintStream;
 
 /**
  * Collection/non-Collection, user versus non-user types, and remove versus local types.
@@ -70,8 +72,8 @@ class CTDModeler {
 		}
 
 		Class<?>[] paramClasses = method.getParameterClasses();
-		
-		// Define a new CTD model for the current method 
+
+		// Define a new CTD model for the current method
 
 		SUT methodModel = new SUT(method.proxyPartition + "::" + method.proxySootClass.getName()+"::"+method.getFormattedSignature());
 
@@ -79,7 +81,7 @@ class CTDModeler {
 		int paramInd=0;
 
 		boolean isCollection;
-		
+
 		// Go over each parameter of the method and define one (or more in case of a collection) CTD attributes for it
 
 		for (Type paramType : paramTypes) {
@@ -178,12 +180,23 @@ class CTDModeler {
 			Relation r = new Relation(actualInteractionCoverage);
 			for (Parameter attr : methodModel.getParameters()) {
 				r.addParam (attr);
-			}			
+			}
 			// add this relation into the CTD model
 			methodModel.addRelation(r);
 
-			TestSet resultTestPlan = generatePlan(methodModel);
-			addModel(methodModel, models, resultTestPlan, method);
+			// disable stdout and stderr before calling test-plan generator
+            PrintStream origSysOut = System.out;
+            PrintStream origSysErr = System.err;
+            System.setOut(NullPrintStream.NULL_PRINT_STREAM);
+            System.setErr(NullPrintStream.NULL_PRINT_STREAM);
+
+            TestSet resultTestPlan = generatePlan(methodModel);
+
+            // restore stdout and stderr
+            System.setOut(origSysOut);
+            System.setErr(origSysErr);
+
+            addModel(methodModel, models, resultTestPlan, method);
 
 			return resultTestPlan.getNumOfTests();
 		}
@@ -194,10 +207,10 @@ class CTDModeler {
 	private TestSet generatePlan(SUT methodModel) {
 
 		TestGenProfile.instance().setRandstar(TestGenProfile.ON);
-		
+
 		// Create an IPO engine object
 		IpoEngine engine = new IpoEngine(methodModel);
-		
+
 		// build a test set
 		engine.build();
 
@@ -220,19 +233,19 @@ class CTDModeler {
 		Arrays.fill(refersTo, -1);
 
 		int attrIndex=0;
-		
+
 		List<String> attrNames = new ArrayList<>();
-		
+
 		for (Parameter attr : methodModel.getParameters()) {
 			attrNames.add(attr.getName());
 		}
-		
+
 		for (Parameter attr : methodModel.getParameters()) {
 
 			JsonObjectBuilder attrObject = Json.createObjectBuilder();
 
 			String  attrName = attr.getName();
-			
+
 			// Handle attributes that are detailing the content of collections represented by other attributes
 
 			if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
@@ -263,10 +276,10 @@ class CTDModeler {
 		Map<Integer, List<Integer>> relatedAttributes = computeRelatedComponents(refersTo);
 
 		JsonArrayBuilder testsList = Json.createArrayBuilder();
-		
-		/* In ACTS, the order of parameters in the test plan may be different from their order in the model, because 
+
+		/* In ACTS, the order of parameters in the test plan may be different from their order in the model, because
 		 * they are sorted according to their domain size. Hence we need to sync the two orders */
-		
+
 		List<Parameter> sortedParams = testPlan.getParams();
 		Map<Parameter, Integer> paramToTestLoc = getParamsTestLocations(methodModel.getParameters(), sortedParams);
 		List<int[]> testPlanRows = testPlan.getMatrix();
@@ -285,7 +298,7 @@ class CTDModeler {
 					// not a collection attribute
 					testArray.add(getSingleValTestObject(getParamTestValue(methodModel.getParam(i), test, paramToTestLoc)));
 				} else {
-					
+
 					// this is a collection attribute - capture all related attributes and values that relate to this single collection
 
 					JsonObjectBuilder attrValObject = Json.createObjectBuilder();
@@ -306,20 +319,20 @@ class CTDModeler {
 	private Map<Parameter, Integer> getParamsTestLocations(ArrayList<Parameter> parameters,
 			List<Parameter> sortedParams) {
 		Map<Parameter, Integer> paramToTestLoc = new HashMap<>();
-		
+
 		for (int i=0; i<parameters.size(); i++) {
-			
+
 			Parameter current = parameters.get(i);
-			
+
 			for (int j=0; i<parameters.size(); j++) {
-				
+
 				if (current.getName().equals(sortedParams.get(j).getName())) {
 					paramToTestLoc.put(current, j);
 					break;
 				}
 			}
 		}
-		
+
 		return paramToTestLoc;
 	}
 
