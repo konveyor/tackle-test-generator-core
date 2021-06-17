@@ -68,8 +68,8 @@ public class CTDTestPlanGenerator {
 	private List<String> appClasspathEntries; // Application under test classpath entries
 
 
-	CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String partitionsCPPrefix, String partitionsCPSuffix, String monolithPath, String classpathFile,
-                         boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level) throws IOException {
+	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String partitionsCPPrefix, String partitionsCPSuffix, String monolithPath, String classpathFile,
+                                boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level) throws IOException {
 
 		applicationName = appName;
 		cpPrefix = partitionsCPPrefix;
@@ -93,7 +93,7 @@ public class CTDTestPlanGenerator {
 		typeAnalysisResults = new TypeAnalysisResults(RTAClasses);
 	}
 
-	void modelPartitions()
+	public void modelPartitions()
 			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		proxyModelsCounter = 0;
