@@ -17,26 +17,35 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
+import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
 import org.konveyor.tackle.testgen.util.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class IntegrationTest {
+public class TestgenIntegrationTest {
 
     private static List<TestUtils.AppUnderTest> appsUnderTest;
+    private static List<String> OUTDIRS;
 
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
         appsUnderTest.add(TestUtils.createIrsApp(null, null));
+        OUTDIRS = appsUnderTest.stream()
+            .map(app -> app.appOutdir)
+            .collect(Collectors.toList());
     }
 
     @Before
@@ -51,6 +60,16 @@ public class IntegrationTest {
                 Files.deleteIfExists(Paths.get(testSeqFile));
             }
         }
+        for (String outdir: OUTDIRS) {
+            if (Files.exists(Paths.get(outdir))) {
+                Files.walk(Paths.get(outdir))
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+            }
+        }
+        Files.deleteIfExists(Paths.get(Constants.COVERAGE_FILE_JSON));
+        Files.deleteIfExists(Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON));
     }
 
     @Test
@@ -80,6 +99,25 @@ public class IntegrationTest {
             for (String testSeqFile : testSeqFilenames) {
                 assertTrue(new File(testSeqFile).exists());
             }
+
+            // generate test cases via process launcher
+            TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
+                testApp.appName, testApp.appPath, testApp.appClasspathFilename, testApp.testSeqFilename,
+                testApp.testPlanFilename, null, true,null);
+
+            // assert that test directory and summary files are created
+            assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
+            assertTrue(Files.exists(Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON)));
+            assertTrue(Files.exists(Paths.get(Constants.COVERAGE_FILE_JSON)));
+
+            // assert over the number of expected test classes
+            assertEquals(testApp.exp__test_classes_count, Files
+                .walk(Paths.get(testApp.appOutdir))
+                .filter(p -> p.toFile().isFile())
+                .count()
+            );
+
         }
+
     }
 }

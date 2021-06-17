@@ -167,7 +167,7 @@ public class TestSequenceExtenderTest {
                  continue;
             }
 
-            // execute test cases via process launcher
+            // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
                 app.testPlanFilename, null, true,null);
