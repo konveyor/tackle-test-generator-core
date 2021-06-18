@@ -21,6 +21,7 @@
     <junit.version>4.13</junit.version>
     <jacoco.version>0.8.7</jacoco.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <evosuite.version>1.0.7</evosuite.version>
@@ -136,6 +137,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven-jar-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
