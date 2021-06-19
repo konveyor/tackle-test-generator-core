@@ -184,17 +184,17 @@ class CTDModeler {
 			// add this relation into the CTD model
 			methodModel.addRelation(r);
 
-			// disable stdout and stderr before calling test-plan generator
-            PrintStream origSysOut = System.out;
-            PrintStream origSysErr = System.err;
-            System.setOut(NullPrintStream.NULL_PRINT_STREAM);
-            System.setErr(NullPrintStream.NULL_PRINT_STREAM);
+//			// disable stdout and stderr before calling test-plan generator
+//            PrintStream origSysOut = System.out;
+//            PrintStream origSysErr = System.err;
+//            System.setOut(NullPrintStream.NULL_PRINT_STREAM);
+//            System.setErr(NullPrintStream.NULL_PRINT_STREAM);
 
             TestSet resultTestPlan = generatePlan(methodModel);
 
-            // restore stdout and stderr
-            System.setOut(origSysOut);
-            System.setErr(origSysErr);
+//            // restore stdout and stderr
+//            System.setOut(origSysOut);
+//            System.setErr(origSysErr);
 
             addModel(methodModel, models, resultTestPlan, method);
 
