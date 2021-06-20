@@ -59,6 +59,15 @@ public class Utils {
 		}
 		return sb.append(')').toString().replace('.', '/');
 	}
+	
+	/**
+	 * Retrieves a Java class name from its file name
+	 * @param fileName The Java file
+	 * @param rootDir The root directory in which the package is located 
+	 * @param suffix The file suffix to be ignored 
+	 * @param separator The file separator
+	 * @return
+	 */
 
 	public static String fileToClass(String fileName, String rootDir, String suffix, String separator) {
 		String root = rootDir;

@@ -30,7 +30,6 @@ import javax.json.JsonValue;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.konveyor.tackle.testgen.util.Constants;
 
 public class CTDModelingTest {
@@ -48,7 +47,7 @@ public class CTDModelingTest {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
 				null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is  created
@@ -75,7 +74,7 @@ public class CTDModelingTest {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, null, null, null,
 				"test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is  created
@@ -155,9 +154,7 @@ public class CTDModelingTest {
 						assertEquals(standardValuesArray.size(), valuesArray.size());
 					}
 				}
-
 			}
-
 		}
 	}
 }

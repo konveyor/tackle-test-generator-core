@@ -45,18 +45,6 @@ public class Constants {
 
     public static final String INITIALIZER_OUTPUT_FILE_NAME_SUFFIX = "bb_test_sequences.json";
 
-    /** Suffix of directory name to which the test sequences are written in the form of junit test cases.
-     * The application name is added at the beginning of the directory name */
-
-//    public static final String JUNIT_OUTDIR_SUFFIX = "FinalJUnitTests";
-
-    /**
-     * The name of the package containing refactoring code utilities that are added to the
-     * refactored application
-     */
-
-    public static final String REFACTOR_UTIL_PACKAGE_NAME = "com.ibm.cardinal.util";
-
     /**
      * Coverage attained for a test plan row:
      *      COVERED: fully covered
