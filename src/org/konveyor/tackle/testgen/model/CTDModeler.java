@@ -14,7 +14,6 @@ limitations under the License.
 package org.konveyor.tackle.testgen.model;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +40,6 @@ import edu.uta.cse.fireeye.common.SUT;
 import edu.uta.cse.fireeye.common.TestGenProfile;
 import edu.uta.cse.fireeye.common.TestSet;
 import edu.uta.cse.fireeye.service.engine.IpoEngine;
-import randoop.org.apache.commons.io.output.NullPrintStream;
 
 /**
  * Collection/non-Collection, user versus non-user types, and remove versus local types.
@@ -53,11 +51,13 @@ import randoop.org.apache.commons.io.output.NullPrintStream;
 class CTDModeler {
 
 	private CTDTestPlanGenerator.TargetFetcher targetClassesFetcher;
+	private String refactorPackagePrefix = null;
 
 	private static final Logger logger = TackleTestLogger.getLogger(CTDModeler.class);
 
-	CTDModeler(CTDTestPlanGenerator.TargetFetcher fetcher) {
+	CTDModeler(CTDTestPlanGenerator.TargetFetcher fetcher, String refactorPrefix) {
 		targetClassesFetcher = fetcher;
+		refactorPackagePrefix = refactorPrefix;
 	}
 
 
@@ -75,7 +75,7 @@ class CTDModeler {
 
 		// Define a new CTD model for the current method
 
-		SUT methodModel = new SUT(method.proxyPartition + "::" + method.proxySootClass.getName()+"::"+method.getFormattedSignature());
+		SUT methodModel = new SUT(method.targetPartition + "::" + method.targetSootClass.getName()+"::"+method.getFormattedSignature());
 
 		int attrInd=0;
 		int paramInd=0;
@@ -94,7 +94,8 @@ class CTDModeler {
 
 			/* Order of checks is important for their correctness */
 
-			if (Utils.isPrimitive(paramClass) || JavaMethodModel.isUtilType(paramType.getTypeName())) {
+			if (Utils.isPrimitive(paramClass) || 
+					JavaMethodModel.isUtilType(paramType.getTypeName(), refactorPackagePrefix)) {
 				params = Collections.singletonList(new ModelAttribute(Collections.singletonList(paramClass), Collections.emptyMap(), "attr_"+attrInd));
 			} else if (JavaMethodModel.isCollection(paramClass)) {
 				isCollection = true;

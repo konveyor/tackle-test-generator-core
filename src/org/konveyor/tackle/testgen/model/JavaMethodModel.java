@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.Utils;
 
 import soot.FastHierarchy;
@@ -39,18 +38,18 @@ import soot.Scene;
 import soot.SootClass;
 
 /**
- * Holds and computes information related to proxy methods
+ * Holds and computes information related to target methods
  * @author RACHELBRILL
  *
  */
 
 public class JavaMethodModel {
 
-    final String proxyPartition;
-    final Class<?> proxyClass;
-    final SootClass proxySootClass;
-    // proxy method can be either a java reflection Constructor or Method
-    final Object proxyMethod;
+    final String targetPartition;
+    final Class<?> targetClass;
+    final SootClass targetSootClass;
+    // target method can be either a java reflection Constructor or Method
+    final Object targetMethod;
 	private final FastHierarchy classHierarchy;
 
 	private final boolean allCHATypes;
@@ -92,10 +91,10 @@ public class JavaMethodModel {
 			throw new IllegalArgumentException("Method argument must be a Method or Constructor type");
 		}
 
-		proxyPartition = partition;
-		proxyClass = theClass;
-		proxySootClass = Scene.v().loadClassAndSupport(theClass.getName());
-		proxyMethod = method;
+		targetPartition = partition;
+		targetClass = theClass;
+		targetSootClass = Scene.v().loadClassAndSupport(theClass.getName());
+		targetMethod = method;
 		this.classLoader = classLoader;
 		allCHATypes = allTypes;
 		maxCollectionDepth = maxDepth;
@@ -104,10 +103,10 @@ public class JavaMethodModel {
 
 	String getSignature() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-		if (proxyMethod instanceof Method) {
-			return Utils.getSignature((Method) proxyMethod);
+		if (targetMethod instanceof Method) {
+			return Utils.getSignature((Method) targetMethod);
 		} else {
-			return Utils.getSignature((Constructor<?>) proxyMethod);
+			return Utils.getSignature((Constructor<?>) targetMethod);
 		}
 	}
 
@@ -115,8 +114,8 @@ public class JavaMethodModel {
 
 		StringBuilder sb = new StringBuilder();
 
-		if (proxyMethod instanceof Method) { // for constructors we don't need the return type
-			Class<?> returnType = ((Method) proxyMethod).getReturnType();
+		if (targetMethod instanceof Method) { // for constructors we don't need the return type
+			Class<?> returnType = ((Method) targetMethod).getReturnType();
 			sb.append(returnType==void.class? "void": returnType.getTypeName());
 			sb.append(" ");
 		}
@@ -134,34 +133,34 @@ public class JavaMethodModel {
 	}
 
 	Type[] getParameterTypes() {
-		if (proxyMethod instanceof Method) {
-			return ((Method) proxyMethod).getGenericParameterTypes();
+		if (targetMethod instanceof Method) {
+			return ((Method) targetMethod).getGenericParameterTypes();
 		} else {
-			return ((Constructor<?>) proxyMethod).getGenericParameterTypes();
+			return ((Constructor<?>) targetMethod).getGenericParameterTypes();
 		}
 	}
 
 	Class<?>[] getParameterClasses() {
-		if (proxyMethod instanceof Method) {
-			return ((Method) proxyMethod).getParameterTypes();
+		if (targetMethod instanceof Method) {
+			return ((Method) targetMethod).getParameterTypes();
 		} else {
-			return ((Constructor<?>) proxyMethod).getParameterTypes();
+			return ((Constructor<?>) targetMethod).getParameterTypes();
 		}
 	}
 
 	String getName() {
-		if (proxyMethod instanceof Method) {
-			return ((Method) proxyMethod).getName();
+		if (targetMethod instanceof Method) {
+			return ((Method) targetMethod).getName();
 		} else {
-			return ((Constructor<?>) proxyMethod).getName();
+			return ((Constructor<?>) targetMethod).getName();
 		}
 	}
 
 	TypeVariable<?>[] getTypeParameters() {
-		if (proxyMethod instanceof Method) {
-			return ((Method) proxyMethod).getTypeParameters();
+		if (targetMethod instanceof Method) {
+			return ((Method) targetMethod).getTypeParameters();
 		} else {
-			return ((Constructor<?>) proxyMethod).getTypeParameters();
+			return ((Constructor<?>) targetMethod).getTypeParameters();
 		}
 	}
 
@@ -551,7 +550,8 @@ public class JavaMethodModel {
 		return paramClass.isAssignableFrom(theClass);
 	}
 
-	static boolean isUtilType(String paramName) {
-		return paramName.startsWith(Constants.REFACTOR_UTIL_PACKAGE_NAME);
+	static boolean isUtilType(String paramName, String refactorPrefix) {
+		return (refactorPrefix != null && 
+				paramName.startsWith(refactorPrefix));
 	}
 }

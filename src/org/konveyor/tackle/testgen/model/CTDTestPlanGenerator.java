@@ -66,10 +66,15 @@ public class CTDTestPlanGenerator {
 	private static final Logger logger = TackleTestLogger.getLogger(CTDTestPlanGenerator.class);
 
 	private List<String> appClasspathEntries; // Application under test classpath entries
+	private String refactoringPackagePrefix = null;
+	private String partitionsFilePrefix = null;
+	private String partitionsFileSuffix = null;
+	private String partitionsFileSeparator = null;
 
 
-	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String partitionsCPPrefix, String partitionsCPSuffix, String monolithPath, String classpathFile,
-                                boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level) throws IOException {
+	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String partitionsCPPrefix, String partitionsCPSuffix, String monolithPath, 
+			String classpathFile, boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level, String refactoringPrefix, 
+			String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {
 
 		applicationName = appName;
 		cpPrefix = partitionsCPPrefix;
@@ -79,6 +84,10 @@ public class CTDTestPlanGenerator {
 		maxCollectionNestDepth = maxNestDepth;
 		addLocalRemoteTag = addLocalRemote;
 		interactionLevel = level;
+		refactoringPackagePrefix  = refactoringPrefix;
+		partitionsFilePrefix = partitionsPrefix;
+		partitionsFileSuffix = partitionsSuffix;
+		partitionsFileSeparator = partitionsSeparator;
 
 		appClasspathEntries = Utils.getClasspathEntries(new File(classpathFile));
 
@@ -155,7 +164,7 @@ public class CTDTestPlanGenerator {
 			}
 		}
 
-		CTDModeler modeler = new CTDModeler(targetFetcher);
+		CTDModeler modeler = new CTDModeler(targetFetcher, refactoringPackagePrefix);
 
 		JsonObjectBuilder classesBuilder = Json.createObjectBuilder();
 
@@ -404,32 +413,29 @@ public class CTDTestPlanGenerator {
 
 			JsonArray proxyFiles = partitionData.getJsonArray("Proxy");
 
-			//TODO: get prefix of partition files as parameter instead of hard-coded
-
-			String JAVA_CARDINAL_SUFFIX = Constants.JAVA_FILE_SUFFIX + "\"";
-
 			for (JsonValue currentFile : proxyFiles) {
-				currentProxyClasses.add(Utils.fileToClass(currentFile.toString(), currentFile.toString().substring(0, currentFile.toString().indexOf("main/java/")+
-						"main/java/".length()-1), JAVA_CARDINAL_SUFFIX, "/"));
+				currentProxyClasses.add(getClassName(currentFile.toString()));
 			}
 
 			JsonArray otherFiles = partitionData.getJsonArray("Service");
 			for (JsonValue currentFile : otherFiles) {
-				currentRemoteClasses.add(Utils.fileToClass(currentFile.toString(), currentFile.toString().substring(0, currentFile.toString().indexOf("main/java/")+
-						"main/java/".length()-1), JAVA_CARDINAL_SUFFIX, "/"));
+				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
 
 			otherFiles = partitionData.getJsonArray("Real");
 			for (JsonValue currentFile : otherFiles) {
-				currentRemoteClasses.add(Utils.fileToClass(currentFile.toString(), currentFile.toString().substring(0, currentFile.toString().indexOf("main/java/")+
-						"main/java/".length()-1), JAVA_CARDINAL_SUFFIX, "/"));
+				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
 
 			otherFiles = partitionData.getJsonArray("Util");
 			for (JsonValue currentFile : otherFiles) {
-				currentRemoteClasses.add(Utils.fileToClass(currentFile.toString(), currentFile.toString().substring(0, currentFile.toString().indexOf("main/java/")+
-						"main/java/".length()-1), JAVA_CARDINAL_SUFFIX, "/"));
+				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
+		}
+		
+		private String getClassName(String fileName) {
+			return Utils.fileToClass(fileName, fileName.substring(0, fileName.indexOf(partitionsFilePrefix)+
+					partitionsFilePrefix.length()-1), partitionsFileSuffix, partitionsFileSeparator);
 		}
 
 		public Set<String> getPartitions() {
@@ -440,23 +446,23 @@ public class CTDTestPlanGenerator {
 		public String getLocalRemoteTag(JavaMethodModel method, String className) {
 			String invokedComponent = null;
 			for (Map.Entry<String, PartitionData> entry : proxyClassesToRemoteClasses.entrySet()) {
-				if (entry.getValue().localClasses.contains(method.proxyClass.getName())) {
+				if (entry.getValue().localClasses.contains(method.targetClass.getName())) {
 					invokedComponent = entry.getKey();
 					break;
 				}
 			}
 
 			if (invokedComponent == null) {
-				throw new RuntimeException("Couldn't find "+method.proxyClass.getName()+" in components data");
+				throw new RuntimeException("Couldn't find "+method.targetClass.getName()+" in components data");
 			}
 
-			if (invokedComponent.equals(method.proxyPartition)) {
-				throw new RuntimeException(method.proxyClass.toString()+" resides in same component as proxy caller from "+method.proxyPartition);
+			if (invokedComponent.equals(method.targetPartition)) {
+				throw new RuntimeException(method.targetClass.toString()+" resides in same component as proxy caller from "+method.targetPartition);
 			}
 
 			String label;
 
-			if (proxyClassesToRemoteClasses.get(method.proxyPartition).proxyClasses
+			if (proxyClassesToRemoteClasses.get(method.targetPartition).proxyClasses
 					.contains(className)) {
 				label = "remote/";
 				if (proxyClassesToRemoteClasses.get(invokedComponent).proxyClasses
@@ -695,6 +701,46 @@ public class CTDTestPlanGenerator {
             .type(Integer.class)
             .build()
         );
+        
+        // option for refactoring package prefix
+        
+        options.addOption(Option.builder("rp")
+                .longOpt("refactoring-package-prefix")
+                .hasArg()
+                .desc("Package prefix of utility classes added during refactoring")
+                .type(String.class)
+                .build()
+            );
+        
+        // option for partitions file classes prefix
+        
+        options.addOption(Option.builder("pcp")
+                .longOpt("partitions-file-classes-prefix")
+                .hasArg()
+                .desc("Prefix preceding class names in partitions file")
+                .type(String.class)
+                .build()
+            );
+        
+        // option for partitions file classes prefix
+        
+        options.addOption(Option.builder("pcs")
+                .longOpt("partitions-file-classes-suffix")
+                .hasArg()
+                .desc("Prefix succeeding class names in partitions file")
+                .type(String.class)
+                .build()
+            );
+        
+        // option for partitions file classes separator
+        
+        options.addOption(Option.builder("pfs")
+                .longOpt("partitions-file-classes-separator")
+                .hasArg()
+                .desc("File separator used in partitions file")
+                .type(String.class)
+                .build()
+            );
 
         // help option
         options.addOption(Option.builder("h")
@@ -821,9 +867,33 @@ public class CTDTestPlanGenerator {
         	interactionLevel = Integer.parseInt(cmd.getOptionValue("ic"));
         	System.out.println("* CTD interaction level: "+interactionLevel);
         }
+        
+        String refactoringPrefix = null;
+        if (cmd.hasOption("rp")) {
+        	refactoringPrefix = cmd.getOptionValue("rp");
+        	System.out.println("* Refactoring package prefix: "+refactoringPrefix);
+        }
+        
+        String partitionsPrefix =  "main/java/";
+        if (cmd.hasOption("pcp")) {
+        	partitionsPrefix = cmd.getOptionValue("pcp");
+        	System.out.println("* Partitions file classes prefix: "+partitionsPrefix);
+        }
+        
+        String partitionsSuffix =  ".java\"";
+        if (cmd.hasOption("pcs")) {
+        	partitionsSuffix = cmd.getOptionValue("pcs");
+        	System.out.println("* Partitions file classes suffix: "+partitionsSuffix);
+        }
+        
+        String partitionsSeparator =  "/";
+        if (cmd.hasOption("pfs")) {
+        	partitionsSeparator = cmd.getOptionValue("pfs");
+        	System.out.println("* Partitions file classes seaprator: "+partitionsSeparator);
+        }
 
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(appName, partitionFileName, targetClassList, partitionPrefix, partitionSuffix, appPath, classpathFilename,
-				allCHA, maxDepth, addLocalRemote, interactionLevel);
+				allCHA, maxDepth, addLocalRemote, interactionLevel, refactoringPrefix, partitionsPrefix, partitionSuffix, partitionsSeparator);
 		analyzer.modelPartitions();
 	}
 }
