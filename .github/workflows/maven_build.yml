@@ -59,6 +59,6 @@ jobs:
         with:
           package-name: 'org.konveyor.tackle-test-generator-core'
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -Dmaven.test.skip=true
+        run: mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
