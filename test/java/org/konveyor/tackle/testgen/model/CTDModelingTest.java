@@ -93,7 +93,7 @@ public class CTDModelingTest {
 		JsonObject standardObject = reader.readObject();
 		reader.close();
 
-//		compareModels(resultObject, standardObject);
+		compareModels(resultObject, standardObject);
 	}
 
 	/* We cannot compare the objects in a straightforward way because CTD result might differ

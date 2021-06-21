@@ -275,6 +275,14 @@ public class CTDTestPlanGenerator {
 								break;
 							}
 						}
+						
+						Type returnType = method.getGenericReturnType();
+						Type interReturnType = interMethod.getGenericReturnType();
+						
+						if ( ! returnType.getTypeName().equals(interReturnType.getTypeName()) &&
+								( ! returnType.getTypeName().equals("java.lang.Object") || ! isTypeParam(interReturnType, types))) {
+							isMatch = false;
+						}
 
 						if (isMatch) {
 							return true;
@@ -306,12 +314,17 @@ public class CTDTestPlanGenerator {
 				if (types.length > 0) {
 					Set<Method> paramMethods = new HashSet<>();
 					for (Method method : inter.getDeclaredMethods()) {
-						for (Type param : method.getGenericParameterTypes()) {
-							if (isTypeParam(param, types)) {
-								paramMethods.add(method);
-								break;
+						if (isTypeParam(method.getGenericReturnType(), types)) {
+							paramMethods.add(method);
+						} else {
+							for (Type param : method.getGenericParameterTypes()) {
+								if (isTypeParam(param, types)) {
+									paramMethods.add(method);
+									break;
+								}
 							}
 						}
+						
 					}
 					if ( ! paramMethods.isEmpty()) {
 						parameterizedInterfaceMethods .put(inter, paramMethods);
