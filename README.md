@@ -39,6 +39,7 @@ The tool can be built using `maven`, following these steps:
    ```dtd
    mvn package
    ```
+CTD modeling and test-plan generation is done using the [NIST Automated Combinatorial Testing for Software](https://csrc.nist.gov/projects/automated-combinatorial-testing-for-software) tool, which is packaged with the test generator (in the `lib` directory).
 
 ## Tool Usage
 
