@@ -33,8 +33,8 @@ public class ExtenderSummary {
     int totalTestPlanRows = 0;
     int covTestPlanRows__full = 0;
     int covTestPlanRows__partial = 0;
-    int covTestPlanRows__full_jee = 0;
-    int covTestPlanRows__partial_jee = 0;
+    public int covTestPlanRows__full_jee = 0;
+    public int covTestPlanRows__partial_jee = 0;
     int covTestPlanRows__initSeq = 0;
     int uncovTestPlanRows__noInitSeq = 0;
     int uncovTestPlanRows__execFail = 0;

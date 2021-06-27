@@ -13,7 +13,9 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.executor;
 
+import com.github.javaparser.utils.Pair;
 import org.konveyor.tackle.testgen.core.JUnitTestExporter;
+import org.konveyor.tackle.testgen.core.extender.ExtenderSummary;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.apache.commons.io.FileUtils;
@@ -59,7 +61,8 @@ public class JUnitExecutor {
                                         Map<String, Boolean> seqIdToPartial,
                                         Map<String, String> seqIdToRowId,
                                         Map<String, Map<String, Constants.TestPlanRowCoverage>> seqIdToCovInfo,
-                                        HashMap<String, Sequence> seqIdMap) {
+                                        HashMap<String, Sequence> seqIdMap,
+                                        ExtenderSummary extSummary) {
         Set<String> passedIDs;
         if ( ! failedSeqIds.isEmpty()) {
 
@@ -77,12 +80,10 @@ public class JUnitExecutor {
                     Map<String, Constants.TestPlanRowCoverage> methodCovInfo = seqIdToCovInfo.get(seqId);
                     if (seqIdToPartial.get(seqId).equals(Boolean.TRUE)) {
                         methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.PARTIAL_JEE);
-                        // TODO
-//                        this.covTestPlanRows__partial_jee++;
+                        extSummary.covTestPlanRows__partial_jee++;
                     } else {
                         methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.COVERED_JEE);
-                        // TODO
-//                        this.covTestPlanRows__full_jee++;
+                        extSummary.covTestPlanRows__full_jee++;
                     }
                 }
             } catch (IOException e) {

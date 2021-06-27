@@ -343,7 +343,7 @@ public class TestSequenceExtender {
                     System.setErr(NullPrintStream.NULL_PRINT_STREAM);
 					this.junitExecutor.runFailedwithJEESupport(classJEEExecInfo.failedSeqIds, partition,
                         className, classJEEExecInfo.seqIdToPartial, classJEEExecInfo.seqIdToRowId,
-                        classJEEExecInfo.seqIdToCovInfo, this.seqIdMap);
+                        classJEEExecInfo.seqIdToCovInfo, this.seqIdMap, this.extSummary);
                     System.setOut(origSysOut);
                     System.setErr(origSysErr);
                 }
