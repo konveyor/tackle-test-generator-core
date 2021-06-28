@@ -324,7 +324,7 @@ public class DiffAssertionsGenerator {
 		String arg1_fixed = arg1;
 
 		if (arg1.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
-			arg1_fixed = "null";
+			return "assertNull("+arg2+");"+LINE_SEPARATOR;
 		}
 
 		// Check long case - shouldn't pass as int but passes as long
