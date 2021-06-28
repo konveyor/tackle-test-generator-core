@@ -28,9 +28,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
 import soot.FastHierarchy;
@@ -65,6 +67,8 @@ public class JavaMethodModel {
 	static final String LIST_TAG = "_list";
 	static final String MAP_KEY_TAG = "_key";
 	static final String MAP_VALUE_TAG = "_value";
+	
+	private static final Logger logger = TackleTestLogger.getLogger(JavaMethodModel.class);
 
 	private static class CollectionTypeInfo {
 
@@ -166,7 +170,6 @@ public class JavaMethodModel {
 
 	Set<Class<?>> getAllConcreteTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
 
-
 		Set<Class<?>>  types = typeAnalysisResults.getSubClasses(paramType);
 
 		if (types != null) {
@@ -178,7 +181,14 @@ public class JavaMethodModel {
 		Set<SootClass> classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
 		classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
 		for (SootClass currentSootClass : classes) {
-			Class<?> currentClass = classLoader.loadClass(currentSootClass.toString());
+			
+			Class<?> currentClass;
+			try {
+				currentClass = classLoader.loadClass(currentSootClass.toString());
+			} catch (ClassNotFoundException | NoClassDefFoundError e) {
+				logger.warning(e.getMessage());
+				continue;
+			}
 
 			if (currentSootClass.isConcrete() && typeAnalysisResults.inRTAResults(currentSootClass.getName()) &&
 					(isCollection(currentClass) ||
@@ -207,7 +217,13 @@ public class JavaMethodModel {
 		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
 		Set<SootClass> classes = getAllSuperclasses(paramClass);
 		for (SootClass currentSootClass : classes) {
-			Class<?> currentClass = classLoader.loadClass(currentSootClass.toString());
+			Class<?> currentClass;
+			try {
+				currentClass = classLoader.loadClass(currentSootClass.toString());
+			} catch (ClassNotFoundException | NoClassDefFoundError e) {
+				logger.warning(e.getMessage());
+				continue;
+			}
 			if (currentSootClass.isConcrete() && typeAnalysisResults.inRTAResults(currentSootClass.getName()) &&
 					(isCollection(currentClass) ||
 							allCHATypes || ! Utils.isJavaType(currentSootClass.getName()))) {
