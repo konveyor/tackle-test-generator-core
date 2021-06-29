@@ -127,10 +127,14 @@ public class JUnitTestExporter {
 				writer.write("import "+imp+";");
 				writer.newLine();
 			}
-			if ( ! testImports.contains("static org.junit.Assert.assertEquals")) {
-				writer.write("import static org.junit.Assert.assertEquals;");
-				writer.newLine();
-			}
+            if ( ! testImports.contains("static org.junit.Assert.assertEquals")) {
+                writer.write("import static org.junit.Assert.assertEquals;");
+                writer.newLine();
+            }
+            if ( ! testImports.contains("static org.junit.Assert.assertNull")) {
+                writer.write("import static org.junit.Assert.assertNull;");
+                writer.newLine();
+            }
 			if ( ! testImports.contains("org.junit.Test")) {
 				writer.write("import org.junit.Test;");
 				writer.newLine();

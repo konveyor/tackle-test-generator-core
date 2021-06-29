@@ -99,7 +99,8 @@ public abstract class AbstractJUnitTestImporter {
 		});
 
 		// add an import for the diff assertions that we may add later
-		imports.add("static org.junit.Assert.assertEquals");
+        imports.add("static org.junit.Assert.assertEquals");
+        imports.add("static org.junit.Assert.assertNull");
 
 		classToSequences.put(className, sequences);
 		classToImports.put(className, imports);
