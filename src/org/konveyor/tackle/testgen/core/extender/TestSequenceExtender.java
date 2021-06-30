@@ -313,6 +313,17 @@ public class TestSequenceExtender {
 						}
 						continue;
 					}
+					catch (NoClassDefFoundError ncdf) {
+                        String errmsg = "Error parsing: " + parseableMethodSig + "\n" + ncdf;
+                        logger.warning(errmsg);
+                        this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
+                        this.extSummary.uncovTestPlanRows__excp__ClassNotFound += currTestPlanRows.length;
+                        this.extSummary.classNotFoundTypes.add(ncdf.getMessage());
+                        for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
+                            methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
+                        }
+                        continue;
+                    }
 
 					// if method is non-static/constructor and no test sequence exists for it in the
                     // sequence pool (i.e., a sequence that creates the receiver object), skip method
@@ -870,7 +881,7 @@ public class TestSequenceExtender {
                 else {
                     seq = processScalarType(randoopType, true, seq);
                 }
-            } catch (ClassNotFoundException cnfe) {
+            } catch (ClassNotFoundException|NoClassDefFoundError cnfe) {
                 String errmsg = "Class not found for type: " + paramType + " in signature " +
                     tgtMethodSig + "\n" + cnfe;
                 logger.warning(errmsg);
@@ -1514,10 +1525,10 @@ public class TestSequenceExtender {
 		for (String clsName : testPlanClasses) {
 			try {
 				createConstructorSequence(clsName);
-			} catch (ClassNotFoundException cnfe) {
-				logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
-				this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
-			}
+			} catch (ClassNotFoundException|NoClassDefFoundError cnfe) {
+                logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
+                this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
+            }
 		}
 	}
 
