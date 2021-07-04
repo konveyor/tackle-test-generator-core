@@ -347,7 +347,7 @@ public class TestSequenceExtender {
 
 				}
 
-				if (jeeSupport) {
+				if (jeeSupport && ! classJEEExecInfo.failedSeqIds.isEmpty()) {
                     PrintStream origSysOut = System.out;
                     PrintStream origSysErr = System.err;
                     System.setOut(NullPrintStream.NULL_PRINT_STREAM);
