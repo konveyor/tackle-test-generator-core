@@ -13,27 +13,35 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.executor;
 
-import com.github.javaparser.utils.Pair;
-import org.konveyor.tackle.testgen.core.JUnitTestExporter;
-import org.konveyor.tackle.testgen.core.extender.ExtenderSummary;
-import org.konveyor.tackle.testgen.util.Constants;
-import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.io.FileUtils;
-import randoop.sequence.Sequence;
-
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+
+import org.apache.commons.io.FileUtils;
+import org.konveyor.tackle.testgen.core.JUnitTestExporter;
+import org.konveyor.tackle.testgen.core.extender.ExtenderSummary;
+import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
+
+import randoop.sequence.Sequence;
 
 public class JUnitExecutor {
 

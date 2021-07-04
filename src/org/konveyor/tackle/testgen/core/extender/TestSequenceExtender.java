@@ -347,7 +347,7 @@ public class TestSequenceExtender {
 
 				}
 
-				if (jeeSupport) {
+				if (jeeSupport && ! classJEEExecInfo.failedSeqIds.isEmpty()) {
                     PrintStream origSysOut = System.out;
                     PrintStream origSysErr = System.err;
                     System.setOut(NullPrintStream.NULL_PRINT_STREAM);
@@ -1121,7 +1121,7 @@ public class TestSequenceExtender {
             colType, typeArgument
         );
         InstantiatedType colInstType = instInfo.instantiatedType;
-        Constructor colCtor = instInfo.typeConstructor;
+        Constructor<?> colCtor = instInfo.typeConstructor;
         Method colAddMethod = instInfo.addMethod;
 
 		// extend sequence with collection instantiation statements
@@ -1203,7 +1203,7 @@ public class TestSequenceExtender {
             mapType, keyTypeArgument, valueTypeArgument
         );
         InstantiatedType mapInstType = instInfo.instantiatedType;
-        Constructor mapCtor = instInfo.typeConstructor;
+        Constructor<?> mapCtor = instInfo.typeConstructor;
         Method mapPutMethod = instInfo.addMethod;
 
         // extend sequence with map instantiation statements
@@ -1611,8 +1611,8 @@ public class TestSequenceExtender {
 	 */
 	private Sequence createConstructorSequence(String typeName) throws ClassNotFoundException {
 
-		Class targetCls = Class.forName(typeName);
-		Constructor[] classCtors = targetCls.getDeclaredConstructors();
+		Class<?> targetCls = Class.forName(typeName);
+		Constructor<?>[] classCtors = targetCls.getDeclaredConstructors();
 
 		// get parameter counts for constructors, sort constructors by number of paramters,
 		// and build map from parameter count to list of constructors
