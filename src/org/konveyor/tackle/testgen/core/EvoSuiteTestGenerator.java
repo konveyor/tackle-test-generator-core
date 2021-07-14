@@ -133,10 +133,10 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 		copyAppAndTargetClasses(targetClassesPath, copyDir, destinationDir);
 
 		args.add("-target");
-		args.add(destinationDir.getAbsolutePath());
+		args.add("\""+destinationDir.getAbsolutePath()+"\"");
 
 		args.add("-Dtest_dir");
-		args.add(evosuiteOutputDir.getAbsolutePath());
+		args.add("\""+evosuiteOutputDir.getAbsolutePath()+"\"");
 
 		args.add("-projectCP");
 		// Using the copy path instead of the original monolith path which contains also the target classes
