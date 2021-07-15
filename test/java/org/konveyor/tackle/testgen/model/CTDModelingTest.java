@@ -46,7 +46,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-				null, null, "test/data/daytrader7/monolith/bin",
+				null, null, null, "test/data/daytrader7/monolith/bin",
 				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
@@ -72,7 +72,7 @@ public class CTDModelingTest {
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				null, null, null, null,
+				null, null, null, null, null, 
 				"test/data/daytrader7/monolith/bin",
 				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
@@ -89,6 +89,34 @@ public class CTDModelingTest {
 		reader.close();
 
 		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
+		reader = Json.createReader(fis);
+		JsonObject standardObject = reader.readObject();
+		reader.close();
+
+		compareModels(resultObject, standardObject);
+	}
+	
+	
+	@Test
+	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
+				null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", 
+				null, null, "test/data/daytrader7/monolith/bin",
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
+		analyzer.modelPartitions();
+
+		// assert that output file for CTD modeling is  created
+
+		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+
+		assertTrue(new File(outFilename).exists());
+
+		InputStream fis = new FileInputStream(outFilename);
+		JsonReader reader = Json.createReader(fis);
+		JsonObject resultObject = reader.readObject();
+		reader.close();
+
+		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
 		reader = Json.createReader(fis);
 		JsonObject standardObject = reader.readObject();
 		reader.close();

@@ -80,7 +80,7 @@ public class TestgenIntegrationTest {
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName,
-                null, null,
+                null, null, null, 
                 null, null, testApp.appPath,
                 testApp.appClasspathFilename, true, 2, false, 2, null, null, null, null);
             analyzer.modelPartitions();
