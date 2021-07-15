@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -394,52 +395,43 @@ public class SequenceExecutor {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		
 		Future<?> future = executorService.submit(executionTask);
-		boolean terminated;
+		
 		try {
-			terminated = executorService.awaitTermination(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			terminated = false;
-		}
-		
-		SequenceResults updatedResults;
-		
-		if (terminated) {
-			SequenceResults results = id2ExecutionResults.get(seqId);
-
-			if (numExecutions == 1 || ! results.passed) {
-				return results;
-			}
-
-			updatedResults = new SequenceResults(results);
-		} else {
+			future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
 			// timeout - return empty results
 			future.cancel(true);
 			executorService.shutdown();
 			return new SequenceResults(randoopSequence.size());
 		}
+			
+		
+		SequenceResults results = id2ExecutionResults.get(seqId);
 
+		if (numExecutions == 1 || ! results.passed) {
+			return results;
+		}
+
+		SequenceResults updatedResults = new SequenceResults(results);
+		
 		for (int i=1; i<numExecutions;i++) {
 
 			future = executorService.submit(executionTask);
 			try {
-				terminated = executorService.awaitTermination(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				terminated = false;
-			}
-			if (terminated) {
-				SequenceResults results = id2ExecutionResults.get(seqId);
-
-				if ( ! results.passed) {
-					return results;
-				}
-
-				updatedResults.retain(results);
-			} else {
+				future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
+			} catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
 				// timeout - return results we have been able to collect so far 
 				future.cancel(true);
 				executorService.shutdown();
 				return updatedResults;
 			}
+			results = id2ExecutionResults.get(seqId);
+
+			if (!results.passed) {
+				return results;
+			}
+
+			updatedResults.retain(results);
 		}
 		
 		executorService.shutdown();
