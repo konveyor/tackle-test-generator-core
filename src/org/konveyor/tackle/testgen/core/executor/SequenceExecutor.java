@@ -409,6 +409,7 @@ public class SequenceExecutor {
 		SequenceResults results = id2ExecutionResults.get(seqId);
 
 		if (numExecutions == 1 || ! results.passed) {
+			executorService.shutdown();
 			return results;
 		}
 
@@ -428,6 +429,7 @@ public class SequenceExecutor {
 			results = id2ExecutionResults.get(seqId);
 
 			if (!results.passed) {
+				executorService.shutdown();
 				return results;
 			}
 
