@@ -72,9 +72,9 @@ public class CTDTestPlanGenerator {
 	private String partitionsFileSeparator = null;
 
 
-	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String partitionsCPPrefix, String partitionsCPSuffix, String monolithPath, 
-			String classpathFile, boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level, String refactoringPrefix, 
-			String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {
+	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String excludedClassList, String partitionsCPPrefix, 
+			String partitionsCPSuffix, String monolithPath, String classpathFile, boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level, 
+			String refactoringPrefix, String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {
 
 		applicationName = appName;
 		cpPrefix = partitionsCPPrefix;
@@ -92,9 +92,9 @@ public class CTDTestPlanGenerator {
 		appClasspathEntries = Utils.getClasspathEntries(new File(classpathFile));
 
 		if (fileName != null) {
-			targetFetcher = new PartitionTargets(new File(fileName));
+			targetFetcher = new PartitionTargets(new File(fileName), excludedClassList);
 		} else {
-			targetFetcher = new ClassListTargets(targetClassList);
+			targetFetcher = new ClassListTargets(targetClassList, excludedClassList);
 		}
 
 		Set<String> RTAClasses = new RapidTypeAnalysis().performAnalysis(monolithPath, appClasspathEntries);
@@ -396,11 +396,11 @@ public class CTDTestPlanGenerator {
 
 		private Map<String, PartitionData> proxyClassesToRemoteClasses = new HashMap<String, PartitionData>();
 
-		private PartitionTargets(File partitionFile) throws IOException {
-			initClassesData(partitionFile);
+		private PartitionTargets(File partitionFile, String excludedClassList) throws IOException {
+			initClassesData(partitionFile, excludedClassList);
 		}
 
-		private void initClassesData(File inputFile) throws IOException {
+		private void initClassesData(File inputFile, String excludedClassList) throws IOException {
 
 			if (!inputFile.isFile()) {
 				throw new IOException(inputFile.getName() + " is not a valid file name");
@@ -414,20 +414,30 @@ public class CTDTestPlanGenerator {
 	        Set<String> keys = mainObject.keySet();
 
 	        for (String partition : keys) {
-	        	readCurrentPartitionClasses(partition, mainObject.getJsonObject(partition));
+	        	readCurrentPartitionClasses(partition, mainObject.getJsonObject(partition), excludedClassList);
 	        }
 		}
 
-		private void readCurrentPartitionClasses(String partition, JsonObject partitionData) {
+		private void readCurrentPartitionClasses(String partition, JsonObject partitionData, String excludedClassList) {
 
 			Set<String> currentProxyClasses = new HashSet<String>();
 			Set<String> currentRemoteClasses = new HashSet<String>();
 			proxyClassesToRemoteClasses.put(partition, new PartitionData(currentProxyClasses, currentRemoteClasses));
+			
+			Set<String> excludedClasses = null;
+			
+			if (excludedClassList != null) {
+				excludedClasses = new HashSet<>(Arrays.asList(excludedClassList.split("::")));
+			}
 
 			JsonArray proxyFiles = partitionData.getJsonArray("Proxy");
 
 			for (JsonValue currentFile : proxyFiles) {
-				currentProxyClasses.add(getClassName(currentFile.toString()));
+				
+				String className = getClassName(currentFile.toString());
+				if (excludedClasses == null || ! excludedClasses.contains(className)) {
+					currentProxyClasses.add(className);
+				}
 			}
 
 			JsonArray otherFiles = partitionData.getJsonArray("Service");
@@ -529,10 +539,21 @@ public class CTDTestPlanGenerator {
 
 		List<String> targetClasses;
 
-		private ClassListTargets(String targetList) throws IOException {
+		private ClassListTargets(String targetList, String excludedClassList) throws IOException {
+			
+			Set<String> excludedClasses = null;
+			
+			if (excludedClassList != null) {
+				excludedClasses = new HashSet<>(Arrays.asList(excludedClassList.split("::")));
+			}
 
 			if (targetList != null) {
 				targetClasses = Arrays.asList(targetList.split("::"));
+				
+				if (excludedClasses != null) {
+					targetClasses.removeAll(excludedClasses);
+				}
+				
 			} else {
 
 				targetClasses = new ArrayList<String>();
@@ -551,7 +572,10 @@ public class CTDTestPlanGenerator {
 								if (!entry.isDirectory() && entry.getName().endsWith(".class") && ! entry.getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX)) {
 									// This ZipEntry represents a class. Now, what class does it represent?
 									String className = entry.getName().replace('/', '.'); // including ".class"
-									targetClasses.add(className.substring(0, className.length() - ".class".length()));
+									className = className.substring(0, className.length() - ".class".length());
+									if (excludedClasses == null || ! excludedClasses.contains(className)) {
+										targetClasses.add(className);
+									}
 								}
 							}
 						} finally {
@@ -566,6 +590,9 @@ public class CTDTestPlanGenerator {
 										! path.toFile().getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX))
 								.map(path -> Utils.fileToClass(path.toFile().getAbsolutePath(), appDirOrJar.getAbsolutePath(), ".class", File.separator)).
 								collect(Collectors.toList()));
+						if (excludedClasses != null) {
+							targetClasses.removeAll(excludedClasses);
+						}
 					} else {
 						throw new IllegalArgumentException("Unrecognized app entry type: "+appDirOrJar.getAbsolutePath());
 					}
@@ -650,11 +677,20 @@ public class CTDTestPlanGenerator {
                 .build()
         );
 
-      // option for Partition file
+      // option for target class list 
         options.addOption(Option.builder("cl")
                 .longOpt("class-list")
                 .hasArg()
                 .desc("List of classes to target, separated by double colons. Only one of partition-file and class-list should be specified.")
+                .type(String.class)
+                .build()
+        );
+        
+        // option for excluded class list
+        options.addOption(Option.builder("el")
+                .longOpt("excluded-class-list")
+                .hasArg()
+                .desc("List of classes to exclude from targets, separated by double colons.")
                 .type(String.class)
                 .build()
         );
@@ -838,6 +874,13 @@ public class CTDTestPlanGenerator {
         	targetClassList = cmd.getOptionValue("cl");
         	logger.info("Target class list: "+targetClassList);
         }
+        
+        String excludedClassList = null;
+
+        if (cmd.hasOption("el")) {
+        	excludedClassList = cmd.getOptionValue("el");
+        	logger.info("Excluded class list: "+excludedClassList);
+        }
 
         String partitionPrefix = null;
 
@@ -905,7 +948,7 @@ public class CTDTestPlanGenerator {
         	System.out.println("* Partitions file classes seaprator: "+partitionsSeparator);
         }
 
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(appName, partitionFileName, targetClassList, partitionPrefix, partitionSuffix, appPath, classpathFilename,
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(appName, partitionFileName, targetClassList, excludedClassList, partitionPrefix, partitionSuffix, appPath, classpathFilename,
 				allCHA, maxDepth, addLocalRemote, interactionLevel, refactoringPrefix, partitionsPrefix, partitionSuffix, partitionsSeparator);
 		analyzer.modelPartitions();
 	}
