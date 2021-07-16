@@ -13,12 +13,61 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.executor;
 
-import com.github.javaparser.utils.ClassUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.NotSerializableException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.cli.*;
+
+import com.github.javaparser.utils.ClassUtils;
+
+import java.util.concurrent.TimeoutException;
 import randoop.ExceptionalExecution;
 import randoop.ExecutionOutcome;
 import randoop.ExecutionVisitor;
@@ -28,15 +77,6 @@ import randoop.sequence.ExecutableSequence;
 import randoop.sequence.Sequence;
 import randoop.sequence.SequenceParseException;
 import randoop.test.TestChecks;
-
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Creates Randoop sequences from junit test sequences, executes them in memory and collect
@@ -59,6 +99,8 @@ public class SequenceExecutor {
 	private static boolean VERBOSE = true;
 
 	public static final String TKLTEST_NULL_STRING = "__tkltest_null";
+	
+	public static final int SINGLE_EXECUTION_SEC_LIMIT = 120;
 
 	private static final Logger logger = TackleTestLogger.getLogger(SequenceExecutor.class);
 
@@ -343,29 +385,66 @@ public class SequenceExecutor {
 
 		String[] statements = randoopSequence.toParsableString().split(System.lineSeparator());
 
-		ExecutableSequence es = new ExecutableSequence(randoopSequence);
-		es.execute(new SequenceExecutionVisitor(seqId, statements, null, null), new SequenceTestCheckGenerator());
-
+		Runnable executionTask = new Runnable() {
+		    @Override
+		    public void run() {
+		    	ExecutableSequence es = new ExecutableSequence(randoopSequence);
+				es.execute(new SequenceExecutionVisitor(seqId, statements, null, null), new SequenceTestCheckGenerator());
+		    }
+		};
+		
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		
+		Future<?> future = executorService.submit(executionTask);
+		
+		try {
+			future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			future.cancel(true);
+			executorService.shutdownNow();
+			// Identify the cause of the ExecutionException
+			Throwable cause = e.getCause() != null? e.getCause() : e;			
+			throw new RuntimeException(cause);
+		}
+		
 		SequenceResults results = id2ExecutionResults.get(seqId);
 
 		if (numExecutions == 1 || ! results.passed) {
+			executorService.shutdownNow();
 			return results;
 		}
 
 		SequenceResults updatedResults = new SequenceResults(results);
-
+		
 		for (int i=1; i<numExecutions;i++) {
 
-			es = new ExecutableSequence(randoopSequence);
-			es.execute(new SequenceExecutionVisitor(seqId, statements, null, null), new SequenceTestCheckGenerator());
+			future = executorService.submit(executionTask);
+			try {
+				future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
+			} catch (java.util.concurrent.TimeoutException e) {
+				// timeout - return results we have been able to collect so far 
+				future.cancel(true);
+				executorService.shutdownNow();
+				return updatedResults;
+			} catch (InterruptedException | ExecutionException e) {
+				future.cancel(true);
+				executorService.shutdownNow();
+				// Identify the cause of the ExecutionException
+				Throwable cause = e.getCause() != null? e.getCause() : e;			
+				throw new RuntimeException(cause);
+			} 
+			
 			results = id2ExecutionResults.get(seqId);
 
-			if ( ! results.passed) {
+			if (!results.passed) {
+				executorService.shutdownNow();
 				return results;
 			}
 
 			updatedResults.retain(results);
 		}
+		
+		executorService.shutdownNow();
 
 		return updatedResults;
 	}

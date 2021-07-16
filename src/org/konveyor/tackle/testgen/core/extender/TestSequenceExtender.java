@@ -1897,11 +1897,11 @@ public class TestSequenceExtender {
 				outputDir, jee, numExecutions, addDiffAsserts);
 		testSeqExt.createExtendedSequences();
 
-        // write coverage file
-        testSeqExt.writeTestCoverageFile(coverageFilename);
-
 		// write test classes
 		testSeqExt.writeTestClasses(addDiffAsserts);
+		
+		// write coverage file
+        testSeqExt.writeTestCoverageFile(coverageFilename);
 	}
 
 	class NonInstantiableTypeException extends RuntimeException {

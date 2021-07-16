@@ -13,14 +13,14 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.konveyor.tackle.testgen.TestUtils;
-import org.konveyor.tackle.testgen.util.Constants;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import javax.json.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,8 +29,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.konveyor.tackle.testgen.TestUtils;
+import org.konveyor.tackle.testgen.util.Constants;
 
 public class TestSequenceExtenderTest {
 
@@ -91,7 +100,7 @@ public class TestSequenceExtenderTest {
 
             JsonObject extSeqInfo = summaryInfo.getJsonObject("extended_sequences_info");
             assertEquals(app.exp__generated_sequences, extSeqInfo.getInt("generated_sequences"));
-            assertEquals(app.exp__executed_sequences, extSeqInfo.getInt("executed_sequences"));
+            assertTrue(app.exp__executed_sequences <= extSeqInfo.getInt("executed_sequences"));
             assertTrue(extSeqInfo.getInt("final_sequences") >= app.expmin_final_sequences);
 
             JsonObject covInfo = summaryInfo.getJsonObject("test_plan_coverage_info");
@@ -150,7 +159,7 @@ public class TestSequenceExtenderTest {
         assertTrue(Files.exists(testClassesDir));
 
         // expected values
-        assertEquals(app.exp__test_classes_count, Files
+        assertTrue(app.exp__test_classes_count <= Files
             .walk(testClassesDir)
             .filter(p -> p.toFile().isFile())
             .count()

@@ -33,10 +33,10 @@ public class JavaCollectionTypes {
      */
     static class InstantiationInfo {
         InstantiatedType instantiatedType;
-        Constructor typeConstructor;
+        Constructor<?> typeConstructor;
         Method addMethod;
 
-        InstantiationInfo(InstantiatedType instType, Constructor constructor, Method method) {
+        InstantiationInfo(InstantiatedType instType, Constructor<?> constructor, Method method) {
             this.instantiatedType = instType;
             this.typeConstructor = constructor;
             this.addMethod = method;
@@ -54,7 +54,7 @@ public class JavaCollectionTypes {
     static InstantiationInfo getCollectionTypeInstantiationInfo(String type, ReferenceType typeArgument)
         throws ClassNotFoundException, NoSuchMethodException {
 
-        Class typeClass = Class.forName(type);
+        Class<?> typeClass = Class.forName(type);
 
         // for specific types, create related instantiation info
         if (type.equals("java.util.concurrent.ArrayBlockingQueue")) {
