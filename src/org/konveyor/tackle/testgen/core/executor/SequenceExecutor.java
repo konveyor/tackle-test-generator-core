@@ -67,6 +67,7 @@ import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.github.javaparser.utils.ClassUtils;
 
+import java.util.concurrent.TimeoutException;
 import randoop.ExceptionalExecution;
 import randoop.ExecutionOutcome;
 import randoop.ExecutionVisitor;
@@ -398,18 +399,18 @@ public class SequenceExecutor {
 		
 		try {
 			future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
-		} catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
-			// timeout - return empty results
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			future.cancel(true);
-			executorService.shutdown();
-			return new SequenceResults(randoopSequence.size());
+			executorService.shutdownNow();
+			// Identify the cause of the ExecutionException
+			Throwable cause = e.getCause() != null? e.getCause() : e;			
+			throw new RuntimeException(cause);
 		}
-			
 		
 		SequenceResults results = id2ExecutionResults.get(seqId);
 
 		if (numExecutions == 1 || ! results.passed) {
-			executorService.shutdown();
+			executorService.shutdownNow();
 			return results;
 		}
 
@@ -420,23 +421,30 @@ public class SequenceExecutor {
 			future = executorService.submit(executionTask);
 			try {
 				future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
-			} catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
+			} catch (java.util.concurrent.TimeoutException e) {
 				// timeout - return results we have been able to collect so far 
 				future.cancel(true);
-				executorService.shutdown();
+				executorService.shutdownNow();
 				return updatedResults;
-			}
+			} catch (InterruptedException | ExecutionException e) {
+				future.cancel(true);
+				executorService.shutdownNow();
+				// Identify the cause of the ExecutionException
+				Throwable cause = e.getCause() != null? e.getCause() : e;			
+				throw new RuntimeException(cause);
+			} 
+			
 			results = id2ExecutionResults.get(seqId);
 
 			if (!results.passed) {
-				executorService.shutdown();
+				executorService.shutdownNow();
 				return results;
 			}
 
 			updatedResults.retain(results);
 		}
 		
-		executorService.shutdown();
+		executorService.shutdownNow();
 
 		return updatedResults;
 	}
