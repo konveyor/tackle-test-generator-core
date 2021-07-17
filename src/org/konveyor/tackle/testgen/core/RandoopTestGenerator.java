@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class RandoopTestGenerator extends AbstractTestGenerator {
@@ -124,8 +125,11 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			randoopProcBld.inheritIO();
 			logger.info("Running Randoop process: " + randoopProcBld.command());
 			Process randoopProc = randoopProcBld.start();
-			int exitCode = randoopProc.waitFor();
-			logger.info("exit code: " + exitCode);
+			boolean exited = randoopProc.waitFor(this.timeLimit*3, TimeUnit.SECONDS); 
+			if ( ! exited) { 
+				logger.warning("randoop timeout on class: " + className);
+				randoopProc.destroyForcibly();
+			}
         }
 
     }
