@@ -80,11 +80,13 @@ public class TestSequenceExtenderTest {
             }
         }
         Files.deleteIfExists(Paths.get(Constants.COVERAGE_FILE_JSON));
-        Files.deleteIfExists(Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON));
+        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
+        }
     }
 
     private void assertSummaryFile(TestUtils.AppUnderTest app) throws FileNotFoundException {
-        Path summaryFilePath = Paths.get(Constants.EXTENDER_SUMMARY_FILE_JSON);
+        Path summaryFilePath = Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX);
         assertTrue(Files.exists(summaryFilePath));
 
         // read summary JSON file and assert over content

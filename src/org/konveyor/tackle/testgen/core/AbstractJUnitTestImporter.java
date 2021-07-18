@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -53,6 +56,8 @@ public abstract class AbstractJUnitTestImporter {
 	protected abstract List<String> beforeAfterCodeSegments(String className)  throws IOException;
 
 	protected abstract void compileBeforeAfterCode(List<String> classes, String classpath);
+	
+	private static final Logger logger = TackleTestLogger.getLogger(AbstractJUnitTestImporter.class);
 
 	AbstractJUnitTestImporter(File dir) {
 
@@ -84,7 +89,7 @@ public abstract class AbstractJUnitTestImporter {
 		Set<String> sequences = new HashSet<String>();
 		Set<String> imports = new HashSet<String>();
 
-		//logger.info("Parsing file "+file.getName());
+		logger.info("Parsing file "+file.getName());
 
 		CompilationUnit compUnit = StaticJavaParser.parse(file);
 

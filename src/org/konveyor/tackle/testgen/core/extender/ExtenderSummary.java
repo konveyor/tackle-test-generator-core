@@ -146,7 +146,7 @@ public class ExtenderSummary {
      * Writes summary information about test generation to a JSON file
      * @throws FileNotFoundException
      */
-    void writeSummaryFile(HashMap<String, Sequence> seqIdMap,
+    void writeSummaryFile(String appName, HashMap<String, Sequence> seqIdMap,
                           Map<String, Map<String, Set<String>>> extTestSeq,
                           HashMap<String, SequenceExecutor.SequenceResults> execExtSeq,
                           Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq,
@@ -231,7 +231,7 @@ public class ExtenderSummary {
         summaryJson.add("class_not_found_types", cnfTypes);
 
         // write JSON file
-        String outFileName = Constants.EXTENDER_SUMMARY_FILE_JSON;
+        String outFileName = appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX;
         FileOutputStream fos = new FileOutputStream(new File(outFileName));
         JsonWriterFactory writerFactory = Json
             .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
