@@ -77,7 +77,7 @@ public class Constants {
     public static final String COVERAGE_FILE_JSON = "coverage_report.json";
 
     /** Name of JSON file to which extender summary information is written */
-    public static final String EXTENDER_SUMMARY_FILE_JSON = "test_generation_summary.json";
+    public static final String EXTENDER_SUMMARY_FILE_JSON_SUFFIX = "_test_generation_summary.json";
 
     /** Minimum number of passing test executions for a test to be considered a non-flaky
      * passing test */

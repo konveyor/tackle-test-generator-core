@@ -33,6 +33,8 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -147,6 +149,10 @@ public class TestSequenceExtender {
 		this.jeeSupport = jee;
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
+		
+		// delete any previously existing summary file as this file signals to calling process that extender
+		
+		Files.deleteIfExists(Paths.get(applicationName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
 
 		// read test plan from JSON file
 		File testPlanFile = new File(testPlanFilename);
@@ -382,8 +388,8 @@ public class TestSequenceExtender {
 
         // write summary JSON file
 		try {
-            this.extSummary.writeSummaryFile(this.seqIdMap, this.extTestSeq, this.execExtSeq,
-                this.discardedExtSeq, assertionCount);
+            this.extSummary.writeSummaryFile(this.applicationName, this.seqIdMap, this.extTestSeq, 
+            		this.execExtSeq, this.discardedExtSeq, assertionCount);
             System.out.println("* wrote summary file for generation of CTD-amplified tests (JSON)");
         }
 		catch (FileNotFoundException fnfe) {

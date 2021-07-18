@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class RandoopTestGenerator extends AbstractTestGenerator {
@@ -124,10 +125,26 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			randoopProcBld.inheritIO();
 			logger.info("Running Randoop process: " + randoopProcBld.command());
 			Process randoopProc = randoopProcBld.start();
-			int exitCode = randoopProc.waitFor();
-			logger.info("exit code: " + exitCode);
+			boolean terminated = randoopProc.waitFor(this.timeLimit*3, TimeUnit.SECONDS); 
+			String classBaseName = className.replaceAll("\\.", "_");
+			if ( ! terminated) { 
+				// kill randoop process and remove all test files for this class because they may start hanging threads
+				
+				logger.warning("randoop timeout on class: " + className);
+				
+				randoopProc.destroyForcibly();
+				
+				int i=0;
+				File testFile = new File(randoopOutputDir.getAbsolutePath(), classBaseName+i+".java");
+				
+				while (testFile.isFile()) {
+					logger.warning("Deleting randoop-created test file: " + testFile.getAbsolutePath());
+					FileUtils.deleteQuietly(testFile);
+					i++;
+					testFile = new File(randoopOutputDir.getAbsolutePath(), classBaseName+i+".java");
+				}
+			}
         }
-
     }
 
 //    private Set<String> buildRandoopMethodlistOpt(String cls) {
