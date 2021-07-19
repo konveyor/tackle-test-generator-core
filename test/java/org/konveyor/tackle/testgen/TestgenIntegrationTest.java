@@ -68,9 +68,9 @@ public class TestgenIntegrationTest {
                     .forEach(File::delete);
             }
         }
-        Files.deleteIfExists(Paths.get(Constants.COVERAGE_FILE_JSON));
         for (TestUtils.AppUnderTest app : appsUnderTest) {
         	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
+        	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
         }
     }
 
@@ -109,8 +109,8 @@ public class TestgenIntegrationTest {
 
             // assert that test directory and summary files are created
             assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
-            assertTrue(Files.exists(Paths.get(testApp.appName+ Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX)));
-            assertTrue(Files.exists(Paths.get(Constants.COVERAGE_FILE_JSON)));
+            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX)));
+            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.COVERAGE_FILE_JSON_SUFFIX)));
 
             // assert over the number of expected test classes
             assertEquals(testApp.exp__test_classes_count, Files

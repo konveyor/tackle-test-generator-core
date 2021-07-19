@@ -74,7 +74,7 @@ public class Constants {
     /**
      * Name of JSON file to which coverage information is written to
      */
-    public static final String COVERAGE_FILE_JSON = "coverage_report.json";
+    public static final String COVERAGE_FILE_JSON_SUFFIX = "_coverage_report.json";
 
     /** Name of JSON file to which extender summary information is written */
     public static final String EXTENDER_SUMMARY_FILE_JSON_SUFFIX = "_test_generation_summary.json";
