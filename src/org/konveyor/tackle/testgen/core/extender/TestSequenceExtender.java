@@ -13,33 +13,75 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import com.github.javaparser.utils.Pair;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
 import org.konveyor.tackle.testgen.core.JUnitTestExporter;
 import org.konveyor.tackle.testgen.core.executor.JUnitExecutor;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.cli.*;
-import randoop.operation.*;
+
+import com.github.javaparser.utils.Pair;
+
+import randoop.operation.ConstructorCall;
+import randoop.operation.MethodCall;
+import randoop.operation.OperationParseException;
+import randoop.operation.TypedClassOperation;
+import randoop.operation.TypedOperation;
 import randoop.org.apache.commons.io.output.NullPrintStream;
 import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
-import randoop.types.*;
-
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import randoop.types.ArrayType;
+import randoop.types.GenericClassType;
+import randoop.types.InstantiatedType;
+import randoop.types.ParameterizedType;
+import randoop.types.ReferenceArgument;
+import randoop.types.ReferenceType;
+import randoop.types.Substitution;
+import randoop.types.Type;
+import randoop.types.TypeArgument;
+import randoop.types.TypeVariable;
 
 /**
  * Extends the initial (or building-block) test sequences created by the
@@ -150,10 +192,6 @@ public class TestSequenceExtender {
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
 		
-		// delete any previously existing summary file as this file signals to calling process that extender
-		
-		Files.deleteIfExists(Paths.get(applicationName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
-
 		// read test plan from JSON file
 		File testPlanFile = new File(testPlanFilename);
 		if (!testPlanFile.isFile()) {
@@ -608,7 +646,7 @@ public class TestSequenceExtender {
 	 * @param coverageFileName
 	 * @throws FileNotFoundException
 	 */
-	public void writeTestCoverageFile(String coverageFileName) throws FileNotFoundException {
+	public void writeTestCoverageFile(String appName, String coverageFileName) throws FileNotFoundException {
 		JsonObjectBuilder partCovJson = Json.createObjectBuilder();
 		for (String part : this.coverageInfo.keySet()) {
 			Map<String, Map<String, Map<String, Constants.TestPlanRowCoverage>>> clsCovInfo = this.coverageInfo
@@ -629,7 +667,7 @@ public class TestSequenceExtender {
 			}
 			partCovJson.add(part, clsCovJson);
 		}
-		String outFileName = Constants.COVERAGE_FILE_JSON;
+		String outFileName = appName+Constants.COVERAGE_FILE_JSON_SUFFIX;
 		if (coverageFileName != null) {
 			outFileName = coverageFileName;
 		}
@@ -1907,7 +1945,7 @@ public class TestSequenceExtender {
 		testSeqExt.writeTestClasses(addDiffAsserts);
 		
 		// write coverage file
-        testSeqExt.writeTestCoverageFile(coverageFilename);
+        testSeqExt.writeTestCoverageFile(appName, coverageFilename);
 	}
 
 	class NonInstantiableTypeException extends RuntimeException {

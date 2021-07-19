@@ -79,9 +79,10 @@ public class TestSequenceExtenderTest {
                     .forEach(File::delete);
             }
         }
-        Files.deleteIfExists(Paths.get(Constants.COVERAGE_FILE_JSON));
+        
         for (TestUtils.AppUnderTest app : appsUnderTest) {
         	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
+        	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
         }
     }
 
@@ -136,7 +137,7 @@ public class TestSequenceExtenderTest {
     }
 
     private void assertCoverageFile(TestUtils.AppUnderTest app) throws FileNotFoundException {
-        Path testCovFilePath = Paths.get(Constants.COVERAGE_FILE_JSON);
+        Path testCovFilePath = Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX);
         assertTrue(Files.exists(testCovFilePath));
         File testCovFile = new File(testCovFilePath.toString());
         InputStream fis = new FileInputStream(testCovFile);
