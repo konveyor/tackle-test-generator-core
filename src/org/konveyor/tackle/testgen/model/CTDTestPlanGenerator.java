@@ -103,7 +103,7 @@ public class CTDTestPlanGenerator {
 	}
 
 	public void modelPartitions()
-			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
+			throws IOException, ClassNotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		proxyModelsCounter = 0;
 		proxyTestsCounter = 0;
@@ -141,7 +141,7 @@ public class CTDTestPlanGenerator {
 	}
 
 	private JsonObject modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults)
-			throws IOException, ClassNotFoundException, SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
+			throws IOException, ClassNotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		logger.fine("Analyzing partition "+partitionName);
 		URLClassLoader classLoader = targetFetcher.loadCurrentClasses(partitionName);

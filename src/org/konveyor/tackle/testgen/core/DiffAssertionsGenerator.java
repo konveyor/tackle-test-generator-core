@@ -209,7 +209,7 @@ public class DiffAssertionsGenerator {
 
 					addAssertionsOnPublicFields(results.runtimePublicObjectState.get(resCounter), results.runtimeObjectName[resCounter],
 							theClass, codeWithAssertions);
-					addAssertionsOnPrivateFields(results.runtimePrivateObjectState.get(resCounter), results.runtimeObjectName[resCounter],
+					addAssertionsOnPrivateFields(theClass, results.runtimePrivateObjectState.get(resCounter), results.runtimeObjectName[resCounter],
 							theClass, codeWithAssertions);
 				}
 			}
@@ -242,7 +242,8 @@ public class DiffAssertionsGenerator {
 		}
 	}
 
-	private void addAssertionsOnPrivateFields(Map<String, String> runtimeState, String objName, Class<?> objClass, StringBuilder codeWithAssertions) {
+	private void addAssertionsOnPrivateFields(Class<?> callingObjectType, Map<String, String> runtimeState, 
+			String objName, Class<?> objClass, StringBuilder codeWithAssertions) {
 
 		for (Map.Entry<String, String> entry : runtimeState.entrySet()) {
 
@@ -256,8 +257,11 @@ public class DiffAssertionsGenerator {
 			}
 
 			String fieldVal = entry.getValue();
+			
+			// We need to cast the calling object because its formal type might be a superclass of its
+			// recorded runtime type
 
-			String getterCall = objName+"."+theMethod.getName()+"()";
+			String getterCall = "(("+callingObjectType.getName()+") "+objName+")."+theMethod.getName()+"()";
 
 			String assertion = getAssertForSimpleType(theMethod.getReturnType(), fieldVal, getterCall, theMethod.getReturnType().isPrimitive());
 
@@ -284,8 +288,13 @@ public class DiffAssertionsGenerator {
 			if ( ! isPrimitive && ! recordedVal.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
 				unboxingMethod = "."+getUnboxingMethod(theType);
 			}
+			
+			// Perform casting in case formal type is a superclass of recorded type, and unboxing
+			// to avoid ambiguous assertion, i.e., to be done on the primitive types, not the object level
 
-			actualVal += unboxingMethod;
+			if ( ! unboxingMethod.isEmpty()) {
+				actualVal = "(("+theType.getName()+") "+actualVal+")"+unboxingMethod;
+			}
 
 			if (theType.getName().equals("java.lang.Float") ||
 					theType.getName().equals("float") ||
@@ -294,10 +303,10 @@ public class DiffAssertionsGenerator {
 
 				if (recordedVal.equals("NaN")) {
 					recordedVal = "java.lang.Double.NaN";
-				}
-
-				if (recordedVal.equals("Infinity")) {
+				} else if (recordedVal.equals("Infinity")) {
 					recordedVal = "java.lang.Double.POSITIVE_INFINITY";
+				} else if (recordedVal.equals("-Infinity")) {
+					recordedVal = "java.lang.Double.NEGATIVE_INFINITY";
 				}
 
 				return getAssert(recordedVal, "("+theType.getName()+") "+actualVal,  0.0001);
@@ -321,8 +330,6 @@ public class DiffAssertionsGenerator {
 	private String getAssert(String arg1, String arg2, double delta) {
 		assertCounter++;
 
-		String arg1_fixed = arg1;
-
 		if (arg1.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
 			return "assertNull("+arg2+");"+LINE_SEPARATOR;
 		}
@@ -334,6 +341,8 @@ public class DiffAssertionsGenerator {
 		// In the future we should handle this in the sequence parser. Randoop
 		// generates long values with "L" but Randoop Sequence class can't parse
 		// them, hence we removed the "L" in the sequence parser.
+		
+		String arg1_fixed = arg1;
 
 		try {
 			Integer.parseInt(arg1);
