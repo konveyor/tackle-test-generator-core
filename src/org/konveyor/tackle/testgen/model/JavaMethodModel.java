@@ -89,7 +89,7 @@ public class JavaMethodModel {
 	}
 
 	JavaMethodModel(String partition, Class<?> theClass, Object method, URLClassLoader classLoader, boolean allTypes, int maxDepth)
-			throws SecurityException, IllegalArgumentException {
+			throws IllegalArgumentException {
 
 		if ( ! (method instanceof Method || method instanceof Constructor)) {
 			throw new IllegalArgumentException("Method argument must be a Method or Constructor type");
