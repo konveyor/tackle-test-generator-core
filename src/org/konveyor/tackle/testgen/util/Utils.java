@@ -103,7 +103,9 @@ public class Utils {
 			String line;
 
 			while ((line = reader.readLine()) != null) {
-				classpath.add(line);
+				if ( ! line.trim().isEmpty()) {
+					classpath.add(line);
+				}
 			}
 		} finally {
 			reader.close();
@@ -117,14 +119,17 @@ public class Utils {
 		List<URL> urls = new ArrayList<URL>();
 
 		for (String url : classpathEntries) {
+			
+			if ( ! url.trim().isEmpty()) {
 
-			File entryFile = new File(url);
+				File entryFile = new File(url);
 
-			if ( ! entryFile.exists()) {
-				throw new IllegalArgumentException(entryFile.getAbsolutePath()+" doesn't exist");
+				if (!entryFile.exists()) {
+					throw new IllegalArgumentException(entryFile.getAbsolutePath() + " doesn't exist");
+				}
+
+				urls.add(entryFile.toURI().toURL());
 			}
-
-			urls.add(entryFile.toURI().toURL());
 		}
 
         URL[] classLoaderUrls = new URL[urls.size()];
@@ -138,8 +143,10 @@ public class Utils {
 		StringBuilder classpathS = new StringBuilder();
 
 		for (String entry : classpathEntries) {
-			classpathS.append(entry);
-			classpathS.append(File.pathSeparator);
+			if ( ! entry.trim().isEmpty()) {
+				classpathS.append(entry);
+				classpathS.append(File.pathSeparator);
+			}
 		}
 
 		if (classpathS.length() == 0) {
