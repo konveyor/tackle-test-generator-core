@@ -1,157 +1,133 @@
 {
-	"test_generation_tool": "EvoSuiteTestGenerator",
-    "test_sequences":{
-
-            "seq1": {
-			"class_name" : "com.ibm.websphere.samples.daytrader.util.TradeConfig",
-			"sequence":
-                "TradeConfig tradeConfig0 = new TradeConfig();\r\n    TradeConfig.setRunTimeModeNames(tradeConfig0.orderProcessingModeNames);"
-				, 
-			 "imports":[
-			 "java.math.BigDecimal",
-                "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert",
-                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-                "java.util.LinkedList"
-			]			 
-            }
-        ,
-        
-            "seq2":  {   
-			"class_name" : "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",			
-			"sequence":
-                "Integer integer0 = new Integer((-1880));\r\n    MockDate mockDate0 = new MockDate((-1880), 1606, 0, 1606, (-1880), 0);\r\n    BigDecimal bigDecimal0 = BigDecimal.TEN;\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-1880), 1606, mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"\");"
-			,
-			"imports":[
-			"java.math.BigDecimal",
-                "org.evosuite.runtime.mock.java.util.MockDate",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert"
-			]
-				
-            }
-        ,
-        
-            "seq3": {
-			"class_name" : "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-			"sequence":
-                "BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\\t\", \"\", 1179, bigDecimal0, bigDecimal0, bigDecimal0, bigDecimal0, 1179);"
-				,		
-				"imports":[
-                "java.math.BigDecimal",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert",
-                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean"
-            ]	
-            }
-        ,
-        
-            "seq4": {   
-			"class_name" : "com.ibm.websphere.samples.daytrader.entities.OrderDataBean",
-			"sequence":			
-                "MockDate mockDate0 = new MockDate(1887, (-1744), 1887);\r\n    BigInteger bigInteger0 = BigInteger.TEN;\r\n    BigDecimal bigDecimal0 = new BigDecimal(bigInteger0);\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean();\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean(0.0, bigDecimal0, mockDate0, (AccountDataBean) null, quoteDataBean0);\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(\"K%I**.E=?kHJ\", \"r5{n{dev r3?];\", mockDate0, mockDate0, (-1744), bigDecimal0, bigDecimal0, (AccountDataBean) null, quoteDataBean0, holdingDataBean0);"             
-				,		
-				"imports":[
-				"java.math.BigDecimal",
-                "org.evosuite.runtime.mock.java.util.MockDate",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
-                "org.evosuite.runtime.EvoRunner",
-                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "java.math.BigInteger",
-                "org.junit.Assert",
-                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"
-				]				
-			},
-			
-			"seq5": {
-			
-			"class_name" : "com.ibm.websphere.samples.daytrader.web.TradeBuildDB",
-			"sequence":
-			"String string0 = \"6M2NvyQS3$5/z-!ac\\\\u\";\r\n    MockFile mockFile0 = new MockFile(string0, \"\");\r\n    MockPrintWriter mockPrintWriter0 = new MockPrintWriter(mockFile0);\r\n    byte[] byteArray0 = new byte[1];\r\n    ByteArrayInputStream byteArrayInputStream0 = new ByteArrayInputStream(byteArray0, (-627), 200);\r\n    TradeBuildDB tradeBuildDB0 = new TradeBuildDB(mockPrintWriter0, byteArrayInputStream0);",
-			"imports":[
-				"org.evosuite.runtime.mock.java.io.MockPrintWriter",
-                "java.io.ByteArrayInputStream",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "com.ibm.websphere.samples.daytrader.web.TradeBuildDB",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert",
-                "org.evosuite.runtime.mock.java.io.MockFile"
-			]
-			},
-			"seq6": {
-				"class_name" : "com.ibm.websphere.samples.daytrader.util.FinancialUtils",
-				"sequence" :	
-				"BigDecimal bigDecimal0 = FinancialUtils.ZERO;\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    BigDecimal bigDecimal1 = FinancialUtils.computeGainPercent(financialUtils0.ZERO, bigDecimal0);",
-				"imports":[
-				"com.ibm.websphere.samples.daytrader.util.FinancialUtils",
-                "java.math.BigDecimal",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert"
-				]
-			},
-			"seq7": {
-				"class_name" : "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
-				"sequence" : 
-				"RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setNewUserCount((-43));",
-				"imports":[
-				"com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "org.junit.Assert"
-				]
-			},
-			"seq8": {
-			"class_name" : "com.ibm.websphere.samples.daytrader.util.Log",
-			"sequence" :
-			"MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, (String) null);",
-			"imports": [
-			"javax.ejb.EJBException",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "static org.junit.Assert.*",
-                "com.ibm.websphere.samples.daytrader.util.Log",
-                "org.evosuite.runtime.mock.java.lang.MockThrowable"
-			]
-			},
-			"seq10": {
-			"class_name" : "com.ibm.websphere.samples.daytrader.util.TradeConfig",
-			"sequence": "TradeConfig.setRunTimeModeNames((String[]) null);",
-			"imports":[
-			"java.math.BigDecimal",
-                "org.evosuite.runtime.EvoRunnerParameters",
-                "org.evosuite.runtime.EvoRunner",
-                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
-                "org.junit.runner.RunWith",
-                "org.junit.Test",
-                "static org.junit.Assert.*"
-			]
-			
-			}
-			
-	}	
+  "test_generation_tool": "EvoSuiteTestGenerator",
+  "test_sequences": {
+    "seq1": {
+      "class_name": "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+      "sequence": "TradeConfig tradeConfig0 = new TradeConfig();\r\n    TradeConfig.setRunTimeModeNames(tradeConfig0.orderProcessingModeNames);",
+      "imports": [
+        "java.math.BigDecimal",
+        "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert",
+        "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+        "java.util.LinkedList"
+      ]
+    },
+    "seq2": {
+      "class_name": "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+      "sequence": "Integer integer0 = new Integer((-1880));\r\n    MockDate mockDate0 = new MockDate((-1880), 1606, 0, 1606, (-1880), 0);\r\n    BigDecimal bigDecimal0 = BigDecimal.TEN;\r\n    AccountDataBean accountDataBean0 = new AccountDataBean(integer0, (-1880), 1606, mockDate0, mockDate0, bigDecimal0, bigDecimal0, \"\");",
+      "imports": [
+        "java.math.BigDecimal",
+        "org.evosuite.runtime.mock.java.util.MockDate",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert"
+      ]
+    },
+    "seq3": {
+      "class_name": "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+      "sequence": "BigDecimal bigDecimal0 = BigDecimal.ZERO;\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean(\"\\t\", \"\", 1179, bigDecimal0, bigDecimal0, bigDecimal0, bigDecimal0, 1179);",
+      "imports": [
+        "java.math.BigDecimal",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert",
+        "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean"
+      ]
+    },
+    "seq4": {
+      "class_name": "com.ibm.websphere.samples.daytrader.entities.OrderDataBean",
+      "sequence": "MockDate mockDate0 = new MockDate(1887, (-1744), 1887);\r\n    BigInteger bigInteger0 = BigInteger.TEN;\r\n    BigDecimal bigDecimal0 = new BigDecimal(bigInteger0);\r\n    QuoteDataBean quoteDataBean0 = new QuoteDataBean();\r\n    HoldingDataBean holdingDataBean0 = new HoldingDataBean(0.0, bigDecimal0, mockDate0, (AccountDataBean) null, quoteDataBean0);\r\n    OrderDataBean orderDataBean0 = new OrderDataBean(\"K%I**.E=?kHJ\", \"r5{n{dev r3?];\", mockDate0, mockDate0, (-1744), bigDecimal0, bigDecimal0, (AccountDataBean) null, quoteDataBean0, holdingDataBean0);",
+      "imports": [
+        "java.math.BigDecimal",
+        "org.evosuite.runtime.mock.java.util.MockDate",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+        "org.evosuite.runtime.EvoRunner",
+        "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "java.math.BigInteger",
+        "org.junit.Assert",
+        "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+        "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"
+      ]
+    },
+    "seq5": {
+      "class_name": "com.ibm.websphere.samples.daytrader.web.TradeBuildDB",
+      "sequence": "String string0 = \"6M2NvyQS3$5/z-!ac\\\\u\";\r\n    MockFile mockFile0 = new MockFile(string0, \"\");\r\n    MockPrintWriter mockPrintWriter0 = new MockPrintWriter(mockFile0);\r\n    byte[] byteArray0 = new byte[1];\r\n    ByteArrayInputStream byteArrayInputStream0 = new ByteArrayInputStream(byteArray0, (-627), 200);\r\n    TradeBuildDB tradeBuildDB0 = new TradeBuildDB(mockPrintWriter0, byteArrayInputStream0);",
+      "imports": [
+        "org.evosuite.runtime.mock.java.io.MockPrintWriter",
+        "java.io.ByteArrayInputStream",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "com.ibm.websphere.samples.daytrader.web.TradeBuildDB",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert",
+        "org.evosuite.runtime.mock.java.io.MockFile"
+      ]
+    },
+    "seq6": {
+      "class_name": "com.ibm.websphere.samples.daytrader.util.FinancialUtils",
+      "sequence": "BigDecimal bigDecimal0 = FinancialUtils.ZERO;\r\n    FinancialUtils financialUtils0 = new FinancialUtils();\r\n    BigDecimal bigDecimal1 = FinancialUtils.computeGainPercent(financialUtils0.ZERO, bigDecimal0);",
+      "imports": [
+        "com.ibm.websphere.samples.daytrader.util.FinancialUtils",
+        "java.math.BigDecimal",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert"
+      ]
+    },
+    "seq7": {
+      "class_name": "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
+      "sequence": "RunStatsDataBean runStatsDataBean0 = new RunStatsDataBean();\r\n    runStatsDataBean0.setNewUserCount((-43));",
+      "imports": [
+        "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "org.junit.Assert"
+      ]
+    },
+    "seq8": {
+      "class_name": "com.ibm.websphere.samples.daytrader.util.Log",
+      "sequence": "MockThrowable mockThrowable0 = new MockThrowable();\r\n    Log.error((Throwable) mockThrowable0, (String) null);",
+      "imports": [
+        "javax.ejb.EJBException",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "static org.junit.Assert.*",
+        "com.ibm.websphere.samples.daytrader.util.Log",
+        "org.evosuite.runtime.mock.java.lang.MockThrowable"
+      ]
+    },
+    "seq10": {
+      "class_name": "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+      "sequence": "TradeConfig.setRunTimeModeNames((String[]) null);",
+      "imports": [
+        "java.math.BigDecimal",
+        "org.evosuite.runtime.EvoRunnerParameters",
+        "org.evosuite.runtime.EvoRunner",
+        "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+        "org.junit.runner.RunWith",
+        "org.junit.Test",
+        "static org.junit.Assert.*"
+      ]
+    }
+  }
 }

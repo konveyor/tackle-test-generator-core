@@ -191,7 +191,7 @@ public class TestSequenceExtender {
 		this.jeeSupport = jee;
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
-		
+
 		// read test plan from JSON file
 		File testPlanFile = new File(testPlanFilename);
 		if (!testPlanFile.isFile()) {
@@ -426,7 +426,7 @@ public class TestSequenceExtender {
 
         // write summary JSON file
 		try {
-            this.extSummary.writeSummaryFile(this.applicationName, this.seqIdMap, this.extTestSeq, 
+            this.extSummary.writeSummaryFile(this.applicationName, this.seqIdMap, this.extTestSeq,
             		this.execExtSeq, this.discardedExtSeq, assertionCount);
             System.out.println("* wrote summary file for generation of CTD-amplified tests (JSON)");
         }
@@ -606,34 +606,56 @@ public class TestSequenceExtender {
 			JUnitTestExporter testExporter = new JUnitTestExporter(outDir, withDiffAssertions);
 			Map<String, Set<String>> partTestSeq = this.extTestSeq.get(partition);
 
-			// group partition test sequences by class
-			Map<String, Set<String>> clsTestSeq = new HashMap<>();
+			// group partition test sequences by class and method
+			Map<String, Map<String, List<String>>> clsTestSeq = new HashMap<>();
 			for (String cls : partTestSeq.keySet()) {
-				String clsName = cls.split("::")[0];
+			    String[] classMethod = cls.split("::");
+				String clsName = classMethod[0];
+				String methodSig = classMethod[1];
 				if (!clsTestSeq.containsKey(clsName)) {
-					clsTestSeq.put(clsName, new HashSet<>());
+					clsTestSeq.put(clsName, new HashMap<>());
 				}
-				clsTestSeq.get(clsName).addAll(partTestSeq.get(cls));
+				Map<String, List<String>> methodTestSeq = clsTestSeq.get(clsName);
+				if (!methodTestSeq.containsKey(methodSig)) {
+				    methodTestSeq.put(methodSig, new ArrayList<>());
+                }
+				List<String> testSeq = methodTestSeq.get(methodSig);
+				if (!withDiffAssertions) {
+				    testSeq.addAll(partTestSeq.get(cls).stream()
+                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+>", ""))
+                        .collect(Collectors.toList())
+                    );
+                }
+				else {
+                    testSeq.addAll(partTestSeq.get(cls).stream()
+                        .map(seqid -> this.seqWithDiffAsserts.get(seqid))
+                        .collect(Collectors.toList())
+                    );
+                }
+//				methodTestSeq.get(methodSig).addAll(partTestSeq.get(cls));
 			}
 
 			// write class sequences to a JUnit test class file
             int testMethodCount = 0;
 			for (String cls : clsTestSeq.keySet()) {
-				List<String> seqList;
-				if (!withDiffAssertions) {
-					seqList = clsTestSeq.get(cls).stream()
-                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+>", ""))
-                        .collect(Collectors.toList());
-				} else {
-					seqList = clsTestSeq.get(cls).stream().map(seqid -> this.seqWithDiffAsserts.get(seqid))
-							.collect(Collectors.toList());
-				}
+                Map<String, List<String>> methodTestSeq = clsTestSeq.get(cls);
+//				for (String methodSig : methodTestSeq.keySet()) {
+//                    List<String> seqList;
+//				    if (!withDiffAssertions) {
+//					    seqList = methodTestSeq.get(methodSig).stream()
+//                            .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+>", ""))
+//                            .collect(Collectors.toList());
+//    				} else {
+//	    				seqList = methodTestSeq.get(methodSig).stream().map(seqid -> this.seqWithDiffAsserts.get(seqid))
+//		    					.collect(Collectors.toList());
+//				    }
+//                }
 				Set<String> testImports = new HashSet<>();
 				if (this.sequencePool.classImports.containsKey(cls)) {
 					testImports.addAll(this.sequencePool.classImports.get(cls).stream().collect(Collectors.toSet()));
 				}
-				testExporter.writeUnitTest(cls, seqList, testImports);
-				testMethodCount += seqList.size();
+				testExporter.writeUnitTest(cls, methodTestSeq, testImports);
+				testMethodCount += methodTestSeq.values().stream().mapToInt(List::size).sum();
 			}
 			System.out.println("* wrote "+clsTestSeq.keySet().size()+" test class files to \""+
                 outDirName+File.separator+partition+"\" with "+testMethodCount+" total test methods");
@@ -1943,7 +1965,7 @@ public class TestSequenceExtender {
 
 		// write test classes
 		testSeqExt.writeTestClasses(addDiffAsserts);
-		
+
 		// write coverage file
         testSeqExt.writeTestCoverageFile(appName, coverageFilename);
 	}

@@ -14,8 +14,8 @@ limitations under the License.
 package org.konveyor.tackle.testgen.core.extender;
 
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import randoop.operation.CallableOperation;
-import randoop.operation.TypedOperation;
+import org.konveyor.tackle.testgen.util.Utils;
+import randoop.operation.*;
 import randoop.sequence.Sequence;
 import randoop.sequence.Statement;
 import randoop.sequence.Variable;
@@ -189,6 +189,36 @@ public class SequenceUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Finds and returns signature of the target method or constructor call for the given sequence.
+     * The target call is identified as the last method or constructor call that occurs in the
+     * sequence (ignoring calls to assert methods).
+     * @param sequence
+     * @return
+     */
+    public static String getTargetMethod(Sequence sequence) {
+        // iterate in reverse order over each statement in the sequence
+        for (int i = sequence.size() - 1; i >= 0; i--) {
+            CallableOperation callableOper = sequence.getStatement(i).getOperation().getOperation();
+            // skip calls to assert methods
+            if (callableOper.getName().startsWith("assert")) {
+                continue;
+            }
+            // check whether call is to a method or constructor and return signature
+            try {
+                if (callableOper.isMethodCall()) {
+                    return Utils.getSignature(((MethodCall) callableOper).getMethod());
+                } else {
+                    return Utils.getSignature(((ConstructorCall) callableOper).getConstructor());
+                }
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     static boolean isCollectionType(Type paramType) {
