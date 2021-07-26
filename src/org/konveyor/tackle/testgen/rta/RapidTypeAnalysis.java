@@ -84,8 +84,12 @@ public class RapidTypeAnalysis {
 	private Set<String> performAnalysis(URLClassLoader urlLoader) {
 
 		Set<String> initializedTypes = new HashSet<String>();
+		
+		final Iterator<SootClass> iter = Scene.v().getApplicationClasses().snapshotIterator();
+		
+		while (iter.hasNext()) {
 
-		Scene.v().getApplicationClasses().forEach(currentSootClass -> {
+			SootClass currentSootClass = iter.next();
 
 			if ( ! currentSootClass.isInterface()) {
 
@@ -127,7 +131,7 @@ public class RapidTypeAnalysis {
 					}
 				}
 			}
-		});
+		}
 
 		return initializedTypes;
 	}
