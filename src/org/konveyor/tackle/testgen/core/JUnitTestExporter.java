@@ -13,9 +13,12 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
+import org.konveyor.tackle.testgen.core.extender.SequenceUtil;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.apache.commons.cli.*;
+import randoop.sequence.Sequence;
+import randoop.sequence.SequenceParseException;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -24,6 +27,7 @@ import javax.json.JsonReader;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Receives a json file with sequences, creates a junit test file per
@@ -59,15 +63,29 @@ public class JUnitTestExporter {
 	 * @param outDirParent output path
 	 * @throws IOException
 	 */
-
-	public JUnitTestExporter(File seqFile, File outDirParent, boolean addAssertMethods) throws IOException {
+	public JUnitTestExporter(File seqFile, File outDirParent, boolean addAssertMethods) throws IOException, SequenceParseException {
 
 		this(outDirParent, addAssertMethods);
 
 		Map<String, TestClass> junitTests = readSequences(seqFile);
 
 		for (Map.Entry<String, TestClass> entry : junitTests.entrySet()) {
-			writeUnitTest(entry.getKey(), entry.getValue().sequences, entry.getValue().imports);
+		    Map<String, List<String>> testSequences = new HashMap<>();
+            String clsName = entry.getKey();
+            List<String> importList = entry.getValue().imports.stream().collect(Collectors.toList());
+            for (String seqStr : entry.getValue().sequences) {
+                Sequence seq = SequenceParser.codeToSequence(seqStr, importList, clsName, true,
+                    new ArrayList<>());
+                String targetMethodSig = SequenceUtil.getTargetMethod(seq);
+                if (targetMethodSig == null) {
+                    targetMethodSig = "method()V;";
+                }
+                if (!testSequences.containsKey(targetMethodSig)) {
+                    testSequences.put(targetMethodSig, new ArrayList<>());
+                }
+                testSequences.get(targetMethodSig).add(seqStr);
+            }
+			writeUnitTest(clsName, testSequences, entry.getValue().imports);
 		}
 		logger.info("Wrote "+unitFileCounter+" junit test files");
 	}
@@ -95,13 +113,12 @@ public class JUnitTestExporter {
 		}
 
 		Map<String, TestClass> junitTests = new HashMap<String, TestClass>();
+		JsonObject testSequences = mainObject.getJsonObject("test_sequences");
 
-		for (String seqId : mainObject.keySet()) {
+		for (String seqId : testSequences.keySet()) {
 
-			JsonObject seqObj = mainObject.getJsonObject(seqId);
-
+			JsonObject seqObj = testSequences.getJsonObject(seqId);
 			String className = seqObj.getString("class_name");
-
 			TestClass currentTests = junitTests.get(className);
 
 			if (currentTests == null) {
@@ -115,7 +132,7 @@ public class JUnitTestExporter {
 		return junitTests;
 	}
 
-	public void writeUnitTest(String className, List<String> testSequences, Set<String> testImports) throws IOException {
+	public void writeUnitTest(String className, Map<String, List<String>> testSequences, Set<String> testImports) throws IOException {
 
 		String unitTestClassName = className.replaceAll("\\.", "_")+"_Test";
 
@@ -143,23 +160,36 @@ public class JUnitTestExporter {
 			writer.write("public class "+unitTestClassName+" {");
 			writer.newLine();
 
-			int testCounter = 0;
+			Map<String, Integer> methodTestCounters = new HashMap<>();
 
-			for (String sequence : testSequences) {
-				writer.write("\t@Test");
-				writer.newLine();
-				writer.write("\tpublic void test"+(testCounter++)+"() throws Throwable {");
-				writer.newLine();
-				String[] lines = sequence.split("\\r\\n");
-				for (String line : lines) {
-					writer.write("\t\t"+line);
-					writer.newLine();
-				}
-				writer.write("\t}");
-				writer.newLine();
-				writer.newLine();
-			}
+			for (String methodSig : testSequences.keySet()) {
+			    List<String> methodSequences = testSequences.get(methodSig);
+			    String methodName = methodSig.split("\\(")[0];
+                if (methodName.equals("<init>")) {
+                    String[] clsNameTokens = className.split("\\.");
+                    methodName = clsNameTokens[clsNameTokens.length-1];
+                }
 
+                int testCounter = 0;
+			    if (methodTestCounters.containsKey(methodName)) {
+                    testCounter = methodTestCounters.get(methodName);
+                }
+                for (String sequence : methodSequences) {
+                    writer.write("\t@Test");
+                    writer.newLine();
+                    writer.write("\tpublic void test_" + methodName + "_" + (testCounter++) + "() throws Throwable {");
+                    writer.newLine();
+                    String[] lines = sequence.split("\\r\\n");
+                    for (String line : lines) {
+                        writer.write("\t\t" + line);
+                        writer.newLine();
+                    }
+                    writer.write("\t}");
+                    writer.newLine();
+                    writer.newLine();
+                }
+                methodTestCounters.put(methodName, testCounter);
+            }
 			if (addAssertUtilMethods) {
 
 				writer.write(addFieldAccessMethod());
@@ -413,7 +443,7 @@ public class JUnitTestExporter {
         return cmd;
     }
 
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException, SequenceParseException {
 
 		 // parse command-line options
         CommandLine cmd = parseCommandLineOptions(args);
