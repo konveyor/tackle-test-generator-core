@@ -44,7 +44,6 @@ import java.util.zip.ZipInputStream;
 
 public class CTDTestPlanGenerator {
 
-	final boolean useAllCHATypes;
     final int maxCollectionNestDepth;
 	final boolean addLocalRemoteTag;
 	final int interactionLevel;
@@ -56,8 +55,12 @@ public class CTDTestPlanGenerator {
 
 	private TypeAnalysisResults typeAnalysisResults;
 
-	private int proxyModelsCounter = 0;
-	private int proxyTestsCounter = 0;
+	private int targetClassesCounter = 0;
+	private int targetModelsCounter = 0;
+	private int targetTestsCounter = 0;
+	private int privateClassCounter = 0;
+	private int privateMethodsCounter = 0;
+	private int totalClassesCounter = 0;
 
 	private final String applicationName;
 
@@ -73,14 +76,13 @@ public class CTDTestPlanGenerator {
 
 
 	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String excludedClassList, String partitionsCPPrefix, 
-			String partitionsCPSuffix, String monolithPath, String classpathFile, boolean allCHA, int maxNestDepth, boolean addLocalRemote, int level, 
+			String partitionsCPSuffix, String monolithPath, String classpathFile, int maxNestDepth, boolean addLocalRemote, int level, 
 			String refactoringPrefix, String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {
 
 		applicationName = appName;
 		cpPrefix = partitionsCPPrefix;
 		cpSuffix = partitionsCPSuffix;
 		appDirs =  monolithPath.split(File.pathSeparator);
-		useAllCHATypes = allCHA;
 		maxCollectionNestDepth = maxNestDepth;
 		addLocalRemoteTag = addLocalRemote;
 		interactionLevel = level;
@@ -105,8 +107,9 @@ public class CTDTestPlanGenerator {
 	public void modelPartitions()
 			throws IOException, ClassNotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
-		proxyModelsCounter = 0;
-		proxyTestsCounter = 0;
+		targetModelsCounter = 0;
+		targetTestsCounter = 0;
+		targetClassesCounter = 0;
 
 		JsonWriter writer = null;
 
@@ -121,10 +124,20 @@ public class CTDTestPlanGenerator {
 
 				partitionBuilder.add(partition, partitionObj);
 			}
+			
+			JsonObjectBuilder statsObject = Json.createObjectBuilder();
+			
+			statsObject.add("total_classes", totalClassesCounter);
+			statsObject.add("target_classes", targetClassesCounter);
+			statsObject.add("non_public_classes", privateClassCounter);
+			statsObject.add("classes_no_public_methods", privateMethodsCounter);
+			statsObject.add("target_methods", targetModelsCounter);
+			statsObject.add("total_tests", targetTestsCounter);
 
 			JsonObjectBuilder object = Json.createObjectBuilder();
-
+			
 			object.add("models_and_test_plans", partitionBuilder.build());
+			object.add("statistics", statsObject.build());
 
 			JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
 			writer = writerFactory.createWriter(new FileOutputStream(new File(applicationName+"_"+Constants.CTD_OUTFILE_SUFFIX)));
@@ -137,7 +150,8 @@ public class CTDTestPlanGenerator {
 			}
 		}
 
-		System.out.println("* Created a total of "+proxyTestsCounter+" test combinations for "+proxyModelsCounter+" target methods");
+		System.out.println("* Created a total of "+targetTestsCounter+" test combinations for "+targetModelsCounter+" target methods of "+
+							targetClassesCounter+" target classes");
 	}
 
 	private JsonObject modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults)
@@ -147,21 +161,43 @@ public class CTDTestPlanGenerator {
 		URLClassLoader classLoader = targetFetcher.loadCurrentClasses(partitionName);
 
 		List<String> classNames = targetFetcher.getTargetClasses(partitionName);
+		
+		totalClassesCounter = classNames.size();
+		
+		System.out.println("* Total number of classes: "+totalClassesCounter);
 
 		Map<String, List<JavaMethodModel>> classToMethods = new HashMap<String, List<JavaMethodModel>>();
-
+		
 		for (String currentClassName : classNames) {
 			List<JavaMethodModel> publicMethods = new ArrayList<JavaMethodModel>();
 			Class<?> proxyClass = Class.forName(currentClassName, false, classLoader);
 			if (Modifier.isPublic(proxyClass.getModifiers())) {
 				for (Object method : targetFetcher.getTargetMethods(proxyClass, classLoader)) {
 					publicMethods.add(new JavaMethodModel(partitionName, proxyClass, method, classLoader,
-							useAllCHATypes, maxCollectionNestDepth));
+							maxCollectionNestDepth));
 				}
 				if (!publicMethods.isEmpty()) {
 					classToMethods.put(currentClassName, publicMethods);
+					targetClassesCounter++;
+				} else {
+					privateMethodsCounter++;
 				}
+			} else {
+				privateClassCounter++;
 			}
+		}
+		
+		System.out.println("* targetting "+targetClassesCounter+" class"+
+					(targetClassesCounter==1? "" : "es"));
+		
+		if (privateClassCounter > 0) {
+			System.out.println("* Skipping "+privateClassCounter+" non-public class"+
+					(privateClassCounter==1? "" : "es"));
+		}
+		
+		if (privateMethodsCounter > 0) {
+			System.out.println("* Skipping "+privateMethodsCounter+" class"+
+					(privateMethodsCounter==1? "" : "es")+" with no public methods");
 		}
 
 		CTDModeler modeler = new CTDModeler(targetFetcher, refactoringPackagePrefix);
@@ -171,18 +207,18 @@ public class CTDTestPlanGenerator {
 		for (Map.Entry<String, List<JavaMethodModel>> entry : classToMethods.entrySet()) {
 
 			JsonObjectBuilder modelsBuilder = Json.createObjectBuilder();
-
+			
 			for (JavaMethodModel method : entry.getValue()) {
 
 				int addedTests = modeler.analyzeParams(method, typeAnalysisResults, modelsBuilder, addLocalRemoteTag,
 						interactionLevel, Class.forName(entry.getKey(), false, classLoader));
 
 				if (addedTests > 0) {
-					proxyModelsCounter++;
-					proxyTestsCounter += addedTests;
+					targetModelsCounter++;
+					targetTestsCounter += addedTests;
 				}
 			}
-
+			
 			classesBuilder.add(entry.getKey(), modelsBuilder.build());
 		}
 
@@ -896,13 +932,6 @@ public class CTDTestPlanGenerator {
         	logger.info("Partitioned application path suffix: "+partitionSuffix);
         }
 
-        boolean allCHA = true;
-
-        if (cmd.hasOption("cha")) {
-        	allCHA = Boolean.parseBoolean(cmd.getOptionValue("cha"));
-        	logger.info("Use all CHA types: "+allCHA);
-        }
-
         int maxDepth = 3;
 
         if (cmd.hasOption("nd")) {
@@ -949,7 +978,7 @@ public class CTDTestPlanGenerator {
         }
 
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(appName, partitionFileName, targetClassList, excludedClassList, partitionPrefix, partitionSuffix, appPath, classpathFilename,
-				allCHA, maxDepth, addLocalRemote, interactionLevel, refactoringPrefix, partitionsPrefix, partitionSuffix, partitionsSeparator);
+					maxDepth, addLocalRemote, interactionLevel, refactoringPrefix, partitionsPrefix, partitionSuffix, partitionsSeparator);
 		analyzer.modelPartitions();
 	}
 }

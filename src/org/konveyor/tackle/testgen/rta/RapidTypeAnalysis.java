@@ -13,29 +13,41 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.rta;
 
-import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
-import org.konveyor.tackle.testgen.util.Constants;
-import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.konveyor.tackle.testgen.util.Utils;
-import soot.*;
-import soot.jimple.DefinitionStmt;
-import soot.jimple.NewExpr;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URLClassLoader;
-import java.util.*;
-import java.util.logging.Logger;
+
+import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
+import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
+import org.konveyor.tackle.testgen.util.Utils;
+
+import soot.Body;
+import soot.Scene;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.Unit;
+import soot.Value;
+import soot.ValueBox;
+import soot.jimple.NewExpr;
+import soot.jimple.internal.JSpecialInvokeExpr;
 
 /**
  * Performs rapid type analysis to retrieve all types instantiated in the monolith application
@@ -92,20 +104,36 @@ public class RapidTypeAnalysis {
 			SootClass currentSootClass = iter.next();
 
 			if ( ! currentSootClass.isInterface()) {
-
+				
 				List<SootMethod> methods = currentSootClass.getMethods();
 				for (SootMethod method : methods) {
 					if (method.isAbstract() || method.isNative()) {
 						continue;
 					}
+					
 					Body body = method.retrieveActiveBody();
-					UnitPatchingChain units = body.getUnits();
-					for (Unit unit : units) {
-						if (unit instanceof DefinitionStmt) {
-							Value val = ((DefinitionStmt) unit).getRightOp();
+					
+					Iterator<Unit> unitIter = body.getUnits().snapshotIterator();
+					
+					while (unitIter.hasNext()) {
+						
+						Unit unit = unitIter.next();
+						
+						Iterator<ValueBox> valIter = unit.getUseBoxes().iterator();
+						
+						while (valIter.hasNext()) {
+							Value val = valIter.next().getValue();
+							
+							String valClassName = null;
+	
 							if (val instanceof NewExpr) {
 
-								String valClassName = ((NewExpr) val).getBaseType().getClassName();
+								valClassName = ((NewExpr) val).getBaseType().getClassName();
+							} else if (val instanceof JSpecialInvokeExpr && val.toString().contains("void <init>")) {
+								valClassName = ((JSpecialInvokeExpr) val).getMethodRef().getDeclaringClass().getName();
+							}
+							
+							if (valClassName != null) {
 
 								Class<?> valClass;
 								try {
@@ -116,8 +144,8 @@ public class RapidTypeAnalysis {
 										logger.fine("Skipping anonymous class "+valClassName);
 									} else if (Utils.isPrivateInnerClass(valClass)) {
 										logger.fine("Skipping private inner class "+valClassName);
-									} else if (isNonSerializableLibraryClass(valClass)) {
-										logger.fine("Skipping non-serializable library class "+valClassName);
+									//} else if (isNonSerializableLibraryClass(valClass)) {
+									//	logger.fine("Skipping non-serializable library class "+valClassName);
 									} else if ( ! hasPublicConstructor(valClass)) {
 										logger.fine("Skipping class "+valClassName+" with no public constructors");
 									} else {
@@ -132,7 +160,7 @@ public class RapidTypeAnalysis {
 				}
 			}
 		}
-
+		
 		return initializedTypes;
 	}
 
@@ -148,10 +176,10 @@ public class RapidTypeAnalysis {
 		return false;
 	}
 
-	private boolean isNonSerializableLibraryClass(Class<?> theClass) {
+	//private boolean isNonSerializableLibraryClass(Class<?> theClass) {
 
-		return  ! appClasses.contains(theClass.getName()) && ! Serializable.class.isAssignableFrom(theClass);
-	}
+	//	return  ! appClasses.contains(theClass.getName()) && ! Serializable.class.isAssignableFrom(theClass);
+	//}
 
     public static void toJson(String appName, Set<String> types) throws FileNotFoundException {
     	JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));

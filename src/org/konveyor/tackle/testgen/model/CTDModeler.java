@@ -104,8 +104,7 @@ class CTDModeler {
 				List<Class<?>> concreteClasses = new ArrayList<Class<?>>(method.getAllConcreteTypes(paramClass, typeAnalysisResults));
 
 				if (concreteClasses.isEmpty()) {
-					logger.warning("Method "+method.getName()+" has an empty param "+paramType.getTypeName());
-					return 0; // param has no concrete type - skip this method as it is not being called from the code
+					throw new RuntimeException("Method "+method.targetClass.getName()+"."+method.getName()+" has an empty param "+paramType.getTypeName());
 				}
 
 				Map<String, String> labels = new HashMap<String, String>();
@@ -125,8 +124,7 @@ class CTDModeler {
 			for (ModelAttribute param : params) {
 
 				if (param.getTypes().isEmpty()) {
-					logger.warning("Method "+method.getName()+" has an empty param "+paramType.getTypeName());
-					return 0; // param has no concrete type - skip this method as it is not being called from the code
+					throw new RuntimeException("Method "+method.targetClass.getName()+"."+method.getName()+" has an empty param "+paramType.getTypeName());
 				}
 
 				Parameter currentAttr = methodModel.addParam(param.getName());
