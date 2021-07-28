@@ -47,7 +47,7 @@ public class CTDModelingTest {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
 				null, null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is  created
@@ -74,7 +74,7 @@ public class CTDModelingTest {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, null, null, null, null, 
 				"test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is  created
@@ -102,7 +102,7 @@ public class CTDModelingTest {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
 				null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", 
 				null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", true, 2, false, 1, null, null, null, null);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is  created

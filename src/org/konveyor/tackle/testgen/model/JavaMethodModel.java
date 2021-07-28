@@ -54,7 +54,6 @@ public class JavaMethodModel {
     final Object targetMethod;
 	private final FastHierarchy classHierarchy;
 
-	private final boolean allCHATypes;
 	private final int maxCollectionDepth;
 
 	private static final String CLASS_NAME_PATTERN = "(([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*)";
@@ -88,7 +87,7 @@ public class JavaMethodModel {
 		}
 	}
 
-	JavaMethodModel(String partition, Class<?> theClass, Object method, URLClassLoader classLoader, boolean allTypes, int maxDepth)
+	JavaMethodModel(String partition, Class<?> theClass, Object method, URLClassLoader classLoader, int maxDepth)
 			throws IllegalArgumentException {
 
 		if ( ! (method instanceof Method || method instanceof Constructor)) {
@@ -100,7 +99,6 @@ public class JavaMethodModel {
 		targetSootClass = Scene.v().loadClassAndSupport(theClass.getName());
 		targetMethod = method;
 		this.classLoader = classLoader;
-		allCHATypes = allTypes;
 		maxCollectionDepth = maxDepth;
 		classHierarchy = Scene.v().getOrMakeFastHierarchy();
 	}
@@ -170,16 +168,46 @@ public class JavaMethodModel {
 
 	Set<Class<?>> getAllConcreteTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
 
-		Set<Class<?>>  types = typeAnalysisResults.getSubClasses(paramType);
+		Set<Class<?>>  resultTypes = typeAnalysisResults.getSubClasses(paramType);
 
-		if (types != null) {
-			return types;
+		if (resultTypes != null) {
+			return resultTypes;
 		}
-
-		types = new HashSet<Class<?>>();
+		
 		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
 		Set<SootClass> classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
 		classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
+		
+		resultTypes = getRelevantTypes(paramClass, classes, typeAnalysisResults);
+		
+		typeAnalysisResults.setSubClasses(paramType, resultTypes);
+		
+		return resultTypes;
+	}
+
+	private Set<Class<?>> getAllSuperTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
+
+		Set<Class<?>>  resultTypes = typeAnalysisResults.getSuperClasses(paramType);
+
+		if (resultTypes != null) {
+			return resultTypes;
+		}
+
+		resultTypes = new HashSet<>();
+		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
+		Set<SootClass> classes = getAllSuperclasses(paramClass);
+		
+		resultTypes = getRelevantTypes(paramClass, classes, typeAnalysisResults);
+
+		typeAnalysisResults.setSuperClasses(paramType, resultTypes);
+
+		return resultTypes;
+	}
+	
+	private Set<Class<?>> getRelevantTypes(SootClass paramClass, Set<SootClass> classes, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
+		
+		Set<Class<?>> resultTypes = new HashSet<>();
+		Set<Class<?>> allConcreteTypes = new HashSet<>();
 		for (SootClass currentSootClass : classes) {
 			
 			Class<?> currentClass;
@@ -190,53 +218,34 @@ public class JavaMethodModel {
 				continue;
 			}
 
-			if (currentSootClass.isConcrete() && typeAnalysisResults.inRTAResults(currentSootClass.getName()) &&
-					(isCollection(currentClass) ||
-					 allCHATypes || ! Utils.isJavaType(currentSootClass.getName()))) {
-				types.add(currentClass);
+			if (currentSootClass.isConcrete()) {
+				allConcreteTypes.add(currentClass);
+				if (typeAnalysisResults.inRTAResults(currentSootClass.getName())) {
+					resultTypes.add(currentClass);
+				}
 			}
 		}
+		
+		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
+		
 		if (paramClass.isConcrete()) {
-			types.add(classLoader.loadClass(paramClass.toString()));
+			allConcreteTypes.add(theParamClass);
+			resultTypes.add(theParamClass);
 		}
-
-		typeAnalysisResults.setSubClasses(paramType, types);
-
-		return types;
-	}
-
-	private Set<Class<?>> getAllSuperTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
-
-		Set<Class<?>>  types = typeAnalysisResults.getSuperClasses(paramType);
-
-		if (types != null) {
-			return types;
-		}
-
-		types = new HashSet<Class<?>>();
-		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
-		Set<SootClass> classes = getAllSuperclasses(paramClass);
-		for (SootClass currentSootClass : classes) {
-			Class<?> currentClass;
-			try {
-				currentClass = classLoader.loadClass(currentSootClass.toString());
-			} catch (ClassNotFoundException | NoClassDefFoundError e) {
-				logger.warning(e.getMessage());
-				continue;
-			}
-			if (currentSootClass.isConcrete() && typeAnalysisResults.inRTAResults(currentSootClass.getName()) &&
-					(isCollection(currentClass) ||
-							allCHATypes || ! Utils.isJavaType(currentSootClass.getName()))) {
-				types.add(currentClass);
+		
+		if (allConcreteTypes.isEmpty()) {
+			logger.warning("No concrete classes found in hierarchy of "+paramClass.getName());
+			// use the formal abstract type of the param 
+			resultTypes.add(theParamClass);
+		} else {
+		
+			if (resultTypes.isEmpty()) {
+				// use only CHA results
+				resultTypes.addAll(allConcreteTypes);
 			}
 		}
-		if (paramClass.isConcrete()) {
-			types.add(classLoader.loadClass(paramClass.toString()));
-		}
 
-		typeAnalysisResults.setSuperClasses(paramType, types);
-
-		return types;
+		return resultTypes;
 	}
 
 	private Set<SootClass> getAllSuperclasses(SootClass theClass) {
