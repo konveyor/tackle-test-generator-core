@@ -187,7 +187,7 @@ public class CTDTestPlanGenerator {
 			}
 		}
 		
-		System.out.println("* targetting "+targetClassesCounter+" class"+
+		System.out.println("* Targeting "+targetClassesCounter+" class"+
 					(targetClassesCounter==1? "" : "es"));
 		
 		if (privateClassCounter > 0) {
