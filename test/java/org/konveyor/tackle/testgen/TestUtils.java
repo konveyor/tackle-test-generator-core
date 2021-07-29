@@ -207,7 +207,7 @@ public class TestUtils {
 
         // set expected values
         app.exp__bb_sequences = 159;
-        app.exp__parsed_sequences = 141;
+        app.exp__parsed_sequences = 158;
         app.exp__method_sequence_pool_keys = 102;
         app.exp__class_sequence_pool_keys = 39;
         app.exp__generated_sequences = 1486;
@@ -220,7 +220,7 @@ public class TestUtils {
         app.exp__excp_during_extension = 15;
         app.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
         app.exp__class_not_found_types = 0;
-        app.exp__parse_exception_types = Stream.of("java.lang.Error", "randoop.sequence.SequenceParseException").
+        app.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
             collect(Collectors.toSet());
         app.exp__randoop_sequence_SequenceParseException = 1;
         app.exp__java_lang_Error = 17;

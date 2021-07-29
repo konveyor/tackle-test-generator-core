@@ -22,6 +22,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
@@ -96,7 +97,8 @@ public class SequenceParser {
 	private static final String RANDOOP_FIELD_GET = "FieldGet";
 	private static final String RANDOOP_FIELD_SET = "FieldSet";
 	private static final String RANDOOP_PRIMITIVE_ASSIGNMENT = "NonreceiverTerm";
-	private static final String RANDOOP_ARRAY_CREATION = "InitializedArrayCreation";
+    private static final String RANDOOP_ARRAY_CREATION = "InitializedArrayCreation";
+    private static final String RANDOOP_ARRAY_ELEMENT_SET = "ArrayElementSet";
 
 	/**
 	 *
@@ -212,6 +214,13 @@ public class SequenceParser {
 
 		statementCounter = 0;
 
+		// find all instances of try statements and remove them from the AST so that statements
+        // occurring in try/catch/finally blocks are not parsed
+        compUnit.findAll(TryStmt.class).forEach(tryStmt -> {
+            boolean removed = tryStmt.remove();
+            logger.fine("try stmt: "+tryStmt+"\nremoved: "+removed);
+        });
+
 		compUnit.findAll(ExpressionStmt.class).forEach(statement -> {
 			try {
 				formattedStatements.addAll(parseStatement(statement, originalIndices, indexToParameterTypes));
@@ -239,12 +248,12 @@ public class SequenceParser {
 
 		} else if (node instanceof MethodCallExpr) {
 
-			parseMethodCall((MethodCallExpr) node, randoopStatements);
+			parseMethodCall((MethodCallExpr) node, randoopStatements, indexToParameterTypes);
 		} else if (node instanceof AssignExpr) {
 
 			parseAssignmentExpression((AssignExpr) node, randoopStatements, indexToParameterTypes);
 		} else {
-			throw new IllegalArgumentException("Encoutered unrecognized statement: "+statement.toString());
+			throw new IllegalArgumentException("Encountered unrecognized statement: "+statement.toString());
 		}
 
 		originalIndices.add(statementCounter+randoopStatements.size()-1);
@@ -279,9 +288,14 @@ public class SequenceParser {
 		Expression target = expr.getTarget();
 
 		if (target instanceof FieldAccessExpr) {
-
 			randoopStatement.append(getNextVar()+" = "+getFieldAccessStatement((FieldAccessExpr) target, false));
-		} else {
+		}
+		else if (target instanceof ArrayAccessExpr) {
+		    ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) target;
+		    ResolvedType targetExprType = arrayAccessExpr.calculateResolvedType();
+		    randoopStatement.append(getNextVar()+" = "+RANDOOP_ARRAY_ELEMENT_SET+" : <set>"+targetExprType.describe()+"[] : ");
+        }
+		else {
 			throw new IllegalArgumentException("Unexpected target expression type "+target.toString());
 		}
 
@@ -310,29 +324,32 @@ public class SequenceParser {
 		NodeList<Type> parameterTypes = null;
 
 		if (valueExpr instanceof ObjectCreationExpr) {
-
-			ObjectCreationExpr constr = (ObjectCreationExpr) valueExpr;
-
-			if (constr.getChildNodes().get(0) instanceof ClassOrInterfaceType) {
-				ClassOrInterfaceType type = (ClassOrInterfaceType) constr.getChildNodes().get(0);
-				if (type.getTypeArguments().isPresent()) {
-					parameterTypes = type.getTypeArguments().get();
-				}
-			}
-
-			valueAsRandoopStatement.append(RANDOOP_CONSTRUCTOR_CALL+" : ");
-
-			ResolvedConstructorDeclaration constDec = constr.resolve();
-
-			valueAsRandoopStatement.append(constDec.getQualifiedSignature().replaceAll("<E>", "").replaceAll("<T>", "")+" : ");
-
-			List<ResolvedParameterDeclaration> argTypes = new ArrayList<ResolvedParameterDeclaration>();
-
-			for (int i=0; i<constDec.getNumberOfParams(); i++) {
-				argTypes.add(constDec.getParam(i));
-			}
-
-			valueAsRandoopStatement.append(handleMethodArguments(constr.getArguments(), argTypes, randoopStatements));
+		    valueAsRandoopStatement.append(getConstructorCallStatement(
+                (ObjectCreationExpr)valueExpr, randoopStatements, indexToParameterTypes
+            ));
+//			ObjectCreationExpr constr = (ObjectCreationExpr) valueExpr;
+//
+//			if (constr.getChildNodes().get(0) instanceof ClassOrInterfaceType) {
+//				ClassOrInterfaceType type = (ClassOrInterfaceType) constr.getChildNodes().get(0);
+//				if (type.getTypeArguments().isPresent()) {
+//					parameterTypes = type.getTypeArguments().get();
+//				}
+//			}
+//
+//			valueAsRandoopStatement.append(RANDOOP_CONSTRUCTOR_CALL+" : ");
+//
+//			ResolvedConstructorDeclaration constDec = constr.resolve();
+//
+//			valueAsRandoopStatement.append(constDec.getQualifiedSignature().replaceAll("<E>", "").replaceAll("<T>", "")+" : ");
+//
+//			List<ResolvedParameterDeclaration> argTypes = new ArrayList<ResolvedParameterDeclaration>();
+//
+//			for (int i=0; i<constDec.getNumberOfParams(); i++) {
+//				argTypes.add(constDec.getParam(i));
+//			}
+//
+//			valueAsRandoopStatement.append(handleMethodArguments(constr.getArguments(), argTypes, randoopStatements,
+//                indexToParameterTypes));
 
 		} else if (valueExpr instanceof FieldAccessExpr) {
 			valueAsRandoopStatement.append(getFieldAccessStatement((FieldAccessExpr) valueExpr, true));
@@ -343,7 +360,8 @@ public class SequenceParser {
 		} else if (valueExpr instanceof LiteralExpr || valueExpr instanceof UnaryExpr) {
 			valueAsRandoopStatement.append(getNonReceiverStatement(valueExpr, targetType));
 		} else if (valueExpr instanceof MethodCallExpr) {
-			valueAsRandoopStatement.append(getMethodCallStatement((MethodCallExpr) valueExpr, randoopStatements));
+			valueAsRandoopStatement.append(getMethodCallStatement((MethodCallExpr) valueExpr, randoopStatements,
+                indexToParameterTypes));
 		} else if (valueExpr instanceof NameExpr) {
 			valueAsRandoopStatement.append(((NameExpr) valueExpr).getNameAsString());
 		} else {
@@ -357,17 +375,20 @@ public class SequenceParser {
 		return valueAsRandoopStatement.toString();
 	}
 
-	private static void parseMethodCall(MethodCallExpr methodCall, List<String> randoopStatements)
+	private static void parseMethodCall(MethodCallExpr methodCall, List<String> randoopStatements,
+                                        Map<Integer, NodeList<Type>> indexToParameterTypes)
 			throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
 		StringBuilder randoopStatement = new StringBuilder(getNextVar()+" = ");
 
-		randoopStatement.append(getMethodCallStatement(methodCall, randoopStatements));
+		randoopStatement.append(getMethodCallStatement(methodCall, randoopStatements, indexToParameterTypes));
 
 		randoopStatements.add(randoopStatement.toString());
 	}
 
-	private static String getMethodCallStatement(MethodCallExpr methodCall, List<String> randoopStatements) throws ClassNotFoundException, NoSuchFieldException, SecurityException {
+	private static String getMethodCallStatement(MethodCallExpr methodCall, List<String> randoopStatements,
+                                                 Map<Integer, NodeList<Type>> indexToParameterTypes)
+        throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
 		StringBuilder randoopStatement = new StringBuilder(RANDOOP_METHOD_CALL+" : ");
 
@@ -386,12 +407,17 @@ public class SequenceParser {
 			argTypes.add(methodDec.getParam(i));
 		}
 
-		randoopStatement.append(handleMethodArguments(methodCall.getArguments(), argTypes, randoopStatements));
+		randoopStatement.append(handleMethodArguments(methodCall.getArguments(), argTypes,
+            randoopStatements, indexToParameterTypes));
 
 		return randoopStatement.toString();
 	}
 
-	private static String handleMethodArguments(NodeList<Expression> arguments, List<ResolvedParameterDeclaration> argTypes, List<String> addedStatements) throws ClassNotFoundException, NoSuchFieldException, SecurityException {
+	private static String handleMethodArguments(NodeList<Expression> arguments,
+                                                List<ResolvedParameterDeclaration> argTypes,
+                                                List<String> addedStatements,
+                                                Map<Integer, NodeList<Type>> indexToParameterTypes)
+        throws ClassNotFoundException, NoSuchFieldException, SecurityException {
 
 		StringBuilder vars = new StringBuilder();
 
@@ -440,11 +466,17 @@ public class SequenceParser {
 								addedStatements.add(nextVar + " = " + getNonReceiverStatement(expr, argTypes.get(argIndex).getType()));
 							}
 						} else {
-							addedStatements
-									.add(nextVar + " = " + getNonReceiverStatement(expr, type));
+							addedStatements.add(nextVar + " = " + getNonReceiverStatement(expr, type));
 						}
 
-					} else {
+					} else if (expr instanceof ClassExpr) {
+                        ResolvedType type = expr.calculateResolvedType();
+                        addedStatements.add(nextVar + " = " + getNonReceiverStatement(expr, type));
+                    } else if (expr instanceof ObjectCreationExpr) {
+					    addedStatements.add(nextVar + " = " + getConstructorCallStatement(
+                            (ObjectCreationExpr)expr, addedStatements, indexToParameterTypes
+                        ));
+                    } else {
 						throw new IllegalArgumentException("Unsupported argument type: '" + expr.toString() + "'");
 					}
 
@@ -581,6 +613,39 @@ public class SequenceParser {
 	private static String getNonReceiverStatement(String exprStr, ResolvedType type) {
 		return RANDOOP_PRIMITIVE_ASSIGNMENT+" : "+type.describe()+":"+exprStr+" :";
 	}
+
+	private static String getConstructorCallStatement(ObjectCreationExpr constructorCallExpr,
+                                                      List<String> randoopStatements,
+                                                      Map<Integer, NodeList<Type>> indexToParameterTypes)
+        throws NoSuchFieldException, ClassNotFoundException {
+        NodeList<Type> parameterTypes = null;
+        if (constructorCallExpr.getChildNodes().get(0) instanceof ClassOrInterfaceType) {
+            ClassOrInterfaceType type = (ClassOrInterfaceType) constructorCallExpr.getChildNodes().get(0);
+            if (type.getTypeArguments().isPresent()) {
+                parameterTypes = type.getTypeArguments().get();
+            }
+        }
+
+        StringBuilder constructorCallStmt = new StringBuilder();
+        constructorCallStmt.append(RANDOOP_CONSTRUCTOR_CALL+" : ");
+        ResolvedConstructorDeclaration constDec = constructorCallExpr.resolve();
+        constructorCallStmt.append(constDec.getQualifiedSignature()
+            .replaceAll("<E>", "")
+            .replaceAll("<T>", "")+" : ");
+
+        List<ResolvedParameterDeclaration> argTypes = new ArrayList<ResolvedParameterDeclaration>();
+        for (int i=0; i<constDec.getNumberOfParams(); i++) {
+            argTypes.add(constDec.getParam(i));
+        }
+        constructorCallStmt.append(handleMethodArguments(constructorCallExpr.getArguments(),
+            argTypes, randoopStatements, indexToParameterTypes));
+
+        if (parameterTypes != null) {
+            indexToParameterTypes.put(statementCounter+randoopStatements.size(), parameterTypes);
+        }
+
+        return constructorCallStmt.toString();
+    }
 
 	private static Expression getInnerExpression(Expression expr) {
 
