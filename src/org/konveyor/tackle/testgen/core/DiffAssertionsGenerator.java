@@ -312,8 +312,14 @@ public class DiffAssertionsGenerator {
 				return getAssert(recordedVal, "("+theType.getName()+") "+actualVal,  0.0001);
 
 			} else {
-
-				if (theType.getName().equals("java.lang.Character") || theType.getName().equals("char")) {
+				
+				if (theType.getName().equals("java.lang.Short") || theType.getName().equals("short")) {
+					recordedVal = "(short) "+recordedVal;
+				} else if (theType.getName().equals("java.lang.Byte") || theType.getName().equals("byte")) {
+					recordedVal = "(byte) "+recordedVal;
+				} else if (theType.getName().equals("java.lang.Long") || theType.getName().equals("long")) {
+					recordedVal += "L";
+				} else if (theType.getName().equals("java.lang.Character") || theType.getName().equals("char")) {
 					recordedVal = getCharValueForAssert(recordedVal);
 				}
 				return getAssert(recordedVal, actualVal);
@@ -334,28 +340,7 @@ public class DiffAssertionsGenerator {
 			return "assertNull("+arg2+");"+LINE_SEPARATOR;
 		}
 
-		// Check long case - shouldn't pass as int but passes as long
-		// TODO: This will work also if the argument is an actual string that contains
-		// a long, because we add double quotes to all strings. It will not work if
-		// the argument is an actual string that contains a double-quoted long.
-		// In the future we should handle this in the sequence parser. Randoop
-		// generates long values with "L" but Randoop Sequence class can't parse
-		// them, hence we removed the "L" in the sequence parser.
-		
-		String arg1_fixed = arg1;
-
-		try {
-			Integer.parseInt(arg1);
-		} catch (NumberFormatException e) {
-			try {
-				Long.parseLong(arg1);
-				arg1_fixed += "L";
-			} catch (NumberFormatException e1) {
-				// do nothing
-			}
-		}
-
-		return "assertEquals("+arg1_fixed+", "+arg2+(delta == 0? "" : ", "+String.valueOf(delta))+");"+LINE_SEPARATOR;
+		return "assertEquals("+arg1+", "+arg2+(delta == 0? "" : ", "+String.valueOf(delta))+");"+LINE_SEPARATOR;
 	}
 
 	private static String getFieldValueMethodCall(String objName, Field field) {

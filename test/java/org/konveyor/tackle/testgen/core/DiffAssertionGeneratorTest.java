@@ -26,12 +26,10 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.konveyor.tackle.testgen.TestUtils;
-import org.konveyor.tackle.testgen.core.util.ProcessLauncher;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
 
 public class DiffAssertionGeneratorTest {
