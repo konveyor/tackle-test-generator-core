@@ -66,8 +66,9 @@ class SequencePool {
     // set of signatures for proxy methods targeted for coverage in the CTD plan
     private Set<String> targetProxyMethodSignatures;
 
-    int totalInitSequences = 0;
-    int parsedInitSequences = 0;
+    int totalBaseSequences = 0;
+    int parsedBaseSequences = 0;
+    int skippedBaseSequences = 0;
 
     SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures) {
         this.classTestSeqPool = new HashMap<>();
@@ -112,7 +113,7 @@ class SequencePool {
 
                 this.classBeforeAfterMethods.get(cls).addAll(beforeAfterMethodsList);
 
-                totalInitSequences += sequences.size();
+                totalBaseSequences += sequences.size();
                 logger.info("Initial sequences for " + cls + ": " + sequences.size());
                 logger.info("Imports: " + importList);
 
@@ -136,7 +137,12 @@ class SequencePool {
                         System.setErr(origSysErr);
 
                         logger.fine("Randoop test sequence: " + randoopSeq);
-                        parsedInitSequences++;
+                        if (randoopSeq.size() > 0) {
+                            parsedBaseSequences++;
+                        }
+                        else {
+                            skippedBaseSequences++;
+                        }
 
                         // if the sequence has generic output types, perform type substitution
                         if (hasGenericTypesOutputType(randoopSeq)) {
@@ -178,16 +184,19 @@ class SequencePool {
                         }
                         this.parseExceptions.put(excpType, excpCount);
                     }
-                    System.out.print("*   "+parsedInitSequences+"\r");
+                    System.out.print("*   "+ parsedBaseSequences +"\r");
                 }
             }
         }
-        System.out.println("\n* Class sequence pool: "+classTestSeqPool.keySet().size()+" classes, "+
+        System.out.println("\n* Skipped base sequences: "+skippedBaseSequences);
+        System.out.println("* Base sequences causing parse exceptions: "+parseExceptions.values()
+            .stream().mapToInt(Integer::intValue).sum());
+        System.out.println("* Class sequence pool: "+classTestSeqPool.keySet().size()+" classes, "+
              classTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
         System.out.println("* Method sequence pool: "+methodTestSeqPool.keySet().size()+" methods, "+
              methodTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
-        logger.info("=======> Test sequence pool init done: total_seq=" + totalInitSequences + "; parsed_seq="
-            + parsedInitSequences);
+        logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="
+            + parsedBaseSequences);
         logger.info("Class sequence pool: " + classTestSeqPool.keySet().size() + " classes; "
             + classTestSeqPool.values().stream().collect(Collectors.summarizingInt(Set::size))
             + " total constructor sequences");

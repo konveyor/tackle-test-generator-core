@@ -92,8 +92,8 @@ public class ExtenderSummary {
                           Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq,
                           int assertionCount) {
         System.out.println("\n==== Summary of CTD-amplified test generation ===");
-        System.out.println(" Total initial sequences: " + this.sequencePool.totalInitSequences);
-        System.out.println(" Parsed initial sequences: " + this.sequencePool.parsedInitSequences);
+        System.out.println(" Total initial sequences: " + this.sequencePool.totalBaseSequences);
+        System.out.println(" Parsed initial sequences: " + this.sequencePool.parsedBaseSequences);
         System.out.println(" Method test sequence pool key size: " + this.sequencePool.methodTestSeqPool.keySet().size());
         System.out.println(" Class test sequence pool key size: " + this.sequencePool.classTestSeqPool.keySet().size());
         System.out.println("***");
@@ -156,8 +156,9 @@ public class ExtenderSummary {
 
         // add information about building-block sequences
         JsonObjectBuilder bbSeqInfo = Json.createObjectBuilder();
-        bbSeqInfo.add("bb_sequences", this.sequencePool.totalInitSequences);
-        bbSeqInfo.add("parsed_sequences", this.sequencePool.parsedInitSequences);
+        bbSeqInfo.add("bb_sequences", this.sequencePool.totalBaseSequences);
+        bbSeqInfo.add("parsed_sequences", this.sequencePool.parsedBaseSequences);
+        bbSeqInfo.add("skipped_sequences", this.sequencePool.skippedBaseSequences);
         bbSeqInfo.add("method_sequence_pool_keys", this.sequencePool.methodTestSeqPool.keySet().size());
         bbSeqInfo.add("class_sequence_pool_keys", this.sequencePool.classTestSeqPool.keySet().size());
         summaryJson.add("building_block_sequences_info", bbSeqInfo);

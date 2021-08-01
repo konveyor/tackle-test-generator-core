@@ -79,7 +79,7 @@ public class TestSequenceExtenderTest {
                     .forEach(File::delete);
             }
         }
-        
+
         for (TestUtils.AppUnderTest app : appsUnderTest) {
         	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
         	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
@@ -98,6 +98,7 @@ public class TestSequenceExtenderTest {
             JsonObject bbSeqInfo = summaryInfo.getJsonObject("building_block_sequences_info");
             assertEquals(app.exp__bb_sequences, bbSeqInfo.getInt("bb_sequences"));
             assertEquals(app.exp__parsed_sequences, bbSeqInfo.getInt("parsed_sequences"));
+            assertEquals(app.exp__skipped_sequences, bbSeqInfo.getInt("skipped_sequences"));
             assertEquals(app.exp__method_sequence_pool_keys, bbSeqInfo.getInt("method_sequence_pool_keys"));
             assertEquals(app.exp__class_sequence_pool_keys, bbSeqInfo.getInt("class_sequence_pool_keys"));
 
