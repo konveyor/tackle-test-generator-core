@@ -259,9 +259,13 @@ public class DiffAssertionsGenerator {
 			String fieldVal = entry.getValue();
 			
 			// We need to cast the calling object because its formal type might be a superclass of its
-			// recorded runtime type
+			// recorded runtime type		
+			
+			if (callingObjectType.getName().contains("$")) {
+				System.out.println();
+			}
 
-			String getterCall = "(("+callingObjectType.getName().replaceAll("$", ".")+") "+objName+")."+theMethod.getName()+"()";
+			String getterCall = "(("+callingObjectType.getName().replaceAll("\\$", ".")+") "+objName+")."+theMethod.getName()+"()";
 
 			String assertion = getAssertForSimpleType(theMethod.getReturnType(), fieldVal, getterCall, theMethod.getReturnType().isPrimitive());
 
@@ -293,7 +297,8 @@ public class DiffAssertionsGenerator {
 			// to avoid ambiguous assertion, i.e., to be done on the primitive types, not the object level
 
 			if ( ! unboxingMethod.isEmpty()) {
-				actualVal = "(("+theType.getName()+") "+actualVal+")"+unboxingMethod;
+				
+				actualVal = "(("+theType.getName().replaceAll("\\$", ".")+") "+actualVal+")"+unboxingMethod;
 			}
 
 			if (theType.getName().equals("java.lang.Float") ||
@@ -346,7 +351,7 @@ public class DiffAssertionsGenerator {
 	private static String getFieldValueMethodCall(String objName, Field field) {
 		return FIELD_UTIL_METHOD_NAME+"(" + objName+", \""+ field.getName() + "\")";
 	}
-
+	
 	private String getUnboxingMethod(Class<?> theClass) {
 
 		if (theClass.equals(Boolean.class)) {
