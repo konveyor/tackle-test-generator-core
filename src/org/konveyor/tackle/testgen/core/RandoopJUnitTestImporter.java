@@ -121,7 +121,7 @@ public class RandoopJUnitTestImporter extends AbstractJUnitTestImporter {
 		}
 
 		for (int i=3;i<lines.length;i++) {
-			filteredSeq.append(lines[i]);
+			filteredSeq.append(lines[i]+System.lineSeparator());
 		}
 
 		return filteredSeq.toString();
