@@ -13,6 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
+import com.github.javaparser.utils.Pair;
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
@@ -67,8 +68,12 @@ class SequencePool {
     private Set<String> targetProxyMethodSignatures;
 
     int totalBaseSequences = 0;
-    int parsedBaseSequences = 0;
+    int parsedBaseSequencesFull = 0;
+    int parsedBaseSequencesPartial = 0;
     int skippedBaseSequences = 0;
+    int exceptionBaseSequences = 0;
+
+    int parseErrorEOF = 0;
 
     SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures) {
         this.classTestSeqPool = new HashMap<>();
@@ -86,7 +91,7 @@ class SequencePool {
      * Initializes test sequence pools for classes and methods (from the CTD test
      * plan)
      */
-     private void initTestSequencePool(List<JsonObject> initialTestSeqs) {
+    private void initTestSequencePool(List<JsonObject> initialTestSeqs) {
 
         // iterate over each class in JSON info about initial sequences
         for (JsonObject initialTestSeq : initialTestSeqs) {
@@ -130,17 +135,23 @@ class SequencePool {
                         System.setErr(NullPrintStream.NULL_PRINT_STREAM);
 
                         // create randoop sequence object by parsing the string representation of sequence
-                        Sequence randoopSeq = SequenceParser.codeToSequence(testSeq, importList, cls, true,
+                        Pair<Sequence, Boolean> parsedSeqPair = SequenceParser.codeToSequence(testSeq, importList, cls, true,
                             new ArrayList<Integer>());
+                        Sequence randoopSeq = parsedSeqPair.a;
+
                         // restore stdout and stderr
                         System.setOut(origSysOut);
                         System.setErr(origSysErr);
 
                         logger.fine("Randoop test sequence: " + randoopSeq);
+                        // update counters for fully/partially parsed sequences and skipped sequences
                         if (randoopSeq.size() > 0) {
-                            parsedBaseSequences++;
-                        }
-                        else {
+                            if (parsedSeqPair.b) {
+                                parsedBaseSequencesFull++;
+                            } else {
+                                parsedBaseSequencesPartial++;
+                            }
+                        } else {
                             skippedBaseSequences++;
                         }
 
@@ -175,7 +186,7 @@ class SequencePool {
                         logger.warning(e.getMessage());
                         logger.warning("Stack trace:");
                         for (StackTraceElement elem : e.getStackTrace()) {
-                        	logger.warning(elem.toString());
+                            logger.warning(elem.toString());
                         }
                         int excpCount = 1;
                         String excpType = e.getClass().getName();
@@ -183,20 +194,27 @@ class SequencePool {
                             excpCount = this.parseExceptions.get(excpType) + 1;
                         }
                         this.parseExceptions.put(excpType, excpCount);
+                        exceptionBaseSequences++;
                     }
-                    System.out.print("*   "+ parsedBaseSequences +"\r");
+                    System.out.print("*   Full:" + parsedBaseSequencesFull +
+                        "  Part:" + parsedBaseSequencesPartial +
+                        "  Skip:" + skippedBaseSequences +
+                        "  Excp:" + exceptionBaseSequences +
+                        "\r");
                 }
             }
         }
-        System.out.println("\n* Skipped base sequences: "+skippedBaseSequences);
-        System.out.println("* Base sequences causing parse exceptions: "+parseExceptions.values()
-            .stream().mapToInt(Integer::intValue).sum());
-        System.out.println("* Class sequence pool: "+classTestSeqPool.keySet().size()+" classes, "+
-             classTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
-        System.out.println("* Method sequence pool: "+methodTestSeqPool.keySet().size()+" methods, "+
-             methodTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
+//        System.out.println("\n* Total parsed base sequences: " +
+//            (parsedBaseSequencesFull + parsedBaseSequencesPartial));
+//        System.out.println("* Skipped base sequences: " + skippedBaseSequences);
+//        System.out.println("* Base sequences causing parse exceptions: " + parseExceptions.values()
+//            .stream().mapToInt(Integer::intValue).sum());
+        System.out.println("\n* Class sequence pool: " + classTestSeqPool.keySet().size() + " classes, " +
+            classTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
+        System.out.println("* Method sequence pool: " + methodTestSeqPool.keySet().size() + " methods, " +
+            methodTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
         logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="
-            + parsedBaseSequences);
+            + parsedBaseSequencesFull);
         logger.info("Class sequence pool: " + classTestSeqPool.keySet().size() + " classes; "
             + classTestSeqPool.values().stream().collect(Collectors.summarizingInt(Set::size))
             + " total constructor sequences");

@@ -92,8 +92,11 @@ public class ExtenderSummary {
                           Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq,
                           int assertionCount) {
         System.out.println("\n==== Summary of CTD-amplified test generation ===");
-        System.out.println(" Total initial sequences: " + this.sequencePool.totalBaseSequences);
-        System.out.println(" Parsed initial sequences: " + this.sequencePool.parsedBaseSequences);
+        System.out.println(" Total base sequences: " + this.sequencePool.totalBaseSequences);
+        System.out.println(" Parsed base sequences (full): " + this.sequencePool.parsedBaseSequencesFull);
+        System.out.println(" Parsed base sequences (partial): " + this.sequencePool.parsedBaseSequencesPartial);
+        System.out.println(" Skipped base sequences: " + this.sequencePool.skippedBaseSequences);
+        System.out.println(" Exception base sequences: " + this.sequencePool.exceptionBaseSequences);
         System.out.println(" Method test sequence pool key size: " + this.sequencePool.methodTestSeqPool.keySet().size());
         System.out.println(" Class test sequence pool key size: " + this.sequencePool.classTestSeqPool.keySet().size());
         System.out.println("***");
@@ -156,9 +159,11 @@ public class ExtenderSummary {
 
         // add information about building-block sequences
         JsonObjectBuilder bbSeqInfo = Json.createObjectBuilder();
-        bbSeqInfo.add("bb_sequences", this.sequencePool.totalBaseSequences);
-        bbSeqInfo.add("parsed_sequences", this.sequencePool.parsedBaseSequences);
-        bbSeqInfo.add("skipped_sequences", this.sequencePool.skippedBaseSequences);
+        bbSeqInfo.add("base_sequences", this.sequencePool.totalBaseSequences);
+        bbSeqInfo.add("parsed_base_sequences_full", this.sequencePool.parsedBaseSequencesFull);
+        bbSeqInfo.add("parsed_base_sequences_partial", this.sequencePool.parsedBaseSequencesPartial);
+        bbSeqInfo.add("skipped_base_sequences", this.sequencePool.skippedBaseSequences);
+        bbSeqInfo.add("exception_base_sequences", this.sequencePool.exceptionBaseSequences);
         bbSeqInfo.add("method_sequence_pool_keys", this.sequencePool.methodTestSeqPool.keySet().size());
         bbSeqInfo.add("class_sequence_pool_keys", this.sequencePool.classTestSeqPool.keySet().size());
         summaryJson.add("building_block_sequences_info", bbSeqInfo);

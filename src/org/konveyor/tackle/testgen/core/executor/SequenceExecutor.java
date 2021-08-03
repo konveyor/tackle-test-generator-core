@@ -99,7 +99,7 @@ public class SequenceExecutor {
 	private static boolean VERBOSE = true;
 
 	public static final String TKLTEST_NULL_STRING = "__tkltest_null";
-	
+
 	public static final int SINGLE_EXECUTION_SEC_LIMIT = 120;
 
 	private static final Logger logger = TackleTestLogger.getLogger(SequenceExecutor.class);
@@ -361,7 +361,8 @@ public class SequenceExecutor {
 
 			List<Integer> originalSeqIndices = new ArrayList<Integer>();
 
-			Sequence randoopSequence = SequenceParser.codeToSequence(info.sequence, info.imports, info.className, addPackageDeclaration, originalSeqIndices);
+			Sequence randoopSequence = SequenceParser.codeToSequence(info.sequence, info.imports,
+                info.className, addPackageDeclaration, originalSeqIndices).a;
 
 			id2Indices.put(id,  originalSeqIndices);
 			String[] origStatements = id2Sequences.get(id).sequence.split(System.lineSeparator());
@@ -392,21 +393,21 @@ public class SequenceExecutor {
 				es.execute(new SequenceExecutionVisitor(seqId, statements, null, null), new SequenceTestCheckGenerator());
 		    }
 		};
-		
+
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		
+
 		Future<?> future = executorService.submit(executionTask);
-		
+
 		try {
 			future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			future.cancel(true);
 			executorService.shutdownNow();
 			// Identify the cause of the ExecutionException
-			Throwable cause = e.getCause() != null? e.getCause() : e;			
+			Throwable cause = e.getCause() != null? e.getCause() : e;
 			throw new RuntimeException(cause);
 		}
-		
+
 		SequenceResults results = id2ExecutionResults.get(seqId);
 
 		if (numExecutions == 1 || ! results.passed) {
@@ -415,14 +416,14 @@ public class SequenceExecutor {
 		}
 
 		SequenceResults updatedResults = new SequenceResults(results);
-		
+
 		for (int i=1; i<numExecutions;i++) {
 
 			future = executorService.submit(executionTask);
 			try {
 				future.get(SINGLE_EXECUTION_SEC_LIMIT, TimeUnit.SECONDS);
 			} catch (java.util.concurrent.TimeoutException e) {
-				// timeout - return results we have been able to collect so far 
+				// timeout - return results we have been able to collect so far
 				future.cancel(true);
 				executorService.shutdownNow();
 				return updatedResults;
@@ -430,10 +431,10 @@ public class SequenceExecutor {
 				future.cancel(true);
 				executorService.shutdownNow();
 				// Identify the cause of the ExecutionException
-				Throwable cause = e.getCause() != null? e.getCause() : e;			
+				Throwable cause = e.getCause() != null? e.getCause() : e;
 				throw new RuntimeException(cause);
-			} 
-			
+			}
+
 			results = id2ExecutionResults.get(seqId);
 
 			if (!results.passed) {
@@ -443,7 +444,7 @@ public class SequenceExecutor {
 
 			updatedResults.retain(results);
 		}
-		
+
 		executorService.shutdownNow();
 
 		return updatedResults;

@@ -35,6 +35,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.Pair;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import randoop.operation.TypedOperation;
 import randoop.sequence.Sequence;
@@ -76,6 +77,7 @@ public class SequenceParser {
 
     private static int addedVarsCounter = 0;
     private static int statementCounter = 0;
+    private static boolean fullyParsed = true;
 
     private static boolean VERBOSE = false;
 
@@ -112,8 +114,10 @@ public class SequenceParser {
      * @throws SequenceParseException
      */
 
-    public static Sequence codeToSequence(String code, List<String> imports, String forClass, boolean addPackageDeclaration, List<Integer> originalIndices)
+    public static Pair<Sequence, Boolean> codeToSequence(String code, List<String> imports, String forClass, boolean addPackageDeclaration, List<Integer> originalIndices)
         throws SequenceParseException {
+
+        fullyParsed = true;
 
         String augmentedCode = augmentCode(code, imports, forClass, addPackageDeclaration);
 
@@ -135,7 +139,7 @@ public class SequenceParser {
             seq = addParameterTypes(seq, indexToParameterTypes);
         }
 
-        return seq;
+        return new Pair<>(seq, fullyParsed);
     }
 
     private static Sequence addParameterTypes(Sequence seq, Map<Integer, NodeList<Type>> indexToParameterTypes) {
@@ -231,6 +235,7 @@ public class SequenceParser {
         }
         catch (Exception e) {
             // TODO: log exception during parsing
+            fullyParsed = false;
         }
 
         return formattedStatements;
@@ -253,7 +258,7 @@ public class SequenceParser {
             parseAssignmentExpression((AssignExpr) node, randoopStatements, indexToParameterTypes);
         } else {
             // TODO: log unrecognized statement
-//      			throw new IllegalArgumentException("Encountered unrecognized statement: "+statement.toString());
+            throw new IllegalArgumentException("Encountered unrecognized statement: "+statement.toString());
         }
 
         originalIndices.add(statementCounter + randoopStatements.size() - 1);

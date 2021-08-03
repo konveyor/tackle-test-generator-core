@@ -153,8 +153,10 @@ public class TestUtils {
 
         // expected values
         public int exp__bb_sequences;
-        public int exp__parsed_sequences;
+        public int exp__parsed_sequences_full;
+        public int exp__parsed_sequences_partial;
         public int exp__skipped_sequences;
+        public int exp__exception_sequences;
         public int exp__method_sequence_pool_keys;
         public int exp__class_sequence_pool_keys;
         public int exp__generated_sequences;
@@ -208,8 +210,10 @@ public class TestUtils {
 
         // set expected values
         app.exp__bb_sequences = 159;
-        app.exp__parsed_sequences = 155;
+        app.exp__parsed_sequences_full = 155;
+        app.exp__parsed_sequences_partial = 0;
         app.exp__skipped_sequences = 3;
+        app.exp__exception_sequences = 1;
         app.exp__method_sequence_pool_keys = 102;
         app.exp__class_sequence_pool_keys = 39;
         app.exp__generated_sequences = 1486;
@@ -261,7 +265,10 @@ public class TestUtils {
 
         // set expected values
         app.exp__bb_sequences = 13;
-        app.exp__parsed_sequences = 12;
+        app.exp__parsed_sequences_full = 12;
+        app.exp__parsed_sequences_partial = 0;
+        app.exp__skipped_sequences = 0;
+        app.exp__exception_sequences = 1;
         app.exp__method_sequence_pool_keys = 11;
         app.exp__class_sequence_pool_keys = 5;
         app.exp__generated_sequences = 25;

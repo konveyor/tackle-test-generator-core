@@ -244,8 +244,8 @@ public class TestSequenceExtender {
         this.extSummary.setSequencePool(this.sequencePool);
 
         System.out.println("* Parsed initial test sequences for "+
-            this.sequencePool.classImports.keySet().size()+" classes; total parsed sequences: "+
-            this.sequencePool.parsedBaseSequences);
+            this.sequencePool.classImports.keySet().size()+" classes; total parsed sequences (full+partial): "+
+            (this.sequencePool.parsedBaseSequencesFull+this.sequencePool.parsedBaseSequencesPartial));
         System.out.println("* Generating extended test sequences");
 
 		this.extTestSeq = new HashMap<>();
