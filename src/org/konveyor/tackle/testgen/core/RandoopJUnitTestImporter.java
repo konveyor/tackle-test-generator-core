@@ -116,8 +116,8 @@ public class RandoopJUnitTestImporter extends AbstractJUnitTestImporter {
 		// Skip first two lines if they contain a debug print
 
 		if ( ! lines[1].trim().equals("if (debug)")) {
-			filteredSeq.append(lines[1]);
-			filteredSeq.append(lines[2]);
+			filteredSeq.append(lines[1]+System.lineSeparator());
+			filteredSeq.append(lines[2]+System.lineSeparator());
 		}
 
 		for (int i=3;i<lines.length;i++) {
