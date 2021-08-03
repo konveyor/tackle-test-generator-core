@@ -708,7 +708,8 @@ public class SequenceExecutor {
 
 		for (Method publicMethod : object.getClass().getMethods()) {
 
-			if (publicMethod.getName().startsWith("get") && publicMethod.getParameterCount() == 0) {
+			if (publicMethod.getName().startsWith("get") && publicMethod.getParameterCount() == 0 &&
+					! publicMethod.getReturnType().equals(Void.TYPE)) {
 				allPublicGetters.put(publicMethod.getName().toLowerCase(), publicMethod);
 			}
 		}
