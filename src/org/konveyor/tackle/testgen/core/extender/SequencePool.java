@@ -28,7 +28,6 @@ import randoop.types.Type;
 
 import javax.json.*;
 import javax.json.stream.JsonGenerator;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -47,6 +46,7 @@ import java.util.stream.Collectors;
 class SequencePool {
 
     private static final Logger logger = TackleTestLogger.getLogger(SequencePool.class);
+    private static final boolean DEBUG = false;
 
     // map from class name to set of sequences that create instances of that class
     HashMap<String, SortedSet<Sequence>> classTestSeqPool;
@@ -228,14 +228,16 @@ class SequencePool {
         System.out.println("* Method sequence pool: " + methodTestSeqPool.keySet().size() + " methods, " +
             methodTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
 
-        // write sequences resulting in parse errors to json file
-        JsonObjectBuilder parseErrorsObj = Json.createObjectBuilder();
-        parseErrorsObj.add("parse_error_sequences", parseErrorSequencesInfo);
-        FileOutputStream fos = new FileOutputStream(appName+ Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX);
-        JsonWriterFactory writerFactory = Json
-            .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-        try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
-            jsonWriter.writeObject(parseErrorsObj.build());
+        // in debug mode, write sequences resulting in parse errors to json file
+        if (DEBUG) {
+            JsonObjectBuilder parseErrorsObj = Json.createObjectBuilder();
+            parseErrorsObj.add("parse_error_sequences", parseErrorSequencesInfo);
+            FileOutputStream fos = new FileOutputStream(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX);
+            JsonWriterFactory writerFactory = Json
+                .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
+            try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
+                jsonWriter.writeObject(parseErrorsObj.build());
+            }
         }
 
         logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="
