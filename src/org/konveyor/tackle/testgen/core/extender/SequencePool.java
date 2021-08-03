@@ -15,6 +15,7 @@ package org.konveyor.tackle.testgen.core.extender;
 
 import com.github.javaparser.utils.Pair;
 import org.konveyor.tackle.testgen.core.SequenceParser;
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 import randoop.operation.*;
@@ -25,9 +26,11 @@ import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
 import randoop.types.Type;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonString;
+import javax.json.*;
+import javax.json.stream.JsonGenerator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -75,7 +78,9 @@ class SequencePool {
 
     int parseErrorEOF = 0;
 
-    SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures) {
+    SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures, String appName)
+        throws FileNotFoundException {
+
         this.classTestSeqPool = new HashMap<>();
         this.methodTestSeqPool = new HashMap<>();
         this.primitiveValuePool = new PrimitiveValuePool();
@@ -83,7 +88,7 @@ class SequencePool {
         this.classBeforeAfterMethods = new HashMap<>();
         this.parseExceptions = new HashMap<>();
         this.targetProxyMethodSignatures = tgtProxyMethodSignatures;
-        initTestSequencePool(initialTestSeqs);
+        initTestSequencePool(initialTestSeqs, appName);
     }
 
 
@@ -91,7 +96,9 @@ class SequencePool {
      * Initializes test sequence pools for classes and methods (from the CTD test
      * plan)
      */
-    private void initTestSequencePool(List<JsonObject> initialTestSeqs) {
+    private void initTestSequencePool(List<JsonObject> initialTestSeqs, String appName) throws FileNotFoundException {
+
+        JsonObjectBuilder parseErrorSequencesInfo = Json.createObjectBuilder();
 
         // iterate over each class in JSON info about initial sequences
         for (JsonObject initialTestSeq : initialTestSeqs) {
@@ -195,6 +202,12 @@ class SequencePool {
                         }
                         this.parseExceptions.put(excpType, excpCount);
                         exceptionBaseSequences++;
+
+                        JsonObjectBuilder parseErrorInfo = Json.createObjectBuilder();
+                        parseErrorInfo.add("exception_type", excpType);
+                        parseErrorInfo.add("exception_msg", e.getMessage());
+                        parseErrorInfo.add("sequence", testSeq);
+                        parseErrorSequencesInfo.add(exceptionBaseSequences+"::"+cls, parseErrorInfo);
                     }
                     System.out.print("*   Full:" + parsedBaseSequencesFull +
                         "  Part:" + parsedBaseSequencesPartial +
@@ -204,6 +217,7 @@ class SequencePool {
                 }
             }
         }
+
 //        System.out.println("\n* Total parsed base sequences: " +
 //            (parsedBaseSequencesFull + parsedBaseSequencesPartial));
 //        System.out.println("* Skipped base sequences: " + skippedBaseSequences);
@@ -213,6 +227,17 @@ class SequencePool {
             classTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
         System.out.println("* Method sequence pool: " + methodTestSeqPool.keySet().size() + " methods, " +
             methodTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
+
+        // write sequences resulting in parse errors to json file
+        JsonObjectBuilder parseErrorsObj = Json.createObjectBuilder();
+        parseErrorsObj.add("parse_error_sequences", parseErrorSequencesInfo);
+        FileOutputStream fos = new FileOutputStream(appName+ Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX);
+        JsonWriterFactory writerFactory = Json
+            .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
+        try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
+            jsonWriter.writeObject(parseErrorsObj.build());
+        }
+
         logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="
             + parsedBaseSequencesFull);
         logger.info("Class sequence pool: " + classTestSeqPool.keySet().size() + " classes; "

@@ -239,7 +239,7 @@ public class TestSequenceExtender {
         this.extSummary = new ExtenderSummary(this.testPlan);
 
 		// create sequence pool for classes and targeted proxy methods
-        this.sequencePool = new SequencePool(this.initialTestSeqs, this.tgtProxyMethodSignatures);
+        this.sequencePool = new SequencePool(this.initialTestSeqs, this.tgtProxyMethodSignatures, appName);
         augmentClassSequencePool();
         this.extSummary.setSequencePool(this.sequencePool);
 
