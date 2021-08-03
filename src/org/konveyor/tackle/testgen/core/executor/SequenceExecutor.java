@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
 import javax.json.Json;
@@ -67,7 +68,6 @@ import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.github.javaparser.utils.ClassUtils;
 
-import java.util.concurrent.TimeoutException;
 import randoop.ExceptionalExecution;
 import randoop.ExecutionOutcome;
 import randoop.ExecutionVisitor;
@@ -403,6 +403,11 @@ public class SequenceExecutor {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			future.cancel(true);
 			executorService.shutdownNow();
+			if (e instanceof TimeoutException) {
+				SequenceResults results = new SequenceResults(randoopSequence.size());
+				results.passed = false;
+				return results;
+			}
 			// Identify the cause of the ExecutionException
 			Throwable cause = e.getCause() != null? e.getCause() : e;
 			throw new RuntimeException(cause);
@@ -704,7 +709,8 @@ public class SequenceExecutor {
 
 		for (Method publicMethod : object.getClass().getMethods()) {
 
-			if (publicMethod.getName().startsWith("get") && publicMethod.getParameterCount() == 0) {
+			if (publicMethod.getName().startsWith("get") && publicMethod.getParameterCount() == 0 &&
+					! publicMethod.getReturnType().equals(Void.TYPE)) {
 				allPublicGetters.put(publicMethod.getName().toLowerCase(), publicMethod);
 			}
 		}
