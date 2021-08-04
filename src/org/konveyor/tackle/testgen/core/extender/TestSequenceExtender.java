@@ -232,20 +232,20 @@ public class TestSequenceExtender {
                 totalInitSeqs += clsInfo.getJsonArray("sequences").size();
             }
         }
-        System.out.println("* Read "+totalInitSeqs+" initial test sequences");
+        System.out.println("* Read "+totalInitSeqs+" base test sequences");
         System.out.println("* Starting sequence parsing");
 
         // create extension summary object
         this.extSummary = new ExtenderSummary(this.testPlan);
 
 		// create sequence pool for classes and targeted proxy methods
-        this.sequencePool = new SequencePool(this.initialTestSeqs, this.tgtProxyMethodSignatures);
+        this.sequencePool = new SequencePool(this.initialTestSeqs, this.tgtProxyMethodSignatures, appName);
         augmentClassSequencePool();
         this.extSummary.setSequencePool(this.sequencePool);
 
         System.out.println("* Parsed initial test sequences for "+
-            this.sequencePool.classImports.keySet().size()+" classes; total parsed sequences: "+
-            this.sequencePool.parsedInitSequences);
+            this.sequencePool.classImports.keySet().size()+" classes; total parsed sequences (full+partial): "+
+            (this.sequencePool.parsedBaseSequencesFull+this.sequencePool.parsedBaseSequencesPartial));
         System.out.println("* Generating extended test sequences");
 
 		this.extTestSeq = new HashMap<>();

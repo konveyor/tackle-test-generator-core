@@ -75,7 +75,7 @@ public class JUnitTestExporter {
             List<String> importList = entry.getValue().imports.stream().collect(Collectors.toList());
             for (String seqStr : entry.getValue().sequences) {
                 Sequence seq = SequenceParser.codeToSequence(seqStr, importList, clsName, true,
-                    new ArrayList<>());
+                    new ArrayList<>()).a;
                 String targetMethodSig = SequenceUtil.getTargetMethod(seq);
                 if (targetMethodSig == null) {
                     targetMethodSig = "method()V;";

@@ -13,7 +13,9 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
+import com.github.javaparser.utils.Pair;
 import org.konveyor.tackle.testgen.core.SequenceParser;
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 import randoop.operation.*;
@@ -24,9 +26,10 @@ import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
 import randoop.types.Type;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonString;
+import javax.json.*;
+import javax.json.stream.JsonGenerator;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -43,6 +46,7 @@ import java.util.stream.Collectors;
 class SequencePool {
 
     private static final Logger logger = TackleTestLogger.getLogger(SequencePool.class);
+    private static final boolean DEBUG = false;
 
     // map from class name to set of sequences that create instances of that class
     HashMap<String, SortedSet<Sequence>> classTestSeqPool;
@@ -66,10 +70,17 @@ class SequencePool {
     // set of signatures for proxy methods targeted for coverage in the CTD plan
     private Set<String> targetProxyMethodSignatures;
 
-    int totalInitSequences = 0;
-    int parsedInitSequences = 0;
+    int totalBaseSequences = 0;
+    int parsedBaseSequencesFull = 0;
+    int parsedBaseSequencesPartial = 0;
+    int skippedBaseSequences = 0;
+    int exceptionBaseSequences = 0;
 
-    SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures) {
+    int parseErrorEOF = 0;
+
+    SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures, String appName)
+        throws FileNotFoundException {
+
         this.classTestSeqPool = new HashMap<>();
         this.methodTestSeqPool = new HashMap<>();
         this.primitiveValuePool = new PrimitiveValuePool();
@@ -77,7 +88,7 @@ class SequencePool {
         this.classBeforeAfterMethods = new HashMap<>();
         this.parseExceptions = new HashMap<>();
         this.targetProxyMethodSignatures = tgtProxyMethodSignatures;
-        initTestSequencePool(initialTestSeqs);
+        initTestSequencePool(initialTestSeqs, appName);
     }
 
 
@@ -85,7 +96,9 @@ class SequencePool {
      * Initializes test sequence pools for classes and methods (from the CTD test
      * plan)
      */
-     private void initTestSequencePool(List<JsonObject> initialTestSeqs) {
+    private void initTestSequencePool(List<JsonObject> initialTestSeqs, String appName) throws FileNotFoundException {
+
+        JsonObjectBuilder parseErrorSequencesInfo = Json.createObjectBuilder();
 
         // iterate over each class in JSON info about initial sequences
         for (JsonObject initialTestSeq : initialTestSeqs) {
@@ -112,7 +125,7 @@ class SequencePool {
 
                 this.classBeforeAfterMethods.get(cls).addAll(beforeAfterMethodsList);
 
-                totalInitSequences += sequences.size();
+                totalBaseSequences += sequences.size();
                 logger.info("Initial sequences for " + cls + ": " + sequences.size());
                 logger.info("Imports: " + importList);
 
@@ -129,14 +142,25 @@ class SequencePool {
                         System.setErr(NullPrintStream.NULL_PRINT_STREAM);
 
                         // create randoop sequence object by parsing the string representation of sequence
-                        Sequence randoopSeq = SequenceParser.codeToSequence(testSeq, importList, cls, true,
+                        Pair<Sequence, Boolean> parsedSeqPair = SequenceParser.codeToSequence(testSeq, importList, cls, true,
                             new ArrayList<Integer>());
+                        Sequence randoopSeq = parsedSeqPair.a;
+
                         // restore stdout and stderr
                         System.setOut(origSysOut);
                         System.setErr(origSysErr);
 
                         logger.fine("Randoop test sequence: " + randoopSeq);
-                        parsedInitSequences++;
+                        // update counters for fully/partially parsed sequences and skipped sequences
+                        if (randoopSeq.size() > 0) {
+                            if (parsedSeqPair.b) {
+                                parsedBaseSequencesFull++;
+                            } else {
+                                parsedBaseSequencesPartial++;
+                            }
+                        } else {
+                            skippedBaseSequences++;
+                        }
 
                         // if the sequence has generic output types, perform type substitution
                         if (hasGenericTypesOutputType(randoopSeq)) {
@@ -169,7 +193,7 @@ class SequencePool {
                         logger.warning(e.getMessage());
                         logger.warning("Stack trace:");
                         for (StackTraceElement elem : e.getStackTrace()) {
-                        	logger.warning(elem.toString());
+                            logger.warning(elem.toString());
                         }
                         int excpCount = 1;
                         String excpType = e.getClass().getName();
@@ -177,17 +201,47 @@ class SequencePool {
                             excpCount = this.parseExceptions.get(excpType) + 1;
                         }
                         this.parseExceptions.put(excpType, excpCount);
+                        exceptionBaseSequences++;
+
+                        JsonObjectBuilder parseErrorInfo = Json.createObjectBuilder();
+                        parseErrorInfo.add("exception_type", excpType);
+                        parseErrorInfo.add("exception_msg", e.getMessage());
+                        parseErrorInfo.add("sequence", testSeq);
+                        parseErrorSequencesInfo.add(exceptionBaseSequences+"::"+cls, parseErrorInfo);
                     }
-                    System.out.print("*   "+parsedInitSequences+"\r");
+                    System.out.print("*   Full:" + parsedBaseSequencesFull +
+                        "  Part:" + parsedBaseSequencesPartial +
+                        "  Skip:" + skippedBaseSequences +
+                        "  Excp:" + exceptionBaseSequences +
+                        "\r");
                 }
             }
         }
-        System.out.println("\n* Class sequence pool: "+classTestSeqPool.keySet().size()+" classes, "+
-             classTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
-        System.out.println("* Method sequence pool: "+methodTestSeqPool.keySet().size()+" methods, "+
-             methodTestSeqPool.values().stream().mapToInt(Collection::size).sum()+" sequences");
-        logger.info("=======> Test sequence pool init done: total_seq=" + totalInitSequences + "; parsed_seq="
-            + parsedInitSequences);
+
+//        System.out.println("\n* Total parsed base sequences: " +
+//            (parsedBaseSequencesFull + parsedBaseSequencesPartial));
+//        System.out.println("* Skipped base sequences: " + skippedBaseSequences);
+//        System.out.println("* Base sequences causing parse exceptions: " + parseExceptions.values()
+//            .stream().mapToInt(Integer::intValue).sum());
+        System.out.println("\n* Class sequence pool: " + classTestSeqPool.keySet().size() + " classes, " +
+            classTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
+        System.out.println("* Method sequence pool: " + methodTestSeqPool.keySet().size() + " methods, " +
+            methodTestSeqPool.values().stream().mapToInt(Collection::size).sum() + " sequences");
+
+        // in debug mode, write sequences resulting in parse errors to json file
+        if (DEBUG) {
+            JsonObjectBuilder parseErrorsObj = Json.createObjectBuilder();
+            parseErrorsObj.add("parse_error_sequences", parseErrorSequencesInfo);
+            FileOutputStream fos = new FileOutputStream(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX);
+            JsonWriterFactory writerFactory = Json
+                .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
+            try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
+                jsonWriter.writeObject(parseErrorsObj.build());
+            }
+        }
+
+        logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="
+            + parsedBaseSequencesFull);
         logger.info("Class sequence pool: " + classTestSeqPool.keySet().size() + " classes; "
             + classTestSeqPool.values().stream().collect(Collectors.summarizingInt(Set::size))
             + " total constructor sequences");

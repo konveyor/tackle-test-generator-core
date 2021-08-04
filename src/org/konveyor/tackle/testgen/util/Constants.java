@@ -79,6 +79,9 @@ public class Constants {
     /** Name of JSON file to which extender summary information is written */
     public static final String EXTENDER_SUMMARY_FILE_JSON_SUFFIX = "_test_generation_summary.json";
 
+    /** Name of JSON file to which information about sequence parse errors is written */
+    public static final String SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX = "_base_sequence_parse_errors.json";
+
     /** Minimum number of passing test executions for a test to be considered a non-flaky
      * passing test */
 //    public static final int MIN_TEST_EXECUTIONS_NONFLAKY = 1;
