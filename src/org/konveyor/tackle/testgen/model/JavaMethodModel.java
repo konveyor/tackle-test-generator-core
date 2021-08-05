@@ -16,6 +16,7 @@ package org.konveyor.tackle.testgen.model;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -218,7 +219,7 @@ public class JavaMethodModel {
 				continue;
 			}
 
-			if (currentSootClass.isConcrete()) {
+			if (currentSootClass.isConcrete() && Modifier.isPublic(currentClass.getModifiers())) {
 				allConcreteTypes.add(currentClass);
 				if (typeAnalysisResults.inRTAResults(currentSootClass.getName())) {
 					resultTypes.add(currentClass);
@@ -228,14 +229,14 @@ public class JavaMethodModel {
 		
 		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
 		
-		if (paramClass.isConcrete()) {
+		if (paramClass.isConcrete() && Modifier.isPublic(paramClass.getModifiers())) {
 			allConcreteTypes.add(theParamClass);
 			resultTypes.add(theParamClass);
 		}
 		
 		if (allConcreteTypes.isEmpty()) {
 			logger.warning("No concrete classes found in hierarchy of "+paramClass.getName());
-			// use the formal abstract type of the param 
+			// use the formal abstract and/or non-public type of the param 
 			resultTypes.add(theParamClass);
 		} else {
 		
