@@ -281,7 +281,11 @@ public class DiffAssertionsGenerator {
 	private String getAssertForSimpleType(Class<?> theType, String recordedVal, String actualVal, boolean isPrimitive) {
 
 		if (theType.getName().equals("java.lang.String")) {
-			return getAssert(getStringValueForAssert(recordedVal), actualVal);
+			if (recordedVal.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
+				return getNullAssert(actualVal);
+			} else {
+				return getAssert(getStringValueForAssert(recordedVal), actualVal);
+			}
 		} else if (ClassUtils.isPrimitiveOrWrapper(theType)) {
 			String unboxingMethod = "";
 
@@ -295,6 +299,10 @@ public class DiffAssertionsGenerator {
 			if ( ! unboxingMethod.isEmpty()) {
 				
 				actualVal = "(("+theType.getName().replaceAll("\\$", ".")+") "+actualVal+")"+unboxingMethod;
+			}
+			
+			if (recordedVal.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
+				return getNullAssert(actualVal);
 			}
 
 			if (theType.getName().equals("java.lang.Float") ||
@@ -333,13 +341,17 @@ public class DiffAssertionsGenerator {
 	private String getAssert(String arg1, String arg2) {
 		return getAssert(arg1, arg2, 0);
 	}
+	
+	private String getNullAssert(String arg) {
+		
+		assertCounter++;
+		
+		return "assertNull("+arg+");"+LINE_SEPARATOR;
+	}
 
 	private String getAssert(String arg1, String arg2, double delta) {
+		
 		assertCounter++;
-
-		if (arg1.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
-			return "assertNull("+arg2+");"+LINE_SEPARATOR;
-		}
 
 		return "assertEquals("+arg1+", "+arg2+(delta == 0? "" : ", "+String.valueOf(delta))+");"+LINE_SEPARATOR;
 	}
