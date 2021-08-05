@@ -261,10 +261,6 @@ public class DiffAssertionsGenerator {
 			// We need to cast the calling object because its formal type might be a superclass of its
 			// recorded runtime type		
 			
-			if (callingObjectType.getName().contains("$")) {
-				System.out.println();
-			}
-
 			String getterCall = "(("+callingObjectType.getName().replaceAll("\\$", ".")+") "+objName+")."+theMethod.getName()+"()";
 
 			String assertion = getAssertForSimpleType(theMethod.getReturnType(), fieldVal, getterCall, theMethod.getReturnType().isPrimitive());
