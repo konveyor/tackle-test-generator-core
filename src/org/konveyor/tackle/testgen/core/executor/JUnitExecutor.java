@@ -93,6 +93,7 @@ public class JUnitExecutor {
                         methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.COVERED_JEE);
                         extSummary.covTestPlanRows__full_jee++;
                     }
+                    extSummary.uncovTestPlanRows__execFail--;
                 }
             } catch (IOException e) {
                 logger.warning(

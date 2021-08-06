@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -123,7 +124,7 @@ public class TestSequenceExtender {
 	// information about extended sequences that are discarded because they fail execution
     // on the monolith
 	// partition --> proxy class --> proxy method --> test plan row --> sequence ID
-	private Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq;
+//	private Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq;
 
 	// extended sequences that could not be executed (seq ID --> error messages)
 	private HashMap<String, String> seqExecErrors = new HashMap<>();
@@ -250,7 +251,7 @@ public class TestSequenceExtender {
 
 		this.extTestSeq = new HashMap<>();
 		this.coverageInfo = new HashMap<>();
-		this.discardedExtSeq = new HashMap<>();
+//		this.discardedExtSeq = new HashMap<>();
 
 		// create junit executor object
         this.junitExecutor = new JUnitExecutor(this.applicationName, this.outputDir,
@@ -408,10 +409,12 @@ public class TestSequenceExtender {
 
 				System.out.println("");
 				System.out.println("*   generated "+classSeqCount+" test sequences");
-                double classCovRate = (double)classSeqCount * 100 / (double)classTestPlanRows;
-                System.out.println("*   -- class test-plan coverage rate: "+
-                    String.format("%.2f", classCovRate)+"% ("+
-                    classSeqCount+"/"+classTestPlanRows+")");
+                System.out.print("*   -- class test-plan coverage rate: ");
+                if (classTestPlanRows > 0) {
+                    System.out.print(String.format("%.2f",
+                        ((double)classSeqCount * 100) / ((double)classTestPlanRows))+"% ");
+                }
+                System.out.println("("+classSeqCount+"/"+classTestPlanRows+")");
 			}
 		}
         double totalCovRate = (double)totalSeqCount * 100 / (double)totalTestPlanRows;
@@ -427,7 +430,7 @@ public class TestSequenceExtender {
         // write summary JSON file
 		try {
             this.extSummary.writeSummaryFile(this.applicationName, this.seqIdMap, this.extTestSeq,
-            		this.execExtSeq, this.discardedExtSeq, assertionCount);
+            		this.execExtSeq, assertionCount);
             System.out.println("* wrote summary file for generation of CTD-amplified tests (JSON)");
         }
 		catch (FileNotFoundException fnfe) {
@@ -1015,7 +1018,7 @@ public class TestSequenceExtender {
 			} else {
 				// attempt to create a new sequence for instantiating this type
 				try {
-					typeInstSeq = createConstructorSequence(typeName);
+					typeInstSeq = createConstructorSequence(typeName, true);
 				} catch (ClassNotFoundException cnfe) {
 					logger.warning("Error creating constructor sequence for " + typeName + ": " + cnfe);
 				}
@@ -1590,7 +1593,7 @@ public class TestSequenceExtender {
 		logger.info("Augmenting class sequence pool for constructor sequences for: " + testPlanClasses);
 		for (String clsName : testPlanClasses) {
 			try {
-				createConstructorSequence(clsName);
+				createConstructorSequence(clsName, false);
 			} catch (ClassNotFoundException|NoClassDefFoundError cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
@@ -1673,11 +1676,26 @@ public class TestSequenceExtender {
 	 * given type.
 	 *
 	 * @param typeName
-	 * @return
+	 * @param isTestPlanParameter
+     * @return
 	 */
-	private Sequence createConstructorSequence(String typeName) throws ClassNotFoundException {
+	private Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter)
+        throws ClassNotFoundException {
 
 		Class<?> targetCls = Class.forName(typeName);
+
+		// if target class is a test plan parameter and is interface, abstract, or non-public,
+        // generate a null assignment sequence
+        if (isTestPlanParameter) {
+            int clsModifiers = targetCls.getModifiers();
+            if (targetCls.isInterface() || Modifier.isAbstract(clsModifiers) ||
+                !Modifier.isPublic(clsModifiers)) {
+                    TypedOperation nullAssignStmt = TypedOperation
+                        .createNullOrZeroInitializationForType(Type.forClass(targetCls));
+                    return Sequence.createSequence(nullAssignStmt, new ArrayList<>(), new ArrayList<>());
+            }
+        }
+
 		Constructor<?>[] classCtors = targetCls.getDeclaredConstructors();
 
 		// get parameter counts for constructors, sort constructors by number of paramters,
@@ -1701,7 +1719,7 @@ public class TestSequenceExtender {
 		for (int paramCount : ctorParamCounts) {
 			for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
 
-				if (!java.lang.reflect.Modifier.isPublic(ctor.getModifiers())) {
+				if (!Modifier.isPublic(ctor.getModifiers())) {
 				    continue;
 				}
 
