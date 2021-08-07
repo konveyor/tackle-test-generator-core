@@ -37,7 +37,7 @@ public class ExtenderSummary {
     public int covTestPlanRows__partial_jee = 0;
     int covTestPlanRows__initSeq = 0;
     int uncovTestPlanRows__noInitSeq = 0;
-    int uncovTestPlanRows__execFail = 0;
+    public int uncovTestPlanRows__execFail = 0;
     int uncovTestPlanRows__excp = 0;
     int uncovTestPlanRows__excp__OperationParse = 0;
     int uncovTestPlanRows__excp__randoop__IllegalArgument = 0;
@@ -89,7 +89,6 @@ public class ExtenderSummary {
     void printSummaryInfo(HashMap<String, Sequence> seqIdMap,
                           Map<String, Map<String, Set<String>>> extTestSeq,
                           HashMap<String, SequenceExecutor.SequenceResults> execExtSeq,
-                          Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq,
                           int assertionCount) {
         System.out.println("\n==== Summary of CTD-amplified test generation ===");
         System.out.println(" Total base sequences: " + this.sequencePool.totalBaseSequences);
@@ -104,9 +103,7 @@ public class ExtenderSummary {
         System.out.println(" Executed extended sequences: " + execExtSeq.keySet().size());
         System.out.println(" Final extended sequences: " + extTestSeq.values().stream()
             .flatMap(clseq -> clseq.values().stream()).mapToInt(seql -> seql.size()).sum());
-        System.out.println(" Total failing sequences: " + discardedExtSeq.values().stream()
-            .flatMap(clseq -> clseq.values().stream()).flatMap(metseq -> metseq.values().stream())
-            .flatMap(rowseq -> rowseq.values().stream()).count());
+        System.out.println(" Total failing sequences: " + this.uncovTestPlanRows__execFail);
         System.out.println(" Diff assertions added: "+assertionCount);
         System.out.println(" Total test plan rows: " + this.totalTestPlanRows);
         System.out.println(" Covered test plan rows (full): " + this.covTestPlanRows__full);
@@ -152,7 +149,6 @@ public class ExtenderSummary {
     void writeSummaryFile(String appName, HashMap<String, Sequence> seqIdMap,
                           Map<String, Map<String, Set<String>>> extTestSeq,
                           HashMap<String, SequenceExecutor.SequenceResults> execExtSeq,
-                          Map<String, Map<String, Map<String, Map<String, String>>>> discardedExtSeq,
                           int assertionCount)
         throws FileNotFoundException {
         JsonObjectBuilder summaryJson = Json.createObjectBuilder();
@@ -172,11 +168,7 @@ public class ExtenderSummary {
         JsonObjectBuilder extSeqInfo = Json.createObjectBuilder();
         extSeqInfo.add("generated_sequences", seqIdMap.keySet().size());
         extSeqInfo.add("executed_sequences", execExtSeq.keySet().size());
-        extSeqInfo.add("failing_sequences", discardedExtSeq.values().stream()
-            .flatMap(clseq -> clseq.values().stream())
-            .flatMap(metseq -> metseq.values().stream())
-            .flatMap(rowseq -> rowseq.values().stream())
-            .count());
+        extSeqInfo.add("failing_sequences", this.uncovTestPlanRows__execFail);
         extSeqInfo.add("final_sequences", extTestSeq.values().stream()
             .flatMap(clseq -> clseq.values().stream())
             .mapToInt(seql -> seql.size())
