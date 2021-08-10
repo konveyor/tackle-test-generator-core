@@ -424,16 +424,13 @@ public class DiffAssertionsGenerator {
 	}
 
 	private static String getStringValueForAssert(String runtimeVal) {
-		if (runtimeVal.equals(SequenceExecutor.TKLTEST_NULL_STRING)) {
-			return runtimeVal;
-		}
 
 		if (runtimeVal.equals("\\")) {
 			return "\""+"\\\\"+"\"";
 		}
 
 		return "\""+runtimeVal.replaceAll("\\\\","\\\\\\\\").replaceAll("\\\n", "\\\\n").
-				replaceAll("\"", "\\\\\"")+"\"";
+				replaceAll("\\\r", "\\\\r").replaceAll("\"", "\\\\\"")+"\"";
 	}
 
 	private static String getCharValueForAssert(String runtimeVal) {
