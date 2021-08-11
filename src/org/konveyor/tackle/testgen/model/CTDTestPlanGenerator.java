@@ -116,14 +116,16 @@ public class CTDTestPlanGenerator {
 		try {
 
 			JsonObjectBuilder partitionBuilder = Json.createObjectBuilder();
+			
+			JsonObjectBuilder nonTargetedMethodsObject = Json.createObjectBuilder();
 
 			for (String partition : targetFetcher.getPartitions()) {
 
-				JsonObject partitionObj = modelPartition(partition, typeAnalysisResults);
+				JsonObject partitionObj = modelPartition(partition, typeAnalysisResults, nonTargetedMethodsObject);
 				typeAnalysisResults.resetCHA(); // we need to compute CHA per partition
 
 				partitionBuilder.add(partition, partitionObj);
-			}
+			}						
 			
 			JsonObjectBuilder statsObject = Json.createObjectBuilder();
 			
@@ -143,6 +145,12 @@ public class CTDTestPlanGenerator {
 			writer = writerFactory.createWriter(new FileOutputStream(new File(applicationName+"_"+Constants.CTD_OUTFILE_SUFFIX)));
 
 			writer.writeObject(object.build());
+			
+			writer.close();
+			
+			writer = writerFactory.createWriter(new FileOutputStream(new File(applicationName+"_"+Constants.CTD_NON_TARGETED_OUTFILE_SUFFIX)));
+
+			writer.writeObject(nonTargetedMethodsObject.build());
 
 		} finally {
 			if (writer != null) {
@@ -154,7 +162,7 @@ public class CTDTestPlanGenerator {
 							targetClassesCounter+" target classes");
 	}
 
-	private JsonObject modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults)
+	private JsonObject modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults, JsonObjectBuilder nonTargetedMethodsObject)
 			throws IOException, ClassNotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		logger.fine("Analyzing partition "+partitionName);
@@ -166,13 +174,18 @@ public class CTDTestPlanGenerator {
 		
 		System.out.println("* Total number of classes: "+totalClassesCounter);
 
-		Map<String, List<JavaMethodModel>> classToMethods = new HashMap<String, List<JavaMethodModel>>();
+		Map<String, List<JavaMethodModel>> classToMethods = new HashMap<>();
+		
+		Map<String, List<Object>> classToNonPublicMethods = new HashMap<>();
+		
 		
 		for (String currentClassName : classNames) {
 			List<JavaMethodModel> publicMethods = new ArrayList<JavaMethodModel>();
 			Class<?> proxyClass = Class.forName(currentClassName, false, classLoader);
 			if (Modifier.isPublic(proxyClass.getModifiers())) {
-				for (Object method : targetFetcher.getTargetMethods(proxyClass, classLoader)) {
+				List<Object> nonPublicMethods = new ArrayList<>();
+				for (Object method : targetFetcher.getTargetMethods(proxyClass, classLoader,
+						nonPublicMethods)) {
 					publicMethods.add(new JavaMethodModel(partitionName, proxyClass, method, classLoader,
 							maxCollectionNestDepth));
 				}
@@ -181,6 +194,9 @@ public class CTDTestPlanGenerator {
 					targetClassesCounter++;
 				} else {
 					privateMethodsCounter++;
+				}
+				if (!nonPublicMethods.isEmpty()) {
+					classToNonPublicMethods.put(currentClassName, nonPublicMethods);
 				}
 			} else {
 				privateClassCounter++;
@@ -221,8 +237,72 @@ public class CTDTestPlanGenerator {
 			
 			classesBuilder.add(entry.getKey(), modelsBuilder.build());
 		}
+		
+		nonTargetedMethodsObject.add(partitionName, getNonTargetedMethodsObject(partitionName, classToNonPublicMethods));
 
 		return classesBuilder.build();
+	}
+	
+	private JsonObject getNonTargetedMethodsObject(String partitionName, 
+			Map<String, List<Object>> classToNonPublicMethods) {
+		
+		JsonObjectBuilder classesBuilder = Json.createObjectBuilder();
+		
+		for (Map.Entry<String, List<Object>> entry : classToNonPublicMethods.entrySet()) {
+			
+			classesBuilder.add(entry.getKey(), getNonTargetedMethodsInfo(entry.getValue()));
+		}
+		
+		return classesBuilder.build();
+	}
+
+
+	private JsonObject getNonTargetedMethodsInfo(List<Object> methodList) {
+		
+		JsonObjectBuilder methodsObjBuilder = Json.createObjectBuilder();
+		
+		for (Object methodOrConstr : methodList) {
+			
+			String sig;
+			
+			if (methodOrConstr instanceof Method) {
+				try {
+					sig = Utils.getSignature((Method) methodOrConstr);
+				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+						| IllegalAccessException e) {
+					logger.warning("Couldn't find signature for "+((Method) methodOrConstr).getName());
+					continue;
+				}
+			} else {
+				sig = Utils.getSignature((Constructor<?>) methodOrConstr);
+			}
+			
+			methodsObjBuilder.add(sig, getVisibility(methodOrConstr));
+		}
+		
+		return methodsObjBuilder.build();
+	}
+
+
+	private static String getVisibility(Object methodOrConstr) {
+		
+		int modifiers;
+		
+		if (methodOrConstr instanceof Method) {
+			modifiers = ((Method) methodOrConstr).getModifiers();
+		} else {
+			modifiers = ((Constructor<?>) methodOrConstr).getModifiers();
+		}
+		
+		if (Modifier.isPrivate(modifiers)) {
+			return "private";
+		} else if (Modifier.isProtected(modifiers)) {
+			return "protected";
+		} else if (Modifier.isPublic(modifiers)) {
+			return "public";
+		} else {
+			return "package";
+		}
 	}
 
 
@@ -236,7 +316,7 @@ public class CTDTestPlanGenerator {
 
 		abstract String getLocalRemoteTag(JavaMethodModel method, String className);
 
-		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader) {
+		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader, List<Object> nonPublicMethods) {
 
 			if (Utils.isPrivateInnerClass(cls)) {
 				logger.fine("Skipping private inner class "+cls.getName());
@@ -257,6 +337,7 @@ public class CTDTestPlanGenerator {
 			for (Method method : cls.getDeclaredMethods()) {
 
 				if ( ! Modifier.isPublic(method.getModifiers())) {
+					nonPublicMethods.add(method);
 					continue;
 				}
 
@@ -285,6 +366,8 @@ public class CTDTestPlanGenerator {
 			for (Constructor<?> constr : cls.getConstructors()) {
 				if (Modifier.isPublic(constr.getModifiers())) {
 					publicMethods.add(constr);
+				} else {
+					nonPublicMethods.add(constr);
 				}
 			}
 

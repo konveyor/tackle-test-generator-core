@@ -24,6 +24,12 @@ public class Constants {
      * The application name is added at the beginning of the file name */
 
     public static final String CTD_OUTFILE_SUFFIX = "ctd_models_and_test_plans.json";
+    
+    /** Suffix of file name to which CTD writes methods that it is not targeting for various reasons.
+     * Currently all non-public methods are not targeted
+     * The application name is added at the beginning of the file name */
+
+    public static final String CTD_NON_TARGETED_OUTFILE_SUFFIX = "ctd_non_targeted_methods.json";
 
     /** Suffix of file name to which CTD writes RTA results.
      * The application name is added at the beginning of the file name */
