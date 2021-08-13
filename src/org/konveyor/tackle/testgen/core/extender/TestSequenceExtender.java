@@ -1644,7 +1644,7 @@ public class TestSequenceExtender {
 		for (String clsName : testPlanClasses) {
 			try {
 				createConstructorSequence(clsName, false);
-			} catch (ClassNotFoundException | NoClassDefFoundError | OperationParseException cnfe) {
+			} catch (ClassNotFoundException|NoClassDefFoundError|OperationParseException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
             }

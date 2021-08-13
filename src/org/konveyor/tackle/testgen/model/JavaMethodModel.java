@@ -373,8 +373,7 @@ public class JavaMethodModel {
 		Class<?> keyClass;
 
 		if (checkIfCollectionParam(keyTypeClassName)) {
-			String collectionType = getCollectionType(keyTypeClassName);
-			keyClass = Class.forName(collectionType, false, classLoader);
+			keyClass =  getCollectionType(keyTypeClassName);
 		} else {
 			keyClass = Class.forName(keyTypeClassName, false, classLoader);
 		}
@@ -399,8 +398,7 @@ public class JavaMethodModel {
 
 		if (valueTypeClassName != null) {
 			if (checkIfCollectionParam(valueTypeClassName)) {
-				String collectionType = getCollectionType(valueTypeClassName);
-				valueClass = Class.forName(collectionType, false, classLoader);
+				valueClass = getCollectionType(valueTypeClassName);
 			} else {
 				valueClass = Class.forName(valueTypeClassName, false, classLoader);
 			}
@@ -491,11 +489,48 @@ public class JavaMethodModel {
 		return (type.contains("<") && type.contains(">")) || type.contains("[]");
 	}
 
-	private static String getCollectionType(String type) {
+	private Class<?> getCollectionType(String type) throws ClassNotFoundException {
 		if (type.contains("<")) {
-			return type.substring(0, type.indexOf('<'));
+			return Class.forName(type.substring(0, type.indexOf('<')), false, classLoader);
 		}
-		return "[L" + type.substring(0, type.indexOf('[')) + ";"; // must be an array
+		
+		// must be an array
+		
+		String componentType = type.substring(0, type.indexOf('['));
+		
+		Class<?> primitiveArrayClass =  getPrimitiveArrayClass(componentType);
+		
+		if (primitiveArrayClass != null) {
+			
+			return primitiveArrayClass;
+			
+		} else {
+			return Class.forName("[L" + componentType + ";", false, classLoader);
+		}
+	}
+	
+	private static Class<?> getPrimitiveArrayClass(String type) {
+		
+		switch (type) {
+			case "int":
+				return (new int[] {}).getClass();
+			case "char":
+				return (new char[] {}).getClass();
+			case "boolean":
+				return (new boolean[] {}).getClass();
+			case "byte":
+				return (new byte[] {}).getClass();
+			case "short":
+				return (new short[] {}).getClass();
+			case "long":
+				return (new long[] {}).getClass();
+			case "double":
+				return (new double[] {}).getClass();
+			case "float":
+				return (new float[] {}).getClass();	
+			default:
+				return null;
+		}
 	}
 
 	private void getCollectionAttributes(List<Class<?>> paramClasses, List<ModelAttribute> params, int depth, String attrName,
