@@ -65,11 +65,7 @@ import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.github.javaparser.utils.Pair;
 
-import randoop.operation.ConstructorCall;
-import randoop.operation.MethodCall;
-import randoop.operation.OperationParseException;
-import randoop.operation.TypedClassOperation;
-import randoop.operation.TypedOperation;
+import randoop.operation.*;
 import randoop.org.apache.commons.io.output.NullPrintStream;
 import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
@@ -659,7 +655,7 @@ public class TestSequenceExtender {
 						try {
 							return Modifier.isPublic(Class.forName(impName).getModifiers());
 						} catch (ClassNotFoundException e) {
-							return true; // treat class as public, either way may result in compilation issues for the resulting JUnit test 
+							return true; // treat class as public, either way may result in compilation issues for the resulting JUnit test
 						}
 					}).
 							collect(Collectors.toSet()));
@@ -970,6 +966,12 @@ public class TestSequenceExtender {
                 logger.warning(errmsg);
                 this.extSummary.uncovTestPlanRows__excp__NoSuchMethod++;
                 throw new RuntimeException(errmsg, nsme);
+            } catch (OperationParseException ope) {
+                String errmsg = "Operation parse exception: " + paramType + " in signature " +
+                    tgtMethodSig + "\n" + ope;
+                logger.warning(errmsg);
+                this.extSummary.uncovTestPlanRows__excp__OperationParse++;
+                throw new RuntimeException(errmsg, ope);
             }
 		}
 
@@ -1006,7 +1008,7 @@ public class TestSequenceExtender {
 	 * @return Extended sequence
 	 */
 	private Sequence processScalarType(Type scalarType, boolean isTgtMethodParm, Sequence seq)
-			throws NonInstantiableTypeException {
+        throws NonInstantiableTypeException, ClassNotFoundException, OperationParseException {
 //        String typeName = scalarType.getFqName();
 		String typeName = scalarType.getBinaryName();
 		if (scalarType.isPrimitive() || scalarType.isBoxedPrimitive() || scalarType.isString()) {
@@ -1015,7 +1017,15 @@ public class TestSequenceExtender {
 			logger.info("Creating primitive/string value assignment statement");
 			TypedOperation primAssign = TypedOperation.createPrimitiveInitialization(scalarType, val);
 			seq = seq.extend(primAssign);
-		} else {
+		}
+		else if (scalarType.isEnum()) {
+            logger.info("Creating assignment statement for enum type");
+		    Class<?> enumCls = Class.forName(typeName);
+            List enumValues = Arrays.asList(enumCls.getEnumConstants());
+            TypedClassOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
+            seq = seq.extend(enumAssign);
+        }
+		else {
 			logger.info("Creating instantiation statement for type: " + typeName);
 			Sequence typeInstSeq = null;
 			// check whether sequences for creating type instance exist in class sequence pool
@@ -1086,7 +1096,7 @@ public class TestSequenceExtender {
 	 * @throws ClassNotFoundException
 	 */
 	private Sequence processArrayType(String arrType, JsonObject arrElemSpec, Sequence seq)
-        throws ClassNotFoundException, NoSuchMethodException {
+        throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
 		// build list of types whose instances are to be added to the array
         List<String> elemTypes = arrElemSpec.getJsonArray("types").getValuesAs(JsonString.class)
@@ -1190,7 +1200,7 @@ public class TestSequenceExtender {
 	private Sequence processCollectionType(String colType, JsonObject colElemSpec,
                                            ReferenceType typeArgument, boolean isTgtMethodParm,
                                            Sequence seq)
-        throws NoSuchMethodException, ClassNotFoundException {
+        throws NoSuchMethodException, ClassNotFoundException, OperationParseException {
 
         // get instantiation info for creating collection instance to add elements to
         JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes.getCollectionTypeInstantiationInfo(
@@ -1272,7 +1282,7 @@ public class TestSequenceExtender {
     private Sequence processMapType(String mapType, ReferenceType keyTypeArgument, ReferenceType valueTypeArgument,
                                     JsonObject keyElemSpec, JsonObject valueElemSpec, boolean isTgtMethodParam,
                                     Sequence seq)
-        throws NoSuchMethodException, ClassNotFoundException {
+        throws NoSuchMethodException, ClassNotFoundException, OperationParseException {
 
         // get instantiation info for creating map instance to add elements to
         JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes.getMapTypeInstantiationInfo(
@@ -1329,7 +1339,7 @@ public class TestSequenceExtender {
                                                    Sequence seq, Method mapPutMethod,
                                                    int mapInstVarIndex, Substitution mapSubst,
                                                    List<String> uncovKeyTypes, List<String> uncovValueTypes)
-        throws ClassNotFoundException, NoSuchMethodException {
+        throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
         // build lists of types for map keys and map values
         List<String> keyTypes = keyElemSpec.getJsonArray("types")
@@ -1415,7 +1425,7 @@ public class TestSequenceExtender {
      * @throws NoSuchMethodException
      */
     private Pair<Sequence, Integer> processElement(String elemType, JsonObject elemSpec, Sequence seq)
-        throws ClassNotFoundException, NoSuchMethodException {
+        throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
         String typeName = elemType;
         if (elemType.contains("<")) {
             typeName = elemType.substring(0, elemType.indexOf('<'));
@@ -1601,7 +1611,7 @@ public class TestSequenceExtender {
 		for (String clsName : testPlanClasses) {
 			try {
 				createConstructorSequence(clsName, false);
-			} catch (ClassNotFoundException|NoClassDefFoundError cnfe) {
+			} catch (ClassNotFoundException|NoClassDefFoundError|OperationParseException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
             }
@@ -1687,7 +1697,7 @@ public class TestSequenceExtender {
      * @return
 	 */
 	private Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter)
-        throws ClassNotFoundException {
+        throws ClassNotFoundException, OperationParseException {
 
 		Class<?> targetCls = Class.forName(typeName);
 
