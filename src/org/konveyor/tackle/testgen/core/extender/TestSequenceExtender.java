@@ -1001,14 +1001,14 @@ public class TestSequenceExtender {
 	private Sequence processScalarType(Type scalarType, boolean isTgtMethodParm, Sequence seq)
         throws NonInstantiableTypeException, ClassNotFoundException, OperationParseException {
 //        String typeName = scalarType.getFqName();
-		String typeName = scalarType.getBinaryName();
+		String typeName = scalarType.getRawtype().getBinaryName();
 		if (scalarType.isPrimitive() || scalarType.isBoxedPrimitive() || scalarType.isString()) {
 			// process primitive types
-			seq = extendWithPrimitiveAssignment(scalarType, seq);
+			seq = addPrimitiveAssignment(scalarType, seq);
 		}
 		else if (scalarType.isEnum()) {
 		    // process enum types
-            seq = extendWithEnumAssignment(typeName, seq);
+            seq = addEnumAssignment(typeName, seq);
         }
 		else {
 			logger.info("Creating instantiation statement for type: " + typeName);
@@ -1515,7 +1515,7 @@ public class TestSequenceExtender {
      * @param seq Sequence to be extended with the assignment statement
      * @return Updated sequence with primitive assignment appended
      */
-    private Sequence extendWithPrimitiveAssignment(Type type, Sequence seq) {
+    private Sequence addPrimitiveAssignment(Type type, Sequence seq) {
         Object val = this.sequencePool.primitiveValuePool.getRandomValueOfType(type.getBinaryName());
         logger.info("Creating primitive/string value assignment statement");
         TypedOperation primAssign = TypedOperation.createPrimitiveInitialization(type, val);
@@ -1526,32 +1526,27 @@ public class TestSequenceExtender {
      * Creates an enum assignment statement for the given enum type by selecting the first value
      * from the list of defined enum values; adds the assignment statement to the given sequence.
      * @param typeName Name of enum type to create assignment statement for
-     * @param seq Sequence to be extended with the assignment statement
+     * @param seq
      * @return Updated sequence with enum assignment appended
      * @throws ClassNotFoundException
      * @throws OperationParseException
      */
-    private Sequence extendWithEnumAssignment(String typeName, Sequence seq)
+    private Sequence addEnumAssignment(String typeName, Sequence seq)
         throws ClassNotFoundException, OperationParseException {
-
         logger.info("Creating assignment statement for enum type");
         Class<?> enumCls = Class.forName(typeName);
         List enumValues = Arrays.asList(enumCls.getEnumConstants());
-        TypedClassOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
+        TypedOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
         return seq.extend(enumAssign);
     }
 
     /**
-     * Creates and returns a sequence consisting of a null-assignment statement for the given type.
-     * @param type Type to create null assignment for
-     * @return Sequence containining null assignment
+     * Creates a null-assignment statement for the given type and appends it to the given sequence.
+     * @param type Type for which to create null assignment
+     * @param seq Sequence to be extended with null assignment
+     * @return
      */
-    private Sequence createNullAssignmentSequence(Type type) {
-        TypedOperation nullAssignStmt = TypedOperation.createNullOrZeroInitializationForType(type);
-        return Sequence.createSequence(nullAssignStmt, new ArrayList<>(), new ArrayList<>());
-    }
-
-    private Sequence extendWithNullAssignmentSequence(Type type, Sequence seq) {
+    private Sequence addNullAssignment(Type type, Sequence seq) {
         TypedOperation nullAssignStmt = TypedOperation.createNullOrZeroInitializationForType(type);
         return seq.extend(nullAssignStmt);
     }
@@ -1740,11 +1735,7 @@ public class TestSequenceExtender {
             int clsModifiers = targetCls.getModifiers();
             if (targetCls.isInterface() || Modifier.isAbstract(clsModifiers) ||
                 !Modifier.isPublic(clsModifiers)) {
-                return extendWithNullAssignmentSequence(Type.forClass(targetCls), new Sequence());
-//                return createNullAssignmentSequence(Type.forClass(targetCls));
-//                    TypedOperation nullAssignStmt = TypedOperation
-//                        .createNullOrZeroInitializationForType(Type.forClass(targetCls));
-//                    return Sequence.createSequence(nullAssignStmt, new ArrayList<>(), new ArrayList<>());
+                return addNullAssignment(Type.forClass(targetCls), new Sequence());
             }
         }
 
@@ -1796,7 +1787,7 @@ public class TestSequenceExtender {
 				boolean paramSeqCreated = true;
 				for (Type paramType : paramTypes) {
 //					Sequence extSeq = processScalarType(paramType, false, ctorSeq);
-					Sequence extSeq = createConstructorParameter(paramType, ctorSeq);
+					Sequence extSeq = createConstructorParameter(paramType, ctorSeq, false);
 					if (extSeq.size() > ctorSeq.size()) {
 						ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
 						ctorSeq = extSeq;
@@ -1847,19 +1838,19 @@ public class TestSequenceExtender {
      * @throws ClassNotFoundException
      * @throws OperationParseException
      */
-	private Sequence createConstructorParameter(Type paramType, Sequence sequence)
+	private Sequence createConstructorParameter(Type paramType, Sequence sequence, boolean createDefaultNull)
         throws ClassNotFoundException, OperationParseException {
 
-	    String typeName = paramType.getBinaryName();
+	    String typeName = paramType.getRawtype().getBinaryName();
 
         // primitive type parameter
         if (paramType.isPrimitive() || paramType.isBoxedPrimitive() || paramType.isString()) {
-            return extendWithPrimitiveAssignment(paramType, sequence);
+            return addPrimitiveAssignment(paramType, sequence);
         }
 
         // enum type parameter
         if (paramType.isEnum()) {
-            return extendWithEnumAssignment(typeName, sequence);
+            return addEnumAssignment(typeName, sequence);
         }
 
         // if the type occurs in the class sequence pool, sample a sequence from the pool
@@ -1902,8 +1893,12 @@ public class TestSequenceExtender {
             }
         }
 
-        // TODO: if nothing succeeds, create a null assignment statement
-	    return extendWithNullAssignmentSequence(paramType, sequence);
+        // if nothing succeeds and create null option specified, create a null assignment statement for parameter
+        if (createDefaultNull) {
+            return addNullAssignment(paramType, sequence);
+        }
+
+        return sequence;
     }
 
     private List<String> getConcreteTypes(ClassOrInterfaceType clsIntType) {
