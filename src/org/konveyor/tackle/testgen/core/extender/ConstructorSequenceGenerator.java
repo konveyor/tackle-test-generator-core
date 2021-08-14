@@ -37,10 +37,10 @@ public class ConstructorSequenceGenerator {
 
     /**
      * Attempts to generate a sequence for instantiating an object of the given type.
-     * Sequence generation enumerates the available constructors for the type, iterates over them in
-     * order of the number of constructor parameters, and return the first successfully created
-     * sequence. For each constructor, sequence generation is done recursively for each parameter
-     * of the constructor if a sequence for the parameter is not found in the sequence pool.
+     * Sequence generation enumerates the available public constructors for the type, iterates over
+     * them in order of the number of constructor parameters, and return the first successfully
+     * created sequence. For each constructor, sequence generation is done recursively for each
+     * parameter of the constructor if a sequence for the parameter is not found in the sequence pool.
      * @param typeName
      * @param isTestPlanParameter
      * @param sequencePool
@@ -64,11 +64,15 @@ public class ConstructorSequenceGenerator {
 
         Constructor<?>[] classCtors = targetCls.getDeclaredConstructors();
 
-        // get parameter counts for constructors, sort constructors by number of paramters,
+        // get parameter counts for constructors, sort constructors by number of parameters,
         // and build map from parameter count to list of constructors
         List<Integer> ctorParamCounts = new ArrayList<>();
         Map<Integer, List<Constructor<?>>> paramCountCtorMap = new HashMap<>();
         for (Constructor<?> ctor : classCtors) {
+            // skip non-public constructors
+            if (!Modifier.isPublic(ctor.getModifiers())) {
+                continue;
+            }
             int paramCount = ctor.getParameterCount();
             if (!ctorParamCounts.contains(paramCount)) {
                 ctorParamCounts.add(paramCount);
@@ -84,73 +88,102 @@ public class ConstructorSequenceGenerator {
         // a sequence does not already exist in the class sequence pool
         for (int paramCount : ctorParamCounts) {
             for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
-
-                if (!Modifier.isPublic(ctor.getModifiers())) {
-                    continue;
-                }
-
-                List<Type> paramTypes = Arrays.stream(ctor.getParameterTypes())
-                    .map(paramType -> Type.forClass(paramType))
-                    .collect(Collectors.toList());
-
                 // check that either of these conditions holds for each parameter type: the type is
                 // a primitive type, or (2) there exists a constructor sequence in the class
                 // sequence pool for the type
 //				if (!validateConstructorParameters(paramTypes)) {
 //					continue;
 //				}
-
-                // initialize sequence
-                Sequence ctorSeq = new Sequence();
-
-                // list to store variables holding constructor parameter values
-                List<Integer> ctorParamVarsIdx = new ArrayList<>();
-
-                // create sequence for instantiation each constructor parameter
-                boolean paramSeqCreated = true;
-                for (Type paramType : paramTypes) {
-                    Sequence extSeq = createConstructorParameter(paramType, ctorSeq, false, sequencePool);
-                    if (extSeq.size() > ctorSeq.size()) {
-                        ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
-                        ctorSeq = extSeq;
-                    } else {
-                        // sequence could not be extended for parameter
-                        logger.warning("Error creating constructor sequence for: " + ctor
-                            + "\n    could not create sequence for parameter type " + paramType.getBinaryName());
-                        paramSeqCreated = false;
-                        break;
-                    }
+                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool, false);
+                if (ctorSequence != null) {
+                    return ctorSequence;
                 }
+            }
+        }
 
-                // if parameter sequence could not be created, try the next constructor
-                if (!paramSeqCreated) {
-                    continue;
+        // if no sequence could be created, iterate over the constructors again, this time
+        // with the option of setting null values for those parameters for which a sequence
+        // could not be created
+        for (int paramCount : ctorParamCounts) {
+            for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
+                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool, true);
+                if (ctorSequence != null) {
+                    return ctorSequence;
                 }
-
-                // create list of input vars for constructor call
-                Sequence finalCtorSeq = ctorSeq;
-                List<Variable> ctorParamVars = ctorParamVarsIdx.stream()
-                    .map(idx -> finalCtorSeq.getVariable(idx))
-                    .collect(Collectors.toList());
-
-                // extend sequence with call to constructor after applying capture conversion and
-                // type substitution to it
-                TypedClassOperation ctorCallOper = TypedOperation.forConstructor(ctor)
-                    .applyCaptureConversion();
-                ctorCallOper = (TypedClassOperation)SequenceUtil.performTypeSubstitution(ctorCallOper);
-                ctorSeq = ctorSeq.extend(ctorCallOper, ctorParamVars);
-
-                // add sequence to the class sequence pool and return it
-                SortedSet<Sequence> seqSet = SequenceUtil.newSequenceSet(SequenceUtil.SequenceSetSort.SEQUENCE_SIZE);
-                seqSet.add(ctorSeq);
-                sequencePool.classTestSeqPool.put(typeName, seqSet);
-                return ctorSeq;
             }
         }
 
         // sequence could not be created using any of the type's constructors
         return null;
     }
+
+    /**
+     * Creates sequence for invoking the given constructor
+     * @param typeName
+     * @param ctor
+     * @param sequencePool
+     * @return
+     * @throws ClassNotFoundException
+     * @throws OperationParseException
+     * @throws NoSuchMethodException
+     */
+    private static Sequence createSequenceForConstructor(String typeName, Constructor<?> ctor,
+                                                         SequencePool sequencePool,
+                                                         boolean createDefaultNull)
+        throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
+
+        // collect parameter types of constructor
+        List<Type> paramTypes = Arrays.stream(ctor.getParameterTypes())
+            .map(paramType -> Type.forClass(paramType))
+            .collect(Collectors.toList());
+
+        // initialize sequence
+        Sequence ctorSequence = new Sequence();
+
+        // list to store variables holding constructor parameter values
+        List<Integer> ctorParamVarsIdx = new ArrayList<>();
+
+        // create sequence for instantiation each constructor parameter
+        boolean paramSeqCreated = true;
+        for (Type paramType : paramTypes) {
+            Sequence extSeq = createConstructorParameter(paramType, ctorSequence, createDefaultNull, sequencePool);
+            if (extSeq.size() > ctorSequence.size()) {
+                ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
+                ctorSequence = extSeq;
+            } else {
+                // sequence could not be extended for parameter
+                logger.warning("Error creating constructor sequence for: " + ctor
+                    + "\n    could not create sequence for parameter type " + paramType.getBinaryName());
+                paramSeqCreated = false;
+                break;
+            }
+        }
+
+        // if parameter sequence could not be created, try the next constructor
+        if (!paramSeqCreated) {
+            return null;
+        }
+
+        // create list of input vars for constructor call
+        Sequence finalCtorSeq = ctorSequence;
+        List<Variable> ctorParamVars = ctorParamVarsIdx.stream()
+            .map(idx -> finalCtorSeq.getVariable(idx))
+            .collect(Collectors.toList());
+
+        // extend sequence with call to constructor after applying capture conversion and
+        // type substitution to it
+        TypedClassOperation ctorCallOper = TypedOperation.forConstructor(ctor)
+            .applyCaptureConversion();
+        ctorCallOper = (TypedClassOperation)SequenceUtil.performTypeSubstitution(ctorCallOper);
+        ctorSequence = ctorSequence.extend(ctorCallOper, ctorParamVars);
+
+        // add sequence to the class sequence pool and return it
+        SortedSet<Sequence> seqSet = SequenceUtil.newSequenceSet(SequenceUtil.SequenceSetSort.SEQUENCE_SIZE);
+        seqSet.add(ctorSequence);
+        sequencePool.classTestSeqPool.put(typeName, seqSet);
+        return ctorSequence;
+    }
+
 
     /**
      * Extends the given sequence with statements for instantiating the given parameter type
@@ -224,7 +257,7 @@ public class ConstructorSequenceGenerator {
             Substitution mapSubst = instInfo.instantiatedType.getTypeSubstitution();
             TypedOperation mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
                 .substitute(mapSubst);
-            sequence = sequence.extend(mapInstOper);
+            return sequence.extend(mapInstOper);
         }
 
         // recursively attempt to create new constructor sequence
