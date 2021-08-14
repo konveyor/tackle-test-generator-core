@@ -1021,7 +1021,7 @@ public class TestSequenceExtender {
 				// attempt to create a new sequence for instantiating this type
 				try {
 					typeInstSeq = createConstructorSequence(typeName, true);
-				} catch (ClassNotFoundException cnfe) {
+				} catch (ClassNotFoundException | NoSuchMethodException cnfe) {
 					logger.warning("Error creating constructor sequence for " + typeName + ": " + cnfe);
 				}
 
@@ -1489,26 +1489,6 @@ public class TestSequenceExtender {
     }
 
     /**
-     * Performs type substitution on the given typed class operation (method or constructor call)
-     * if the output type is generic and contains type parameters.
-     *
-     * @param typedClassOper operation to perform type substitution on
-     * @return updated operation with type parameters replaced with instantiated types
-     */
-//    private TypedClassOperation applyTypeSubstitution(TypedClassOperation typedClassOper) {
-//        Type outputType = typedClassOper.getOutputType();
-//        if (outputType.isGeneric()) {
-//            List<TypeVariable> typeVars = ((GenericClassType)outputType).getTypeParameters();
-//            List<ReferenceType> typeRefs = typeVars.stream()
-//                .map(typeVar -> ReferenceType.forClass(Object.class))
-//                .collect(Collectors.toList());
-//            Substitution typeSubst = new Substitution(typeVars, typeRefs);
-//            typedClassOper = typedClassOper.substitute(typeSubst);
-//        }
-//        return typedClassOper;
-//    }
-
-    /**
      * Creates a primitive assignment statement for the given type and adds the statement to the
      * given sequence.
      * @param type Primitive type to create assignment statement for
@@ -1639,7 +1619,7 @@ public class TestSequenceExtender {
 		for (String clsName : testPlanClasses) {
 			try {
 				createConstructorSequence(clsName, false);
-			} catch (ClassNotFoundException|NoClassDefFoundError|OperationParseException cnfe) {
+			} catch (ClassNotFoundException | NoClassDefFoundError | OperationParseException | NoSuchMethodException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
             }
@@ -1725,7 +1705,7 @@ public class TestSequenceExtender {
      * @return
 	 */
 	private Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter)
-        throws ClassNotFoundException, OperationParseException {
+        throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
 		Class<?> targetCls = Class.forName(typeName);
 
@@ -1839,7 +1819,7 @@ public class TestSequenceExtender {
      * @throws OperationParseException
      */
 	private Sequence createConstructorParameter(Type paramType, Sequence sequence, boolean createDefaultNull)
-        throws ClassNotFoundException, OperationParseException {
+        throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
 	    String typeName = paramType.getRawtype().getBinaryName();
 
@@ -1867,8 +1847,38 @@ public class TestSequenceExtender {
             return SequenceUtil.concatenate(sequence, typeInstSeq);
         }
 
+        // if array type, create an empty array
         if (paramType.isArray()) {
-            // TODO: handle array types
+            ArrayType arrayType = ArrayType.forClass(Type.forFullyQualifiedName(typeName));
+            TypedOperation arrayCreateStmt = TypedOperation.createArrayCreation(arrayType);
+            return sequence.extend(arrayCreateStmt);
+        }
+
+        // if collection type, create an empty collection object of the specified type
+        if (SequenceUtil.isCollectionType(paramType)) {
+            List<ReferenceType> typeArgs = getTypeArguments(paramType);
+            ReferenceType typeArg = typeArgs.isEmpty() ? null : typeArgs.get(0);
+            JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
+                .getCollectionTypeInstantiationInfo(typeName, typeArg);
+            Substitution colSubst = instInfo.instantiatedType.getTypeSubstitution();
+            TypedOperation colInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
+                .substitute(colSubst);
+            return sequence.extend(colInstOper);
+        }
+
+        if (SequenceUtil.isMapType(paramType)) {
+            List<ReferenceType> typeArgs = getTypeArguments(paramType);
+            ReferenceType keyTypeArg = null, valTypeArg = null;
+            if (!typeArgs.isEmpty()) {
+                keyTypeArg = typeArgs.get(0);
+                valTypeArg = typeArgs.get(1);
+            }
+            JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
+                .getMapTypeInstantiationInfo(typeName, keyTypeArg, valTypeArg);
+            Substitution mapSubst = instInfo.instantiatedType.getTypeSubstitution();
+            TypedOperation mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
+                .substitute(mapSubst);
+            sequence = sequence.extend(mapInstOper);
         }
 
         // recursively attempt to create new constructor sequence
@@ -1915,19 +1925,19 @@ public class TestSequenceExtender {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private boolean validateConstructorParameters(List<Type> paramTypes) throws ClassNotFoundException {
-		boolean valResult = true;
-		for (Type paramType : paramTypes) {
-			if (paramType.isPrimitive() || paramType.isBoxedPrimitive() || paramType.isString()) {
-				continue;
-			}
-			if (!this.sequencePool.classTestSeqPool.containsKey(paramType.getBinaryName())) {
-				valResult = false;
-				break;
-			}
-		}
-		return valResult;
-	}
+//	private boolean validateConstructorParameters(List<Type> paramTypes) throws ClassNotFoundException {
+//		boolean valResult = true;
+//		for (Type paramType : paramTypes) {
+//			if (paramType.isPrimitive() || paramType.isBoxedPrimitive() || paramType.isString()) {
+//				continue;
+//			}
+//			if (!this.sequencePool.classTestSeqPool.containsKey(paramType.getBinaryName())) {
+//				valResult = false;
+//				break;
+//			}
+//		}
+//		return valResult;
+//	}
 
 	/**
 	 * Given a sequence that ends at a virtual method call, returns the subsequence
@@ -1936,10 +1946,8 @@ public class TestSequenceExtender {
 	 * @return
 	 */
 	private Sequence getConstructorSubsequence(Sequence seq) {
-		// traverse backward until the statement that defines the receiver type is
-		// reached
-		// TODO: Do not remove statements that assign values to parameters of primitive
-		// types
+		// traverse backward until the statement that defines the receiver type is reached
+		// TODO: Do not remove statements that assign values to parameters of primitive types
 		String receiverVar = seq.getInputs(seq.size() - 1).get(0).getName();
 		logger.fine("Receiver var for last method call in seq: " + receiverVar);
 		int endIndex = 0;
