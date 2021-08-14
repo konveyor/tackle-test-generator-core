@@ -811,8 +811,8 @@ public class TestSequenceExtender {
             } else {
                 // select a sequence from the set of candidate sequences and compute
                 // constructor subsequence for the selected sequence
-                candidateSeq = selectFromSequenceSet(candidateSequences);
-                candidateSeq = getConstructorSubsequence(candidateSeq);
+                candidateSeq = SequenceUtil.selectFromSequenceSet(candidateSequences);
+                candidateSeq = SequenceUtil.getConstructorSubsequence(candidateSeq);
             }
         }
         else {
@@ -822,7 +822,7 @@ public class TestSequenceExtender {
             // as the candidate sequence to be extended
             if (!tgtMethodCall.isStatic() && !tgtMethodCall.isConstructorCall()) {
                 if (this.sequencePool.classTestSeqPool.containsKey(clsName)) {
-                    candidateSeq = selectFromSequenceSet(this.sequencePool.classTestSeqPool.get(clsName));
+                    candidateSeq = SequenceUtil.selectFromSequenceSet(this.sequencePool.classTestSeqPool.get(clsName));
                 }
             }
         }
@@ -909,7 +909,7 @@ public class TestSequenceExtender {
                         paramNum++;
                     }
                     Type colParamType = tgtMethodCall.getInputTypes().get(paramNum);
-                    List<ReferenceType> typeArgs = getTypeArguments(colParamType);
+                    List<ReferenceType> typeArgs = ExtenderUtil.getTypeArguments(colParamType);
                     ReferenceType typeArg = typeArgs.isEmpty() ? null : typeArgs.get(0);
 
                     // process collection type parameter and extend sequence
@@ -926,7 +926,7 @@ public class TestSequenceExtender {
                         paramNum++;
                     }
                     Type mapParamType = tgtMethodCall.getInputTypes().get(paramNum);
-                    List<ReferenceType> typeArgs = getTypeArguments(mapParamType);
+                    List<ReferenceType> typeArgs = ExtenderUtil.getTypeArguments(mapParamType);
                     ReferenceType keyTypeArg = null, valTypeArg = null;
                     if (!typeArgs.isEmpty()) {
                         keyTypeArg = typeArgs.get(0);
@@ -1004,11 +1004,11 @@ public class TestSequenceExtender {
 		String typeName = scalarType.getRawtype().getBinaryName();
 		if (scalarType.isPrimitive() || scalarType.isBoxedPrimitive() || scalarType.isString()) {
 			// process primitive types
-			seq = addPrimitiveAssignment(scalarType, seq);
+			seq = SequenceUtil.addPrimitiveAssignment(scalarType, seq, this.sequencePool);
 		}
 		else if (scalarType.isEnum()) {
 		    // process enum types
-            seq = addEnumAssignment(typeName, seq);
+            seq = SequenceUtil.addEnumAssignment(typeName, seq);
         }
 		else {
 			logger.info("Creating instantiation statement for type: " + typeName);
@@ -1016,11 +1016,12 @@ public class TestSequenceExtender {
 			// check whether sequences for creating type instance exist in class sequence pool
 			if (this.sequencePool.classTestSeqPool.containsKey(typeName)) {
 				// select random sequence from pool
-				typeInstSeq = selectFromSequenceSet(this.sequencePool.classTestSeqPool.get(typeName));
+				typeInstSeq = SequenceUtil.selectFromSequenceSet(this.sequencePool.classTestSeqPool.get(typeName));
 			} else {
 				// attempt to create a new sequence for instantiating this type
 				try {
-					typeInstSeq = createConstructorSequence(typeName, true);
+					typeInstSeq = ConstructorSequenceGenerator.createConstructorSequence(typeName, true,
+                        this.sequencePool);
 				} catch (ClassNotFoundException | NoSuchMethodException cnfe) {
 					logger.warning("Error creating constructor sequence for " + typeName + ": " + cnfe);
 				}
@@ -1032,7 +1033,7 @@ public class TestSequenceExtender {
 					try {
 						subtypeCtorSeqs = getSubtypeConstructorSequences(typeName, isTgtMethodParm);
 						if (subtypeCtorSeqs != null) {
-							typeInstSeq = selectFromSequenceSet(subtypeCtorSeqs);
+							typeInstSeq = SequenceUtil.selectFromSequenceSet(subtypeCtorSeqs);
 						}
 					} catch (ClassNotFoundException cnfe) {
 						logger.warning("Error getting subtype constructor sequence for " + typeName + ": " + cnfe);
@@ -1488,74 +1489,6 @@ public class TestSequenceExtender {
         return new Pair<>(seq, seq.size()-1);
     }
 
-    /**
-     * Creates a primitive assignment statement for the given type and adds the statement to the
-     * given sequence.
-     * @param type Primitive type to create assignment statement for
-     * @param seq Sequence to be extended with the assignment statement
-     * @return Updated sequence with primitive assignment appended
-     */
-    private Sequence addPrimitiveAssignment(Type type, Sequence seq) {
-        Object val = this.sequencePool.primitiveValuePool.getRandomValueOfType(type.getBinaryName());
-        logger.info("Creating primitive/string value assignment statement");
-        TypedOperation primAssign = TypedOperation.createPrimitiveInitialization(type, val);
-        return seq.extend(primAssign);
-    }
-
-    /**
-     * Creates an enum assignment statement for the given enum type by selecting the first value
-     * from the list of defined enum values; adds the assignment statement to the given sequence.
-     * @param typeName Name of enum type to create assignment statement for
-     * @param seq
-     * @return Updated sequence with enum assignment appended
-     * @throws ClassNotFoundException
-     * @throws OperationParseException
-     */
-    private Sequence addEnumAssignment(String typeName, Sequence seq)
-        throws ClassNotFoundException, OperationParseException {
-        logger.info("Creating assignment statement for enum type");
-        Class<?> enumCls = Class.forName(typeName);
-        List enumValues = Arrays.asList(enumCls.getEnumConstants());
-        TypedOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
-        return seq.extend(enumAssign);
-    }
-
-    /**
-     * Creates a null-assignment statement for the given type and appends it to the given sequence.
-     * @param type Type for which to create null assignment
-     * @param seq Sequence to be extended with null assignment
-     * @return
-     */
-    private Sequence addNullAssignment(Type type, Sequence seq) {
-        TypedOperation nullAssignStmt = TypedOperation.createNullOrZeroInitializationForType(type);
-        return seq.extend(nullAssignStmt);
-    }
-
-    /**
-     * Returns a list of strings representing the binary names of the declared type arguments
-     * for a parameterized collection/map type or empty list if the type is not parameterized.
-     * For a wildcard type, the list contains "java.lang.Object" as the type to be instantiated.
-     * @param type
-     * @return
-     */
-	private List<ReferenceType> getTypeArguments(Type type) throws ClassNotFoundException {
-        String wildcardTypeArg = "java.lang.Object";
-        List<ReferenceType> typeArgsRefTypes = new ArrayList<>();
-        if (type.isParameterized()) {
-            ParameterizedType parameterizedType = (ParameterizedType)type;
-            List<TypeArgument> typeArgs = parameterizedType.getTypeArguments();
-            for (TypeArgument typeArg : typeArgs) {
-                if (typeArg.isWildcard()) {
-                    typeArgsRefTypes.add(ReferenceType.forClass(Class.forName(wildcardTypeArg)));
-                }
-                else {
-                    typeArgsRefTypes.add(((ReferenceArgument)typeArg).getReferenceType());
-                }
-            }
-        }
-        return typeArgsRefTypes;
-    }
-
 	/**
 	 * Returns coverage map for the given partition, class, and method. Initializes
 	 * coverage information for method to uncovered.
@@ -1618,7 +1551,7 @@ public class TestSequenceExtender {
 		logger.info("Augmenting class sequence pool for constructor sequences for: " + testPlanClasses);
 		for (String clsName : testPlanClasses) {
 			try {
-				createConstructorSequence(clsName, false);
+				ConstructorSequenceGenerator.createConstructorSequence(clsName, false, this.sequencePool);
 			} catch (ClassNotFoundException | NoClassDefFoundError | OperationParseException | NoSuchMethodException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
@@ -1696,287 +1629,6 @@ public class TestSequenceExtender {
 		return this.sequencePool.classTestSeqPool.get(subtypesWithCtorSeqs.first());
 	}
 
-	/**
-	 * Attempts to create a Randoop sequence for instantiating an object of the
-	 * given type.
-	 *
-	 * @param typeName
-	 * @param isTestPlanParameter
-     * @return
-	 */
-	private Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter)
-        throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
-
-		Class<?> targetCls = Class.forName(typeName);
-
-		// if target class is a test plan parameter and is interface, abstract, or non-public,
-        // generate a null assignment sequence
-        if (isTestPlanParameter) {
-            int clsModifiers = targetCls.getModifiers();
-            if (targetCls.isInterface() || Modifier.isAbstract(clsModifiers) ||
-                !Modifier.isPublic(clsModifiers)) {
-                return addNullAssignment(Type.forClass(targetCls), new Sequence());
-            }
-        }
-
-		Constructor<?>[] classCtors = targetCls.getDeclaredConstructors();
-
-		// get parameter counts for constructors, sort constructors by number of paramters,
-		// and build map from parameter count to list of constructors
-		List<Integer> ctorParamCounts = new ArrayList<>();
-		Map<Integer, List<Constructor<?>>> paramCountCtorMap = new HashMap<>();
-		for (Constructor<?> ctor : classCtors) {
-			int paramCount = ctor.getParameterCount();
-			if (!ctorParamCounts.contains(paramCount)) {
-				ctorParamCounts.add(paramCount);
-				paramCountCtorMap.put(paramCount, new ArrayList<>());
-			}
-			paramCountCtorMap.get(paramCount).add(ctor);
-		}
-		Collections.sort(ctorParamCounts);
-//		Collections.reverse(ctorParamCounts);
-
-		// iterate over constructors in order of parameter count and attempt to build a
-		// constructor sequence; ignore constructors with non-primitive parameter types for which
-		// a sequence does not already exist in the class sequence pool
-		for (int paramCount : ctorParamCounts) {
-			for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
-
-				if (!Modifier.isPublic(ctor.getModifiers())) {
-				    continue;
-				}
-
-				List<Type> paramTypes = Arrays.stream(ctor.getParameterTypes())
-                    .map(paramType -> Type.forClass(paramType))
-                    .collect(Collectors.toList());
-
-                // check that either of these conditions holds for each parameter type: the type is
-                // a primitive type, or (2) there exists a constructor sequence in the class
-                // sequence pool for the type
-//				if (!validateConstructorParameters(paramTypes)) {
-//					continue;
-//				}
-
-				// initialize sequence
-				Sequence ctorSeq = new Sequence();
-
-				// list to store variables holding constructor parameter values
-				List<Integer> ctorParamVarsIdx = new ArrayList<>();
-
-				// create sequence for instantiation each constructor parameter
-				boolean paramSeqCreated = true;
-				for (Type paramType : paramTypes) {
-//					Sequence extSeq = processScalarType(paramType, false, ctorSeq);
-					Sequence extSeq = createConstructorParameter(paramType, ctorSeq, false);
-					if (extSeq.size() > ctorSeq.size()) {
-						ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
-						ctorSeq = extSeq;
-					} else {
-						// sequence could not be extended for parameter
-						logger.warning("Error creating constructor sequence for: " + ctor
-                            + "\n    could not create sequence for parameter type " + paramType.getBinaryName());
-						paramSeqCreated = false;
-						break;
-					}
-				}
-
-				// if parameter sequence could not be created, try the next constructor
-				if (!paramSeqCreated) {
-					continue;
-				}
-
-                // create list of input vars for constructor call
-                Sequence finalCtorSeq = ctorSeq;
-                List<Variable> ctorParamVars = ctorParamVarsIdx.stream()
-                    .map(idx -> finalCtorSeq.getVariable(idx))
-                    .collect(Collectors.toList());
-
-				// extend sequence with call to constructor after applying capture conversion and
-                // type substitution to it
-				TypedClassOperation ctorCallOper = TypedOperation.forConstructor(ctor)
-                    .applyCaptureConversion();
-				ctorCallOper = (TypedClassOperation)SequenceUtil.performTypeSubstitution(ctorCallOper);
-				ctorSeq = ctorSeq.extend(ctorCallOper, ctorParamVars);
-
-				// add sequence to the class sequence pool and return it
-				SortedSet<Sequence> seqSet = SequenceUtil.newSequenceSet(SequenceUtil.SequenceSetSort.SEQUENCE_SIZE);
-				seqSet.add(ctorSeq);
-				this.sequencePool.classTestSeqPool.put(typeName, seqSet);
-				return ctorSeq;
-			}
-		}
-
-		// sequence could not be created using any of the type's constructors
-		return null;
-	}
-
-    /**
-     *
-     * @param paramType
-     * @param sequence
-     * @return
-     * @throws ClassNotFoundException
-     * @throws OperationParseException
-     */
-	private Sequence createConstructorParameter(Type paramType, Sequence sequence, boolean createDefaultNull)
-        throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
-
-	    String typeName = paramType.getRawtype().getBinaryName();
-
-        // primitive type parameter
-        if (paramType.isPrimitive() || paramType.isBoxedPrimitive() || paramType.isString()) {
-            return addPrimitiveAssignment(paramType, sequence);
-        }
-
-        // enum type parameter
-        if (paramType.isEnum()) {
-            return addEnumAssignment(typeName, sequence);
-        }
-
-        // if the type occurs in the class sequence pool, sample a sequence from the pool
-        if (this.sequencePool.classTestSeqPool.containsKey(typeName)) {
-            Sequence typeInstSeq = selectFromSequenceSet(this.sequencePool.classTestSeqPool.get(typeName));
-            return SequenceUtil.concatenate(sequence, typeInstSeq);
-        }
-
-        // if a subtype of the declared type occurs in the class sequence pool, sample a
-        // sequence from the available ones
-        SortedSet<Sequence> subtypeCtorSeqs = getSubtypeConstructorSequences(typeName, false);
-        if (subtypeCtorSeqs != null) {
-            Sequence typeInstSeq = selectFromSequenceSet(subtypeCtorSeqs);
-            return SequenceUtil.concatenate(sequence, typeInstSeq);
-        }
-
-        // if array type, create an empty array
-        if (paramType.isArray()) {
-            ArrayType arrayType = ArrayType.forClass(Type.forFullyQualifiedName(typeName));
-            TypedOperation arrayCreateStmt = TypedOperation.createArrayCreation(arrayType);
-            return sequence.extend(arrayCreateStmt);
-        }
-
-        // if collection type, create an empty collection object of the specified type
-        if (SequenceUtil.isCollectionType(paramType)) {
-            List<ReferenceType> typeArgs = getTypeArguments(paramType);
-            ReferenceType typeArg = typeArgs.isEmpty() ? null : typeArgs.get(0);
-            JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
-                .getCollectionTypeInstantiationInfo(typeName, typeArg);
-            Substitution colSubst = instInfo.instantiatedType.getTypeSubstitution();
-            TypedOperation colInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
-                .substitute(colSubst);
-            return sequence.extend(colInstOper);
-        }
-
-        if (SequenceUtil.isMapType(paramType)) {
-            List<ReferenceType> typeArgs = getTypeArguments(paramType);
-            ReferenceType keyTypeArg = null, valTypeArg = null;
-            if (!typeArgs.isEmpty()) {
-                keyTypeArg = typeArgs.get(0);
-                valTypeArg = typeArgs.get(1);
-            }
-            JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
-                .getMapTypeInstantiationInfo(typeName, keyTypeArg, valTypeArg);
-            Substitution mapSubst = instInfo.instantiatedType.getTypeSubstitution();
-            TypedOperation mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
-                .substitute(mapSubst);
-            sequence = sequence.extend(mapInstOper);
-        }
-
-        // recursively attempt to create new constructor sequence
-        Sequence typeInstSeq = null;
-        if (paramType.isClassOrInterfaceType()) {
-            ClassOrInterfaceType clsIntType = (ClassOrInterfaceType)paramType;
-            List<String> potentialInstantiationTypes = new ArrayList<>();
-            if (clsIntType.isInterface() || clsIntType.isAbstract()) {
-                // TODO: get all implementing classes for interface and all non-abstract subclasses for abstract class
-                potentialInstantiationTypes.addAll(getConcreteTypes(clsIntType));
-            }
-            else {
-                potentialInstantiationTypes.add(typeName);
-            }
-
-            // iterate over the list of instantiable types and attempt to create constructor sequence
-            for (String subtypeName : potentialInstantiationTypes) {
-                typeInstSeq = createConstructorSequence(typeName, false);
-                if (typeInstSeq != null) {
-                    return SequenceUtil.concatenate(sequence, typeInstSeq);
-                }
-            }
-        }
-
-        // if nothing succeeds and create null option specified, create a null assignment statement for parameter
-        if (createDefaultNull) {
-            return addNullAssignment(paramType, sequence);
-        }
-
-        return sequence;
-    }
-
-    private List<String> getConcreteTypes(ClassOrInterfaceType clsIntType) {
-	    return new ArrayList<>();
-    }
-
-	/**
-	 * Checks that either of these conditions holds for rach parameter type in the
-	 * given array of (constructor) parameter types: (1) the parameter type is a
-	 * primitive type or (2) a constructor sequence for the parameter type in the
-	 * class sequence pool.
-	 *
-	 * @param paramTypes
-	 * @return
-	 * @throws ClassNotFoundException
-	 */
-//	private boolean validateConstructorParameters(List<Type> paramTypes) throws ClassNotFoundException {
-//		boolean valResult = true;
-//		for (Type paramType : paramTypes) {
-//			if (paramType.isPrimitive() || paramType.isBoxedPrimitive() || paramType.isString()) {
-//				continue;
-//			}
-//			if (!this.sequencePool.classTestSeqPool.containsKey(paramType.getBinaryName())) {
-//				valResult = false;
-//				break;
-//			}
-//		}
-//		return valResult;
-//	}
-
-	/**
-	 * Given a sequence that ends at a virtual method call, returns the subsequence
-	 * that creates the receiver object for that call.
-	 *
-	 * @return
-	 */
-	private Sequence getConstructorSubsequence(Sequence seq) {
-		// traverse backward until the statement that defines the receiver type is reached
-		// TODO: Do not remove statements that assign values to parameters of primitive types
-		String receiverVar = seq.getInputs(seq.size() - 1).get(0).getName();
-		logger.fine("Receiver var for last method call in seq: " + receiverVar);
-		int endIndex = 0;
-		for (int i = seq.size() - 2; i >= 0; i--) {
-			String defVar = seq.getVariable(i).getName();
-			logger.fine("DefVar: " + defVar);
-			if (defVar.equals(receiverVar)) {
-				endIndex = i + 1;
-				break;
-			}
-		}
-		if (endIndex > 0) {
-			logger.info("Computing subsequence 0:" + endIndex);
-			return SequenceUtil.createSubsequence(seq, 0, endIndex);
-		}
-		throw new RuntimeException(
-				"Construct call that assigns to receiver variable " + receiverVar + " not found in sequence: " + seq);
-	}
-
-	/**
-	 * Selects a sequence randomly from the given set of sequences
-	 *
-	 * @param seqSet
-	 * @return
-	 */
-	private Sequence selectFromSequenceSet(SortedSet<Sequence> seqSet) {
-	    return seqSet.last();
-//		return seqSet.stream().skip(new Random().nextInt(seqSet.size())).findFirst().get();
-	}
 
 	private JsonObject readJsonFile(File file) throws FileNotFoundException {
 		InputStream fis = new FileInputStream(file);
