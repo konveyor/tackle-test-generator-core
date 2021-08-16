@@ -62,17 +62,17 @@ public class ConstructorSequenceGenerator {
             }
         }
 
-        Constructor<?>[] classCtors = targetCls.getDeclaredConstructors();
+        // get all public constructors for the class (declared and inherited)
+        Set<Constructor> classCtors = Arrays.stream(targetCls.getDeclaredConstructors())
+            .filter(ctor -> Modifier.isPublic(ctor.getModifiers()))
+            .collect(Collectors.toSet());
+        classCtors.addAll(Arrays.asList(targetCls.getConstructors()));
 
         // get parameter counts for constructors, sort constructors by number of parameters,
         // and build map from parameter count to list of constructors
         List<Integer> ctorParamCounts = new ArrayList<>();
         Map<Integer, List<Constructor<?>>> paramCountCtorMap = new HashMap<>();
         for (Constructor<?> ctor : classCtors) {
-            // skip non-public constructors
-            if (!Modifier.isPublic(ctor.getModifiers())) {
-                continue;
-            }
             int paramCount = ctor.getParameterCount();
             if (!ctorParamCounts.contains(paramCount)) {
                 ctorParamCounts.add(paramCount);
