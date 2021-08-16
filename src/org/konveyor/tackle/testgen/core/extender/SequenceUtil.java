@@ -269,4 +269,86 @@ public class SequenceUtil {
         return false;
     }
 
+    /**
+     * Creates a primitive assignment statement for the given type and adds the statement to the
+     * given sequence.
+     * @param type Primitive type to create assignment statement for
+     * @param seq Sequence to be extended with the assignment statement
+     * @return Updated sequence with primitive assignment appended
+     */
+    static Sequence addPrimitiveAssignment(Type type, Sequence seq, SequencePool sequencePool) {
+        Object val = sequencePool.primitiveValuePool.getRandomValueOfType(type.getBinaryName());
+        logger.info("Creating primitive/string value assignment statement");
+        TypedOperation primAssign = TypedOperation.createPrimitiveInitialization(type, val);
+        return seq.extend(primAssign);
+    }
+
+    /**
+     * Creates an enum assignment statement for the given enum type by selecting the first value
+     * from the list of defined enum values; adds the assignment statement to the given sequence.
+     * @param typeName Name of enum type to create assignment statement for
+     * @param seq
+     * @return Updated sequence with enum assignment appended
+     * @throws ClassNotFoundException
+     * @throws OperationParseException
+     */
+    static Sequence addEnumAssignment(String typeName, Sequence seq)
+        throws ClassNotFoundException, OperationParseException {
+        logger.info("Creating assignment statement for enum type");
+        Class<?> enumCls = Class.forName(typeName);
+        List enumValues = Arrays.asList(enumCls.getEnumConstants());
+        TypedOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
+        return seq.extend(enumAssign);
+    }
+
+    /**
+     * Creates a null-assignment statement for the given type and appends it to the given sequence.
+     * @param type Type for which to create null assignment
+     * @param seq Sequence to be extended with null assignment
+     * @return
+     */
+    static Sequence addNullAssignment(Type type, Sequence seq) {
+        TypedOperation nullAssignStmt = TypedOperation.createNullOrZeroInitializationForType(type);
+        return seq.extend(nullAssignStmt);
+    }
+
+    /**
+     * Given a sequence that ends at a virtual method call, returns the subsequence
+     * that creates the receiver object for that call.
+     *
+     * @return
+     */
+    static Sequence getConstructorSubsequence(Sequence seq) {
+        // traverse backward until the statement that defines the receiver type is reached
+        // TODO: Do not remove statements that assign values to parameters of primitive types
+        String receiverVar = seq.getInputs(seq.size() - 1).get(0).getName();
+        logger.fine("Receiver var for last method call in seq: " + receiverVar);
+        int endIndex = 0;
+        for (int i = seq.size() - 2; i >= 0; i--) {
+            String defVar = seq.getVariable(i).getName();
+            logger.fine("DefVar: " + defVar);
+            if (defVar.equals(receiverVar)) {
+                endIndex = i + 1;
+                break;
+            }
+        }
+        if (endIndex > 0) {
+            logger.info("Computing subsequence 0:" + endIndex);
+            return createSubsequence(seq, 0, endIndex);
+        }
+        throw new RuntimeException(
+            "Construct call that assigns to receiver variable " + receiverVar + " not found in sequence: " + seq);
+    }
+
+    /**
+     * Selects a sequence randomly from the given set of sequences
+     *
+     * @param seqSet
+     * @return
+     */
+    static Sequence selectFromSequenceSet(SortedSet<Sequence> seqSet) {
+        return seqSet.last();
+//		return seqSet.stream().skip(new Random().nextInt(seqSet.size())).findFirst().get();
+    }
+
 }
