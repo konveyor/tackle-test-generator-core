@@ -55,7 +55,7 @@ public class TestSequenceInitializerTest {
 
 		TestSequenceInitializer seqInitializer = new TestSequenceInitializer("DayTrader",
 				"test/data/daytrader7/daytrader_ctd_models_shortened.json", "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", "EvoSuiteTestGenerator", -1);
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", "EvoSuiteTestGenerator", -1, false);
 
 		seqInitializer.createInitialTests();
 

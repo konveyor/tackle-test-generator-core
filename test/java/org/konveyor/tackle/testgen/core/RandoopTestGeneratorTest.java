@@ -51,7 +51,7 @@ public class RandoopTestGeneratorTest {
 
         // assert that input/output files for randoop are created
         //assertTrue(new File(RandoopTestGenerator.RANDOOP_CLASSLIST_FILE_NAME).exists());
-        assertTrue(new File(RandoopTestGenerator.RANDOOP_METHODLIST_FILE_NAME).exists());
+        //assertTrue(new File(RandoopTestGenerator.RANDOOP_METHODLIST_FILE_NAME).exists());
         assertTrue(new File("DayTrader"+RandoopTestGenerator.RANDOOP_OUTPUT_DIR_NAME_SUFFIX).exists());
     }
 
