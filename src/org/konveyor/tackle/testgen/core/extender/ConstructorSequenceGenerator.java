@@ -275,7 +275,7 @@ public class ConstructorSequenceGenerator {
 
             // iterate over the list of instantiable types and attempt to create constructor sequence
             for (String subtypeName : potentialInstantiationTypes) {
-                typeInstSeq = createConstructorSequence(typeName, false, sequencePool);
+                typeInstSeq = createConstructorSequence(subtypeName, false, sequencePool);
                 if (typeInstSeq != null) {
                     return SequenceUtil.concatenate(sequence, typeInstSeq);
                 }
