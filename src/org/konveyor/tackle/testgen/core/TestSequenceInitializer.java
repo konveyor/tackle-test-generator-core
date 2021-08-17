@@ -550,7 +550,7 @@ public class TestSequenceInitializer {
         boolean targetMethods = false;
         
         if (cmd.hasOption("tm")) {
-        	targetMethods = Boolean.valueOf(cmd.getOptionValue("tm"));
+        	targetMethods = true;
         }
 
         logger.info("Application name: "+appName);
