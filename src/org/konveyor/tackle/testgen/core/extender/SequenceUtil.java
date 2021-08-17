@@ -296,7 +296,7 @@ public class SequenceUtil {
         throws ClassNotFoundException, OperationParseException {
         logger.info("Creating assignment statement for enum type");
         Class<?> enumCls = Class.forName(typeName);
-        List enumValues = Arrays.asList(enumCls.getEnumConstants());
+        List<?> enumValues = Arrays.asList(enumCls.getEnumConstants());
         TypedOperation enumAssign = EnumConstant.parse(typeName +":"+enumValues.get(0).toString());
         return seq.extend(enumAssign);
     }

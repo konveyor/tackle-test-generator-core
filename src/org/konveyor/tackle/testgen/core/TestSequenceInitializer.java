@@ -64,7 +64,7 @@ import org.konveyor.tackle.testgen.util.Utils;
 
 public class TestSequenceInitializer {
 
-	private File proxyDataFile;
+	private File ctdModelsFile;
 	private List<String> appClasspath;
 	private String monolithAppPath;
 	private final List<AbstractTestGenerator> testGenerators = new ArrayList<AbstractTestGenerator>();
@@ -75,6 +75,8 @@ public class TestSequenceInitializer {
 	private final String applicationName;
 
 	private final int timeLimit;
+	
+	private final boolean targetSpecificMethods;
 
 	public static final int DEFAULT_TIME_LIMIT = -1;
 
@@ -82,19 +84,21 @@ public class TestSequenceInitializer {
 
 	private volatile Map<String, String> threadsErrorMessages = new HashMap<>();
 
-	public TestSequenceInitializer(String appName, String proxyModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit)
+	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
+			boolean targetMethods)
 			throws IOException {
 
 		monolithAppPath = appPath;
 		applicationName = appName;
 		testGeneratorName = testGenName;
 		this.timeLimit = timeLimit;
+		targetSpecificMethods = targetMethods;
 
-		File file = new File(proxyModelsFileName);
+		File file = new File(ctdModelsFileName);
 		if (!file.isFile()) {
 			throw new IOException(file.getAbsolutePath() + " is not a valid file");
 		}
-		this.proxyDataFile = file;
+		this.ctdModelsFile = file;
 
 		file = new File(appClasspathFileName);
 		if (!file.isFile()) {
@@ -129,7 +133,7 @@ public class TestSequenceInitializer {
 		JsonObject mainObject = null;
 
 		try {
-			InputStream fis = new FileInputStream(proxyDataFile);
+			InputStream fis = new FileInputStream(ctdModelsFile);
 			reader = Json.createReader(fis);
 			mainObject = reader.readObject();
 		} finally {
@@ -143,8 +147,8 @@ public class TestSequenceInitializer {
         for (Map.Entry<String, JsonValue> partitionEntry : modelsObject.entrySet()) {
         	for (Map.Entry<String, JsonValue> entry : ((JsonObject) partitionEntry.getValue()).entrySet()) {
         		String receiverClassName = entry.getKey();
-        		// Note: we are targeting not only the proxy method but also its receiver class, because the extender will reuse the receiver object generation
-    			// to invoke the proxy method with different parameter combinations
+        		// Note: we are targeting not only the target method but also its receiver class, because the extender will reuse the receiver object generation
+    			// to invoke the target method with different parameter combinations
     			Class<?> receiverClass;
 
     			try {
@@ -160,7 +164,11 @@ public class TestSequenceInitializer {
     				for (Constructor<?> constr : receiverConstructors) {
         				String constrSig = Utils.getSignature(constr);
         				for (AbstractTestGenerator testGenerator : testGenerators) {
-        					testGenerator.addCoverageTarget(receiverClassName, constrSig);
+        					if (targetSpecificMethods) {
+        						testGenerator.addCoverageTarget(receiverClassName, constrSig);
+        					} else {
+        						testGenerator.addCoverageTarget(receiverClassName);
+        					}
         				}
         			}
     			} catch (Throwable e) {
@@ -171,7 +179,11 @@ public class TestSequenceInitializer {
         		JsonObject methodsObject = (JsonObject) entry.getValue();
         		for (Map.Entry<String, JsonValue> methodEntry : methodsObject.entrySet()) {
         			for (AbstractTestGenerator testGenerator : testGenerators) {
-        				testGenerator.addCoverageTarget(receiverClassName, methodEntry.getKey());
+        				if (targetSpecificMethods) {
+        					testGenerator.addCoverageTarget(receiverClassName, methodEntry.getKey());
+        				} else {
+    						testGenerator.addCoverageTarget(receiverClassName);
+    					}
         			}
         			addParameterTargets((JsonObject) methodEntry.getValue(), reachedClasses);
         		}
@@ -283,7 +295,11 @@ public class TestSequenceInitializer {
 									for (Constructor<?> constr : constructors) {
 										String constrSig = Utils.getSignature(constr);
 										for (AbstractTestGenerator testGenerator : testGenerators) {
-											testGenerator.addCoverageTarget(targetClass, constrSig);
+											if (targetSpecificMethods) {
+												testGenerator.addCoverageTarget(targetClass, constrSig);
+											} else {
+												testGenerator.addCoverageTarget(targetClass);
+											}
 										}
 									}
 								} catch (Throwable e) {
@@ -459,6 +475,14 @@ public class TestSequenceInitializer {
                 .type(Integer.class)
                 .build()
         );
+        
+     // option for targeting specific methods
+        options.addOption(Option.builder("tm")
+                .longOpt("target-methods")
+                .desc("Target specific methods rather than entire classes under test.")
+                .type(Boolean.class)
+                .build()
+        );
 
         // help option
         options.addOption(Option.builder("h")
@@ -522,6 +546,12 @@ public class TestSequenceInitializer {
         if (cmd.hasOption("tl")) {
         	timeLimit = Integer.valueOf(cmd.getOptionValue("tl"));
         }
+        
+        boolean targetMethods = false;
+        
+        if (cmd.hasOption("tm")) {
+        	targetMethods = Boolean.valueOf(cmd.getOptionValue("tm"));
+        }
 
         logger.info("Application name: "+appName);
         logger.info("CTD test plan file: "+testPlanFilename);
@@ -529,8 +559,9 @@ public class TestSequenceInitializer {
         logger.info("Application classpath file name: "+classpathFilename);
         logger.info("Test generator name: "+testGenerator);
         logger.info("Time limit per class: "+timeLimit);
+        logger.info("Target specific methods: "+targetMethods);
 
-		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, timeLimit).createInitialTests();
+		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, timeLimit, targetMethods).createInitialTests();
 	}
 
 
