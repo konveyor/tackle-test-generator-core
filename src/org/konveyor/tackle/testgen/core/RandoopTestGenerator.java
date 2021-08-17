@@ -109,8 +109,10 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 	        //Set<String> methodlist = buildRandoopMethodlistOpt(className);
 			Set<String> methodlist = this.targets.get(className);
 	        logger.info("method list size: "+methodlist.size());
-	        FileUtils.writeLines(new File(RANDOOP_METHODLIST_FILE_NAME), methodlist);
-			//randoopOpts.add("--methodlist=" + RANDOOP_METHODLIST_FILE_NAME);
+	        if ( ! methodlist.isEmpty()) {
+	        	FileUtils.writeLines(new File(RANDOOP_METHODLIST_FILE_NAME), methodlist);	        
+	        	randoopOpts.add("--methodlist=" + RANDOOP_METHODLIST_FILE_NAME);
+	        }
 			randoopOpts.add("--time-limit=" + Integer.toString(this.timeLimit));
 			randoopOpts.add("--check-compilable=" + this.compilable);
 			randoopOpts.add("--no-error-revealing-tests=" + !this.errorRevealingTests);

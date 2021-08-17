@@ -63,7 +63,7 @@ public class ConstructorSequenceGenerator {
         }
 
         // get all public constructors for the class (declared and inherited)
-        Set<Constructor> classCtors = Arrays.stream(targetCls.getDeclaredConstructors())
+        Set<Constructor<?>> classCtors = Arrays.stream(targetCls.getDeclaredConstructors())
             .filter(ctor -> Modifier.isPublic(ctor.getModifiers()))
             .collect(Collectors.toSet());
         classCtors.addAll(Arrays.asList(targetCls.getConstructors()));
