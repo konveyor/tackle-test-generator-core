@@ -318,7 +318,7 @@ public class DiffAssertionsGenerator {
 					recordedVal = "java.lang.Double.NEGATIVE_INFINITY";
 				}
 
-				return getAssert(recordedVal, "("+theType.getName()+") "+actualVal,  0.0001);
+				return getAssert(recordedVal, "("+theType.getName()+") "+actualVal,  0.015);
 
 			} else {
 				
