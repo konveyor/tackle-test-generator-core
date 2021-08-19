@@ -57,14 +57,14 @@ public class ConstructorSequenceGenerator {
         if (isTestPlanParameter) {
             int clsModifiers = targetCls.getModifiers();
             if (targetCls.isInterface() || Modifier.isAbstract(clsModifiers) ||
-                !Modifier.isPublic(clsModifiers)) {
+                Modifier.isPrivate(clsModifiers)) {
                 return SequenceUtil.addNullAssignment(Type.forClass(targetCls), new Sequence());
             }
         }
 
         // get all public constructors for the class (declared and inherited)
         Set<Constructor<?>> classCtors = Arrays.stream(targetCls.getDeclaredConstructors())
-            .filter(ctor -> Modifier.isPublic(ctor.getModifiers()))
+            .filter(ctor -> ! Modifier.isPrivate(ctor.getModifiers()))
             .collect(Collectors.toSet());
         classCtors.addAll(Arrays.asList(targetCls.getConstructors()));
 

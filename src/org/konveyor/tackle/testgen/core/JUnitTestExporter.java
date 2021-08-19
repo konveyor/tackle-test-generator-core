@@ -135,10 +135,32 @@ public class JUnitTestExporter {
 	public void writeUnitTest(String className, Map<String, List<String>> testSequences, Set<String> testImports) throws IOException {
 
 		String unitTestClassName = className.replaceAll("\\.", "_")+"_Test";
-
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(testOutDir, unitTestClassName+".java")));
-
+		
+		File outputFile;
+		
+		if (className.contains(".")) {
+			String fileSep = File.separator;
+			if (fileSep.equals("\\")) {
+				fileSep = fileSep + "\\"; // for regex replacement
+			}
+			String packagePath =  className.substring(0, className.lastIndexOf('.')).replaceAll("\\.", fileSep);
+			File packageDir = new File(testOutDir.getAbsoluteFile(), packagePath);
+			packageDir.mkdirs();
+			outputFile = new File(packageDir, unitTestClassName+".java");
+		} else {
+			outputFile = new File(testOutDir, unitTestClassName+".java");
+		}
+		
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+		
 		try {
+			
+			if (className.contains(".")) {
+				writer.write("package "+className.substring(0, className.lastIndexOf('.'))+";");
+				writer.newLine();
+				writer.newLine();
+			}
 
 			for (String imp : testImports) {
 				writer.write("import "+imp+";");

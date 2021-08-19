@@ -219,7 +219,7 @@ public class JavaMethodModel {
 				continue;
 			}
 
-			if (currentSootClass.isConcrete() && Modifier.isPublic(currentClass.getModifiers())) {
+			if (currentSootClass.isConcrete() &&  ! Modifier.isPrivate(currentClass.getModifiers())) {
 				allConcreteTypes.add(currentClass);
 				if (typeAnalysisResults.inRTAResults(currentSootClass.getName())) {
 					resultTypes.add(currentClass);
@@ -229,7 +229,7 @@ public class JavaMethodModel {
 		
 		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
 		
-		if (paramClass.isConcrete() && Modifier.isPublic(paramClass.getModifiers())) {
+		if (paramClass.isConcrete() && ! Modifier.isPrivate(paramClass.getModifiers())) {
 			allConcreteTypes.add(theParamClass);
 			resultTypes.add(theParamClass);
 		}
