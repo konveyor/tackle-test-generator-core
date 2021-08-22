@@ -644,9 +644,10 @@ public class TestSequenceExtender {
 				if (this.sequencePool.classImports.containsKey(cls)) {
 					testImports.addAll(this.sequencePool.classImports.get(cls).stream().filter(impName -> {
 						try {
-							return Modifier.isPublic(Class.forName(impName).getModifiers());
+							return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") || 
+									! Modifier.isPrivate(Class.forName(impName).getModifiers());
 						} catch (ClassNotFoundException e) {
-							return true; // treat class as public, either way may result in compilation issues for the resulting JUnit test
+							return true; // treat class as non-private, either way may result in compilation issues for the resulting JUnit test
 						}
 					}).
 							collect(Collectors.toSet()));
@@ -1021,7 +1022,7 @@ public class TestSequenceExtender {
 				// attempt to create a new sequence for instantiating this type
 				try {
 					typeInstSeq = ConstructorSequenceGenerator.createConstructorSequence(typeName, true,
-                        this.sequencePool);
+                        this.sequencePool, 0);
 				} catch (ClassNotFoundException | NoSuchMethodException cnfe) {
 					logger.warning("Error creating constructor sequence for " + typeName + ": " + cnfe);
 				}
@@ -1551,7 +1552,7 @@ public class TestSequenceExtender {
 		logger.info("Augmenting class sequence pool for constructor sequences for: " + testPlanClasses);
 		for (String clsName : testPlanClasses) {
 			try {
-				ConstructorSequenceGenerator.createConstructorSequence(clsName, false, this.sequencePool);
+				ConstructorSequenceGenerator.createConstructorSequence(clsName, false, this.sequencePool, 0);
 			} catch (ClassNotFoundException | NoClassDefFoundError | OperationParseException | NoSuchMethodException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());

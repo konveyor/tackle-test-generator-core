@@ -158,32 +158,33 @@ public class TestSequenceInitializer {
     				continue;
     			}
     			Constructor<?>[] receiverConstructors = null;
-
-    			try {
-    				receiverConstructors = receiverClass.getConstructors();
-    				for (Constructor<?> constr : receiverConstructors) {
-        				String constrSig = Utils.getSignature(constr);
-        				for (AbstractTestGenerator testGenerator : testGenerators) {
-        					if (targetSpecificMethods) {
-        						testGenerator.addCoverageTarget(receiverClassName, constrSig);
-        					} else {
-        						testGenerator.addCoverageTarget(receiverClassName);
-        					}
-        				}
-        			}
-    			} catch (Throwable e) {
-    				logger.warning("Unable to load target class "+receiverClassName+" constructors: "+e.getMessage());
-    				continue;
-    			}
+    			
+    			if ( ! targetSpecificMethods) {
+    				for (AbstractTestGenerator testGenerator : testGenerators) {
+    					testGenerator.addCoverageTarget(receiverClassName);
+    				}
+				} else {
+					try {
+						receiverConstructors = receiverClass.getConstructors();
+						for (Constructor<?> constr : receiverConstructors) {
+							String constrSig = Utils.getSignature(constr);
+							for (AbstractTestGenerator testGenerator : testGenerators) {
+								testGenerator.addCoverageTarget(receiverClassName, constrSig);
+							}
+						}
+					} catch (Throwable e) {
+						logger.warning("Unable to load target class " + receiverClassName + " constructors: "
+								+ e.getMessage());
+						continue;
+					}
+				}
 
         		JsonObject methodsObject = (JsonObject) entry.getValue();
         		for (Map.Entry<String, JsonValue> methodEntry : methodsObject.entrySet()) {
-        			for (AbstractTestGenerator testGenerator : testGenerators) {
-        				if (targetSpecificMethods) {
+        			if (targetSpecificMethods) {
+        				for (AbstractTestGenerator testGenerator : testGenerators) {
         					testGenerator.addCoverageTarget(receiverClassName, methodEntry.getKey());
-        				} else {
-    						testGenerator.addCoverageTarget(receiverClassName);
-    					}
+        				}
         			}
         			addParameterTargets((JsonObject) methodEntry.getValue(), reachedClasses);
         		}
@@ -288,23 +289,30 @@ public class TestSequenceInitializer {
 			    				continue;
 							}
 							if (!Utils.isPrimitive(theClass)) {
-								Constructor<?>[] constructors;
 
-								try {
-									constructors = theClass.getConstructors();
-									for (Constructor<?> constr : constructors) {
-										String constrSig = Utils.getSignature(constr);
-										for (AbstractTestGenerator testGenerator : testGenerators) {
-											if (targetSpecificMethods) {
-												testGenerator.addCoverageTarget(targetClass, constrSig);
-											} else {
-												testGenerator.addCoverageTarget(targetClass);
+								if ( ! targetSpecificMethods) {
+									for (AbstractTestGenerator testGenerator : testGenerators) {
+										testGenerator.addCoverageTarget(targetClass);
+									}
+								} else {
+
+									Constructor<?>[] constructors;
+
+									try {
+										constructors = theClass.getConstructors();
+										for (Constructor<?> constr : constructors) {
+											String constrSig = Utils.getSignature(constr);
+											for (AbstractTestGenerator testGenerator : testGenerators) {
+												if (targetSpecificMethods) {
+													testGenerator.addCoverageTarget(targetClass, constrSig);
+												}
 											}
 										}
+									} catch (Throwable e) {
+										logger.warning("Unable to load target class " + targetClass + " constructors: "
+												+ e.getMessage());
+										continue;
 									}
-								} catch (Throwable e) {
-									logger.warning("Unable to load target class "+targetClass+" constructors: "+e.getMessage());
-				    				continue;
 								}
 
 							}

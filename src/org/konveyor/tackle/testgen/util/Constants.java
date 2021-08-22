@@ -24,7 +24,7 @@ public class Constants {
      * The application name is added at the beginning of the file name */
 
     public static final String CTD_OUTFILE_SUFFIX = "ctd_models_and_test_plans.json";
-    
+
     /** Suffix of file name to which CTD writes methods that it is not targeting for various reasons.
      * Currently all non-public methods are not targeted
      * The application name is added at the beginning of the file name */
@@ -94,6 +94,9 @@ public class Constants {
 
     /** Number of times to execute each sequence to identify and eliminate random recorded values */
     public static final int NUM_SEQUENCE_EXECUTION = 10;
+
+    /** Maximum recursive depth for generation of constructor sequences */
+    public static final int CONSTRUCTOR_SEQUENCE_GEN_MAX_DEPTH = -1;
 
     /** Name of test generator indicating invocation of all known test generators in concert */
 

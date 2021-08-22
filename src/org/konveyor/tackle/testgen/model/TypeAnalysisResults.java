@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import soot.SootClass;
+
 /**
  * A class that holds CHA and RTA results for reuse in the same partition
  * @author RACHELBRILL
@@ -28,27 +30,27 @@ class TypeAnalysisResults {
 
 	private final Set<String> RTAClasses;
 
-	private Map<Class<?>, Set<Class<?>>> CHASubClasses = new HashMap<Class<?>, Set<Class<?>>>();
-	private Map<Class<?>, Set<Class<?>>> CHASuperClasses = new HashMap<Class<?>, Set<Class<?>>>();
+	private Map<Class<?>, Set<SootClass>> CHASubClasses = new HashMap<>();
+	private Map<Class<?>, Set<SootClass>> CHASuperClasses = new HashMap<>();
 
 	TypeAnalysisResults(Set<String> RTAResults) {
 
 		RTAClasses = Collections.unmodifiableSet(RTAResults);
 	}
 
-	Set<Class<?>> getSubClasses(Class<?> type) {
+	Set<SootClass> getSubClasses(Class<?> type) {
 		return CHASubClasses.get(type);
 	}
 
-	void setSubClasses(Class<?> type, Set<Class<?>> subclasses) {
+	void setSubClasses(Class<?> type, Set<SootClass> subclasses) {
 		CHASubClasses.put(type, subclasses);
 	}
 
-	Set<Class<?>> getSuperClasses(Class<?> type) {
+	Set<SootClass> getSuperClasses(Class<?> type) {
 		return CHASuperClasses.get(type);
 	}
 
-	void setSuperClasses(Class<?> type, Set<Class<?>> superClasses) {
+	void setSuperClasses(Class<?> type, Set<SootClass> superClasses) {
 		CHASuperClasses.put(type, superClasses);
 	}
 
