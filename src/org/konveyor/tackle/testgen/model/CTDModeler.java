@@ -71,7 +71,7 @@ class CTDModeler {
 		if (paramTypes.length == 0) {
 			return null; // nothing to do here
 		}
-
+		
 		Class<?>[] paramClasses = method.getParameterClasses();
 
 		// Define a new CTD model for the current method

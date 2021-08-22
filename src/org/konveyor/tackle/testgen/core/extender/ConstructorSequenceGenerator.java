@@ -56,8 +56,8 @@ public class ConstructorSequenceGenerator {
 
         // if target class is a test plan parameter and is interface, abstract, or non-public,
         // generate a null assignment sequence
+        int clsModifiers = targetCls.getModifiers();
         if (isTestPlanParameter) {
-            int clsModifiers = targetCls.getModifiers();
             if (targetCls.isInterface() || Modifier.isAbstract(clsModifiers) ||
                 Modifier.isPrivate(clsModifiers)) {
                 return SequenceUtil.addNullAssignment(Type.forClass(targetCls), new Sequence());
@@ -66,7 +66,8 @@ public class ConstructorSequenceGenerator {
 
         // get all public constructors for the class (declared and inherited)
         Set<Constructor<?>> classCtors = Arrays.stream(targetCls.getDeclaredConstructors())
-            .filter(ctor -> ! Modifier.isPrivate(ctor.getModifiers()))
+            .filter(ctor -> (Modifier.isPublic(clsModifiers) && Modifier.isPublic(ctor.getModifiers()))
+            		|| ( ! Modifier.isPublic(clsModifiers) && ! Modifier.isPrivate(ctor.getModifiers())))
             .collect(Collectors.toSet());
         classCtors.addAll(Arrays.asList(targetCls.getConstructors()));
 

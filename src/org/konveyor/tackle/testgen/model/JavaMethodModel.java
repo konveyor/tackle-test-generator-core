@@ -169,40 +169,33 @@ public class JavaMethodModel {
 
 	Set<Class<?>> getAllConcreteTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
 
-		Set<Class<?>>  resultTypes = typeAnalysisResults.getSubClasses(paramType);
+		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
+		
+		Set<SootClass>  classes = typeAnalysisResults.getSubClasses(paramType);
 
-		if (resultTypes != null) {
-			return resultTypes;
+		if (classes == null) {
+		
+			classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
+			classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
+			typeAnalysisResults.setSubClasses(paramType, classes);
 		}
 		
-		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
-		Set<SootClass> classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
-		classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
-		
-		resultTypes = getRelevantTypes(paramClass, classes, typeAnalysisResults);
-		
-		typeAnalysisResults.setSubClasses(paramType, resultTypes);
-		
-		return resultTypes;
+		return getRelevantTypes(paramClass, classes, typeAnalysisResults);
 	}
 
 	private Set<Class<?>> getAllSuperTypes(Class<?> paramType, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
 
-		Set<Class<?>>  resultTypes = typeAnalysisResults.getSuperClasses(paramType);
-
-		if (resultTypes != null) {
-			return resultTypes;
-		}
-
-		resultTypes = new HashSet<>();
 		SootClass paramClass = Scene.v().getSootClass(paramType.getName());
-		Set<SootClass> classes = getAllSuperclasses(paramClass);
 		
-		resultTypes = getRelevantTypes(paramClass, classes, typeAnalysisResults);
+		Set<SootClass> classes = typeAnalysisResults.getSuperClasses(paramType);
 
-		typeAnalysisResults.setSuperClasses(paramType, resultTypes);
-
-		return resultTypes;
+		if (classes == null) {
+			
+			classes = getAllSuperclasses(paramClass);
+			typeAnalysisResults.setSuperClasses(paramType, classes);
+		}
+		
+		return getRelevantTypes(paramClass, classes, typeAnalysisResults);
 	}
 	
 	private Set<Class<?>> getRelevantTypes(SootClass paramClass, Set<SootClass> classes, TypeAnalysisResults typeAnalysisResults) throws ClassNotFoundException {
@@ -219,7 +212,7 @@ public class JavaMethodModel {
 				continue;
 			}
 
-			if (currentSootClass.isConcrete() &&  ! Modifier.isPrivate(currentClass.getModifiers())) {
+			if (currentSootClass.isConcrete() &&  canBeInstantiated(currentClass)) {
 				allConcreteTypes.add(currentClass);
 				if (typeAnalysisResults.inRTAResults(currentSootClass.getName())) {
 					resultTypes.add(currentClass);
@@ -229,7 +222,7 @@ public class JavaMethodModel {
 		
 		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
 		
-		if (paramClass.isConcrete() && ! Modifier.isPrivate(paramClass.getModifiers())) {
+		if (paramClass.isConcrete() && canBeInstantiated(theParamClass)) {
 			allConcreteTypes.add(theParamClass);
 			resultTypes.add(theParamClass);
 		}
@@ -247,6 +240,19 @@ public class JavaMethodModel {
 		}
 
 		return resultTypes;
+	}
+	
+	private boolean canBeInstantiated(Class<?> type) {
+		
+		int typeModifiers = type.getModifiers();
+		
+		return Modifier.isPublic(typeModifiers) || // type is public
+				// type is not private and in the same package as class under test 
+			(! Modifier.isPrivate(typeModifiers) && 
+			type.getPackage() != null && targetClass.getPackage() != null && 
+			type.getPackage().getName().equals(targetClass.getPackage().getName())) ||
+			// type is protected and class under test is a subclass of type
+			Modifier.isProtected(typeModifiers) && type.isAssignableFrom(targetClass);
 	}
 
 	private Set<SootClass> getAllSuperclasses(SootClass theClass) {
