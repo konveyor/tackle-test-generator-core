@@ -133,8 +133,8 @@ public class ConstructorSequenceGenerator {
         throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
         // collect parameter types of constructor
-        List<Type> paramTypes = Arrays.stream(ctor.getParameterTypes())
-            .map(paramType -> Type.forClass(paramType))
+        List<Type> paramTypes = Arrays.stream(ctor.getGenericParameterTypes())
+            .map(paramType -> Type.forType(paramType))
             .collect(Collectors.toList());
 
         // initialize sequence
@@ -212,20 +212,6 @@ public class ConstructorSequenceGenerator {
             return SequenceUtil.addEnumAssignment(typeName, sequence);
         }
 
-        // if the type occurs in the class sequence pool, sample a sequence from the pool
-        if (sequencePool.classTestSeqPool.containsKey(typeName)) {
-            Sequence typeInstSeq = SequenceUtil.selectFromSequenceSet(sequencePool.classTestSeqPool.get(typeName));
-            return SequenceUtil.concatenate(sequence, typeInstSeq);
-        }
-
-        // if a subtype of the declared type occurs in the class sequence pool, sample a
-        // sequence from the available ones
-        SortedSet<Sequence> subtypeCtorSeqs = getSubtypeConstructorSequences(typeName, sequencePool);
-        if (subtypeCtorSeqs != null) {
-            Sequence typeInstSeq = SequenceUtil.selectFromSequenceSet(subtypeCtorSeqs);
-            return SequenceUtil.concatenate(sequence, typeInstSeq);
-        }
-
         // if array type, create an empty array
         if (paramType.isArray()) {
             ArrayType arrayType = ArrayType.forClass(Type.forFullyQualifiedName(typeName));
@@ -258,6 +244,20 @@ public class ConstructorSequenceGenerator {
             TypedOperation mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
                 .substitute(mapSubst);
             return sequence.extend(mapInstOper);
+        }
+
+        // if the type occurs in the class sequence pool, sample a sequence from the pool
+        if (sequencePool.classTestSeqPool.containsKey(typeName)) {
+            Sequence typeInstSeq = SequenceUtil.selectFromSequenceSet(sequencePool.classTestSeqPool.get(typeName));
+            return SequenceUtil.concatenate(sequence, typeInstSeq);
+        }
+
+        // if a subtype of the declared type occurs in the class sequence pool, sample a
+        // sequence from the available ones
+        SortedSet<Sequence> subtypeCtorSeqs = getSubtypeConstructorSequences(typeName, sequencePool);
+        if (subtypeCtorSeqs != null) {
+            Sequence typeInstSeq = SequenceUtil.selectFromSequenceSet(subtypeCtorSeqs);
+            return SequenceUtil.concatenate(sequence, typeInstSeq);
         }
 
         // recursively attempt to create new constructor sequence
