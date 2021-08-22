@@ -13,6 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import randoop.operation.OperationParseException;
 import randoop.operation.TypedClassOperation;
@@ -44,10 +45,11 @@ public class ConstructorSequenceGenerator {
      * @param typeName
      * @param isTestPlanParameter
      * @param sequencePool
+     * @param currNestingDepth
      * @return
      */
     static Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter,
-                                              SequencePool sequencePool)
+                                              SequencePool sequencePool, int currNestingDepth)
         throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
         Class<?> targetCls = Class.forName(typeName);
@@ -94,7 +96,8 @@ public class ConstructorSequenceGenerator {
 //				if (!validateConstructorParameters(paramTypes)) {
 //					continue;
 //				}
-                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool, false);
+                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool,
+                    false, currNestingDepth);
                 if (ctorSequence != null) {
                     return ctorSequence;
                 }
@@ -106,7 +109,8 @@ public class ConstructorSequenceGenerator {
         // could not be created
         for (int paramCount : ctorParamCounts) {
             for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
-                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool, true);
+                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool,
+                    true, currNestingDepth);
                 if (ctorSequence != null) {
                     return ctorSequence;
                 }
@@ -129,7 +133,8 @@ public class ConstructorSequenceGenerator {
      */
     private static Sequence createSequenceForConstructor(String typeName, Constructor<?> ctor,
                                                          SequencePool sequencePool,
-                                                         boolean createDefaultNull)
+                                                         boolean createDefaultNull,
+                                                         int currNestingDepth)
         throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
         // collect parameter types of constructor
@@ -146,7 +151,8 @@ public class ConstructorSequenceGenerator {
         // create sequence for instantiation each constructor parameter
         boolean paramSeqCreated = true;
         for (Type paramType : paramTypes) {
-            Sequence extSeq = createConstructorParameter(paramType, ctorSequence, createDefaultNull, sequencePool);
+            Sequence extSeq = createConstructorParameter(paramType, ctorSequence, createDefaultNull,
+                sequencePool, currNestingDepth);
             if (extSeq.size() > ctorSequence.size()) {
                 ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
                 ctorSequence = extSeq;
@@ -197,7 +203,7 @@ public class ConstructorSequenceGenerator {
      * @throws OperationParseException
      */
     static Sequence createConstructorParameter(Type paramType, Sequence sequence, boolean createDefaultNull,
-                                               SequencePool sequencePool)
+                                               SequencePool sequencePool, int currNestingDepth)
         throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
         String typeName = paramType.getRawtype().getBinaryName();
@@ -260,24 +266,28 @@ public class ConstructorSequenceGenerator {
             return SequenceUtil.concatenate(sequence, typeInstSeq);
         }
 
-        // recursively attempt to create new constructor sequence
-        Sequence typeInstSeq = null;
-        if (paramType.isClassOrInterfaceType()) {
-            ClassOrInterfaceType clsIntType = (ClassOrInterfaceType)paramType;
-            List<String> potentialInstantiationTypes = new ArrayList<>();
-            if (clsIntType.isInterface() || clsIntType.isAbstract()) {
-                // TODO: get all implementing classes for interface and all non-abstract subclasses for abstract class
-                potentialInstantiationTypes.addAll(getConcreteTypes(clsIntType));
-            }
-            else {
-                potentialInstantiationTypes.add(typeName);
-            }
+        // recursively attempt to create new constructor sequence if max recursion depth not reached
+        // recursive depth is not constrained
+        if (Constants.CONSTRUCTOR_SEQUENCE_GEN_MAX_DEPTH == -1 ||
+            currNestingDepth < Constants.CONSTRUCTOR_SEQUENCE_GEN_MAX_DEPTH) {
+            Sequence typeInstSeq = null;
+            if (paramType.isClassOrInterfaceType()) {
+                ClassOrInterfaceType clsIntType = (ClassOrInterfaceType) paramType;
+                List<String> potentialInstantiationTypes = new ArrayList<>();
+                if (clsIntType.isInterface() || clsIntType.isAbstract()) {
+                    // TODO: get all implementing classes for interface and all non-abstract subclasses for abstract class
+                    potentialInstantiationTypes.addAll(getConcreteTypes(clsIntType));
+                } else {
+                    potentialInstantiationTypes.add(typeName);
+                }
 
-            // iterate over the list of instantiable types and attempt to create constructor sequence
-            for (String subtypeName : potentialInstantiationTypes) {
-                typeInstSeq = createConstructorSequence(subtypeName, false, sequencePool);
-                if (typeInstSeq != null) {
-                    return SequenceUtil.concatenate(sequence, typeInstSeq);
+                // iterate over the list of instantiable types and attempt to create constructor sequence
+                for (String subtypeName : potentialInstantiationTypes) {
+                    typeInstSeq = createConstructorSequence(subtypeName, false,
+                        sequencePool, currNestingDepth + 1);
+                    if (typeInstSeq != null) {
+                        return SequenceUtil.concatenate(sequence, typeInstSeq);
+                    }
                 }
             }
         }

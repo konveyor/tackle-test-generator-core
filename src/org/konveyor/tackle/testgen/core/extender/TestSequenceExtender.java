@@ -1021,7 +1021,7 @@ public class TestSequenceExtender {
 				// attempt to create a new sequence for instantiating this type
 				try {
 					typeInstSeq = ConstructorSequenceGenerator.createConstructorSequence(typeName, true,
-                        this.sequencePool);
+                        this.sequencePool, 0);
 				} catch (ClassNotFoundException | NoSuchMethodException cnfe) {
 					logger.warning("Error creating constructor sequence for " + typeName + ": " + cnfe);
 				}
@@ -1551,7 +1551,7 @@ public class TestSequenceExtender {
 		logger.info("Augmenting class sequence pool for constructor sequences for: " + testPlanClasses);
 		for (String clsName : testPlanClasses) {
 			try {
-				ConstructorSequenceGenerator.createConstructorSequence(clsName, false, this.sequencePool);
+				ConstructorSequenceGenerator.createConstructorSequence(clsName, false, this.sequencePool, 0);
 			} catch (ClassNotFoundException | NoClassDefFoundError | OperationParseException | NoSuchMethodException cnfe) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cnfe.getMessage());
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
