@@ -740,6 +740,8 @@ public class CTDTestPlanGenerator {
 	private class ClassListTargets extends TargetFetcher {
 
 		List<String> targetClasses;
+		
+		private final String ANONYMOUS_CLASS_NAME_PATTERN = ".*\\$\\d+";
 
 		private ClassListTargets(String targetList, String excludedClassList) throws IOException {
 			
@@ -775,7 +777,7 @@ public class CTDTestPlanGenerator {
 									// This ZipEntry represents a class. Now, what class does it represent?
 									String className = entry.getName().replace('/', '.'); // including ".class"
 									className = className.substring(0, className.length() - ".class".length());
-									if (excludedClasses == null || ! excludedClasses.contains(className)) {
+									if (excludedClasses == null || ! excludedClasses.contains(className) && ! isAnonymousClassName(className)) {
 										targetClasses.add(className);
 									}
 								}
@@ -789,7 +791,8 @@ public class CTDTestPlanGenerator {
 					} else if (appDirOrJar.isDirectory()) {
 						targetClasses.addAll(Files.walk(Paths.get(appDirOrJar.getAbsolutePath()))
 								.filter(path -> path.toFile().isFile() && path.toFile().getName().endsWith(".class") &&
-										! path.toFile().getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX))
+										! path.toFile().getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX) && 
+										! isAnonymousClassName(path.toFile().getName().substring(0, path.toFile().getName().length() - ".class".length())))
 								.map(path -> Utils.fileToClass(path.toFile().getAbsolutePath(), appDirOrJar.getAbsolutePath(), ".class", File.separator)).
 								collect(Collectors.toList()));
 						if (excludedClasses != null) {
@@ -800,6 +803,11 @@ public class CTDTestPlanGenerator {
 					}
 				}
 			}
+		}
+
+		private boolean isAnonymousClassName(String className) {
+			
+			return className.matches(ANONYMOUS_CLASS_NAME_PATTERN);
 		}
 
 		public Set<String> getPartitions() {
