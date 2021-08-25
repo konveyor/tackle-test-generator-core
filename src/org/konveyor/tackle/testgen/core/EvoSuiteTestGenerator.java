@@ -91,7 +91,7 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 		}
 
         List<String> args = new ArrayList<String>();
-		args.add("java");
+		args.add(System.getProperty("java.home")+File.separator+"bin"+File.separator+"java");
 		args.add("-jar");
 		args.add(Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
 		if (methodTargetList != null) {

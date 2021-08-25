@@ -100,7 +100,7 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			String classpath = this.projectClasspath + File.pathSeparator + RANDOOP_JAR + File.pathSeparator;
 			classpath += Utils.entriesToClasspath(targetClassesPath);
 			List<String> randoopOpts = new ArrayList<String>(
-					Arrays.asList("java", "-Xmx3000m", "-Xbootclasspath/a:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
+					Arrays.asList(System.getProperty("java.home")+File.separator+"bin"+File.separator+"java", "-Xmx3000m", "-Xbootclasspath/a:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
 							"-javaagent:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
 							"-classpath", classpath, "randoop.main.Main", "gentests"));
 			randoopOpts.add("--testclass=" + className);
