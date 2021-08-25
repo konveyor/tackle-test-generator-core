@@ -14,6 +14,7 @@ limitations under the License.
 package org.konveyor.tackle.testgen.model;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -184,17 +185,22 @@ class CTDModeler {
 			// add this relation into the CTD model
 			methodModel.addRelation(r);
 
-//			// disable stdout and stderr before calling test-plan generator
-//            PrintStream origSysOut = System.out;
-//            PrintStream origSysErr = System.err;
-//            System.setOut(NullPrintStream.NULL_PRINT_STREAM);
-//            System.setErr(NullPrintStream.NULL_PRINT_STREAM);
+            // disable stdout before calling test-plan generator
+            System.out.flush();
+            PrintStream origSysOut = System.out;
+
+            PrintStream nullPrintStream = new java.io.PrintStream(
+                new java.io.OutputStream() {
+                    public void write(int size) {}
+                }
+            );
+            System.setOut(nullPrintStream);
 
             TestSet resultTestPlan = generatePlan(methodModel);
 
-//            // restore stdout and stderr
-//            System.setOut(origSysOut);
-//            System.setErr(origSysErr);
+            // restore stdout
+            System.out.flush();
+            System.setOut(origSysOut);
 
 			return new CTDModelAndTestPlan(methodModel, resultTestPlan);
 		}
