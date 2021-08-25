@@ -96,7 +96,7 @@ public class Constants {
     public static final int NUM_SEQUENCE_EXECUTION = 10;
 
     /** Maximum recursive depth for generation of constructor sequences */
-    public static final int CONSTRUCTOR_SEQUENCE_GEN_MAX_DEPTH = -1;
+    public static final int CONSTRUCTOR_SEQUENCE_GEN_MAX_DEPTH = 3;
 
     /** Name of test generator indicating invocation of all known test generators in concert */
 
