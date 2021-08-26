@@ -222,7 +222,7 @@ public class ConstructorSequenceGenerator {
         // if array type, create an empty array
         if (paramType.isArray()) {
             ArrayType arrayType = ArrayType.forClass(Type.forFullyQualifiedName(typeName));
-            TypedOperation arrayCreateStmt = TypedOperation.createArrayCreation(arrayType);
+            TypedOperation arrayCreateStmt = TypedOperation.createInitializedArrayCreation(arrayType, 0);
             return sequence.extend(arrayCreateStmt);
         }
 
