@@ -191,7 +191,7 @@ class CTDModeler {
 
             PrintStream nullPrintStream = new java.io.PrintStream(
                 new java.io.OutputStream() {
-                    public void write(int size) {}
+                    public void write(int b) {}
                 }
             );
             System.setOut(nullPrintStream);
