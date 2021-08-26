@@ -123,6 +123,34 @@ public class CTDModelingTest {
 
 		compareModels(resultObject, standardObject);
 	}
+	
+	
+	@Test
+	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
+				null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*", 
+				null, null, "test/data/daytrader7/monolith/bin",
+				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
+		analyzer.modelPartitions();
+
+		// assert that output file for CTD modeling is  created
+
+		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+
+		assertTrue(new File(outFilename).exists());
+
+		InputStream fis = new FileInputStream(outFilename);
+		JsonReader reader = Json.createReader(fis);
+		JsonObject resultObject = reader.readObject();
+		reader.close();
+
+		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
+		reader = Json.createReader(fis);
+		JsonObject standardObject = reader.readObject();
+		reader.close();
+
+		compareModels(resultObject, standardObject);
+	}
 
 	/* We cannot compare the objects in a straightforward way because CTD result might differ
 	 * between different JVMs. Hence we just compare the models to each other.
