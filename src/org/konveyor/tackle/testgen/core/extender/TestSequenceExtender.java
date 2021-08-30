@@ -14,11 +14,7 @@ limitations under the License.
 package org.konveyor.tackle.testgen.core.extender;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -26,9 +22,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,16 +34,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonString;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -63,13 +49,30 @@ import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.javaparser.utils.Pair;
 
-import randoop.operation.*;
+import randoop.operation.ConstructorCall;
+import randoop.operation.MethodCall;
+import randoop.operation.OperationParseException;
+import randoop.operation.TypedClassOperation;
+import randoop.operation.TypedOperation;
 import randoop.org.apache.commons.io.output.NullPrintStream;
 import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
-import randoop.types.*;
+import randoop.types.ArrayType;
+import randoop.types.GenericClassType;
+import randoop.types.InstantiatedType;
+import randoop.types.ReferenceType;
+import randoop.types.Substitution;
+import randoop.types.Type;
+import randoop.types.TypeVariable;
 
 /**
  * Extends the initial (or building-block) test sequences created by the
@@ -78,12 +81,14 @@ import randoop.types.*;
 public class TestSequenceExtender {
 
 	private static final Logger logger = TackleTestLogger.getLogger(TestSequenceExtender.class);
+	
+	final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
 	// CTD test plan read from the JSON input file
-	private JsonObject testPlan;
+	private ObjectNode testPlan;
 
 	// initial test sequences read from the JSON input files
-	private List<JsonObject> initialTestSeqs = new ArrayList<JsonObject>();
+	private List<ObjectNode> initialTestSeqs = new ArrayList<ObjectNode>();
 
 	// set of signatures for proxy methods targeted for coverage in the CTD plan
 	private Set<String> tgtProxyMethodSignatures;
@@ -127,7 +132,16 @@ public class TestSequenceExtender {
 	private final String applicationName;
 
 	private String outputDir = null;
-
+	
+	int totalInitSeqs = 0, testPlanMethods = 0, testPlanClasses = 0;
+	
+	int classTestPlanRows = 0;
+	
+	int classSeqCount = 0;
+	
+	int totalSeqCount = 0;
+    int totalTestPlanRows = 0;
+	
 	private final boolean jeeSupport;
 
 	private final boolean diffAssertions;
@@ -185,22 +199,21 @@ public class TestSequenceExtender {
 		if (!testPlanFile.isFile()) {
 			throw new IOException(testPlanFile.getAbsolutePath() + " is not a valid file");
 		}
-		this.testPlan = readJsonFile(testPlanFile).getJsonObject("models_and_test_plans");
-		int testPlanMethods = 0, testPlanClasses = 0;
+		this.testPlan = (ObjectNode) mapper.readTree(testPlanFile).get("models_and_test_plans");
 
 		// create set of targeted proxy methods
 		this.tgtProxyMethodSignatures = new HashSet<>();
-		for (String partitionName : this.testPlan.keySet()) {
-		    JsonObject partitionTestPlan = this.testPlan.getJsonObject(partitionName);
-		    for (String className : partitionTestPlan.keySet()) {
+		this.testPlan.fieldNames().forEachRemaining(partitionName -> {
+		    ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partitionName);
+		    partitionTestPlan.fieldNames().forEachRemaining(className -> {
 		        testPlanClasses++;
-		        JsonObject classTestPlan = partitionTestPlan.getJsonObject(className);
-		        for (String methodSig : classTestPlan.keySet()) {
+		        ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
+		        classTestPlan.fieldNames().forEachRemaining(methodSig -> {
 		            this.tgtProxyMethodSignatures.add(className+"::"+methodSig);
 		            testPlanMethods++;
-                }
-            }
-        }
+                });
+            });
+        });
         System.out.println("* Read test plans for: " + testPlanClasses + " classes, "+
             testPlanMethods + " methods");
 
@@ -211,14 +224,14 @@ public class TestSequenceExtender {
 			if (!testSeqFile.isFile()) {
 				throw new IOException(testSeqFile.getAbsolutePath() + " is not a valid file");
 			}
-			this.initialTestSeqs.add(readJsonFile(testSeqFile).getJsonObject("test_sequences"));
+			this.initialTestSeqs.add((ObjectNode) mapper.readTree(testSeqFile).get("test_sequences"));
 		}
-		int totalInitSeqs = 0;
-        for (JsonObject initialTestSeq : initialTestSeqs) {
-            for (String cls : initialTestSeq.keySet()) {
-                JsonObject clsInfo = (JsonObject) initialTestSeq.getJsonObject(cls);
-                totalInitSeqs += clsInfo.getJsonArray("sequences").size();
-            }
+		
+        for (ObjectNode initialTestSeq : initialTestSeqs) {
+        	initialTestSeq.fieldNames().forEachRemaining(cls -> {
+        		ObjectNode clsInfo = (ObjectNode) initialTestSeq.get(cls);
+                totalInitSeqs += clsInfo.get("sequences").size();
+            });
         }
         System.out.println("* Read "+totalInitSeqs+" base test sequences");
         System.out.println("* Starting sequence parsing");
@@ -249,7 +262,7 @@ public class TestSequenceExtender {
 	// boolean flag to keep track of whether a test plan row is partially covered
 	private boolean rowPartiallyCovered = false;
 
-	private JsonArray[] currTestPlanRows = null;
+	private ArrayNode[] currTestPlanRows = null;
 	private int currTestPlanRowIndex = -1;
 	private int currTestPlanRowParamIndex = -1;
 
@@ -277,11 +290,8 @@ public class TestSequenceExtender {
 		// mapping from qualified method signatures to output-formatted method signature
         Map<String, String> formattedMethodSigMap = getQualifiedToFormattedMethodSignatureMap();
 
-        int totalSeqCount = 0;
-        int totalTestPlanRows = 0;
-
         // iterate over each partition
-		for (String partition : this.testPlan.keySet()) {
+        this.testPlan.fieldNames().forEachRemaining(partition -> {
 
 		    System.out.println("* Partition: "+partition);
 
@@ -291,31 +301,31 @@ public class TestSequenceExtender {
 			}
 
 			// get test plan info for partition
-			JsonObject partitionTestPlan = this.testPlan.getJsonObject(partition);
+			ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partition);
 
 			// iterate over each class in partition
-			for (String className : partitionTestPlan.keySet()) {
+			partitionTestPlan.fieldNames().forEachRemaining(className -> {
 
 			    System.out.println("* Processing class "+className);
 
                 // get test plan info for class
-			    JsonObject classTestPlan = partitionTestPlan.getJsonObject(className);
+			    ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
 
-			    System.out.print("*   "+classTestPlan.keySet().size()+" methods ");
-			    int classSeqCount = 0;
-			    int classTestPlanRows = 0;
+			    System.out.print("*   "+classTestPlan.size()+" methods ");
+			    classSeqCount = 0;
+			    classTestPlanRows = 0;
 
 				// initialize data structures needed for JEE trial for failing extended sequences for class
 				JEEExecutionInfo classJEEExecInfo = new JEEExecutionInfo();
 
 				// iterate over each method in class
-				for (String methodSig : classTestPlan.keySet()) {
+				classTestPlan.fieldNames().forEachRemaining(methodSig -> {
 
                     System.out.print(".");
 
                     // get test plan rows for method
-					JsonObject methodTestPlan = classTestPlan.getJsonObject(methodSig);
-					currTestPlanRows = methodTestPlan.getJsonArray("test_plan").toArray(new JsonArray[0]);
+					ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
+					currTestPlanRows = mapper.convertValue(methodTestPlan.get("test_plan"), new TypeReference<ArrayNode[]>(){});
 					classTestPlanRows +=  currTestPlanRows.length;
 
 					// method signature qualified with the class name
@@ -343,7 +353,7 @@ public class TestSequenceExtender {
 						for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
 							methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
 						}
-						continue;
+						return;
 					}
 					catch (NoClassDefFoundError ncdf) {
                         String errmsg = "Error parsing: " + parseableMethodSig + "\n" + ncdf;
@@ -354,7 +364,7 @@ public class TestSequenceExtender {
                         for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
                             methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
                         }
-                        continue;
+                        return;
                     }
 
 					// if method is non-static/constructor and no test sequence exists for it in the
@@ -369,7 +379,7 @@ public class TestSequenceExtender {
 								methodCovInfo.put(getTestPlanRowId(rowCtr),
                                     Constants.TestPlanRowCoverage.UNCOVERED_NO_INIT_SEQ);
 							}
-							continue;
+							return;
 						}
 					}
 
@@ -377,7 +387,7 @@ public class TestSequenceExtender {
                     classSeqCount += createExtendedSequencesForMethod(partition, qualMethodSig,
                         parseableMethodSig, tgtMethodCall, classJEEExecInfo, methodCovInfo);
 
-				}
+				});
 
 				if (jeeSupport && ! classJEEExecInfo.failedSeqIds.isEmpty()) {
                     PrintStream origSysOut = System.out;
@@ -402,8 +412,8 @@ public class TestSequenceExtender {
                         ((double)classSeqCount * 100) / ((double)classTestPlanRows))+"% ");
                 }
                 System.out.println("("+classSeqCount+"/"+classTestPlanRows+")");
-			}
-		}
+			});
+		});
         double totalCovRate = (double)totalSeqCount * 100 / (double)totalTestPlanRows;
         System.out.println("* === total CTD test-plan coverage rate: "+
             String.format("%.2f", totalCovRate)+"% ("+totalSeqCount+"/"+totalTestPlanRows+")");
@@ -419,8 +429,7 @@ public class TestSequenceExtender {
             this.extSummary.writeSummaryFile(this.applicationName, this.seqIdMap, this.extTestSeq,
             		this.execExtSeq, assertionCount);
             System.out.println("* wrote summary file for generation of CTD-amplified tests (JSON)");
-        }
-		catch (FileNotFoundException fnfe) {
+        } catch (IOException fnfe) {
 		    logger.warning("Error writing summary JSON: "+fnfe);
         }
 
@@ -457,7 +466,7 @@ public class TestSequenceExtender {
 
         // iterate over each row of test plan for method
         int rowCtr = 0;
-        for (JsonArray row : currTestPlanRows) {
+        for (ArrayNode row : currTestPlanRows) {
             this.rowPartiallyCovered = false;
             this.currTestPlanRowIndex = rowCtr;
             String testPlanRowId = getTestPlanRowId(++rowCtr);
@@ -541,17 +550,17 @@ public class TestSequenceExtender {
      */
     private Map<String, String> getQualifiedToFormattedMethodSignatureMap() {
         Map<String, String> methodToCovMethod = new HashMap<>();
-        for (String partition : this.testPlan.keySet()) {
-            JsonObject partitionTestPlan = this.testPlan.getJsonObject(partition);
-            for (String className : partitionTestPlan.keySet()) {
-                JsonObject classTestPlan = partitionTestPlan.getJsonObject(className);
-                for (String methodSig : classTestPlan.keySet()) {
-                    JsonObject methodTestPlan = classTestPlan.getJsonObject(methodSig);
+        this.testPlan.fieldNames().forEachRemaining(partition -> {
+            ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partition);
+            partitionTestPlan.fieldNames().forEachRemaining(className -> {
+            	ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
+            	classTestPlan.fieldNames().forEachRemaining(methodSig -> {
+                	ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
                     String qualMethodSig = className + "::" + methodSig;
-                    methodToCovMethod.put(qualMethodSig, methodTestPlan.getString("formatted_signature"));
-                }
-            }
-        }
+                    methodToCovMethod.put(qualMethodSig, methodTestPlan.get("formatted_signature").asText());
+                });
+            });
+        });
         return methodToCovMethod;
     }
 
@@ -664,41 +673,39 @@ public class TestSequenceExtender {
 	 * Writes coverage information to JSON file
 	 *
 	 * @param coverageFileName
-	 * @throws FileNotFoundException
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
-	public void writeTestCoverageFile(String appName, String coverageFileName) throws FileNotFoundException {
-		JsonObjectBuilder partCovJson = Json.createObjectBuilder();
+	public void writeTestCoverageFile(String appName, String coverageFileName) throws JsonGenerationException, JsonMappingException, IOException {
+		ObjectNode partCovJson = mapper.createObjectNode();
 		for (String part : this.coverageInfo.keySet()) {
 			Map<String, Map<String, Map<String, Constants.TestPlanRowCoverage>>> clsCovInfo = this.coverageInfo
 					.get(part);
-			JsonObjectBuilder clsCovJson = Json.createObjectBuilder();
+			ObjectNode clsCovJson = mapper.createObjectNode();
 			for (String cls : clsCovInfo.keySet()) {
 				Map<String, Map<String, Constants.TestPlanRowCoverage>> methodCovInfo = clsCovInfo.get(cls);
-				JsonObjectBuilder methodCovJson = Json.createObjectBuilder();
+				ObjectNode methodCovJson = mapper.createObjectNode();
 				for (String method : methodCovInfo.keySet()) {
 					Map<String, Constants.TestPlanRowCoverage> rowCovInfo = methodCovInfo.get(method);
-					JsonObjectBuilder rowCovJson = Json.createObjectBuilder();
+					ObjectNode rowCovJson = mapper.createObjectNode();
 					for (String row : rowCovInfo.keySet()) {
-						rowCovJson.add(row, rowCovInfo.get(row).name());
+						rowCovJson.put(row, rowCovInfo.get(row).name());
 					}
-					methodCovJson.add(method, rowCovJson);
+					methodCovJson.set(method, rowCovJson);
 				}
-				clsCovJson.add(cls, methodCovJson);
+				clsCovJson.set(cls, methodCovJson);
 			}
-			partCovJson.add(part, clsCovJson);
+			partCovJson.set(part, clsCovJson);
 		}
 		String outFileName = appName+Constants.COVERAGE_FILE_JSON_SUFFIX;
+		
+		
 		if (coverageFileName != null) {
 			outFileName = coverageFileName;
 		}
-		FileOutputStream fos = new FileOutputStream(new File(outFileName));
-		JsonWriterFactory writerFactory = Json
-				.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-		try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
-			jsonWriter.writeObject(partCovJson.build());
-			System.out.println("* wrote CTD test-plan coverage report (JSON)");
-		}
-
+		mapper.writeValue(new File(outFileName), partCovJson);
+		System.out.println("* wrote CTD test-plan coverage report (JSON)");
 	}
 
 	/**
@@ -796,7 +803,7 @@ public class TestSequenceExtender {
      */
 	private Pair<Sequence, Boolean> getCandidateSequenceForRow(String clsName, String qualMethodSig,
                                                                TypedClassOperation tgtMethodCall,
-                                                               JsonArray testPlanRow) {
+                                                               ArrayNode testPlanRow) {
         Sequence candidateSeq = new Sequence();
         boolean coveringInitialSequenceExists = false;
         if (this.sequencePool.methodTestSeqPool.containsKey(qualMethodSig)) {
@@ -837,7 +844,7 @@ public class TestSequenceExtender {
      * @param sequences
      * @return
      */
-	private Sequence getCoveringSequence(JsonArray testPlanRow, SortedSet<Sequence> sequences) {
+	private Sequence getCoveringSequence(ArrayNode testPlanRow, SortedSet<Sequence> sequences) {
 	    for (Sequence seq : sequences) {
 	        if (SequenceUtil.isTestPlanRowCoveredBySequence(testPlanRow, seq)) {
 	            return seq;
@@ -866,7 +873,7 @@ public class TestSequenceExtender {
 	 * @param tgtMethodCall MethodCall object for the target method
 	 * @return Sequence object for the extended (covering) sequence
 	 */
-	private Sequence extendSequence(Sequence initSeq, JsonArray testplanRow, String tgtMethodSig,
+	private Sequence extendSequence(Sequence initSeq, ArrayNode testplanRow, String tgtMethodSig,
 			TypedClassOperation tgtMethodCall) {
 
 		// reset target method input set
@@ -884,9 +891,9 @@ public class TestSequenceExtender {
 		// synthesize randoop statements for each parameter according to the test plan and
 		// extend sequence with those statements
 		for (int i = 0; i < testplanRow.size(); i++) {
-			JsonObject param = testplanRow.getJsonObject(i);
+			ObjectNode param = (ObjectNode) testplanRow.get(i);
 			this.currTestPlanRowParamIndex = i;
-            String paramType = param.getString("type");
+            String paramType = param.get("type").asText();
             logger.info("Synthesizing statement object for type: " + paramType);
 
             // process different types (array, collection, map, scalar) and update loop index
@@ -898,7 +905,7 @@ public class TestSequenceExtender {
                 if (randoopType.isArray()) {
                     logger.info("Creating array instantiation statement");
                     // process array type parameter based on types of objects to be added to array
-                    seq = processArrayType(paramType, param.getJsonObject("list_types"), seq);
+                    seq = processArrayType(paramType, (ObjectNode) param.get("list_types"), seq);
                 }
 
                 // process collection creation
@@ -914,7 +921,7 @@ public class TestSequenceExtender {
                     ReferenceType typeArg = typeArgs.isEmpty() ? null : typeArgs.get(0);
 
                     // process collection type parameter and extend sequence
-                    seq = processCollectionType(paramType, param.getJsonObject("list_types"), typeArg,
+                    seq = processCollectionType(paramType, (ObjectNode) param.get("list_types"), typeArg,
                         true, seq);
                 }
 
@@ -937,8 +944,8 @@ public class TestSequenceExtender {
                     // process map type parameter and extend sequence; the next element
                     // of the row gives the types of objects to be added to the map
                     seq = processMapType(paramType, keyTypeArg, valTypeArg,
-                        param.getJsonObject("key_types"),
-                        param.getJsonObject("value_types"), true, seq);
+                        (ObjectNode) param.get("key_types"),
+                        (ObjectNode) param.get("value_types"), true, seq);
                 }
 
                 // default: process scalar type instantiation
@@ -1082,15 +1089,12 @@ public class TestSequenceExtender {
 	 * @return Extended sequence
 	 * @throws ClassNotFoundException
 	 */
-	private Sequence processArrayType(String arrType, JsonObject arrElemSpec, Sequence seq)
+	private Sequence processArrayType(String arrType, ObjectNode arrElemSpec, Sequence seq)
         throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
 		// build list of types whose instances are to be added to the array
-        List<String> elemTypes = arrElemSpec.getJsonArray("types").getValuesAs(JsonString.class)
-            .stream()
-            .map(JsonString::getString)
-            .collect(Collectors.toList());
-
+        List<String> elemTypes = mapper.convertValue(arrElemSpec.get("types"), new TypeReference<List<String>>(){}); 
+        		
 		// list to hold uncovered array element types
 		List<String> uncovElemTypes = new ArrayList<>();
 
@@ -1184,7 +1188,7 @@ public class TestSequenceExtender {
 	 * @throws NoSuchMethodException
 	 * @throws ClassNotFoundException
 	 */
-	private Sequence processCollectionType(String colType, JsonObject colElemSpec,
+	private Sequence processCollectionType(String colType, ObjectNode colElemSpec,
                                            ReferenceType typeArgument, boolean isTgtMethodParm,
                                            Sequence seq)
         throws NoSuchMethodException, ClassNotFoundException, OperationParseException {
@@ -1204,10 +1208,7 @@ public class TestSequenceExtender {
 		int colInstVarIdx = seq.getLastVariable().getDeclIndex();
 
 		// build list of types whose instances are to be added to the collection
-        List<String> elemTypes = colElemSpec.getJsonArray("types").getValuesAs(JsonString.class)
-            .stream()
-            .map(JsonString::getString)
-            .collect(Collectors.toList());
+        List<String> elemTypes = mapper.convertValue(colElemSpec.get("types"), new TypeReference<List<String>>(){});
 
 		// list to hold uncovered collection element types
 		List<String> uncovElemTypes = new ArrayList<>();
@@ -1267,7 +1268,7 @@ public class TestSequenceExtender {
      * @throws ClassNotFoundException
      */
     private Sequence processMapType(String mapType, ReferenceType keyTypeArgument, ReferenceType valueTypeArgument,
-                                    JsonObject keyElemSpec, JsonObject valueElemSpec, boolean isTgtMethodParam,
+                                    ObjectNode keyElemSpec, ObjectNode valueElemSpec, boolean isTgtMethodParam,
                                     Sequence seq)
         throws NoSuchMethodException, ClassNotFoundException, OperationParseException {
 
@@ -1322,24 +1323,16 @@ public class TestSequenceExtender {
      * @return
      * @throws ClassNotFoundException
      */
-    private Sequence extendSequenceWithMapElements(JsonObject keyElemSpec, JsonObject valueElemSpec,
+    private Sequence extendSequenceWithMapElements(ObjectNode keyElemSpec, ObjectNode valueElemSpec,
                                                    Sequence seq, Method mapPutMethod,
                                                    int mapInstVarIndex, Substitution mapSubst,
                                                    List<String> uncovKeyTypes, List<String> uncovValueTypes)
         throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
         // build lists of types for map keys and map values
-        List<String> keyTypes = keyElemSpec.getJsonArray("types")
-            .getValuesAs(JsonString.class)
-            .stream()
-            .map(JsonString::getString)
-            .collect(Collectors.toList());
-        List<String> valueTypes = valueElemSpec.getJsonArray("types")
-            .getValuesAs(JsonString.class)
-            .stream()
-            .map(JsonString::getString)
-            .collect(Collectors.toList());
-
+        List<String> keyTypes = mapper.convertValue(keyElemSpec.get("types"), new TypeReference<List<String>>(){}); 
+        List<String> valueTypes = mapper.convertValue(valueElemSpec.get("types"), new TypeReference<List<String>>(){}); 
+        		
         // create sequence for instantiating each key type
         List<Pair<Sequence, Integer>> keySequences = new ArrayList<>();
         for (String keyType : keyTypes) {
@@ -1411,7 +1404,7 @@ public class TestSequenceExtender {
      * @throws ClassNotFoundException
      * @throws NoSuchMethodException
      */
-    private Pair<Sequence, Integer> processElement(String elemType, JsonObject elemSpec, Sequence seq)
+    private Pair<Sequence, Integer> processElement(String elemType, ObjectNode elemSpec, Sequence seq)
         throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
         String typeName = elemType;
         if (elemType.contains("<")) {
@@ -1441,7 +1434,7 @@ public class TestSequenceExtender {
             }
 
             // extend sequence with statements for creating and adding elements to collection
-            seq = processCollectionType(colType, elemSpec.getJsonObject("list_types"), typeArgument,
+            seq = processCollectionType(colType, (ObjectNode) elemSpec.get("list_types"), typeArgument,
                 false, seq);
             return new Pair<>(seq, inputSeqSize);
         }
@@ -1470,8 +1463,8 @@ public class TestSequenceExtender {
 
             // extend sequence with statements for creating and adding elements to map
             seq = processMapType(mapType, keyTypeArgument, valueTypeArgument,
-                elemSpec.getJsonObject("key_types"),
-                elemSpec.getJsonObject("value_types"), false, seq);
+                (ObjectNode) elemSpec.get("key_types"),
+                (ObjectNode) elemSpec.get("value_types"), false, seq);
             return new Pair<>(seq, inputSeqSize);
         }
 
@@ -1481,7 +1474,7 @@ public class TestSequenceExtender {
             logger.info("Processing nested array");
 
             // extend sequence with statements for creating and adding elements to array
-            seq = processArrayType(elemType, elemSpec.getJsonObject("list_types"), seq);
+            seq = processArrayType(elemType, (ObjectNode) elemSpec.get("list_types"), seq);
             return new Pair<>(seq, seq.size()-1);
         }
 
@@ -1501,7 +1494,7 @@ public class TestSequenceExtender {
 	 * @return Map from test plan row to coverage constant string
 	 */
 	private Map<String, Constants.TestPlanRowCoverage> getProxyMethodCovInfo(String partName, String clsName,
-			String methodSig, JsonArray[] testPlanRows) {
+			String methodSig, ArrayNode[] testPlanRows) {
 		if (!this.coverageInfo.containsKey(partName)) {
 			this.coverageInfo.put(partName, new HashMap<>());
 		}
@@ -1594,27 +1587,24 @@ public class TestSequenceExtender {
 		if (isTgtMethodParam) {
 			// for non array/collection type, iterate over test plan rows and get the specification
 			// for the current paramater
-			for (JsonArray testPlanRow : currTestPlanRows) {
-				JsonObject param = testPlanRow.getJsonObject(currTestPlanRowParamIndex);
-				for (String key : param.keySet()) {
+			for (ArrayNode testPlanRow : currTestPlanRows) {
+				ObjectNode param = (ObjectNode) testPlanRow.get(currTestPlanRowParamIndex);
+				Iterator<String> iter = param.fieldNames();
+				while (iter.hasNext()) {
+					String key = iter.next();
 					// skip non-param keys
 					if (key.startsWith("attr_")) {
-						otherTypesForParam.add(param.getString(key));
-						break;
+						otherTypesForParam.add(param.get(key).asText());
+						break; 
 					}
 				}
 			}
 		} else {
 			// for array/collection type, get all types in specification of the current test plan row
-			JsonArray testPlanRow = currTestPlanRows[currTestPlanRowIndex];
-			JsonArray colElemSpec = testPlanRow.getJsonObject(currTestPlanRowParamIndex)
-                .getJsonArray("list_types");
-			otherTypesForParam.addAll(
-                colElemSpec.getValuesAs(JsonString.class)
-                    .stream()
-                    .map(JsonString::getString)
-                    .collect(Collectors.toList())
-            );
+			ArrayNode testPlanRow = currTestPlanRows[currTestPlanRowIndex];
+			ArrayNode colElemSpec = (ArrayNode) testPlanRow.get(currTestPlanRowParamIndex)
+                .get("list_types");
+			otherTypesForParam.addAll(mapper.convertValue(colElemSpec, new TypeReference<List<String>>(){}));
 		}
 		otherTypesForParam.remove(typeName);
 
@@ -1628,14 +1618,6 @@ public class TestSequenceExtender {
 
 		// return the constructor sequences for a remaining subtype
 		return this.sequencePool.classTestSeqPool.get(subtypesWithCtorSeqs.first());
-	}
-
-
-	private JsonObject readJsonFile(File file) throws FileNotFoundException {
-		InputStream fis = new FileInputStream(file);
-		try (JsonReader reader = Json.createReader(fis)) {
-			return reader.readObject();
-		}
 	}
 
 	/**

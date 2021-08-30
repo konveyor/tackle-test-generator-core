@@ -9,11 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import edu.uta.cse.fireeye.common.Parameter;
 import edu.uta.cse.fireeye.common.SUT;
@@ -22,14 +19,14 @@ import edu.uta.cse.fireeye.common.TestSet;
 class ModelJsonConvertor {
 	
 	
-	static JsonObject addModel(SUT methodModel, TestSet testPlan, JavaMethodModel method) 
+	static ObjectNode addModel(SUT methodModel, TestSet testPlan, JavaMethodModel method) 
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-		JsonObjectBuilder modelObjectBuilder = Json.createObjectBuilder();
+		ObjectNode modelNode = CTDTestPlanGenerator.mapper.createObjectNode();
 
-		modelObjectBuilder.add("formatted_signature", method.getFormattedSignature());
+		modelNode.put("formatted_signature", method.getFormattedSignature());
 
-		JsonArrayBuilder attrList = Json.createArrayBuilder();
+		ArrayNode attrList = CTDTestPlanGenerator.mapper.createArrayNode();
 
 		int[] refersTo = new int[methodModel.getNumOfParams()];
 
@@ -45,7 +42,7 @@ class ModelJsonConvertor {
 
 		for (Parameter attr : methodModel.getParameters()) {
 
-			JsonObjectBuilder attrObject = Json.createObjectBuilder();
+			ObjectNode attrNode = CTDTestPlanGenerator.mapper.createObjectNode();
 
 			String  attrName = attr.getName();
 
@@ -55,30 +52,30 @@ class ModelJsonConvertor {
 				setReferredAttr(attrName, attrIndex, attrNames, refersTo);
 			}
 
-			attrObject.add("attribute_name", attrName);
+			attrNode.put("attribute_name", attrName);
 
-			JsonArrayBuilder valList = Json.createArrayBuilder();
+			ArrayNode valList = CTDTestPlanGenerator.mapper.createArrayNode();
 
 			int i=0;
 			for (String val : attr.getValues()) {
 				valList.add(getValObject("val_"+(i++), val));
 			}
 
-			attrObject.add("values", valList.build());
+			attrNode.set("values", valList);
 
-			attrList.add(attrObject.build());
+			attrList.add(attrNode);
 
 			attrIndex++;
 		}
 
-		modelObjectBuilder.add("attributes", attrList.build());
+		modelNode.set("attributes", attrList);
 
 
 		/* Compute components of related attributes */
 
 		Map<Integer, List<Integer>> relatedAttributes = computeRelatedComponents(refersTo);
 
-		JsonArrayBuilder testsList = Json.createArrayBuilder();
+		ArrayNode testsList = CTDTestPlanGenerator.mapper.createArrayNode();
 
 		/* In ACTS, the order of parameters in the test plan may be different from their order in the model, because
 		 * they are sorted according to their domain size. Hence we need to sync the two orders */
@@ -89,7 +86,7 @@ class ModelJsonConvertor {
 
 		for (int[] test : testPlanRows) {
 
-			JsonArrayBuilder testArray = Json.createArrayBuilder();
+			ArrayNode testArray = CTDTestPlanGenerator.mapper.createArrayNode();
 
 			for (int i=0; i < methodModel.getNumOfParams(); i++) {
 
@@ -104,19 +101,19 @@ class ModelJsonConvertor {
 
 					// this is a collection attribute - capture all related attributes and values that relate to this single collection
 
-					JsonObjectBuilder attrValObject = Json.createObjectBuilder();
-					getValueRecursive(methodModel, attrValObject, test, i, combinedAttrs, refersTo, attrNames, paramToTestLoc);
+					ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
+					getValueRecursive(methodModel, attrValNode, test, i, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 
-					testArray.add(attrValObject.build());
+					testArray.add(attrValNode);
 				}
 			}
 
-			testsList.add(testArray.build());
+			testsList.add(testArray);
 		}
 
-		modelObjectBuilder.add("test_plan", testsList.build());
+		modelNode.set("test_plan", testsList);
 		
-		return modelObjectBuilder.build();
+		return modelNode;
 	}
 
 	private static Map<Parameter, Integer> getParamsTestLocations(ArrayList<Parameter> parameters,
@@ -140,7 +137,7 @@ class ModelJsonConvertor {
 	}
 
 
-	private static void getValueRecursive(SUT methodModel, JsonObjectBuilder attrValObject, int[] test, int indexToAdd, List<Integer> combinedAttrs,
+	private static void getValueRecursive(SUT methodModel, ObjectNode attrValNode, int[] test, int indexToAdd, List<Integer> combinedAttrs,
 			int[] refersTo, List<String> attrNames, Map<Parameter, Integer> paramToTestLoc) {
 
 		String attrName = attrNames.get(indexToAdd);
@@ -148,23 +145,23 @@ class ModelJsonConvertor {
 
 		if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
 
-			JsonObjectBuilder collectObject = Json.createObjectBuilder();
-			collectObject.add("types", getArrayFromVal(valueToAdd));
+			ObjectNode collectNode = CTDTestPlanGenerator.mapper.createObjectNode();
+			collectNode.set("types", getArrayFromVal(valueToAdd));
 
 			for (int ind : combinedAttrs) {
 				if (refersTo[ind] == indexToAdd) {
-					getValueRecursive(methodModel, collectObject, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
+					getValueRecursive(methodModel, collectNode, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 				}
 			}
 
-			attrValObject.add(attrName.substring(attrName.lastIndexOf('_')+1)+"_types", collectObject.build());
+			attrValNode.set(attrName.substring(attrName.lastIndexOf('_')+1)+"_types", collectNode);
 
 		} else {
 			String actualVal = (valueToAdd.contains(" ")? valueToAdd.substring(0, valueToAdd.indexOf(" ")) : valueToAdd);
-			attrValObject.add("type", actualVal);
+			attrValNode.put("type", actualVal);
 			for (int ind : combinedAttrs) {
 				if (refersTo[ind] == indexToAdd) {
-					getValueRecursive(methodModel, attrValObject, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
+					getValueRecursive(methodModel, attrValNode, test, ind, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 				}
 			}
 		}
@@ -228,30 +225,31 @@ class ModelJsonConvertor {
 	}
 
 
-	private static JsonObject getSingleValTestObject(String val) {
-		JsonObjectBuilder attrValObject = Json.createObjectBuilder();
+	private static ObjectNode getSingleValTestObject(String val) {
+		ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
 
 		String actualVal = (val.contains(" ")? val.substring(0, val.indexOf(" ")) : val);
 
-		attrValObject.add("type", actualVal);
+		attrValNode.put("type", actualVal);
 
-		return attrValObject.build();
+		return attrValNode;
 	}
 
-	private static JsonArray getArrayFromVal(String listVal) {
+	private static ArrayNode getArrayFromVal(String listVal) {
 		String[] listVals = listVal.split(" ");
-
-		JsonArrayBuilder listBuilder = Json.createArrayBuilder();
+		
+		ArrayNode listNode = CTDTestPlanGenerator.mapper.createArrayNode();
 
 		for (String lVal : listVals) {
-			listBuilder.add(lVal);
+			listNode.add(lVal);
 		}
 
-		return listBuilder.build();
+		return listNode;
 	}
 
-	private static JsonObject getValObject(String attr, String val) {
-		JsonObjectBuilder attrValObject = Json.createObjectBuilder();
+	private static ObjectNode getValObject(String attr, String val) {
+		
+		ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
 		String[] vals = val.split(" ");
 		List<String> filteredVals = new ArrayList<String>();
 
@@ -262,18 +260,18 @@ class ModelJsonConvertor {
 		}
 
 		if (filteredVals.size() == 1) {
-			attrValObject.add(attr, filteredVals.get(0));
+			attrValNode.put(attr, filteredVals.get(0));
 		} else if (filteredVals.size() == 2 && (filteredVals.get(1).endsWith("local") || filteredVals.get(1).endsWith("remote"))) {
-			attrValObject.add(attr, filteredVals.get(0));
-			attrValObject.add("locality_status:", filteredVals.get(1));
+			attrValNode.put(attr, filteredVals.get(0));
+			attrValNode.put("locality_status:", filteredVals.get(1));
 		} else { // a collection value
-			JsonArrayBuilder valList = Json.createArrayBuilder();
+			ArrayNode valList = CTDTestPlanGenerator.mapper.createArrayNode();
 			for (String innerVal : filteredVals) {
 				valList.add(innerVal);
 			}
-			attrValObject.add(attr, valList.build());
+			attrValNode.set(attr, valList);
 		}
-		return attrValObject.build();
+		return attrValNode;
 	}
 
 }

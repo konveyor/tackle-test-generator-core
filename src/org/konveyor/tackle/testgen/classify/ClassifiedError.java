@@ -13,8 +13,15 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.classify;
 
-import javax.json.JsonObject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
 public class ClassifiedError {
@@ -29,7 +36,7 @@ public class ClassifiedError {
 
     public static final String CAUSED_BY = "Caused by:";
 
-    ClassifiedError(String message, String type, String output, String semanticTag, JsonObject stackTrace) {
+    ClassifiedError(String message, String type, String output, String semanticTag, ObjectNode stackTrace) {
         this.message = message;
         this.type = type;
         this.output = output;
@@ -122,13 +129,13 @@ public class ClassifiedError {
         private final String rootCause;
         private final String direct;
 
-        StackTracePattern(JsonObject stackTrace) {
+        StackTracePattern(ObjectNode stackTrace) {
             if (stackTrace!=null) {
-                this.text = stackTrace.getString("text");
-                String jsonPosition = stackTrace.getString("position");
+                this.text = stackTrace.get("text").asText();
+                String jsonPosition = stackTrace.get("position").asText();
                 this.position = jsonPosition.isEmpty() ? -1 : Integer.parseInt(jsonPosition);
-                this.rootCause = stackTrace.getString("rootCause");
-                this.direct = stackTrace.getString("direct");
+                this.rootCause = stackTrace.get("rootCause").asText();
+                this.direct = stackTrace.get("direct").asText();
             }
             else {
                 this.text = "";

@@ -13,17 +13,16 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.classify;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.json.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public class ClassificationTest {
 
@@ -54,52 +53,45 @@ public class ClassificationTest {
 
         // assert that output file for classification is created
         assertTrue(new File(OUTPUT_PATH).exists());
+        
+        ArrayNode resultArray = (ArrayNode) ClassifyErrors.mapper.readTree(new File(OUTPUT_PATH)); 
+        ArrayNode standardArray = (ArrayNode) ClassifyErrors.mapper.readTree(new File(COMPARE_OUTPUT_PATH)); 
 
-        InputStream fis = new FileInputStream(OUTPUT_PATH);
-        JsonReader reader = Json.createReader(fis);
-        JsonArray resultObject = reader.readArray();
-        reader.close();
-
-        fis = new FileInputStream(COMPARE_OUTPUT_PATH);
-        reader = Json.createReader(fis);
-        JsonArray standardObject = reader.readArray();
-        reader.close();
-
-        assertEquals(standardObject.size(), resultObject.size());
-        for (int objectInd=0; objectInd<resultObject.size(); objectInd++) {
-            assertEquals(standardObject.getJsonObject(objectInd).getString(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG),
-                resultObject.getJsonObject(objectInd).getString(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG));
-            JsonArray typeResult = resultObject.getJsonObject(objectInd).getJsonArray(ClassifyErrors.OUTPUT_ERRORS_TAG);
-            JsonArray typeStandard = standardObject.getJsonObject(objectInd).getJsonArray(ClassifyErrors.OUTPUT_ERRORS_TAG);
+        assertEquals(standardArray.size(), resultArray.size());
+        for (int objectInd=0; objectInd<resultArray.size(); objectInd++) {
+            assertEquals(standardArray.get(objectInd).get(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG).asText(),
+            		resultArray.get(objectInd).get(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG).asText());
+            ArrayNode typeResult = (ArrayNode) resultArray.get(objectInd).get(ClassifyErrors.OUTPUT_ERRORS_TAG);
+            ArrayNode typeStandard = (ArrayNode) standardArray.get(objectInd).get(ClassifyErrors.OUTPUT_ERRORS_TAG);
             assertEquals(typeStandard.size(), typeResult.size());
             for (int typeInd=0; typeInd<typeResult.size(); typeInd++) {
-                assertEquals(typeStandard.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_PATTERN_TAG),
-                    typeResult.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_PATTERN_TAG));
-                assertEquals(typeStandard.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_TYPE_TAG),
-                    typeResult.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_TYPE_TAG));
-                assertEquals(typeStandard.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_SEMANTIC_TAG),
-                    typeResult.getJsonObject(typeInd).getString(ClassifyErrors.INPUT_SEMANTIC_TAG));
-                JsonArray messageResult = typeResult.getJsonObject(typeInd).getJsonArray(ClassifyErrors.INPUT_MESSAGE_TAG);
-                JsonArray messageStandard = typeStandard.getJsonObject(typeInd).getJsonArray(ClassifyErrors.INPUT_MESSAGE_TAG);
+                assertEquals(typeStandard.get(typeInd).get(ClassifyErrors.INPUT_PATTERN_TAG).asText(),
+                    typeResult.get(typeInd).get(ClassifyErrors.INPUT_PATTERN_TAG).asText());
+                assertEquals(typeStandard.get(typeInd).get(ClassifyErrors.INPUT_TYPE_TAG).asText(),
+                    typeResult.get(typeInd).get(ClassifyErrors.INPUT_TYPE_TAG).asText());
+                assertEquals(typeStandard.get(typeInd).get(ClassifyErrors.INPUT_SEMANTIC_TAG).asText(),
+                    typeResult.get(typeInd).get(ClassifyErrors.INPUT_SEMANTIC_TAG).asText());
+                ArrayNode messageResult = (ArrayNode) typeResult.get(typeInd).get(ClassifyErrors.INPUT_MESSAGE_TAG);
+                ArrayNode messageStandard = (ArrayNode) typeStandard.get(typeInd).get(ClassifyErrors.INPUT_MESSAGE_TAG);
                 assertEquals(messageStandard.size(), messageResult.size());
                 for (int messageInd = 0; messageInd < messageResult.size(); messageInd++) {
                     assertEquals(messageStandard.get(messageInd), messageResult.get(messageInd));
                 }
 
-                JsonArray partitionResult = typeResult.getJsonObject(typeInd).getJsonArray(ClassifyErrors.OUTPUT_PARTITIONS_TAG);
-                JsonArray partitionStandard = typeStandard.getJsonObject(typeInd).getJsonArray(ClassifyErrors.OUTPUT_PARTITIONS_TAG);
+                ArrayNode partitionResult = (ArrayNode) typeResult.get(typeInd).get(ClassifyErrors.OUTPUT_PARTITIONS_TAG);
+                ArrayNode partitionStandard = (ArrayNode) typeStandard.get(typeInd).get(ClassifyErrors.OUTPUT_PARTITIONS_TAG);
                 assertEquals(partitionStandard.size(), partitionResult.size());
                 for (int partitionInd = 0; partitionInd < partitionResult.size(); partitionInd++) {
-                    assertEquals(partitionStandard.getJsonObject(partitionInd).getString(ClassifyErrors.OUTPUT_PARTITION_TAG),
-                        partitionResult.getJsonObject(partitionInd).getString(ClassifyErrors.OUTPUT_PARTITION_TAG));
-                    JsonArray testFilesResult = partitionResult.getJsonObject(partitionInd).getJsonArray(ClassifyErrors.OUTPUT_TEST_CLASSES_TAG);
-                    JsonArray testFilesStandard = partitionStandard.getJsonObject(partitionInd).getJsonArray(ClassifyErrors.OUTPUT_TEST_CLASSES_TAG);
+                    assertEquals(partitionStandard.get(partitionInd).get(ClassifyErrors.OUTPUT_PARTITION_TAG).asText(),
+                        partitionResult.get(partitionInd).get(ClassifyErrors.OUTPUT_PARTITION_TAG).asText());
+                    ArrayNode testFilesResult = (ArrayNode) partitionResult.get(partitionInd).get(ClassifyErrors.OUTPUT_TEST_CLASSES_TAG);
+                    ArrayNode testFilesStandard = (ArrayNode) partitionStandard.get(partitionInd).get(ClassifyErrors.OUTPUT_TEST_CLASSES_TAG);
                     assertEquals(testFilesStandard.size(), testFilesResult.size());
                     for (int testFileInd = 0; testFileInd < testFilesResult.size(); testFileInd++) {
-                        assertEquals(testFilesStandard.getJsonObject(testFileInd).getString(ClassifyErrors.OUTPUT_TEST_CLASS_TAG),
-                            testFilesResult.getJsonObject(testFileInd).getString(ClassifyErrors.OUTPUT_TEST_CLASS_TAG));
-                        JsonArray testIdsResult = testFilesResult.getJsonObject(testFileInd).getJsonArray(ClassifyErrors.OUTPUT_TEST_METHODS_TAG);
-                        JsonArray testIdsStandard = testFilesStandard.getJsonObject(testFileInd).getJsonArray(ClassifyErrors.OUTPUT_TEST_METHODS_TAG);
+                        assertEquals(testFilesStandard.get(testFileInd).get(ClassifyErrors.OUTPUT_TEST_CLASS_TAG).asText(),
+                            testFilesResult.get(testFileInd).get(ClassifyErrors.OUTPUT_TEST_CLASS_TAG).asText());
+                        ArrayNode testIdsResult = (ArrayNode) testFilesResult.get(testFileInd).get(ClassifyErrors.OUTPUT_TEST_METHODS_TAG);
+                        ArrayNode testIdsStandard = (ArrayNode) testFilesStandard.get(testFileInd).get(ClassifyErrors.OUTPUT_TEST_METHODS_TAG);
                         assertEquals(testIdsStandard.size(), testIdsResult.size());
                         for (int testIdInd = 0; testIdInd < testIdsResult.size(); testIdInd++) {
                             assertEquals(testIdsStandard.get(testIdInd), testIdsResult.get(testIdInd));

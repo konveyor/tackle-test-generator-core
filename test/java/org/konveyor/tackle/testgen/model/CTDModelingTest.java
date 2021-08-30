@@ -17,20 +17,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Map;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
+import java.util.HashSet;
 
 import org.apache.commons.io.FileUtils;
+import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.util.Constants;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CTDModelingTest {
 
@@ -39,178 +36,160 @@ public class CTDModelingTest {
 	 * Delete existing modeling output file
 	 */
 	public void cleanUp() {
-		FileUtils.deleteQuietly(new File("DayTrader_"+ Constants.CTD_OUTFILE_SUFFIX));
+		FileUtils.deleteQuietly(new File("DayTrader_" + Constants.CTD_OUTFILE_SUFFIX));
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-				null, null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null,
+				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
+				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2,
+				false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is  created
+		// assert that output file for CTD modeling is created
 
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
 
 		assertTrue(new File(outFilename).exists());
 
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
+		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
 
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_classlist.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
+		JsonNode standardNode = CTDTestPlanGenerator.mapper
+				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
 
-		compareModels(resultObject, standardObject);
+		compareModels(resultNode, standardNode);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				null, null, null, null, null, 
-				"test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null, null, null, null,
+				"test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1,
+				null, null, null, null);
 		analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is  created
+		// assert that output file for CTD modeling is created
 
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
 
 		assertTrue(new File(outFilename).exists());
 
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
+		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
 
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
+		JsonNode standardNode = CTDTestPlanGenerator.mapper
+				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
 
-		compareModels(resultObject, standardObject);
+		compareModels(resultNode, standardNode);
 	}
-	
-	
+
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", 
-				null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
+				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
+				null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false,
+				1, null, null, null, null);
 		analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is  created
+		// assert that output file for CTD modeling is created
 
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
 
 		assertTrue(new File(outFilename).exists());
 
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
+		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
 
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
+		JsonNode standardNode = CTDTestPlanGenerator.mapper
+				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
 
-		compareModels(resultObject, standardObject);
+		compareModels(resultNode, standardNode);
 	}
-	
-	
+
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader",
-				null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*", 
-				null, null, "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1, null, null, null, null);
+		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
+				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
+				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2,
+				false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is  created
+		// assert that output file for CTD modeling is created
 
-		String  outFilename = "DayTrader_"+Constants.CTD_OUTFILE_SUFFIX;
+		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
 
 		assertTrue(new File(outFilename).exists());
 
-		InputStream fis = new FileInputStream(outFilename);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject resultObject = reader.readObject();
-		reader.close();
+		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
 
-		fis = new FileInputStream("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
-		reader = Json.createReader(fis);
-		JsonObject standardObject = reader.readObject();
-		reader.close();
+		JsonNode standardNode = CTDTestPlanGenerator.mapper
+				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
 
-		compareModels(resultObject, standardObject);
+		compareModels(resultNode, standardNode);
 	}
 
-	/* We cannot compare the objects in a straightforward way because CTD result might differ
-	 * between different JVMs. Hence we just compare the models to each other.
+	/*
+	 * We cannot compare the objects in a straightforward way because CTD result
+	 * might differ between different JVMs. Hence we just compare the models to each
+	 * other.
 	 */
 
-	private void compareModels(JsonObject resultObject, JsonObject standardObject) {
-		JsonObject resultObjects = resultObject.getJsonObject("models_and_test_plans");
-		JsonObject standardObjects = standardObject.getJsonObject("models_and_test_plans");
+	@SuppressWarnings("unchecked")
+	private void compareModels(JsonNode resultObject, JsonNode standardObject) {
+		ObjectNode resultObjects = (ObjectNode) resultObject.get("models_and_test_plans");
+		ObjectNode standardObjects = (ObjectNode) standardObject.get("models_and_test_plans");
 
-		assertEquals(standardObjects.keySet(), resultObjects.keySet());
+		assertEquals(new HashSet<String>(IteratorUtils.toList(standardObjects.fieldNames())),
+				new HashSet<String>(IteratorUtils.toList(resultObjects.fieldNames())));
 
-		for (Map.Entry<String, JsonValue> entry : resultObjects.entrySet()) {
-			String partition = entry.getKey();
-			JsonObject classesObject = (JsonObject) entry.getValue();
+		resultObjects.fieldNames().forEachRemaining(partition -> {
 
-			JsonObject standardClassesObject = (JsonObject) standardObjects.getJsonObject(partition);
+			ObjectNode classesObject = (ObjectNode) resultObjects.get(partition);
+
+			ObjectNode standardClassesObject = (ObjectNode) standardObjects.get(partition);
 
 			assert (standardClassesObject != null);
 
-			assertEquals(standardClassesObject.keySet(), classesObject.keySet());
+			assertEquals(new HashSet<String>(IteratorUtils.toList(standardClassesObject.fieldNames())),
+					new HashSet<String>(IteratorUtils.toList(classesObject.fieldNames())));
 
-			for (Map.Entry<String, JsonValue> classEntry : classesObject.entrySet()) {
+			classesObject.fieldNames().forEachRemaining(className -> {
 
-				String className = classEntry.getKey();
-				JsonObject methodsObject = (JsonObject) classEntry.getValue();
+				ObjectNode methodsObject = (ObjectNode) classesObject.get(className);
 
-				JsonObject standardMethodsObject = (JsonObject) standardClassesObject.getJsonObject(className);
+				ObjectNode standardMethodsObject = (ObjectNode) standardClassesObject.get(className);
 
-				assert(standardMethodsObject != null);
+				assert (standardMethodsObject != null);
 
-				assertEquals(standardMethodsObject.keySet(), methodsObject.keySet());
+				assertEquals(new HashSet<String>(IteratorUtils.toList(standardMethodsObject.fieldNames())),
+						new HashSet<String>(IteratorUtils.toList(methodsObject.fieldNames())));
 
-				for (Map.Entry<String, JsonValue> methodEntry : methodsObject.entrySet()) {
+				methodsObject.fieldNames().forEachRemaining(methodName -> {
 
-					String methodName = methodEntry.getKey();
+					ObjectNode methodObject = (ObjectNode) methodsObject.get(methodName);
 
-					JsonObject methodObject = (JsonObject) methodEntry.getValue();
-
-					JsonObject standardMethodObject = (JsonObject) standardMethodsObject.getJsonObject(methodName);
+					ObjectNode standardMethodObject = (ObjectNode) standardMethodsObject.get(methodName);
 
 					assert(standardMethodObject != null);
 
 					assertEquals(standardMethodObject.get("formatted_signature"),
 							methodObject.get("formatted_signature"));
 
-					JsonArray attrsArray = methodObject.getJsonArray("attributes");
-					JsonArray standardAttrsArray = standardMethodObject.getJsonArray("attributes");
+					ArrayNode attrsArray = (ArrayNode) methodObject.get("attributes");
+					ArrayNode standardAttrsArray = (ArrayNode) standardMethodObject.get("attributes");
 
 					assertEquals(standardAttrsArray.size(), attrsArray.size());
 
 					for (int k = 0; k < attrsArray.size(); k++) {
-						JsonObject attrObject = attrsArray.getJsonObject(k);
-						JsonArray valuesArray = attrObject.getJsonArray("values");
-						JsonObject standardAttrObject = standardAttrsArray.getJsonObject(k);
-						JsonArray standardValuesArray = standardAttrObject.getJsonArray("values");
+						ObjectNode attrObject = (ObjectNode) attrsArray.get(k);
+						ArrayNode valuesArray = (ArrayNode) attrObject.get("values");
+						ObjectNode standardAttrObject = (ObjectNode) standardAttrsArray.get(k);
+						ArrayNode standardValuesArray = (ArrayNode) standardAttrObject.get("values");
 
 						assertEquals(standardValuesArray.size(), valuesArray.size());
 					}
-				}
-			}
-		}
+
+				});
+
+			});
+		});
 	}
 }

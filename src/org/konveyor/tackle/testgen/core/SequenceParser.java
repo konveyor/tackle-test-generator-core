@@ -398,7 +398,6 @@ public class SequenceParser {
         StringBuilder randoopStatement = new StringBuilder(RANDOOP_METHOD_CALL + " : ");
 
         ResolvedMethodDeclaration methodDec = methodCall.resolve();
-        String qualSig = methodDec.getQualifiedSignature();
         randoopStatement.append(methodDec.getQualifiedSignature()
             .replaceAll("<E>", "")
             .replaceAll("<T>", "") + " : ");

@@ -11,33 +11,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package org.konveyor.tackle.testgen.rta;
+package org.konveyor.tackle.testgen.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-
 import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import soot.Body;
 import soot.Scene;
@@ -181,16 +176,8 @@ public class RapidTypeAnalysis {
 	//	return  ! appClasses.contains(theClass.getName()) && ! Serializable.class.isAssignableFrom(theClass);
 	//}
 
-    public static void toJson(String appName, Set<String> types) throws FileNotFoundException {
-    	JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-		JsonWriter writer = writerFactory.createWriter(new FileOutputStream(new File(appName+"_"+ Constants.RTA_OUTFILE_SUFFIX)));
-
-		JsonArrayBuilder typeArray = Json.createArrayBuilder();
-
-		for (String type : types) {
-			typeArray.add(type);
-		}
-
-		writer.writeArray(typeArray.build());
+    public static void toJson(String appName, Set<String> types) throws JsonGenerationException, JsonMappingException, IOException {
+    	
+    	CTDTestPlanGenerator.mapper.writeValue(new File(appName+"_"+ Constants.RTA_OUTFILE_SUFFIX), types);
     }
 }
