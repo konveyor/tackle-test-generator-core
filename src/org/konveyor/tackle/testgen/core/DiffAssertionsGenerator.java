@@ -13,24 +13,43 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.utils.ClassUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor.SequenceInfo;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor.SequenceResults;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.cli.*;
 
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Logger;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.utils.ClassUtils;
 
 /**
  * Add to a test sequence assertions capturing its runtime recorded objects and
@@ -54,6 +73,8 @@ public class DiffAssertionsGenerator {
 	private Map<String, SequenceResults> id2Results = new HashMap<String, SequenceResults>();
 
 	private final String applicationName;
+	
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public DiffAssertionsGenerator(String appName, File seqFile, File resFile) throws ClassNotFoundException, IllegalArgumentException, SecurityException, IOException {
 
@@ -76,42 +97,30 @@ public class DiffAssertionsGenerator {
 
 	static final int ASSERT_NESTING_LEVEL = 2;
 
-	private void readResults(File resFile) throws FileNotFoundException, ClassNotFoundException {
+	private void readResults(File resFile) throws ClassNotFoundException, JsonProcessingException, IOException {
 
-		JsonReader reader = null;
-		JsonObject mainObject = null;
+		ObjectNode mainObject = (ObjectNode) mapper.readTree(resFile);
+		
+		mainObject.fieldNames().forEachRemaining(seqId -> {
 
-		try {
+			ObjectNode content = (ObjectNode) mainObject.get(seqId);
 
-			InputStream fis = new FileInputStream(resFile);
-			reader = Json.createReader(fis);
-			mainObject = reader.readObject();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
-
-		for (Map.Entry<String, JsonValue> entry : mainObject.entrySet()) {
-
-			String seqId = entry.getKey();
-
-			JsonObject content = (JsonObject) entry.getValue();
-
-
-
-			JsonArray originalIndices = content.getJsonArray("original_sequence_indices");
+			ArrayNode originalIndices = (ArrayNode) content.get("original_sequence_indices");
 
 			Set<Integer> indices = new HashSet<Integer>();
 
 			for (int i = 0; i < originalIndices.size(); i++) {
-				indices.add(originalIndices.getInt(i));
+				indices.add(originalIndices.get(i).asInt());
 			}
 
-			SequenceResults results = new SequenceResults(content, indices);
-
-			id2Results.put(seqId, results);
-		}
+			SequenceResults results;
+			try {
+				results = new SequenceResults(content, indices);
+				id2Results.put(seqId, results);
+			} catch (ClassNotFoundException e) {
+				logger.warning("ClassNotFoundException: "+e.getMessage());
+			}
+		});
 
 	}
 
@@ -384,43 +393,31 @@ public class DiffAssertionsGenerator {
 	}
 
 	private void exportSequences(Map<String, SequenceInfo> id2AssertSequences, File outputFile)
-			throws FileNotFoundException {
-
-		JsonObjectBuilder sequencesObject = Json.createObjectBuilder();
+			throws JsonGenerationException, JsonMappingException, IOException {
+		
+		ObjectNode sequencesObject = mapper.createObjectNode();
 
 		for (Map.Entry<String, SequenceInfo> entry : id2AssertSequences.entrySet()) {
 
 			String seqId = entry.getKey();
 
-			JsonObjectBuilder sequenceObject = Json.createObjectBuilder();
+			ObjectNode sequenceObject = mapper.createObjectNode();
 
-			sequenceObject.add("class_name", entry.getValue().className);
-			sequenceObject.add("sequence", entry.getValue().sequence);
+			sequenceObject.put("class_name", entry.getValue().className);
+			sequenceObject.put("sequence", entry.getValue().sequence);
 
-			JsonArrayBuilder importsBuilder = Json.createArrayBuilder();
+			ArrayNode importsArray = mapper.createArrayNode();
 
 			for (String imp : entry.getValue().imports) {
-				importsBuilder.add(imp);
+				importsArray.add(imp);
 			}
 
-			sequenceObject.add("imports", importsBuilder.build());
+			sequenceObject.set("imports", importsArray);
 
-			sequencesObject.add(seqId, sequenceObject.build());
+			sequencesObject.set(seqId, sequenceObject);
 		}
-
-		JsonWriter writer = null;
-
-		try {
-
-			JsonWriterFactory writerFactory = Json
-					.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-			writer = writerFactory.createWriter(new FileOutputStream(outputFile));
-			writer.writeObject(sequencesObject.build());
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
+		
+		mapper.writeValue(outputFile, sequencesObject);
 	}
 
 	private static String getStringValueForAssert(String runtimeVal) {

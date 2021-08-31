@@ -14,11 +14,8 @@ limitations under the License.
 package org.konveyor.tackle.testgen.core;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -31,17 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -50,10 +36,16 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.evosuite.shaded.org.springframework.util.ClassUtils;
-
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Creates test sequences based on CTD output to be used as building blocks for final test generation.
@@ -83,6 +75,8 @@ public class TestSequenceInitializer {
 	private static final Logger logger = TackleTestLogger.getLogger(AbstractJUnitTestImporter.class);
 
 	private volatile Map<String, String> threadsErrorMessages = new HashMap<>();
+	
+	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
 			boolean targetMethods)
@@ -129,24 +123,18 @@ public class TestSequenceInitializer {
 
 	public void createInitialTests() throws IOException, SecurityException, IllegalArgumentException {
 
-		JsonReader reader = null;
-		JsonObject mainObject = null;
+		ObjectNode mainNode = (ObjectNode) mapper.readTree(ctdModelsFile);
 
-		try {
-			InputStream fis = new FileInputStream(ctdModelsFile);
-			reader = Json.createReader(fis);
-			mainObject = reader.readObject();
-		} finally {
-			reader.close();
-		}
-
-        JsonObject modelsObject = mainObject.getJsonObject("models_and_test_plans");
+		ObjectNode modelsNode = (ObjectNode) mainNode.get("models_and_test_plans");
 
         Set<String> reachedClasses = new HashSet<String>();
-
-        for (Map.Entry<String, JsonValue> partitionEntry : modelsObject.entrySet()) {
-        	for (Map.Entry<String, JsonValue> entry : ((JsonObject) partitionEntry.getValue()).entrySet()) {
-        		String receiverClassName = entry.getKey();
+        
+        modelsNode.elements().forEachRemaining(classesNode -> {
+        	
+        	classesNode.fieldNames().forEachRemaining(receiverClassName -> {
+        		
+        		ObjectNode classNode = (ObjectNode) classesNode.get(receiverClassName);
+        		
         		// Note: we are targeting not only the target method but also its receiver class, because the extender will reuse the receiver object generation
     			// to invoke the target method with different parameter combinations
     			Class<?> receiverClass;
@@ -155,7 +143,7 @@ public class TestSequenceInitializer {
     				receiverClass = ClassUtils.forName(receiverClassName, classLoader);
     			} catch (Throwable e) {
     				logger.warning("Unable to load target class "+receiverClassName+": "+e.getMessage());
-    				continue;
+    				return;
     			}
     			Constructor<?>[] receiverConstructors = null;
     			
@@ -175,22 +163,26 @@ public class TestSequenceInitializer {
 					} catch (Throwable e) {
 						logger.warning("Unable to load target class " + receiverClassName + " constructors: "
 								+ e.getMessage());
-						continue;
+						return;
 					}
 				}
-
-        		JsonObject methodsObject = (JsonObject) entry.getValue();
-        		for (Map.Entry<String, JsonValue> methodEntry : methodsObject.entrySet()) {
+    			
+    			classNode.fieldNames().forEachRemaining(methodSig -> {
+    				ObjectNode methodNode = (ObjectNode) classNode.get(methodSig);
+    				
         			if (targetSpecificMethods) {
         				for (AbstractTestGenerator testGenerator : testGenerators) {
-        					testGenerator.addCoverageTarget(receiverClassName, methodEntry.getKey());
+        					testGenerator.addCoverageTarget(receiverClassName, methodSig);
         				}
         			}
-        			addParameterTargets((JsonObject) methodEntry.getValue(), reachedClasses);
-        		}
-        	}
-        }
-
+        			addParameterTargets(methodNode, reachedClasses);
+    				
+    			});
+    			
+        	});
+        	
+        });
+        
         for (AbstractTestGenerator testGenerator : testGenerators) {
         	testGenerator.setProjectClasspath(Utils.entriesToClasspath(appClasspath));
         }
@@ -257,22 +249,22 @@ public class TestSequenceInitializer {
         }
 	}
 
-	private void addParameterTargets(JsonObject modelObject, Set<String> reachedClasses) throws LinkageError {
-		JsonArray attrsArray = modelObject.getJsonArray("attributes");
+	private void addParameterTargets(ObjectNode modelObject, Set<String> reachedClasses) throws LinkageError {
+		ArrayNode attrsArray = (ArrayNode) modelObject.get("attributes");
     	for (int j = 0; j < attrsArray.size(); j++) {
-    		JsonObject attrObject = attrsArray.getJsonObject(j);
-    		JsonArray valuesArray = attrObject.getJsonArray("values");
+    		ObjectNode attrObject = (ObjectNode) attrsArray.get(j);
+    		ArrayNode valuesArray = (ArrayNode) attrObject.get("values");
     		for (int k = 0; k < valuesArray.size(); k++) {
-    			Object valueObject = valuesArray.getJsonObject(k).get("val_"+String.valueOf(k));
+    			JsonNode valueObject = valuesArray.get(k).get("val_"+String.valueOf(k));
     			List<String> targetClasses;
-    			if (valueObject instanceof JsonArray) {
+    			if (valueObject instanceof ArrayNode) {
     				targetClasses = new ArrayList<String>();
-    				JsonArray singleValueArray = (JsonArray) valueObject;
+    				ArrayNode singleValueArray = (ArrayNode) valueObject;
     				for (int m = 0; m < singleValueArray.size(); m++) {
-    					targetClasses.add(singleValueArray.getString(m));
+    					targetClasses.add(singleValueArray.get(m).asText());
     				}
     			} else {
-    				targetClasses = Collections.singletonList(valuesArray.getJsonObject(k).getString("val_"+String.valueOf(k)));
+    				targetClasses = Collections.singletonList(((ObjectNode)valuesArray.get(k)).get("val_"+String.valueOf(k)).asText());
     			}
 
     			for (String targetClass : targetClasses) {
@@ -347,7 +339,7 @@ public class TestSequenceInitializer {
 
 			testImporter.importSequences();
 
-			JsonObjectBuilder sequencesObject = Json.createObjectBuilder();
+			ObjectNode sequencesObject = mapper.createObjectNode();
 
 			List<String> beforeAfterCodeClasses = new ArrayList<String>();
 
@@ -361,25 +353,25 @@ public class TestSequenceInitializer {
 					continue;
 				}
 
-				JsonArrayBuilder seqList = Json.createArrayBuilder();
+				ArrayNode seqList = mapper.createArrayNode();
 
 				for (String sequence : sequences) {
 
 					seqList.add(sequence);
 				}
 
-				JsonArrayBuilder importList = Json.createArrayBuilder();
+				ArrayNode importList = mapper.createArrayNode();
 
 				for (String imp : imports) {
 
 					importList.add(imp);
 				}
 
-				JsonObjectBuilder contentObject = Json.createObjectBuilder();
+				ObjectNode contentObject = mapper.createObjectNode();
 
-				contentObject.add("sequences", seqList.build());
-				contentObject.add("imports", importList.build());
-				JsonArrayBuilder codeList = Json.createArrayBuilder();
+				contentObject.set("sequences", seqList);
+				contentObject.set("imports", importList);
+				ArrayNode codeList = mapper.createArrayNode();
 
 				List<String> beforeAfterSegs = testImporter.beforeAfterCodeSegments(className);
 
@@ -391,31 +383,19 @@ public class TestSequenceInitializer {
 					codeList.add(codeSeg);
 				}
 
-				contentObject.add("before_after_code_segments", codeList.build());
+				contentObject.set("before_after_code_segments", codeList);
 
-				sequencesObject.add(className, contentObject.build());
+				sequencesObject.set(className, contentObject);
 			}
 
-			JsonObjectBuilder object = Json.createObjectBuilder();
+			ObjectNode object = mapper.createObjectNode();
 
-			object.add("test_sequences", sequencesObject.build());
+			object.set("test_sequences", sequencesObject);
 
-			object.add("test_generation_tool", testGenerator.getName());
-
-			JsonWriter writer = null;
-
-			try {
-
-				JsonWriterFactory writerFactory = Json
-						.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-				writer = writerFactory.createWriter(new FileOutputStream(new File(applicationName+"_"+testGenerator.getName()+"_"+
-						Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX)));
-				writer.writeObject(object.build());
-			} finally {
-				if (writer != null) {
-					writer.close();
-				}
-			}
+			object.put("test_generation_tool", testGenerator.getName());
+			
+			mapper.writeValue(new File(applicationName+"_"+testGenerator.getName()+"_"+
+					Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX), object);
 
 			String classpath = System.getProperty("java.class.path")+File.pathSeparator+Utils.entriesToClasspath(appClasspath)+File.pathSeparator+monolithAppPath;
 

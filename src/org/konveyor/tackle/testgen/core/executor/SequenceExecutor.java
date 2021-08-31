@@ -15,11 +15,8 @@ package org.konveyor.tackle.testgen.core.executor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -29,7 +26,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,17 +39,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -61,11 +46,19 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.javaparser.utils.ClassUtils;
 
 import randoop.ExceptionalExecution;
@@ -101,6 +94,8 @@ public class SequenceExecutor {
 	public static final String TKLTEST_NULL_STRING = "__tkltest_null";
 
 	public static final int SINGLE_EXECUTION_SEC_LIMIT = 120;
+	
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	private static final Logger logger = TackleTestLogger.getLogger(SequenceExecutor.class);
 
@@ -162,97 +157,77 @@ public class SequenceExecutor {
 			passed = other.passed;
 		}
 
-		public SequenceResults(JsonObject content, Set<Integer> indices) throws ClassNotFoundException {
+		public SequenceResults(ObjectNode content, Set<Integer> indices) throws ClassNotFoundException {
 
 			this(indices.size());
-			passed = content.getBoolean("normal_termination");
+			passed = content.get("normal_termination").asBoolean();
 
-			JsonArray statementResults = content.getJsonArray("per_statement_results");
+			ArrayNode statementResults = (ArrayNode) content.get("per_statement_results");
 
 			int k = 0;
 			for (int i = 0; i < statementResults.size(); i++) {
 				if (indices.contains(i)) {
-					JsonObject statementInfo = statementResults.getJsonObject(i);
-					normalTermination[k] = statementInfo.getBoolean("statement_normal_termination");
+					ObjectNode statementInfo = (ObjectNode) statementResults.get(i);
+					normalTermination[k] = statementInfo.get("statement_normal_termination").asBoolean();
 					if (normalTermination[k]) {
-						if (statementInfo.keySet().contains("runtime_object_name")) {
-							runtimeObjectName[k] = statementInfo.getString("runtime_object_name");
-							runtimeObjectType[k] = Class.forName(statementInfo.getString("runtime_object_type"));
-							runtimePublicObjectState.set(k, jsonToObjState(statementInfo.getJsonObject("runtime_object_state")));
-							runtimePrivateObjectState.set(k, jsonToObjState(statementInfo.getJsonObject("runtime_private_object_state")));
+						if (IteratorUtils.toList(statementInfo.fieldNames()).contains("runtime_object_name")) {
+							runtimeObjectName[k] = statementInfo.get("runtime_object_name").asText();
+							runtimeObjectType[k] = Class.forName(statementInfo.get("runtime_object_type").asText());
+							runtimePublicObjectState.set(k, mapper.convertValue(statementInfo.get("runtime_object_state"), new TypeReference<Map<String, String>>(){}));
+							runtimePrivateObjectState.set(k, mapper.convertValue(statementInfo.get("runtime_private_object_state"), new TypeReference<Map<String, String>>(){}));
 						}
 					}
 					k++;
 				}
 			}
 		}
-
-		private Map<String, String> jsonToObjState(JsonObject objState) {
-			Map<String, String> state = new HashMap<String, String>();
-
-			for (Map.Entry<String, JsonValue> entry : objState.entrySet()) {
-				state.put(entry.getKey(), entry.getValue().toString());
-			}
-
-			return state;
-		}
-
+		
 		public int size() {
 			return normalTermination.length;
 		}
 
-		public JsonObject toJson(List<Integer> origSeqIndices) {
+		public ObjectNode toJson(List<Integer> origSeqIndices) {
 
-			JsonArrayBuilder sequenceArray = Json.createArrayBuilder();
+			ArrayNode sequenceArray = mapper.createArrayNode();
 
-			JsonObjectBuilder sequenceObject = Json.createObjectBuilder();
+			ObjectNode sequenceObject = mapper.createObjectNode();
 
-			sequenceObject.add("normal_termination", passed);
+			sequenceObject.put("normal_termination", passed);
+			
+			ArrayNode origSeqIndicesArray = mapper.valueToTree(origSeqIndices);
 
-			sequenceObject.add("original_sequence_indices", toJsonArray(origSeqIndices));
+			sequenceObject.set("original_sequence_indices", origSeqIndicesArray);
 
 			for (int i=0; i<normalTermination.length && normalTermination[i] != null; i++) {
-				JsonObjectBuilder statementObject = Json.createObjectBuilder();
+				ObjectNode statementObject = mapper.createObjectNode();
 
-				statementObject.add("statement_normal_termination", normalTermination[i]);
+				statementObject.put("statement_normal_termination", normalTermination[i]);
 				if (output[i] != null) {
-					statementObject.add("output", output[i]);
+					statementObject.put("output", output[i]);
 				}
 				if (runtimeObjectName[i] != null) {
-					statementObject.add("runtime_object_name", runtimeObjectName[i]);
-					statementObject.add("runtime_object_type", runtimeObjectType[i].getName());
-					statementObject.add("runtime_object_state", objectStateToJson(runtimePublicObjectState.get(i)));
-					statementObject.add("runtime_private_object_state", objectStateToJson(runtimePrivateObjectState.get(i)));
+					statementObject.put("runtime_object_name", runtimeObjectName[i]);
+					statementObject.put("runtime_object_type", runtimeObjectType[i].getName());
+					statementObject.set("runtime_object_state", mapper.valueToTree(runtimePublicObjectState.get(i)));
+					statementObject.set("runtime_private_object_state", mapper.valueToTree(runtimePrivateObjectState.get(i)));
 				}
 
 				if ( ! normalTermination[i]) {
 
-					statementObject.add("exception", exception[i]);
-					statementObject.add("exception_message", exceptionMessage[i]);
+					statementObject.put("exception", exception[i]);
+					statementObject.put("exception_message", exceptionMessage[i]);
 
 					if (cause[i] != null) {
-						statementObject.add("cause", cause[i]);
-						statementObject.add("cause_message",  causeMessage[i]);
+						statementObject.put("cause", cause[i]);
+						statementObject.put("cause_message",  causeMessage[i]);
 					}
 				}
-				sequenceArray.add(statementObject.build());
+				sequenceArray.add(statementObject);
 			}
 
-			sequenceObject.add("per_statement_results", sequenceArray.build());
+			sequenceObject.set("per_statement_results", sequenceArray);
 
-			return sequenceObject.build();
-		}
-
-		private JsonObject objectStateToJson(Map<String, String> objState) {
-
-			JsonObjectBuilder objBuilder = Json.createObjectBuilder();
-
-			for (Map.Entry<String, String> entry : objState.entrySet()) {
-
-				objBuilder.add(entry.getKey(), entry.getValue());
-			}
-
-			return objBuilder.build();
+			return sequenceObject;
 		}
 
 		/* Retain in results only recorded values that agree with given results */
@@ -307,46 +282,33 @@ public class SequenceExecutor {
 	 * @param sequencesFile
 	 * @param id2Seq
 	 * @return whether the sequences were generated by EvoSuite
-	 * @throws FileNotFoundException
+	 * @throws IOException 
+	 * @throws JsonProcessingException 
 	 */
 
-	public static boolean readSequences(File sequencesFile, Map<String, SequenceInfo> id2Seq) throws FileNotFoundException {
+	public static boolean readSequences(File sequencesFile, Map<String, SequenceInfo> id2Seq) throws JsonProcessingException, IOException {
 
-		JsonReader reader = null;
-		JsonObject mainObject = null;
+		ObjectNode mainObject = (ObjectNode) mapper.readTree(sequencesFile);
 
-		try {
-
-			InputStream fis = new FileInputStream(sequencesFile);
-			reader = Json.createReader(fis);
-			mainObject = reader.readObject();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
-
-		JsonObject seqObject = mainObject.getJsonObject("test_sequences");
-
-		for (Map.Entry<String, JsonValue> entry : seqObject.entrySet()) {
-
-			String seqId = entry.getKey();
-
-			JsonObject content = (JsonObject) entry.getValue();
-
-			JsonArray importsArray = content.getJsonArray("imports");
-
+		ObjectNode seqObject = (ObjectNode) mainObject.get("test_sequences");
+		
+		seqObject.fieldNames().forEachRemaining(seqId -> {
+			
+			ObjectNode content = (ObjectNode) seqObject.get(seqId);
+			
+			ArrayNode importsArray = (ArrayNode) content.get("imports");
+			
 			List<String> imports = new ArrayList<String>();
 
 			for (int i = 0; i < importsArray.size(); i++) {
-				imports.add(importsArray.getString(i));
+				imports.add(importsArray.get(i).asText());
 			}
 
 			id2Seq.put(seqId,
-					new SequenceInfo(content.getString("class_name"), content.getString("sequence"), imports));
-		}
+					new SequenceInfo(content.get("class_name").asText(), content.get("sequence").asText(), imports));
+		});
 
-		String toolName = mainObject.getString("test_generation_tool");
+		String toolName = mainObject.get("test_generation_tool").asText();
 
 		return toolName.equals(EvoSuiteTestGenerator.class.getSimpleName());
 	}
@@ -638,30 +600,18 @@ public class SequenceExecutor {
 
 	private void toJson(String appName) throws IllegalArgumentException, IOException {
 
-		JsonObjectBuilder resultsObject = Json.createObjectBuilder();
+		ObjectNode resultsObject = mapper.createObjectNode();
 
 		for (Map.Entry<String, SequenceResults> entry : id2ExecutionResults.entrySet()) {
 			String seqId = entry.getKey();
 			SequenceResults results = entry.getValue();
 
-			JsonObject sequenceObject = results.toJson(id2Indices.get(seqId));
+			ObjectNode sequenceObject = results.toJson(id2Indices.get(seqId));
 
-			resultsObject.add(seqId, sequenceObject);
+			resultsObject.set(seqId, sequenceObject);
 		}
-
-		JsonWriter writer = null;
-
-		try {
-
-			JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-			writer = writerFactory.createWriter(new FileOutputStream(new File(appName+"_"+ Constants.EXECUTOR_OUTFILE_SUFFIX)));
-			writer.writeObject(resultsObject.build());
-
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
+		
+		mapper.writeValue(new File(appName+"_"+ Constants.EXECUTOR_OUTFILE_SUFFIX), resultsObject);
 	}
 
 	private void getObjectState(Object object, String name, Map<String, String> objPublicState,  Map<String, String> objPrivateState) {
@@ -768,18 +718,6 @@ public class SequenceExecutor {
         oos.close();
         return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
-
-	private static JsonArray toJsonArray(List<Integer> list) {
-
-		JsonArrayBuilder indices = Json.createArrayBuilder();
-
-		for (Integer item : list) {
-
-			indices.add(item);
-		}
-
-		return indices.build();
-	}
 
 	/**
 	 *

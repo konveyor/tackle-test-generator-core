@@ -13,23 +13,42 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.konveyor.tackle.testgen.util.Utils;
-import randoop.operation.*;
-import randoop.sequence.Sequence;
-import randoop.sequence.Statement;
-import randoop.sequence.Variable;
-import randoop.types.*;
-import randoop.util.SimpleArrayList;
-
-import javax.json.JsonArray;
-import javax.json.JsonObject;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Dictionary;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
+import org.konveyor.tackle.testgen.util.Utils;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import randoop.operation.CallableOperation;
+import randoop.operation.ConstructorCall;
+import randoop.operation.EnumConstant;
+import randoop.operation.MethodCall;
+import randoop.operation.OperationParseException;
+import randoop.operation.TypedOperation;
+import randoop.sequence.Sequence;
+import randoop.sequence.Statement;
+import randoop.sequence.Variable;
+import randoop.types.ArrayType;
+import randoop.types.GenericClassType;
+import randoop.types.ReferenceType;
+import randoop.types.Substitution;
+import randoop.types.Type;
+import randoop.types.TypeVariable;
+import randoop.util.SimpleArrayList;
 
 /**
  * General utility methods for manipulating sequences.
@@ -147,7 +166,7 @@ public class SequenceUtil {
      * @param sequence
      * @return
      */
-    public static boolean isTestPlanRowCoveredBySequence(JsonArray testPlanRow, Sequence sequence) {
+    public static boolean isTestPlanRowCoveredBySequence(ArrayNode testPlanRow, Sequence sequence) {
         // build list of parameter types for the last method call in the sequence
         List<Type> methodCallParamTypes = new ArrayList<>();
         TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
@@ -180,10 +199,10 @@ public class SequenceUtil {
 
         // build list of param types specified in the test plan row
         List<String> testPlanRowTypes = new ArrayList<>();
-        for (JsonObject param : testPlanRow.toArray(new JsonObject[0])) {
-            testPlanRowTypes.add(param.getString("type"));
-        }
-
+        testPlanRow.elements().forEachRemaining(entry -> {
+        	testPlanRowTypes.add(entry.get("type").asText());
+        });
+        	
         // if the two lists are equal, the sequence covers the test plan row
         if (methodCallParamTypeNames.equals(testPlanRowTypes)) {
             return true;

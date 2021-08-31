@@ -13,21 +13,39 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
-import org.konveyor.tackle.testgen.core.extender.SequenceUtil;
-import org.konveyor.tackle.testgen.util.Constants;
-import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.cli.*;
-import randoop.sequence.Sequence;
-import randoop.sequence.SequenceParseException;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
+import org.konveyor.tackle.testgen.core.extender.SequenceUtil;
+import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import randoop.sequence.Sequence;
+import randoop.sequence.SequenceParseException;
 
 /**
  * Receives a json file with sequences, creates a junit test file per
@@ -96,39 +114,29 @@ public class JUnitTestExporter {
 		testOutDir.mkdirs();
 	}
 
-	private Map<String, TestClass> readSequences(File seqFile) throws FileNotFoundException {
+	@SuppressWarnings("unchecked")
+	private Map<String, TestClass> readSequences(File seqFile) throws JsonProcessingException, IOException {
 
-		JsonReader reader = null;
-		JsonObject mainObject = null;
-
-		try {
-
-			InputStream fis = new FileInputStream(seqFile);
-			reader = Json.createReader(fis);
-			mainObject = reader.readObject();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-		}
+		JsonNode mainNode = TackleTestJson.getObjectMapper().readTree(seqFile);
 
 		Map<String, TestClass> junitTests = new HashMap<String, TestClass>();
-		JsonObject testSequences = mainObject.getJsonObject("test_sequences");
-
-		for (String seqId : testSequences.keySet()) {
-
-			JsonObject seqObj = testSequences.getJsonObject(seqId);
-			String className = seqObj.getString("class_name");
+		ObjectNode testSequences = (ObjectNode) mainNode.get("test_sequences");
+		
+		testSequences.elements().forEachRemaining(seqObj -> {
+		
+			String className = seqObj.get("class_name").asText();
 			TestClass currentTests = junitTests.get(className);
 
 			if (currentTests == null) {
 				currentTests = new TestClass();
 				junitTests.put(className, currentTests);
 			}
-
-			currentTests.imports.addAll(jsonArrayToSet(seqObj.getJsonArray("imports")));
-			currentTests.sequences.add(seqObj.getString("sequence"));
-		}
+			
+			currentTests.imports.addAll(new HashSet<String>(IteratorUtils.
+					toList(((ArrayNode) seqObj.get("imports")).elements())));
+			currentTests.sequences.add(seqObj.get("sequence").asText());
+		});
+		
 		return junitTests;
 	}
 
@@ -399,17 +407,6 @@ public class JUnitTestExporter {
 //
 //		throw new IllegalArgumentException("Could not find field or getter "+fieldName+" for class "+obj.getClass().getName());
 //	}
-
-
-	private Set<String> jsonArrayToSet(JsonArray jsonArray) {
-		Set<String> result = new HashSet<String>();
-
-		for(int i = 0; i < jsonArray.size(); i++){
-			result.add(jsonArray.getJsonString(i).getString());
-		}
-
-		return result;
-	}
 
 	private static CommandLine parseCommandLineOptions(String[] args) {
         Options options = new Options();

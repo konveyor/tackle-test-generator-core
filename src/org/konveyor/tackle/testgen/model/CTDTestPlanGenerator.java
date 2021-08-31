@@ -15,10 +15,7 @@ package org.konveyor.tackle.testgen.model;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -41,16 +38,6 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -59,10 +46,17 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.konveyor.tackle.testgen.model.CTDModeler.CTDModelAndTestPlan;
-import org.konveyor.tackle.testgen.rta.RapidTypeAnalysis;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import soot.FastHierarchy;
 import soot.Scene;
@@ -99,14 +93,15 @@ public class CTDTestPlanGenerator {
 	private TargetFetcher targetFetcher;
 
 	private static final Logger logger = TackleTestLogger.getLogger(CTDTestPlanGenerator.class);
+	
+	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	private List<String> appClasspathEntries; // Application under test classpath entries
 	private String refactoringPackagePrefix = null;
 	private String partitionsFilePrefix = null;
 	private String partitionsFileSuffix = null;
 	private String partitionsFileSeparator = null;
-
-
+	
 	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String excludedClassList, String partitionsCPPrefix, 
 			String partitionsCPSuffix, String monolithPath, String classpathFile, int maxNestDepth, boolean addLocalRemote, int level, 
 			String refactoringPrefix, String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {
@@ -150,11 +145,11 @@ public class CTDTestPlanGenerator {
 		targetClassesCounter = 0;
 
 		Map<String, Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>>> partitionToCTD = new HashMap<>();
-		Map<String, Map<String, List<Object>>> partitionToNonTargeted = new HashMap<>();
+		Map<String, Map<String, Map<String, String>>> partitionToNonTargeted = new HashMap<>();
 
 		for (String partition : targetFetcher.getPartitions()) {
 			
-			Map<String, List<Object>> classToNonTargeted = new HashMap<>();
+			Map<String, Map<String, String>> classToNonTargeted = new HashMap<>();
 
 			Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>> classToCTD = modelPartition(partition, typeAnalysisResults, classToNonTargeted);
 			typeAnalysisResults.resetCHA(); // we need to compute CHA per partition
@@ -170,89 +165,61 @@ public class CTDTestPlanGenerator {
 	}
 	
 	private void toJson(Map<String, Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>>> partitionToCTD, 
-			Map<String, Map<String, List<Object>>> partitionToNonTargeted) 
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FileNotFoundException {
+			Map<String, Map<String, Map<String, String>>> partitionToNonTargeted) 
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JsonGenerationException, JsonMappingException, IOException {
 		
-		
-		JsonObjectBuilder partitionBuilder = Json.createObjectBuilder();
+		ObjectNode partitionNode = mapper.createObjectNode();
 		
 		for (Map.Entry<String, Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>>> entry : partitionToCTD.entrySet()) {
 			String partitionName = entry.getKey();
 			
-			JsonObjectBuilder classesBuilder = Json.createObjectBuilder();
+			ObjectNode classesNode = mapper.createObjectNode();
 			
 			for (Map.Entry<String, Map<JavaMethodModel, CTDModelAndTestPlan>> classEntry : entry.getValue().entrySet()) {
 				
-				classesBuilder.add(classEntry.getKey(), modelsToJson(classEntry.getValue()));
+				classesNode.set(classEntry.getKey(), modelsToJson(classEntry.getValue()));
 			}
 			
-			partitionBuilder.add(partitionName, classesBuilder.build());
+			partitionNode.set(partitionName, classesNode);
 		}
 		
-		JsonObjectBuilder statsObject = Json.createObjectBuilder();
+		ObjectNode statsNode = mapper.createObjectNode();
 		
-		statsObject.add("total_classes", totalClassesCounter);
-		statsObject.add("target_classes", targetClassesCounter);
-		statsObject.add("non_public_classes", privateClassCounter);
-		statsObject.add("classes_no_public_methods", privateMethodsCounter);
-		statsObject.add("target_methods", targetModelsCounter);
-		statsObject.add("total_tests", targetTestsCounter);
+		statsNode.put("total_classes", totalClassesCounter);
+		statsNode.put("target_classes", targetClassesCounter);
+		statsNode.put("non_public_classes", privateClassCounter);
+		statsNode.put("classes_no_public_methods", privateMethodsCounter);
+		statsNode.put("target_methods", targetModelsCounter);
+		statsNode.put("total_tests", targetTestsCounter);
 
-		JsonObjectBuilder ctdObject = Json.createObjectBuilder();
+		ObjectNode ctdNode = mapper.createObjectNode();
 		
-		ctdObject.add("models_and_test_plans", partitionBuilder.build());
-		ctdObject.add("statistics", statsObject.build());
+		ctdNode.set("models_and_test_plans", partitionNode);
+		ctdNode.set("statistics", statsNode);
 		
-		JsonWriter writer = null;
-		
-		JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-		
-		try {
-
-			writer = writerFactory
-					.createWriter(new FileOutputStream(new File(applicationName + "_" + Constants.CTD_OUTFILE_SUFFIX)));
-
-			writer.writeObject(ctdObject.build());
-
-			writer.close();
-
-			writer = writerFactory.createWriter(
-					new FileOutputStream(new File(applicationName + "_" + Constants.CTD_NON_TARGETED_OUTFILE_SUFFIX)));
-			
-			JsonObjectBuilder nonTargetedMethodsObject = Json.createObjectBuilder();
-			
-			for (Map.Entry<String, Map<String, List<Object>>> entry : partitionToNonTargeted.entrySet()) {
-				nonTargetedMethodsObject.add(entry.getKey(), getNonTargetedMethodsObject(entry.getValue()));
-			}
-
-			writer.writeObject(nonTargetedMethodsObject.build());
-
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
+		mapper.writeValue(new File(applicationName + "_" + Constants.CTD_OUTFILE_SUFFIX), ctdNode);
+		mapper.writeValue(new File(applicationName + "_" + Constants.CTD_NON_TARGETED_OUTFILE_SUFFIX), partitionToNonTargeted);
 		
 	}
 
-	private JsonObject modelsToJson(Map<JavaMethodModel, CTDModelAndTestPlan> methodsModels) 
+	private ObjectNode modelsToJson(Map<JavaMethodModel, CTDModelAndTestPlan> methodsModels) 
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
 		
-		JsonObjectBuilder methodsBuilder = Json.createObjectBuilder();
+		ObjectNode methodsNode = mapper.createObjectNode();
 		
 		for (Map.Entry<JavaMethodModel, CTDModelAndTestPlan> entry : methodsModels.entrySet()) {
 			
-			JsonObject modelObject = ModelJsonConvertor.addModel(entry.getValue().model, entry.getValue().testPlan, entry.getKey());
+			ObjectNode modelNode = ModelJsonConvertor.addModel(entry.getValue().model, entry.getValue().testPlan, entry.getKey());
 			
-			methodsBuilder.add(entry.getKey().getSignature(), modelObject);
+			methodsNode.set(entry.getKey().getSignature(), modelNode);
 		}
 		
-		return methodsBuilder.build();
+		return methodsNode;
 	}
 
 	private Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>> modelPartition(String partitionName, TypeAnalysisResults typeAnalysisResults, 
-			Map<String, List<Object>> classToNonTargetedMethods)
+			Map<String, Map<String, String>> classToNonTargetedMethods)
 			throws IOException, ClassNotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 
 		logger.fine("Analyzing partition "+partitionName);
@@ -269,12 +236,12 @@ public class CTDTestPlanGenerator {
 		for (String currentClassName : classNames) {
 			
 			List<JavaMethodModel> publicMethods = new ArrayList<JavaMethodModel>();
-			Class<?> proxyClass = Class.forName(currentClassName, false, classLoader);
-			if (Modifier.isPublic(proxyClass.getModifiers())) {
-				List<Object> nonPublicMethods = new ArrayList<>();
-				for (Object method : targetFetcher.getTargetMethods(proxyClass, classLoader,
+			Class<?> targetClass = Class.forName(currentClassName, false, classLoader);
+			if (Modifier.isPublic(targetClass.getModifiers())) {
+				Map<String, String> nonPublicMethods = new HashMap<>(); // map from method signature to its visibility
+				for (Object method : targetFetcher.getTargetMethods(targetClass, classLoader,
 						nonPublicMethods)) {
-					publicMethods.add(new JavaMethodModel(partitionName, proxyClass, method, classLoader,
+					publicMethods.add(new JavaMethodModel(partitionName, targetClass, method, classLoader,
 							maxCollectionNestDepth));
 				}
 				if (!publicMethods.isEmpty()) {
@@ -332,46 +299,6 @@ public class CTDTestPlanGenerator {
 
 		return classToModels;
 	}
-	
-	private JsonObject getNonTargetedMethodsObject(Map<String, List<Object>> classToNonPublicMethods) {
-		
-		JsonObjectBuilder classesBuilder = Json.createObjectBuilder();
-		
-		for (Map.Entry<String, List<Object>> entry : classToNonPublicMethods.entrySet()) {
-			
-			classesBuilder.add(entry.getKey(), getNonTargetedMethodsInfo(entry.getValue()));
-		}
-		
-		return classesBuilder.build();
-	}
-
-
-	private JsonObject getNonTargetedMethodsInfo(List<Object> methodList) {
-		
-		JsonObjectBuilder methodsObjBuilder = Json.createObjectBuilder();
-		
-		for (Object methodOrConstr : methodList) {
-			
-			String sig;
-			
-			if (methodOrConstr instanceof Method) {
-				try {
-					sig = Utils.getSignature((Method) methodOrConstr);
-				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-						| IllegalAccessException e) {
-					logger.warning("Couldn't find signature for "+((Method) methodOrConstr).getName());
-					continue;
-				}
-			} else {
-				sig = Utils.getSignature((Constructor<?>) methodOrConstr);
-			}
-			
-			methodsObjBuilder.add(sig, getVisibility(methodOrConstr));
-		}
-		
-		return methodsObjBuilder.build();
-	}
-
 
 	private static String getVisibility(Object methodOrConstr) {
 		
@@ -405,7 +332,7 @@ public class CTDTestPlanGenerator {
 
 		abstract String getLocalRemoteTag(JavaMethodModel method, String className);
 
-		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader, List<Object> nonPublicMethods) {
+		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader, Map<String, String> nonPublicMethods) {
 
 			if (Utils.isPrivateInnerClass(cls)) {
 				logger.fine("Skipping private inner class "+cls.getName());
@@ -426,7 +353,16 @@ public class CTDTestPlanGenerator {
 			for (Method method : cls.getDeclaredMethods()) {
 
 				if ( ! Modifier.isPublic(method.getModifiers())) {
-					nonPublicMethods.add(method);
+					String sig;
+					
+					try {
+						sig = Utils.getSignature(method);
+					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+							| IllegalAccessException e) {
+						logger.warning("Couldn't find signature for " + method.getName());
+						continue;
+					}
+					nonPublicMethods.put(sig, getVisibility(method));
 					continue;
 				}
 
@@ -456,7 +392,8 @@ public class CTDTestPlanGenerator {
 				if (Modifier.isPublic(constr.getModifiers())) {
 					publicMethods.add(constr);
 				} else {
-					nonPublicMethods.add(constr);
+					String sig = Utils.getSignature(constr);
+					nonPublicMethods.put(sig, getVisibility(constr));
 				}
 			}
 
@@ -634,27 +571,22 @@ public class CTDTestPlanGenerator {
 				throw new IOException(inputFile.getName() + " is not a valid file name");
 			}
 
-			InputStream fis = new FileInputStream(inputFile);
-	        JsonReader reader = Json.createReader(fis);
-	        JsonObject mainObject = reader.readObject();
-	        reader.close();
+			ObjectNode mainNode = (ObjectNode) mapper.readTree(inputFile);
 
-	        Set<String> keys = mainObject.keySet();
-
-	        for (String partition : keys) {
-	        	readCurrentPartitionClasses(partition, mainObject.getJsonObject(partition), excludedClasses);
-	        }
+	        mainNode.fieldNames().forEachRemaining(partition -> {
+	        	readCurrentPartitionClasses(partition, (ObjectNode) mainNode.get(partition), excludedClasses);
+	        });
 		}
 
-		private void readCurrentPartitionClasses(String partition, JsonObject partitionData, Set<String> excludedClasses) {
+		private void readCurrentPartitionClasses(String partition, ObjectNode partitionData, Set<String> excludedClasses) {
 
 			Set<String> currentProxyClasses = new HashSet<String>();
 			Set<String> currentRemoteClasses = new HashSet<String>();
 			proxyClassesToRemoteClasses.put(partition, new PartitionData(currentProxyClasses, currentRemoteClasses));
 			
-			JsonArray proxyFiles = partitionData.getJsonArray("Proxy");
+			ArrayNode proxyFiles = (ArrayNode) partitionData.get("Proxy");
 
-			for (JsonValue currentFile : proxyFiles) {
+			for (JsonNode currentFile : proxyFiles) {
 				
 				String className = getClassName(currentFile.toString());
 				if (excludedClasses == null || ! isExcluded(className, excludedClasses)) {
@@ -662,18 +594,18 @@ public class CTDTestPlanGenerator {
 				}
 			}
 
-			JsonArray otherFiles = partitionData.getJsonArray("Service");
-			for (JsonValue currentFile : otherFiles) {
+			ArrayNode otherFiles = (ArrayNode) partitionData.get("Service");
+			for (JsonNode currentFile : otherFiles) {
 				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
 
-			otherFiles = partitionData.getJsonArray("Real");
-			for (JsonValue currentFile : otherFiles) {
+			otherFiles = (ArrayNode) partitionData.get("Real");
+			for (JsonNode currentFile : otherFiles) {
 				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
 
-			otherFiles = partitionData.getJsonArray("Util");
-			for (JsonValue currentFile : otherFiles) {
+			otherFiles = (ArrayNode) partitionData.get("Util");
+			for (JsonNode currentFile : otherFiles) {
 				currentRemoteClasses.add(getClassName(currentFile.toString()));
 			}
 		}

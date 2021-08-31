@@ -13,29 +13,50 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import com.github.javaparser.utils.Pair;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
-import randoop.operation.*;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.javaparser.utils.Pair;
+
+import randoop.operation.CallableOperation;
+import randoop.operation.ConstructorCall;
+import randoop.operation.MethodCall;
+import randoop.operation.Operation;
+import randoop.operation.TypedClassOperation;
+import randoop.operation.TypedOperation;
 import randoop.org.apache.commons.io.output.NullPrintStream;
 import randoop.org.apache.commons.lang3.RandomStringUtils;
 import randoop.org.apache.commons.lang3.RandomUtils;
 import randoop.sequence.Sequence;
 import randoop.sequence.Variable;
 import randoop.types.Type;
-
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Class for building and managing sequence pools for class construction, target method calls,
@@ -78,8 +99,8 @@ class SequencePool {
 
     int parseErrorEOF = 0;
 
-    SequencePool(List<JsonObject> initialTestSeqs, Set<String> tgtProxyMethodSignatures, String appName)
-        throws FileNotFoundException {
+    SequencePool(List<ObjectNode> initialTestSeqs, Set<String> tgtProxyMethodSignatures, String appName)
+        throws JsonGenerationException, JsonMappingException, IOException {
 
         this.classTestSeqPool = new HashMap<>();
         this.methodTestSeqPool = new HashMap<>();
@@ -95,30 +116,36 @@ class SequencePool {
     /**
      * Initializes test sequence pools for classes and methods (from the CTD test
      * plan)
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      */
-    private void initTestSequencePool(List<JsonObject> initialTestSeqs, String appName) throws FileNotFoundException {
+    private void initTestSequencePool(List<ObjectNode> initialTestSeqs, String appName) throws JsonGenerationException, JsonMappingException, IOException {
+    	
+    	ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
-        JsonObjectBuilder parseErrorSequencesInfo = Json.createObjectBuilder();
+    	ObjectNode parseErrorSequencesInfo = mapper.createObjectNode();
 
         // iterate over each class in JSON info about initial sequences
-        for (JsonObject initialTestSeq : initialTestSeqs) {
+        for (ObjectNode initialTestSeq : initialTestSeqs) {
+        	
+        	initialTestSeq.fieldNames().forEachRemaining(cls -> {
 
-            for (String cls : initialTestSeq.keySet()) {
-                JsonObject clsInfo = (JsonObject) initialTestSeq.getJsonObject(cls);
-                JsonArray sequences = clsInfo.getJsonArray("sequences");
-                JsonArray imports = clsInfo.getJsonArray("imports");
-                List<String> importList = imports.getValuesAs(JsonString.class).stream().map(JsonString::getString)
-                    .collect(Collectors.toList());
-
+            	ObjectNode clsInfo = (ObjectNode) initialTestSeq.get(cls);
+                ArrayNode sequences = (ArrayNode) clsInfo.get("sequences");
+                ArrayNode imports = (ArrayNode) clsInfo.get("imports");
+                List<String> importList = mapper.convertValue(imports, 
+                		new TypeReference<List<String>>(){}); 
+                		
                 if (this.classImports.get(cls) == null) {
                     this.classImports.put(cls, new ArrayList<String>());
                 }
                 this.classImports.get(cls).addAll(importList);
 
-                JsonArray beforeAfterMethods = clsInfo.getJsonArray("before_after_code_segments");
-                List<String> beforeAfterMethodsList = beforeAfterMethods.getValuesAs(JsonString.class).stream()
-                    .map(JsonString::getString).collect(Collectors.toList());
-
+                ArrayNode beforeAfterMethods = (ArrayNode) clsInfo.get("before_after_code_segments");
+                List<String> beforeAfterMethodsList = mapper.convertValue(beforeAfterMethods, 
+                		new TypeReference<List<String>>(){});
+                		
                 if (this.classBeforeAfterMethods.get(cls) == null) {
                     this.classBeforeAfterMethods.put(cls, new HashSet<String>());
                 }
@@ -131,8 +158,10 @@ class SequencePool {
 
                 // iterate over each string sequence for class and parse it into a randoop
                 // sequence object
-                for (JsonString seq : sequences.getValuesAs(JsonString.class)) {
-                    String testSeq = seq.getString();
+                
+                sequences.elements().forEachRemaining(seq -> {
+                
+                    String testSeq = seq.asText();
                     logger.fine("- " + testSeq);
                     PrintStream origSysOut = System.out;
                     PrintStream origSysErr = System.err;
@@ -203,19 +232,19 @@ class SequencePool {
                         this.parseExceptions.put(excpType, excpCount);
                         exceptionBaseSequences++;
 
-                        JsonObjectBuilder parseErrorInfo = Json.createObjectBuilder();
-                        parseErrorInfo.add("exception_type", excpType);
-                        parseErrorInfo.add("exception_msg", e.getMessage());
-                        parseErrorInfo.add("sequence", testSeq);
-                        parseErrorSequencesInfo.add(exceptionBaseSequences+"::"+cls, parseErrorInfo);
+                        ObjectNode parseErrorInfo = mapper.createObjectNode();
+                        parseErrorInfo.put("exception_type", excpType);
+                        parseErrorInfo.put("exception_msg", e.getMessage());
+                        parseErrorInfo.put("sequence", testSeq);
+                        parseErrorSequencesInfo.set(exceptionBaseSequences+"::"+cls, parseErrorInfo);
                     }
                     System.out.print("*   Full:" + parsedBaseSequencesFull +
                         "  Part:" + parsedBaseSequencesPartial +
                         "  Skip:" + skippedBaseSequences +
                         "  Excp:" + exceptionBaseSequences +
                         "\r");
-                }
-            }
+                });
+            });
         }
 
 //        System.out.println("\n* Total parsed base sequences: " +
@@ -230,14 +259,10 @@ class SequencePool {
 
         // in debug mode, write sequences resulting in parse errors to json file
         if (DEBUG) {
-            JsonObjectBuilder parseErrorsObj = Json.createObjectBuilder();
-            parseErrorsObj.add("parse_error_sequences", parseErrorSequencesInfo);
-            FileOutputStream fos = new FileOutputStream(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX);
-            JsonWriterFactory writerFactory = Json
-                .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-            try (JsonWriter jsonWriter = writerFactory.createWriter(fos)) {
-                jsonWriter.writeObject(parseErrorsObj.build());
-            }
+            ObjectNode parseErrorsObj = mapper.createObjectNode();
+            parseErrorsObj.set("parse_error_sequences", parseErrorSequencesInfo);
+            
+            mapper.writeValue(new File(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX), parseErrorsObj);
         }
 
         logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="

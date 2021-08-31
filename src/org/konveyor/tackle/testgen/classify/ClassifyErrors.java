@@ -13,22 +13,41 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.classify;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.apache.commons.cli.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
-import java.util.*;
-import java.util.logging.Logger;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ClassifyErrors {
     public enum ErrorType { SERIALIZATION, JSON_PARSING, DUMMY_FUNCTION, SERVICE_INVOCATION, OTHER }
@@ -58,6 +77,8 @@ public class ClassifyErrors {
     public static final String OUTPUT_TAG = "output";
 
     private static final Logger logger = TackleTestLogger.getLogger(ClassifyErrors.class);
+    
+    private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
     ClassifyErrors(String[] reportsPath, String errorsFilePath, String[] appPackages, String testDir)
         throws ParserConfigurationException, IOException, SAXException {
@@ -101,27 +122,25 @@ public class ClassifyErrors {
         }
     }
 
-    private void parseErrorPatternsFile(String path) throws FileNotFoundException {
-        InputStream fis = new FileInputStream(path);
-        JsonReader reader = Json.createReader(fis);
-        JsonArray fileObject = reader.readArray();
-        reader.close();
-
-        for (int objectInd=0; objectInd<fileObject.size(); objectInd++) {
-            String errorType = fileObject.getJsonObject(objectInd).getString(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG);
+    private void parseErrorPatternsFile(String path) throws JsonProcessingException, IOException {
+    	
+    	ArrayNode fileArray = (ArrayNode) mapper.readTree(new File(path));
+    	
+        for (int objectInd=0; objectInd<fileArray.size(); objectInd++) {
+            String errorType = fileArray.get(objectInd).get(ClassifyErrors.OUTPUT_ERROR_TYPE_TAG).asText();
             Set<ClassifiedError> errorTypesSet = errorTypes.get(errorType);
             if (errorTypesSet==null) {
                 errorTypesSet = new HashSet<>();
                 errorTypes.put(errorType, errorTypesSet);
             }
 
-            JsonArray patternResult = fileObject.getJsonObject(objectInd).getJsonArray(ClassifyErrors.INPUT_PATTERNS_TAG);
+            ArrayNode patternResult = (ArrayNode) fileArray.get(objectInd).get(ClassifyErrors.INPUT_PATTERNS_TAG);
             for (int patternInd = 0; patternInd < patternResult.size(); patternInd++) {
-                String output = patternResult.getJsonObject(patternInd).getString(OUTPUT_TAG);
-                String message = patternResult.getJsonObject(patternInd).getString(ClassifyErrors.INPUT_MESSAGE_TAG);
-                String exceptionType = patternResult.getJsonObject(patternInd).getString(INPUT_TYPE_TAG);
-                String semanticTag = patternResult.getJsonObject(patternInd).getString(INPUT_SEMANTIC_TAG);
-                JsonObject stackTrace = patternResult.getJsonObject(patternInd).getJsonObject(INPUT_STACK_TRACE_TAG);
+                String output = patternResult.get(patternInd).get(OUTPUT_TAG).asText();
+                String message = patternResult.get(patternInd).get(ClassifyErrors.INPUT_MESSAGE_TAG).asText();
+                String exceptionType = patternResult.get(patternInd).get(INPUT_TYPE_TAG).asText();
+                String semanticTag = patternResult.get(patternInd).get(INPUT_SEMANTIC_TAG).asText();
+                ObjectNode stackTrace = (ObjectNode) patternResult.get(patternInd).get(INPUT_STACK_TRACE_TAG);
                 ClassifiedError classifiedError = new ClassifiedError(message, exceptionType, output, semanticTag, stackTrace);
                 errorTypesSet.add(classifiedError);
             }
@@ -142,59 +161,50 @@ public class ClassifyErrors {
         unclassifiedError.addTest(partition, testFile, testId, message);
     }
 
-    private void writeClassifiedErrorsFile() throws FileNotFoundException {
-        String errorsFileName = this.testDir + "_" + OUTPUT_FILE;
-        JsonWriter writer = null;
-        try {
-            JsonArrayBuilder jsonErrorTypesList = Json.createArrayBuilder();
-            for (String currType: errorTypes.keySet()) { //add error type
-                JsonArrayBuilder jsonErrorsList = Json.createArrayBuilder();
-                for (ClassifiedError currError : errorTypes.get(currType)) {
-                    if (currError.getErrorMessages().isEmpty()) {
-                        continue;
-                    }
-                    JsonArrayBuilder jsonPartitionList = Json.createArrayBuilder();
-                    for (String currPartition : currError.getErrorTests().keySet()) { //add partitions
-                        Map<String, ArrayList<String>> partition = currError.getErrorTests().get(currPartition);
-                        JsonObjectBuilder jsonPartition = Json.createObjectBuilder();
-                        JsonArrayBuilder jsonTestFileList = Json.createArrayBuilder();
-                        for (String currTestFile : partition.keySet()) { //add test files
-                            ArrayList<String> testIds = partition.get(currTestFile);
-                            JsonArrayBuilder jsonTestIdsList = Json.createArrayBuilder();
-                            for (String currTestId : testIds) { //add test ids
-                                jsonTestIdsList.add(currTestId);
-                            }
-                            JsonObjectBuilder jsonTestFile = Json.createObjectBuilder();
-                            jsonTestFile.add(OUTPUT_TEST_CLASS_TAG, currTestFile).add(OUTPUT_TEST_METHODS_TAG, jsonTestIdsList);
-                            jsonTestFileList.add(jsonTestFile);
-                        }
-                        jsonPartition.add(OUTPUT_PARTITION_TAG, currPartition).add(OUTPUT_TEST_CLASSES_TAG, jsonTestFileList);
-                        jsonPartitionList.add(jsonPartition);
-                    }
-                    JsonArrayBuilder jsonMessages = Json.createArrayBuilder();
-                    for (String currMessage : currError.getErrorMessages()) { //add messages
-                        jsonMessages.add(currMessage);
-                    }
-                    JsonObjectBuilder jsonError = Json.createObjectBuilder();
-                    jsonError.add(INPUT_PATTERN_TAG, currError.getOutput()).add(INPUT_TYPE_TAG, currError.getType()).
-                        add(INPUT_SEMANTIC_TAG, currError.getSemanticTag()).add(INPUT_MESSAGE_TAG, jsonMessages).
-                        add(OUTPUT_PARTITIONS_TAG, jsonPartitionList);
-                    jsonErrorsList.add(jsonError);
-                }
-                JsonObjectBuilder jsonType = Json.createObjectBuilder();
-                jsonType.add(OUTPUT_ERROR_TYPE_TAG, currType).add(OUTPUT_ERRORS_TAG, jsonErrorsList);
-                jsonErrorTypesList.add(jsonType);
-            }
-            JsonWriterFactory writerFactory = Json.createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
-            writer = writerFactory.createWriter(new FileOutputStream((errorsFileName)));
-            writer.writeArray(jsonErrorTypesList.build());
+	private void writeClassifiedErrorsFile() throws JsonGenerationException, JsonMappingException, IOException {
+		String errorsFileName = this.testDir + "_" + OUTPUT_FILE;
+		ArrayNode jsonErrorTypesList = mapper.createArrayNode();
+		
+		for (String currType : errorTypes.keySet()) { // add error type
+			ArrayNode jsonErrorsList = mapper.createArrayNode();
+			for (ClassifiedError currError : errorTypes.get(currType)) {
+				if (currError.getErrorMessages().isEmpty()) {
+					continue;
+				}
+				ArrayNode jsonPartitionList = mapper.createArrayNode();
+				for (String currPartition : currError.getErrorTests().keySet()) { // add partitions
+					Map<String, ArrayList<String>> partition = currError.getErrorTests().get(currPartition);
+					ObjectNode jsonPartition = mapper.createObjectNode();
+					ArrayNode jsonTestFileList = mapper.createArrayNode();
+					for (String currTestFile : partition.keySet()) { // add test files
+						ArrayList<String> testIds = partition.get(currTestFile);
+						ArrayNode jsonTestIdsList = mapper.valueToTree(testIds);
+						ObjectNode jsonTestFile = mapper.createObjectNode();
+						jsonTestFile.put(OUTPUT_TEST_CLASS_TAG, currTestFile);
+						jsonTestFile.set(OUTPUT_TEST_METHODS_TAG, jsonTestIdsList);
+						jsonTestFileList.add(jsonTestFile);
+					}
+					jsonPartition.put(OUTPUT_PARTITION_TAG, currPartition);
+					jsonPartition.set(OUTPUT_TEST_CLASSES_TAG, jsonTestFileList);
+					jsonPartitionList.add(jsonPartition);
+				}
+				ArrayNode jsonMessages = mapper.valueToTree(currError.getErrorMessages());
+				ObjectNode jsonError = mapper.createObjectNode();
+				jsonError.put(INPUT_PATTERN_TAG, currError.getOutput());
+				jsonError.put(INPUT_TYPE_TAG, currError.getType());
+				jsonError.put(INPUT_SEMANTIC_TAG, currError.getSemanticTag());
+				jsonError.set(INPUT_MESSAGE_TAG, jsonMessages);
+				jsonError.set(OUTPUT_PARTITIONS_TAG, jsonPartitionList);
+				jsonErrorsList.add(jsonError);
+			}
+			ObjectNode jsonType = mapper.createObjectNode();
+			jsonType.put(OUTPUT_ERROR_TYPE_TAG, currType);
+			jsonType.set(OUTPUT_ERRORS_TAG, jsonErrorsList);
+			jsonErrorTypesList.add(jsonType);
+		}
 
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-            logger.info("Classified errors file is located in " + errorsFileName);
-        }
+		mapper.writeValue(new File(errorsFileName), jsonErrorTypesList);
+
     }
 
     private static CommandLine parseCommandLineOptions(String[] args) {

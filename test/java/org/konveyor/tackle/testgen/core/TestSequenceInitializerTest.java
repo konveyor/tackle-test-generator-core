@@ -16,21 +16,19 @@ package org.konveyor.tackle.testgen.core;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-
 import org.apache.commons.io.FileUtils;
+import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class TestSequenceInitializerTest {
 
@@ -72,15 +70,13 @@ public class TestSequenceInitializerTest {
 						"com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
 						"com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
 						"com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
+		
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
 
-		InputStream fis = new FileInputStream(outputFile);
-		JsonReader reader = Json.createReader(fis);
-		JsonObject mainObject = reader.readObject();
-		reader.close();
+		ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
 
-		JsonObject sequencesObject = mainObject.getJsonObject("test_sequences");
-
-		Set<String> reachedClasses = sequencesObject.keySet();
+		@SuppressWarnings("unchecked")
+		Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
 
 		assertTrue(reachedClasses.equals(targetClasses));
 	}

@@ -13,27 +13,31 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core;
 
-import org.konveyor.tackle.testgen.TestUtils;
-import org.konveyor.tackle.testgen.util.Constants;
-import org.konveyor.tackle.testgen.util.TackleTestLogger;
-import org.konveyor.tackle.testgen.util.Utils;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import javax.json.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.konveyor.tackle.testgen.TestUtils;
+import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
+import org.konveyor.tackle.testgen.util.TackleTestLogger;
+import org.konveyor.tackle.testgen.util.Utils;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class BasicBlockSequenceParseTest {
 
 	private static final Logger logger = TackleTestLogger.getLogger(BasicBlockSequenceParseTest.class);
+	
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	@Test
 	public void parseRunner() throws Throwable {
@@ -73,37 +77,26 @@ public class BasicBlockSequenceParseTest {
 
 		public void parseSequences() throws Throwable {
 
-			JsonObject initialTestSeq = null;
+			ObjectNode initialTestSeq = (ObjectNode) mapper.readTree(new File("test/data/daytrader7/bb_sequences_test.json")).get("test_sequences");
+			
+			initialTestSeq.fieldNames().forEachRemaining(cls -> {
 
-			InputStream fis = new FileInputStream(new File("test/data/daytrader7/bb_sequences_test.json"));
-			//InputStream fis = new FileInputStream(new File("test/data/bb_sequences_test_TradeConfig.json"));
-			//InputStream fis = new FileInputStream(new File("bb_sequences_short.json"));
-			JsonReader reader = null;
-			try {
-				reader = Json.createReader(fis);
-				initialTestSeq = reader.readObject().getJsonObject("test_sequences");
-			} finally {
-
-				if (reader != null) {
-					reader.close();
-				}
-			}
-
-			for (String cls : initialTestSeq.keySet()) {
-				JsonObject clsInfo = initialTestSeq.getJsonObject(cls);
-				JsonArray sequences = clsInfo.getJsonArray("sequences");
-				JsonArray imports = clsInfo.getJsonArray("imports");
-				List<String> importList = imports.getValuesAs(JsonString.class).stream().map(JsonString::getString)
-						.collect(Collectors.toList());
-
+				ObjectNode clsInfo = (ObjectNode) initialTestSeq.get(cls);
+				ArrayNode sequences = (ArrayNode) clsInfo.get("sequences");
+				ArrayNode imports = (ArrayNode) clsInfo.get("imports");
+				List<String> importList = mapper.convertValue(imports, new TypeReference<List<String>>(){});
+						
 				totalInitSequences += sequences.size();
 				logger.info("Initial sequences for " + cls + ": " + sequences.size());
 				logger.info("Imports: " + importList);
 
 				// iterate over each string sequence for class and parse it into a randoop
 				// sequence object
-				for (JsonString seq : sequences.getValuesAs(JsonString.class)) {
-					String testSeq = seq.getString();
+				
+				sequences.elements().forEachRemaining(seq -> {
+					
+					String testSeq = seq.asText();
+					
 					// logger.fine("- " + testSeq);
 					try {
 						// create randoop sequence object
@@ -119,8 +112,10 @@ public class BasicBlockSequenceParseTest {
 						e.printStackTrace();
 						//throw e;
 					}
-				}
-			}
+					
+				});
+				
+			});
 			logger.info("=======> total_seq=" + totalInitSequences + "; parsed_seq="
 					+ parsedInitSequences);
 
