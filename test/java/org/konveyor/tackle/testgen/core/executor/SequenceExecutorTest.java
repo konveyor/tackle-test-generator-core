@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -60,8 +61,8 @@ public class SequenceExecutorTest {
 
 		assertTrue(outputFile.exists());
 
-		ObjectNode mainObject = (ObjectNode) SequenceExecutor.mapper.readTree(outputFile);
-		ObjectNode standardObject = (ObjectNode) SequenceExecutor.mapper.readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_results.json"));
+		ObjectNode mainObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(outputFile);
+		ObjectNode standardObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_results.json"));
 
 		Set<String> seqKeys = new HashSet<String>(IteratorUtils.toList(mainObject.fieldNames()));
 		Set<String> seqStandardKeys = new HashSet<String>(IteratorUtils.toList(standardObject.fieldNames()));

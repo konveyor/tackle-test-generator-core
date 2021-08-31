@@ -21,6 +21,7 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
@@ -54,8 +55,8 @@ public class ClassificationTest {
         // assert that output file for classification is created
         assertTrue(new File(OUTPUT_PATH).exists());
         
-        ArrayNode resultArray = (ArrayNode) ClassifyErrors.mapper.readTree(new File(OUTPUT_PATH)); 
-        ArrayNode standardArray = (ArrayNode) ClassifyErrors.mapper.readTree(new File(COMPARE_OUTPUT_PATH)); 
+        ArrayNode resultArray = (ArrayNode) TackleTestJson.getObjectMapper().readTree(new File(OUTPUT_PATH)); 
+        ArrayNode standardArray = (ArrayNode) TackleTestJson.getObjectMapper().readTree(new File(COMPARE_OUTPUT_PATH)); 
 
         assertEquals(standardArray.size(), resultArray.size());
         for (int objectInd=0; objectInd<resultArray.size(); objectInd++) {

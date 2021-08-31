@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.konveyor.tackle.testgen.util.TackleTestJson;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -21,12 +24,14 @@ class ModelJsonConvertor {
 	
 	static ObjectNode addModel(SUT methodModel, TestSet testPlan, JavaMethodModel method) 
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		
+		ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
-		ObjectNode modelNode = CTDTestPlanGenerator.mapper.createObjectNode();
+		ObjectNode modelNode = mapper.createObjectNode();
 
 		modelNode.put("formatted_signature", method.getFormattedSignature());
 
-		ArrayNode attrList = CTDTestPlanGenerator.mapper.createArrayNode();
+		ArrayNode attrList = mapper.createArrayNode();
 
 		int[] refersTo = new int[methodModel.getNumOfParams()];
 
@@ -42,7 +47,7 @@ class ModelJsonConvertor {
 
 		for (Parameter attr : methodModel.getParameters()) {
 
-			ObjectNode attrNode = CTDTestPlanGenerator.mapper.createObjectNode();
+			ObjectNode attrNode = mapper.createObjectNode();
 
 			String  attrName = attr.getName();
 
@@ -54,7 +59,7 @@ class ModelJsonConvertor {
 
 			attrNode.put("attribute_name", attrName);
 
-			ArrayNode valList = CTDTestPlanGenerator.mapper.createArrayNode();
+			ArrayNode valList = mapper.createArrayNode();
 
 			int i=0;
 			for (String val : attr.getValues()) {
@@ -75,7 +80,7 @@ class ModelJsonConvertor {
 
 		Map<Integer, List<Integer>> relatedAttributes = computeRelatedComponents(refersTo);
 
-		ArrayNode testsList = CTDTestPlanGenerator.mapper.createArrayNode();
+		ArrayNode testsList = mapper.createArrayNode();
 
 		/* In ACTS, the order of parameters in the test plan may be different from their order in the model, because
 		 * they are sorted according to their domain size. Hence we need to sync the two orders */
@@ -86,7 +91,7 @@ class ModelJsonConvertor {
 
 		for (int[] test : testPlanRows) {
 
-			ArrayNode testArray = CTDTestPlanGenerator.mapper.createArrayNode();
+			ArrayNode testArray = mapper.createArrayNode();
 
 			for (int i=0; i < methodModel.getNumOfParams(); i++) {
 
@@ -101,7 +106,7 @@ class ModelJsonConvertor {
 
 					// this is a collection attribute - capture all related attributes and values that relate to this single collection
 
-					ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
+					ObjectNode attrValNode = mapper.createObjectNode();
 					getValueRecursive(methodModel, attrValNode, test, i, combinedAttrs, refersTo, attrNames, paramToTestLoc);
 
 					testArray.add(attrValNode);
@@ -145,7 +150,7 @@ class ModelJsonConvertor {
 
 		if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
 
-			ObjectNode collectNode = CTDTestPlanGenerator.mapper.createObjectNode();
+			ObjectNode collectNode = TackleTestJson.getObjectMapper().createObjectNode();
 			collectNode.set("types", getArrayFromVal(valueToAdd));
 
 			for (int ind : combinedAttrs) {
@@ -226,7 +231,7 @@ class ModelJsonConvertor {
 
 
 	private static ObjectNode getSingleValTestObject(String val) {
-		ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
+		ObjectNode attrValNode = TackleTestJson.getObjectMapper().createObjectNode();
 
 		String actualVal = (val.contains(" ")? val.substring(0, val.indexOf(" ")) : val);
 
@@ -238,7 +243,7 @@ class ModelJsonConvertor {
 	private static ArrayNode getArrayFromVal(String listVal) {
 		String[] listVals = listVal.split(" ");
 		
-		ArrayNode listNode = CTDTestPlanGenerator.mapper.createArrayNode();
+		ArrayNode listNode = TackleTestJson.getObjectMapper().createArrayNode();
 
 		for (String lVal : listVals) {
 			listNode.add(lVal);
@@ -249,7 +254,7 @@ class ModelJsonConvertor {
 
 	private static ObjectNode getValObject(String attr, String val) {
 		
-		ObjectNode attrValNode = CTDTestPlanGenerator.mapper.createObjectNode();
+		ObjectNode attrValNode = TackleTestJson.getObjectMapper().createObjectNode();
 		String[] vals = val.split(" ");
 		List<String> filteredVals = new ArrayList<String>();
 
@@ -265,7 +270,7 @@ class ModelJsonConvertor {
 			attrValNode.put(attr, filteredVals.get(0));
 			attrValNode.put("locality_status:", filteredVals.get(1));
 		} else { // a collection value
-			ArrayNode valList = CTDTestPlanGenerator.mapper.createArrayNode();
+			ArrayNode valList = TackleTestJson.getObjectMapper().createArrayNode();
 			for (String innerVal : filteredVals) {
 				valList.add(innerVal);
 			}

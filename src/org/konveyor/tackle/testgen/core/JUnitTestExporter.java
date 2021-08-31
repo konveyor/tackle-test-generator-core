@@ -36,11 +36,11 @@ import org.apache.commons.cli.ParseException;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.konveyor.tackle.testgen.core.extender.SequenceUtil;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -117,7 +117,7 @@ public class JUnitTestExporter {
 	@SuppressWarnings("unchecked")
 	private Map<String, TestClass> readSequences(File seqFile) throws JsonProcessingException, IOException {
 
-		JsonNode mainNode = new ObjectMapper().readTree(seqFile);
+		JsonNode mainNode = TackleTestJson.getObjectMapper().readTree(seqFile);
 
 		Map<String, TestClass> junitTests = new HashMap<String, TestClass>();
 		ObjectNode testSequences = (ObjectNode) mainNode.get("test_sequences");

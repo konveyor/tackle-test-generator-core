@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
@@ -178,6 +179,6 @@ public class RapidTypeAnalysis {
 
     public static void toJson(String appName, Set<String> types) throws JsonGenerationException, JsonMappingException, IOException {
     	
-    	CTDTestPlanGenerator.mapper.writeValue(new File(appName+"_"+ Constants.RTA_OUTFILE_SUFFIX), types);
+    	TackleTestJson.getObjectMapper().writeValue(new File(appName+"_"+ Constants.RTA_OUTFILE_SUFFIX), types);
     }
 }

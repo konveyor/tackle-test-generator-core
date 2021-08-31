@@ -37,6 +37,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.evosuite.shaded.org.springframework.util.ClassUtils;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
@@ -75,7 +76,7 @@ public class TestSequenceInitializer {
 
 	private volatile Map<String, String> threadsErrorMessages = new HashMap<>();
 	
-	final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
 			boolean targetMethods)

@@ -50,6 +50,7 @@ import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -94,7 +95,7 @@ public class SequenceExecutor {
 
 	public static final int SINGLE_EXECUTION_SEC_LIMIT = 120;
 	
-	final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	private static final Logger logger = TackleTestLogger.getLogger(SequenceExecutor.class);
 

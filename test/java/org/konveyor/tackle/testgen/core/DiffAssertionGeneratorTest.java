@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -59,8 +60,8 @@ public class DiffAssertionGeneratorTest {
 
 		assertTrue(outputFile.exists());
 
-		ObjectNode mainObject = (ObjectNode) DiffAssertionsGenerator.mapper.readTree(outputFile);
-		ObjectNode standardObject = (ObjectNode) DiffAssertionsGenerator.mapper.readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_with_assertions.json"));
+		ObjectNode mainObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(outputFile);
+		ObjectNode standardObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_with_assertions.json"));
 
 		Set<String> seqKeys = new HashSet<String>(IteratorUtils.toList(mainObject.fieldNames()));
 		Set<String> seqStandardKeys = new HashSet<String>(IteratorUtils.toList(standardObject.fieldNames()));
@@ -77,6 +78,11 @@ public class DiffAssertionGeneratorTest {
 
 			int assertCount = countMatches(currentSeqCode, "assertEquals(");
 			int standardAssertCount = countMatches(standardSeqCode, "assertEquals(");
+
+			assertEquals(standardAssertCount, assertCount);
+			
+			assertCount = countMatches(currentSeqCode, "assertNull(");
+			standardAssertCount = countMatches(standardSeqCode, "assertNull(");
 
 			assertEquals(standardAssertCount, assertCount);
 			

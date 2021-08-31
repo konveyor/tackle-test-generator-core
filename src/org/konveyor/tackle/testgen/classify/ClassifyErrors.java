@@ -34,6 +34,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,7 +46,6 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -78,7 +78,7 @@ public class ClassifyErrors {
 
     private static final Logger logger = TackleTestLogger.getLogger(ClassifyErrors.class);
     
-    final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
     ClassifyErrors(String[] reportsPath, String errorsFilePath, String[] appPackages, String testDir)
         throws ParserConfigurationException, IOException, SAXException {

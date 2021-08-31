@@ -33,6 +33,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -92,7 +93,7 @@ public class TestSequenceExtenderTest {
         // read summary JSON file and assert over content
         File testCovFile = new File(summaryFilePath.toString());
         
-        ObjectNode summaryInfo = (ObjectNode) TestSequenceExtender.mapper.readTree(testCovFile);	
+        ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);	
         ObjectNode bbSeqInfo = (ObjectNode) summaryInfo.get("building_block_sequences_info");
         
 		assertEquals(app.exp__bb_sequences, bbSeqInfo.get("base_sequences").asInt());
@@ -119,7 +120,7 @@ public class TestSequenceExtenderTest {
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
 		assertEquals(app.exp__execution_exception_types_other, 
-				TestSequenceExtender.mapper.convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
+				TackleTestJson.getObjectMapper().convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
 				
 		ArrayNode nonInstTypes = (ArrayNode) summaryInfo.get("non_instantiable_types");
 		assertEquals(app.exp__non_instantiable_param_type, nonInstTypes.size());
@@ -139,7 +140,7 @@ public class TestSequenceExtenderTest {
         File testCovFile = new File(testCovFilePath.toString());
 
         // read coverage JSON file and assert over content
-		ObjectNode summaryInfo = (ObjectNode) TestSequenceExtender.mapper.readTree(testCovFile);
+		ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
 		assertEquals(app.exp__partition_count, summaryInfo.size());
 		for (String covKey : app.exp__tatget_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");

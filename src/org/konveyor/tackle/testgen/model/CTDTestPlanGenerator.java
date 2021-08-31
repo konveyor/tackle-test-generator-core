@@ -47,6 +47,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.konveyor.tackle.testgen.model.CTDModeler.CTDModelAndTestPlan;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
@@ -54,7 +55,6 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -93,6 +93,8 @@ public class CTDTestPlanGenerator {
 	private TargetFetcher targetFetcher;
 
 	private static final Logger logger = TackleTestLogger.getLogger(CTDTestPlanGenerator.class);
+	
+	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	private List<String> appClasspathEntries; // Application under test classpath entries
 	private String refactoringPackagePrefix = null;
@@ -100,9 +102,6 @@ public class CTDTestPlanGenerator {
 	private String partitionsFileSuffix = null;
 	private String partitionsFileSeparator = null;
 	
-	final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
-
 	public CTDTestPlanGenerator(String appName, String fileName, String targetClassList, String excludedClassList, String partitionsCPPrefix, 
 			String partitionsCPSuffix, String monolithPath, String classpathFile, int maxNestDepth, boolean addLocalRemote, int level, 
 			String refactoringPrefix, String partitionsPrefix, String partitionsSuffix, String partitionsSeparator) throws IOException {

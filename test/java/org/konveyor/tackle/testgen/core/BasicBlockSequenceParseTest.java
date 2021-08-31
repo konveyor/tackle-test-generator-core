@@ -24,12 +24,12 @@ import java.util.logging.Logger;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -37,7 +37,7 @@ public class BasicBlockSequenceParseTest {
 
 	private static final Logger logger = TackleTestLogger.getLogger(BasicBlockSequenceParseTest.class);
 	
-	private final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	@Test
 	public void parseRunner() throws Throwable {

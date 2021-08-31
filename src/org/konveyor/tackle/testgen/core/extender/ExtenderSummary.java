@@ -23,10 +23,12 @@ import java.util.logging.Logger;
 
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -160,10 +162,12 @@ public class ExtenderSummary {
                           int assertionCount)
         throws JsonGenerationException, JsonMappingException, IOException {
     	
-        ObjectNode summaryJson = TestSequenceExtender.mapper.createObjectNode();
+    	ObjectMapper mapper = TackleTestJson.getObjectMapper();
+    	
+        ObjectNode summaryJson = mapper.createObjectNode();
 
         // add information about building-block sequences
-        ObjectNode bbSeqInfo = TestSequenceExtender.mapper.createObjectNode();
+        ObjectNode bbSeqInfo = mapper.createObjectNode();
         bbSeqInfo.put("base_sequences", this.sequencePool.totalBaseSequences);
         bbSeqInfo.put("parsed_base_sequences_full", this.sequencePool.parsedBaseSequencesFull);
         bbSeqInfo.put("parsed_base_sequences_partial", this.sequencePool.parsedBaseSequencesPartial);
@@ -174,7 +178,7 @@ public class ExtenderSummary {
         summaryJson.set("building_block_sequences_info", bbSeqInfo);
 
         // add information about generated sequences
-        ObjectNode extSeqInfo = TestSequenceExtender.mapper.createObjectNode();
+        ObjectNode extSeqInfo = mapper.createObjectNode();
         extSeqInfo.put("generated_sequences", seqIdMap.keySet().size());
         extSeqInfo.put("executed_sequences", execExtSeq.keySet().size());
         extSeqInfo.put("failing_sequences", this.uncovTestPlanRows__execFail);
@@ -186,7 +190,7 @@ public class ExtenderSummary {
         summaryJson.set("extended_sequences_info", extSeqInfo);
 
         // add information about coverage of test plan rows
-        ObjectNode covInfo = TestSequenceExtender.mapper.createObjectNode();
+        ObjectNode covInfo = mapper.createObjectNode();
         covInfo.put("test_plan_target_methods", this.testPlan.size());
         covInfo.put("test_plan_rows", this.totalTestPlanRows);
         covInfo.put("rows_covered_full", this.covTestPlanRows__full);
@@ -197,12 +201,12 @@ public class ExtenderSummary {
         summaryJson.set("test_plan_coverage_info", covInfo);
 
         // add information about uncovered test plan rows
-        ObjectNode uncovInfo = TestSequenceExtender.mapper.createObjectNode();
+        ObjectNode uncovInfo = mapper.createObjectNode();
         uncovInfo.put("no_bb_sequence_for_target_method", this.uncovTestPlanRows__noInitSeq);
         uncovInfo.put("non_instantiable_param_type", this.uncovTestPlanRows__excp__NonInstantiableType);
         uncovInfo.put("execution_failed", this.uncovTestPlanRows__execFail);
         uncovInfo.put("exception_during_extension", this.uncovTestPlanRows__excp);
-        ObjectNode excpInfo = TestSequenceExtender.mapper.createObjectNode();
+        ObjectNode excpInfo = mapper.createObjectNode();
         excpInfo.put("randoop_operation_parse_exception", this.uncovTestPlanRows__excp__OperationParse);
         excpInfo.put("randoop_illegal_argument_exception", this.uncovTestPlanRows__excp__randoop__IllegalArgument);
         excpInfo.put("class_not_found_exception", this.uncovTestPlanRows__excp__ClassNotFound);
@@ -218,27 +222,27 @@ public class ExtenderSummary {
         summaryJson.set("uncovered_test_plan_rows_info", uncovInfo);
 
         // add exception types thrown during sequence execution
-        ArrayNode execExcpTypes = TestSequenceExtender.mapper.createArrayNode();
+        ArrayNode execExcpTypes = mapper.createArrayNode();
         this.seqExecExcpOther.forEach(excp -> execExcpTypes.add(excp));
         summaryJson.set("execution_exception_types_other", execExcpTypes);
 
         // add parse exception types
-        ObjectNode parseExcpTypes =  TestSequenceExtender.mapper.valueToTree(this.sequencePool.parseExceptions);
+        ObjectNode parseExcpTypes =  mapper.valueToTree(this.sequencePool.parseExceptions);
         summaryJson.set("parse_exception_types", parseExcpTypes);
 
         // add non-instantiable types
-        ArrayNode nonInstTypes = TestSequenceExtender.mapper.createArrayNode();
+        ArrayNode nonInstTypes = mapper.createArrayNode();
         this.nonInstantiableTypes.forEach(type -> nonInstTypes.add(type));
         summaryJson.set("non_instantiable_types", nonInstTypes);
 
         // add class-not-found types
-        ArrayNode cnfTypes = TestSequenceExtender.mapper.createArrayNode();
+        ArrayNode cnfTypes = mapper.createArrayNode();
         this.classNotFoundTypes.forEach(type -> cnfTypes.add(type));
         summaryJson.set("class_not_found_types", cnfTypes);
 
         // write JSON file
         String outFileName = appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX;
-        TestSequenceExtender.mapper.writeValue(new File(outFileName), summaryJson);
+        mapper.writeValue(new File(outFileName), summaryJson);
     }
 
 }

@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Set;
 
 import org.junit.Test;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,9 +37,9 @@ public class RapidTypeAnalysisTest {
 
 		// read standard types and make sure they are the same as what we got
 		
-		JsonNode standardNode = CTDTestPlanGenerator.mapper.readTree(new File("test/data/daytrader7/DayTrader_RTA_output.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File("test/data/daytrader7/DayTrader_RTA_output.json"));
 
-		Set<String> standard = CTDTestPlanGenerator.mapper.convertValue(standardNode, new TypeReference<Set<String>>() {});
+		Set<String> standard = TackleTestJson.getObjectMapper().convertValue(standardNode, new TypeReference<Set<String>>() {});
 		
 		assertEquals(standard.size(), result.size());
 		assertTrue(result.equals(standard));

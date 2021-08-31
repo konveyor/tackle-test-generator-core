@@ -33,12 +33,14 @@ import java.util.stream.Collectors;
 
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.javaparser.utils.Pair;
@@ -119,8 +121,10 @@ class SequencePool {
      * @throws JsonGenerationException 
      */
     private void initTestSequencePool(List<ObjectNode> initialTestSeqs, String appName) throws JsonGenerationException, JsonMappingException, IOException {
+    	
+    	ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
-    	ObjectNode parseErrorSequencesInfo = TestSequenceExtender.mapper.createObjectNode();
+    	ObjectNode parseErrorSequencesInfo = mapper.createObjectNode();
 
         // iterate over each class in JSON info about initial sequences
         for (ObjectNode initialTestSeq : initialTestSeqs) {
@@ -130,7 +134,7 @@ class SequencePool {
             	ObjectNode clsInfo = (ObjectNode) initialTestSeq.get(cls);
                 ArrayNode sequences = (ArrayNode) clsInfo.get("sequences");
                 ArrayNode imports = (ArrayNode) clsInfo.get("imports");
-                List<String> importList = TestSequenceExtender.mapper.convertValue(imports, 
+                List<String> importList = mapper.convertValue(imports, 
                 		new TypeReference<List<String>>(){}); 
                 		
                 if (this.classImports.get(cls) == null) {
@@ -139,7 +143,7 @@ class SequencePool {
                 this.classImports.get(cls).addAll(importList);
 
                 ArrayNode beforeAfterMethods = (ArrayNode) clsInfo.get("before_after_code_segments");
-                List<String> beforeAfterMethodsList = TestSequenceExtender.mapper.convertValue(beforeAfterMethods, 
+                List<String> beforeAfterMethodsList = mapper.convertValue(beforeAfterMethods, 
                 		new TypeReference<List<String>>(){});
                 		
                 if (this.classBeforeAfterMethods.get(cls) == null) {
@@ -228,7 +232,7 @@ class SequencePool {
                         this.parseExceptions.put(excpType, excpCount);
                         exceptionBaseSequences++;
 
-                        ObjectNode parseErrorInfo = TestSequenceExtender.mapper.createObjectNode();
+                        ObjectNode parseErrorInfo = mapper.createObjectNode();
                         parseErrorInfo.put("exception_type", excpType);
                         parseErrorInfo.put("exception_msg", e.getMessage());
                         parseErrorInfo.put("sequence", testSeq);
@@ -255,10 +259,10 @@ class SequencePool {
 
         // in debug mode, write sequences resulting in parse errors to json file
         if (DEBUG) {
-            ObjectNode parseErrorsObj = TestSequenceExtender.mapper.createObjectNode();
+            ObjectNode parseErrorsObj = mapper.createObjectNode();
             parseErrorsObj.set("parse_error_sequences", parseErrorSequencesInfo);
             
-            TestSequenceExtender.mapper.writeValue(new File(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX), parseErrorsObj);
+            mapper.writeValue(new File(appName + Constants.SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX), parseErrorsObj);
         }
 
         logger.info("=======> Test sequence pool init done: total_seq=" + totalBaseSequences + "; parsed_seq="

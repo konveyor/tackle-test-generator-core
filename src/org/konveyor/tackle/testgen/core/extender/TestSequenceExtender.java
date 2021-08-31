@@ -47,13 +47,13 @@ import org.konveyor.tackle.testgen.core.JUnitTestExporter;
 import org.konveyor.tackle.testgen.core.executor.JUnitExecutor;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.javaparser.utils.Pair;
@@ -82,7 +82,7 @@ public class TestSequenceExtender {
 
 	private static final Logger logger = TackleTestLogger.getLogger(TestSequenceExtender.class);
 	
-	final static ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	// CTD test plan read from the JSON input file
 	private ObjectNode testPlan;

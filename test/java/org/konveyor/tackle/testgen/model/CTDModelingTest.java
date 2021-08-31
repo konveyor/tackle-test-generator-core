@@ -24,6 +24,7 @@ import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -53,10 +54,10 @@ public class CTDModelingTest {
 
 		assertTrue(new File(outFilename).exists());
 
-		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
 
-		JsonNode standardNode = CTDTestPlanGenerator.mapper
-				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().
+				readTree(new File("test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
 
 		compareModels(resultNode, standardNode);
 	}
@@ -74,10 +75,10 @@ public class CTDModelingTest {
 
 		assertTrue(new File(outFilename).exists());
 
-		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
 
-		JsonNode standardNode = CTDTestPlanGenerator.mapper
-				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().
+					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
 
 		compareModels(resultNode, standardNode);
 	}
@@ -96,10 +97,10 @@ public class CTDModelingTest {
 
 		assertTrue(new File(outFilename).exists());
 
-		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
 
-		JsonNode standardNode = CTDTestPlanGenerator.mapper
-				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().
+					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
 
 		compareModels(resultNode, standardNode);
 	}
@@ -118,10 +119,10 @@ public class CTDModelingTest {
 
 		assertTrue(new File(outFilename).exists());
 
-		JsonNode resultNode = CTDTestPlanGenerator.mapper.readTree(new File(outFilename));
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
 
-		JsonNode standardNode = CTDTestPlanGenerator.mapper
-				.readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().
+					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
 
 		compareModels(resultNode, standardNode);
 	}

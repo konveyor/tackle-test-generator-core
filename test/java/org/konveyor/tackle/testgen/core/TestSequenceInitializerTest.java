@@ -25,6 +25,7 @@ import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -70,7 +71,7 @@ public class TestSequenceInitializerTest {
 						"com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
 						"com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
 		
-		JsonNode resultNode = TestSequenceInitializer.mapper.readTree(outputFile);
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
 
 		ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
 
