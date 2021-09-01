@@ -235,23 +235,23 @@ public class CTDTestPlanGenerator {
 		
 		for (String currentClassName : classNames) {
 			
-			List<JavaMethodModel> publicMethods = new ArrayList<JavaMethodModel>();
+			List<JavaMethodModel> nonPrivateMethods = new ArrayList<JavaMethodModel>();
 			Class<?> targetClass = Class.forName(currentClassName, false, classLoader);
-			if (Modifier.isPublic(targetClass.getModifiers())) {
-				Map<String, String> nonPublicMethods = new HashMap<>(); // map from method signature to its visibility
+			if ( ! Modifier.isPrivate(targetClass.getModifiers())) {
+				Map<String, String> privateMethods = new HashMap<>(); // map from method signature to its visibility
 				for (Object method : targetFetcher.getTargetMethods(targetClass, classLoader,
-						nonPublicMethods)) {
-					publicMethods.add(new JavaMethodModel(partitionName, targetClass, method, classLoader,
+						privateMethods)) {
+					nonPrivateMethods.add(new JavaMethodModel(partitionName, targetClass, method, classLoader,
 							maxCollectionNestDepth));
 				}
-				if (!publicMethods.isEmpty()) {
-					classToMethods.put(currentClassName, publicMethods);
+				if (!nonPrivateMethods.isEmpty()) {
+					classToMethods.put(currentClassName, nonPrivateMethods);
 					targetClassesCounter++;
 				} else {
 					privateMethodsCounter++;
 				}
-				if (!nonPublicMethods.isEmpty()) {
-					classToNonTargetedMethods.put(currentClassName, nonPublicMethods);
+				if (!privateMethods.isEmpty()) {
+					classToNonTargetedMethods.put(currentClassName, privateMethods);
 				}
 			} else {
 				privateClassCounter++;
@@ -262,13 +262,13 @@ public class CTDTestPlanGenerator {
 					(targetClassesCounter==1? "" : "es"));
 		
 		if (privateClassCounter > 0) {
-			System.out.println("* Skipping "+privateClassCounter+" non-public class"+
+			System.out.println("* Skipping "+privateClassCounter+" private class"+
 					(privateClassCounter==1? "" : "es"));
 		}
 		
 		if (privateMethodsCounter > 0) {
 			System.out.println("* Skipping "+privateMethodsCounter+" class"+
-					(privateMethodsCounter==1? "" : "es")+" with no public methods");
+					(privateMethodsCounter==1? "" : "es")+" with only private methods");
 		}
 
 		CTDModeler modeler = new CTDModeler(targetFetcher, refactoringPackagePrefix);
@@ -332,7 +332,7 @@ public class CTDTestPlanGenerator {
 
 		abstract String getLocalRemoteTag(JavaMethodModel method, String className);
 
-		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader, Map<String, String> nonPublicMethods) {
+		protected List<Object> getTargetMethods(Class<?> cls, URLClassLoader classLoader, Map<String, String> privateMethods) {
 
 			if (Utils.isPrivateInnerClass(cls)) {
 				logger.fine("Skipping private inner class "+cls.getName());
@@ -352,7 +352,7 @@ public class CTDTestPlanGenerator {
 
 			for (Method method : cls.getDeclaredMethods()) {
 
-				if ( ! Modifier.isPublic(method.getModifiers())) {
+				if (Modifier.isPrivate(method.getModifiers())) {
 					String sig;
 					
 					try {
@@ -362,7 +362,7 @@ public class CTDTestPlanGenerator {
 						logger.warning("Couldn't find signature for " + method.getName());
 						continue;
 					}
-					nonPublicMethods.put(sig, getVisibility(method));
+					privateMethods.put(sig, getVisibility(method));
 					continue;
 				}
 
@@ -389,11 +389,11 @@ public class CTDTestPlanGenerator {
 			}
 
 			for (Constructor<?> constr : cls.getConstructors()) {
-				if (Modifier.isPublic(constr.getModifiers())) {
+				if ( ! Modifier.isPrivate(constr.getModifiers())) {
 					publicMethods.add(constr);
 				} else {
 					String sig = Utils.getSignature(constr);
-					nonPublicMethods.put(sig, getVisibility(constr));
+					privateMethods.put(sig, getVisibility(constr));
 				}
 			}
 
