@@ -148,6 +148,8 @@ public class CTDModelingTest {
 			ObjectNode standardClassesObject = (ObjectNode) standardObjects.get(partition);
 
 			assert (standardClassesObject != null);
+			
+			assertEquals(standardClassesObject.size(), classesObject.size());
 
 			assertEquals(new HashSet<String>(IteratorUtils.toList(standardClassesObject.fieldNames())),
 					new HashSet<String>(IteratorUtils.toList(classesObject.fieldNames())));
@@ -159,6 +161,8 @@ public class CTDModelingTest {
 				ObjectNode standardMethodsObject = (ObjectNode) standardClassesObject.get(className);
 
 				assert (standardMethodsObject != null);
+				
+				assertEquals(standardMethodsObject.size(), methodsObject.size());
 
 				assertEquals(new HashSet<String>(IteratorUtils.toList(standardMethodsObject.fieldNames())),
 						new HashSet<String>(IteratorUtils.toList(methodsObject.fieldNames())));
