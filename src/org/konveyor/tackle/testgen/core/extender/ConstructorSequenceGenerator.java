@@ -232,9 +232,10 @@ public class ConstructorSequenceGenerator {
             ReferenceType typeArg = typeArgs.isEmpty() ? null : typeArgs.get(0);
             JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
                 .getCollectionTypeInstantiationInfo(typeName, typeArg);
-            Substitution colSubst = instInfo.instantiatedType.getTypeSubstitution();
-            TypedOperation colInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
-                .substitute(colSubst);
+            TypedOperation colInstOper = TypedOperation.forConstructor(instInfo.typeConstructor);
+            if (instInfo.instantiatedType != null) {
+                colInstOper = colInstOper.substitute(instInfo.instantiatedType.getTypeSubstitution());
+            }
             return sequence.extend(colInstOper);
         }
 

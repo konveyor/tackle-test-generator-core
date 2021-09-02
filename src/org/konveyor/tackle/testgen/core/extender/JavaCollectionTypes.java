@@ -13,10 +13,7 @@ limitations under the License.
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import randoop.types.GenericClassType;
-import randoop.types.InstantiatedType;
-import randoop.types.JDKTypes;
-import randoop.types.ReferenceType;
+import randoop.types.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -191,6 +188,22 @@ public class JavaCollectionTypes {
             );
         }
 
+        // handle collection type defined in the application under test; the type can be parameterized
+        // (generic or instantiated) or non-parameterized type
+        if (!type.startsWith("java.util.")) {
+            Type randoopType = Type.forClass(typeClass);
+            InstantiatedType instType = null;
+            if (randoopType instanceof GenericClassType) {
+                instType = getInstantiatedType((GenericClassType)randoopType, typeArgument);
+            }
+            else if (randoopType instanceof  InstantiatedType) {
+                instType = (InstantiatedType)randoopType;
+            }
+            // in case of non-parameterized type, instantiated type is null
+            return new InstantiationInfo(instType, typeClass.getConstructor(),
+                typeClass.getMethod("add", Object.class));
+        }
+
         // for a set type, by default, create instantiation info for java.util.HashSet
         if (java.util.Set.class.isAssignableFrom(typeClass)) {
             return new InstantiationInfo(getInstantiatedType(
@@ -249,7 +262,7 @@ public class JavaCollectionTypes {
                 HashMap.class.getMethod("put", Object.class, Object.class)
             );
         }
-        if (type.equals("java.util.HashTable")) {
+        if (type.equals("java.util.Hashtable")) {
             return new InstantiationInfo(
                 getInstantiatedType(JDKTypes.HASH_TABLE_TYPE, keyTypeArgument, valueTypeArgument),
                 Hashtable.class.getConstructor(),

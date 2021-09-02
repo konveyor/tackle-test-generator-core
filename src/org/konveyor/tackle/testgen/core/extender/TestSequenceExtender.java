@@ -81,7 +81,7 @@ import randoop.types.TypeVariable;
 public class TestSequenceExtender {
 
 	private static final Logger logger = TackleTestLogger.getLogger(TestSequenceExtender.class);
-	
+
 	private final static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	// CTD test plan read from the JSON input file
@@ -132,16 +132,16 @@ public class TestSequenceExtender {
 	private final String applicationName;
 
 	private String outputDir = null;
-	
+
 	int totalInitSeqs = 0, testPlanMethods = 0, testPlanClasses = 0;
-	
+
 	int classTestPlanRows = 0;
-	
+
 	int classSeqCount = 0;
-	
+
 	int totalSeqCount = 0;
     int totalTestPlanRows = 0;
-	
+
 	private final boolean jeeSupport;
 
 	private final boolean diffAssertions;
@@ -226,7 +226,7 @@ public class TestSequenceExtender {
 			}
 			this.initialTestSeqs.add((ObjectNode) mapper.readTree(testSeqFile).get("test_sequences"));
 		}
-		
+
         for (ObjectNode initialTestSeq : initialTestSeqs) {
         	initialTestSeq.fieldNames().forEachRemaining(cls -> {
         		ObjectNode clsInfo = (ObjectNode) initialTestSeq.get(cls);
@@ -653,7 +653,7 @@ public class TestSequenceExtender {
 				if (this.sequencePool.classImports.containsKey(cls)) {
 					testImports.addAll(this.sequencePool.classImports.get(cls).stream().filter(impName -> {
 						try {
-							return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") || 
+							return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") ||
 									! Modifier.isPrivate(Class.forName(impName).getModifiers());
 						} catch (ClassNotFoundException e) {
 							return true; // treat class as non-private, either way may result in compilation issues for the resulting JUnit test
@@ -673,9 +673,9 @@ public class TestSequenceExtender {
 	 * Writes coverage information to JSON file
 	 *
 	 * @param coverageFileName
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 */
 	public void writeTestCoverageFile(String appName, String coverageFileName) throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectNode partCovJson = mapper.createObjectNode();
@@ -699,8 +699,8 @@ public class TestSequenceExtender {
 			partCovJson.set(part, clsCovJson);
 		}
 		String outFileName = appName+Constants.COVERAGE_FILE_JSON_SUFFIX;
-		
-		
+
+
 		if (coverageFileName != null) {
 			outFileName = coverageFileName;
 		}
@@ -1093,8 +1093,8 @@ public class TestSequenceExtender {
         throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
 		// build list of types whose instances are to be added to the array
-        List<String> elemTypes = mapper.convertValue(arrElemSpec.get("types"), new TypeReference<List<String>>(){}); 
-        		
+        List<String> elemTypes = mapper.convertValue(arrElemSpec.get("types"), new TypeReference<List<String>>(){});
+
 		// list to hold uncovered array element types
 		List<String> uncovElemTypes = new ArrayList<>();
 
@@ -1202,8 +1202,10 @@ public class TestSequenceExtender {
         Method colAddMethod = instInfo.addMethod;
 
 		// extend sequence with collection instantiation statements
-		Substitution colSubst = colInstType.getTypeSubstitution();
-		TypedOperation colInstOper = TypedOperation.forConstructor(colCtor).substitute(colSubst);
+		TypedOperation colInstOper = TypedOperation.forConstructor(colCtor);
+		if (colInstType != null) {
+            colInstOper = colInstOper.substitute(colInstType.getTypeSubstitution());
+        }
 		seq = seq.extend(colInstOper);
 		int colInstVarIdx = seq.getLastVariable().getDeclIndex();
 
@@ -1227,9 +1229,10 @@ public class TestSequenceExtender {
 //                Substitution colAddSubst = new Substitution(
 //                    colAddOper.getTypeParameters(),
 //                    ReferenceType.forClass(Object.class));
-                seq = seq.extend(colAddOper.substitute(colSubst),
-                    seq.getVariable(colInstVarIdx),
-                    seq.getVariable(extSeq.b));
+                if (colInstType != null) {
+                    colAddOper = colAddOper.substitute(colInstType.getTypeSubstitution());
+                }
+                seq = seq.extend(colAddOper, seq.getVariable(colInstVarIdx), seq.getVariable(extSeq.b));
 			}
 			else {
 				// otherwise record the element as uncovered
@@ -1330,9 +1333,9 @@ public class TestSequenceExtender {
         throws ClassNotFoundException, NoSuchMethodException, OperationParseException {
 
         // build lists of types for map keys and map values
-        List<String> keyTypes = mapper.convertValue(keyElemSpec.get("types"), new TypeReference<List<String>>(){}); 
-        List<String> valueTypes = mapper.convertValue(valueElemSpec.get("types"), new TypeReference<List<String>>(){}); 
-        		
+        List<String> keyTypes = mapper.convertValue(keyElemSpec.get("types"), new TypeReference<List<String>>(){});
+        List<String> valueTypes = mapper.convertValue(valueElemSpec.get("types"), new TypeReference<List<String>>(){});
+
         // create sequence for instantiating each key type
         List<Pair<Sequence, Integer>> keySequences = new ArrayList<>();
         for (String keyType : keyTypes) {
@@ -1595,7 +1598,7 @@ public class TestSequenceExtender {
 					// skip non-param keys
 					if (key.startsWith("attr_")) {
 						otherTypesForParam.add(param.get(key).asText());
-						break; 
+						break;
 					}
 				}
 			}
