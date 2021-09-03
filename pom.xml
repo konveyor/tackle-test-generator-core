@@ -87,12 +87,13 @@
       <artifactId>evosuite-standalone-runtime</artifactId>
       <version>${evosuite.version}</version>
   	</dependency>
-     <dependency>
+    <dependency>
       <groupId>edu.uta.cse.fireeye.acts</groupId>
       <artifactId>acts</artifactId>
       <version>${acts.version}</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/acts_${acts.version}.jar</systemPath>
+      <optional>true</optional>
     </dependency>
     <dependency>
     	<groupId>com.github.javaparser</groupId>
@@ -110,6 +111,7 @@
       <version>${randoop.version}</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/download/randoop-all-${randoop.version}.jar</systemPath>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>randoop</groupId>
@@ -117,6 +119,7 @@
       <version>${randoop.version}</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/lib/download/replacecall-${randoop.version}.jar</systemPath>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
