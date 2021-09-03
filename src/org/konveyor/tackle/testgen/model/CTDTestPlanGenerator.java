@@ -352,7 +352,7 @@ public class CTDTestPlanGenerator {
 
 			for (Method method : cls.getDeclaredMethods()) {
 
-				if (Modifier.isPrivate(method.getModifiers())) {
+				if (Modifier.isPrivate(method.getModifiers()) || method.isSynthetic()) {
 					String sig;
 					
 					try {
