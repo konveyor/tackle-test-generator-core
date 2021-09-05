@@ -125,12 +125,16 @@ public class CTDTestPlanGenerator {
 		if (excludedClassList != null) {
 			excludedClasses = new HashSet<String>(Arrays.asList(excludedClassList.split("::")));
 		}
+		
+		// determine target classes
 
 		if (fileName != null) {
 			targetFetcher = new PartitionTargets(new File(fileName), excludedClasses);
 		} else {
 			targetFetcher = new ClassListTargets(targetClassList, excludedClasses);
 		}
+		
+		// determine types instantiated in the app via Rapid Type Analysis (RTA)
 
 		Set<String> RTAClasses = new RapidTypeAnalysis().performAnalysis(monolithPath, appClasspathEntries);
 
@@ -143,6 +147,8 @@ public class CTDTestPlanGenerator {
 		targetModelsCounter = 0;
 		targetTestsCounter = 0;
 		targetClassesCounter = 0;
+		
+		// build CTD models and test plans for all target methods of all target classes
 
 		Map<String, Map<String, Map<JavaMethodModel, CTDModelAndTestPlan>>> partitionToCTD = new HashMap<>();
 		Map<String, Map<String, Map<String, String>>> partitionToNonTargeted = new HashMap<>();
@@ -235,6 +241,8 @@ public class CTDTestPlanGenerator {
 		
 		for (String currentClassName : classNames) {
 			
+			// determine target methods per class
+			
 			List<JavaMethodModel> nonPrivateMethods = new ArrayList<JavaMethodModel>();
 			Class<?> targetClass = Class.forName(currentClassName, false, classLoader);
 			if ( ! Modifier.isPrivate(targetClass.getModifiers())) {
@@ -270,6 +278,8 @@ public class CTDTestPlanGenerator {
 			System.out.println("* Skipping "+privateMethodsCounter+" class"+
 					(privateMethodsCounter==1? "" : "es")+" with only private methods");
 		}
+		
+		// Create CTD model and test plan for each target method of each class 
 
 		CTDModeler modeler = new CTDModeler(targetFetcher, refactoringPackagePrefix);
 
@@ -352,7 +362,7 @@ public class CTDTestPlanGenerator {
 
 			for (Method method : cls.getDeclaredMethods()) {
 
-				if (Modifier.isPrivate(method.getModifiers()) || method.isSynthetic()) {
+				if (Modifier.isPrivate(method.getModifiers())) {
 					String sig;
 					
 					try {
@@ -363,6 +373,11 @@ public class CTDTestPlanGenerator {
 						continue;
 					}
 					privateMethods.put(sig, getVisibility(method));
+					continue;
+				}
+				
+				if (method.isSynthetic()) {
+					logger.fine("Skipping synthetic method "+cls.getName()+":"+method.getName());
 					continue;
 				}
 

@@ -142,8 +142,8 @@ public class RapidTypeAnalysis {
 										logger.fine("Skipping private inner class "+valClassName);
 									//} else if (isNonSerializableLibraryClass(valClass)) {
 									//	logger.fine("Skipping non-serializable library class "+valClassName);
-									} else if ( ! hasPublicConstructor(valClass)) {
-										logger.fine("Skipping class "+valClassName+" with no public constructors");
+									} else if ( hasOnlyPrivateConstructors(valClass)) {
+										logger.fine("Skipping class "+valClassName+" with only private constructors");
 									} else {
 										initializedTypes.add(valClassName);
 									}
@@ -160,16 +160,16 @@ public class RapidTypeAnalysis {
 		return initializedTypes;
 	}
 
-	private boolean hasPublicConstructor(Class<?> valClass) {
+	private boolean hasOnlyPrivateConstructors(Class<?> valClass) {
 
 		for (Constructor<?> constr : valClass.getConstructors()) {
 
-			if (Modifier.isPublic(constr.getModifiers())) {
-				return true;
+			if ( ! Modifier.isPrivate(constr.getModifiers())) {
+				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	//private boolean isNonSerializableLibraryClass(Class<?> theClass) {
