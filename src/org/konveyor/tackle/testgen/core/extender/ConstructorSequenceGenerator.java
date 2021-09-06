@@ -48,7 +48,7 @@ public class ConstructorSequenceGenerator {
      * @param currNestingDepth
      * @return
      */
-    static Sequence createConstructorSequence(String typeName, boolean isTestPlanParameter,
+    static Sequence createConstructorSequence(String typeName, Type type, boolean isTestPlanParameter,
                                               SequencePool sequencePool, int currNestingDepth)
         throws ClassNotFoundException, OperationParseException, NoSuchMethodException {
 
@@ -97,7 +97,7 @@ public class ConstructorSequenceGenerator {
 //				if (!validateConstructorParameters(paramTypes)) {
 //					continue;
 //				}
-                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool,
+                Sequence ctorSequence = createSequenceForConstructor(typeName,type, ctor, sequencePool,
                     false, currNestingDepth);
                 if (ctorSequence != null) {
                     return ctorSequence;
@@ -110,7 +110,7 @@ public class ConstructorSequenceGenerator {
         // could not be created
         for (int paramCount : ctorParamCounts) {
             for (Constructor<?> ctor : paramCountCtorMap.get(paramCount)) {
-                Sequence ctorSequence = createSequenceForConstructor(typeName, ctor, sequencePool,
+                Sequence ctorSequence = createSequenceForConstructor(typeName, type, ctor, sequencePool,
                     true, currNestingDepth);
                 if (ctorSequence != null) {
                     return ctorSequence;
@@ -132,7 +132,7 @@ public class ConstructorSequenceGenerator {
      * @throws OperationParseException
      * @throws NoSuchMethodException
      */
-    private static Sequence createSequenceForConstructor(String typeName, Constructor<?> ctor,
+    private static Sequence createSequenceForConstructor(String typeName, Type type, Constructor<?> ctor,
                                                          SequencePool sequencePool,
                                                          boolean createDefaultNull,
                                                          int currNestingDepth)
@@ -181,7 +181,12 @@ public class ConstructorSequenceGenerator {
         // type substitution to it
         TypedClassOperation ctorCallOper = TypedOperation.forConstructor(ctor)
             .applyCaptureConversion();
-        ctorCallOper = (TypedClassOperation)SequenceUtil.performTypeSubstitution(ctorCallOper);
+        if (type != null && type instanceof InstantiatedType) {
+            ctorCallOper = ctorCallOper.substitute(((InstantiatedType)type).getTypeSubstitution());
+        }
+        else {
+            ctorCallOper = (TypedClassOperation) SequenceUtil.performTypeSubstitution(ctorCallOper);
+        }
         ctorSequence = ctorSequence.extend(ctorCallOper, ctorParamVars);
 
         // add sequence to the class sequence pool and return it
@@ -275,17 +280,17 @@ public class ConstructorSequenceGenerator {
             Sequence typeInstSeq = null;
             if (paramType.isClassOrInterfaceType()) {
                 ClassOrInterfaceType clsIntType = (ClassOrInterfaceType) paramType;
-                List<String> potentialInstantiationTypes = new ArrayList<>();
+                List<Type> potentialInstantiationTypes = new ArrayList<>();
                 if (clsIntType.isInterface() || clsIntType.isAbstract()) {
                     // TODO: get all implementing classes for interface and all non-abstract subclasses for abstract class
                     potentialInstantiationTypes.addAll(getConcreteTypes(clsIntType));
                 } else {
-                    potentialInstantiationTypes.add(typeName);
+                    potentialInstantiationTypes.add(paramType);
                 }
 
                 // iterate over the list of instantiable types and attempt to create constructor sequence
-                for (String subtypeName : potentialInstantiationTypes) {
-                    typeInstSeq = createConstructorSequence(subtypeName, false,
+                for (Type type : potentialInstantiationTypes) {
+                    typeInstSeq = createConstructorSequence(type.getRawtype().getBinaryName(), type,false,
                         sequencePool, currNestingDepth + 1);
                     if (typeInstSeq != null) {
                         return SequenceUtil.concatenate(sequence, typeInstSeq);
@@ -331,7 +336,7 @@ public class ConstructorSequenceGenerator {
         return sequencePool.classTestSeqPool.get(subtypesWithCtorSeqs.first());
     }
 
-    private static List<String> getConcreteTypes(ClassOrInterfaceType clsIntType) {
+    private static List<Type> getConcreteTypes(ClassOrInterfaceType clsIntType) {
         return new ArrayList<>();
     }
 
