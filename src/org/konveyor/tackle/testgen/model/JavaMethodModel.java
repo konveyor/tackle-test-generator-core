@@ -246,12 +246,17 @@ public class JavaMethodModel {
 		
 		int typeModifiers = type.getModifiers();
 		
-		return Modifier.isPublic(typeModifiers) || // type is public
-				// type is not private and in the same package as class under test 
+		/*
+		 * Type can be instantiated if either of the following conditions holds:
+		 * 1. Type is public and belongs to some package 
+		 * 2. Type is not private and in the same package as the class under test 
+		 * 3. Type is protected and the class under test is a subclass of type
+		 */
+		
+		return (Modifier.isPublic(typeModifiers) && type.getPackage() != null) || 
 			(! Modifier.isPrivate(typeModifiers) && 
 			type.getPackage() != null && targetClass.getPackage() != null && 
 			type.getPackage().getName().equals(targetClass.getPackage().getName())) ||
-			// type is protected and class under test is a subclass of type
 			Modifier.isProtected(typeModifiers) && type.isAssignableFrom(targetClass);
 	}
 
