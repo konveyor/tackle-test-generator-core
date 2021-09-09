@@ -93,7 +93,7 @@ public class TestgenIntegrationTest {
             // create building-block test sequences using combined test generator
             TestSequenceInitializer seqInitializer = new TestSequenceInitializer(testApp.appName,
                 testApp.testPlanFilename, testApp.appPath, testApp.appClasspathFilename,
-                Constants.COMBINED_TEST_GENERATOR_NAME, 5, false);
+                Constants.COMBINED_TEST_GENERATOR_NAME, 5, false, false);
             seqInitializer.createInitialTests();
 
             // assert that test sequences files are created
