@@ -43,7 +43,6 @@ import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -69,6 +68,8 @@ public class TestSequenceInitializer {
 	private final int timeLimit;
 	
 	private final boolean targetSpecificMethods;
+	
+	private final boolean addBaseAssertions;
 
 	public static final int DEFAULT_TIME_LIMIT = -1;
 
@@ -79,7 +80,7 @@ public class TestSequenceInitializer {
 	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
-			boolean targetMethods)
+			boolean targetMethods, boolean baseAssertions)
 			throws IOException {
 
 		monolithAppPath = appPath;
@@ -87,6 +88,7 @@ public class TestSequenceInitializer {
 		testGeneratorName = testGenName;
 		this.timeLimit = timeLimit;
 		targetSpecificMethods = targetMethods;
+		addBaseAssertions = baseAssertions;
 
 		File file = new File(ctdModelsFileName);
 		if (!file.isFile()) {
@@ -190,7 +192,7 @@ public class TestSequenceInitializer {
 
         if (testGeneratorName.equals(EvoSuiteTestGenerator.class.getSimpleName()) || testGeneratorName.equals(Constants.COMBINED_TEST_GENERATOR_NAME)) {
         	Map<String, String> evoSuiteSettings = new HashMap<String, String>();
-        	evoSuiteSettings.put(EvoSuiteTestGenerator.Options.ASSERTIONS.name(), "false");
+        	evoSuiteSettings.put(EvoSuiteTestGenerator.Options.ASSERTIONS.name(), String.valueOf(addBaseAssertions));
         	evoSuiteSettings.put(EvoSuiteTestGenerator.Options.CRITERION.name(), "BRANCH");
         	if (timeLimit != DEFAULT_TIME_LIMIT) {
         		evoSuiteSettings.put(EvoSuiteTestGenerator.Options.SEARCH_BUDGET.name(), String.valueOf(timeLimit));
@@ -200,7 +202,7 @@ public class TestSequenceInitializer {
 
         if (testGeneratorName.equals(RandoopTestGenerator.class.getSimpleName()) || testGeneratorName.equals(Constants.COMBINED_TEST_GENERATOR_NAME)) {
         	Map<String, String> randoopSettings = new HashMap<String, String>();
-        	randoopSettings.put(RandoopTestGenerator.RandoopOptions.REGRESSION_ASSERTIONS.name(), "false");
+        	randoopSettings.put(RandoopTestGenerator.RandoopOptions.REGRESSION_ASSERTIONS.name(), String.valueOf(addBaseAssertions));
         	if (timeLimit != DEFAULT_TIME_LIMIT) {
         		randoopSettings.put(RandoopTestGenerator.RandoopOptions.TIME_LIMIT.name(), String.valueOf(timeLimit));
         	}
@@ -471,6 +473,15 @@ public class TestSequenceInitializer {
                 .type(Boolean.class)
                 .build()
         );
+        
+        
+     // option for adding assertions to base tests
+        options.addOption(Option.builder("ba")
+                .longOpt("base-tests-assertions")
+                .desc("Generate assertions in base tests. This option should be used for techique evaluation only.")
+                .type(Boolean.class)
+                .build()
+        );
 
         // help option
         options.addOption(Option.builder("h")
@@ -540,6 +551,12 @@ public class TestSequenceInitializer {
         if (cmd.hasOption("tm")) {
         	targetMethods = true;
         }
+        
+        boolean baseAssertions = false;
+        
+        if (cmd.hasOption("ba")) {
+        	baseAssertions = true;
+        }
 
         logger.info("Application name: "+appName);
         logger.info("CTD test plan file: "+testPlanFilename);
@@ -547,9 +564,15 @@ public class TestSequenceInitializer {
         logger.info("Application classpath file name: "+classpathFilename);
         logger.info("Test generator name: "+testGenerator);
         logger.info("Time limit per class: "+timeLimit);
-        logger.info("Target specific methods: "+targetMethods);
+        if (targetMethods) {
+        	logger.info("Targeting specific methods");
+        }
+        if (baseAssertions) {
+        	logger.info("Adding assertions to base tests");
+        }
 
-		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, timeLimit, targetMethods).createInitialTests();
+		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, timeLimit, targetMethods, baseAssertions).
+		createInitialTests();
 	}
 
 
