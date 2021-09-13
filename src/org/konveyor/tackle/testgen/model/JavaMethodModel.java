@@ -58,9 +58,10 @@ public class JavaMethodModel {
 	private final int maxCollectionDepth;
 
 	private static final String CLASS_NAME_PATTERN = "(([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*)";
-	private static final String EXTEND_STRING = "\\? extends "+CLASS_NAME_PATTERN;
+	private static final String PARAM_PATTERN = "(<[\\?a-zA-Z\\.\\d\\s_$]*>)?";
+	private static final String EXTEND_STRING = "\\? extends "+CLASS_NAME_PATTERN+PARAM_PATTERN;
 	private static final Pattern EXTEND_PATTERN = Pattern.compile(EXTEND_STRING);
-	private static final String SUPER_STRING = "\\? super "+CLASS_NAME_PATTERN;
+	private static final String SUPER_STRING = "\\? super "+CLASS_NAME_PATTERN+PARAM_PATTERN;
 	private static final Pattern SUPER_PATTERN = Pattern.compile(SUPER_STRING);
 	private static final String JAVA_OBJECT_NAME = "java.lang.Object";
 	private final URLClassLoader classLoader;
@@ -370,7 +371,7 @@ public class JavaMethodModel {
 
 		String keyTypeClassName = paramType[0].getTypeName();
 		String valueTypeClassName = paramType.length > 1? paramType[1].getTypeName() : null;
-
+		
 		boolean[] keyIsSuper = new boolean[] {false};
 		boolean[] valueIsSuper = new boolean[] {false};
 
@@ -383,8 +384,8 @@ public class JavaMethodModel {
 
 		Class<?> keyClass;
 
-		if (checkIfCollectionParam(keyTypeClassName)) {
-			keyClass =  getCollectionType(keyTypeClassName);
+		if (checkIfCollectionOrParameterizedType(keyTypeClassName)) {
+			keyClass =  getCollectionOrParameterizedType(keyTypeClassName);
 		} else {
 			keyClass = Class.forName(keyTypeClassName, false, classLoader);
 		}
@@ -408,8 +409,8 @@ public class JavaMethodModel {
 		Class<?> valueClass = null;
 
 		if (valueTypeClassName != null) {
-			if (checkIfCollectionParam(valueTypeClassName)) {
-				valueClass = getCollectionType(valueTypeClassName);
+			if (checkIfCollectionOrParameterizedType(valueTypeClassName)) {
+				valueClass = getCollectionOrParameterizedType(valueTypeClassName);
 			} else {
 				valueClass = Class.forName(valueTypeClassName, false, classLoader);
 			}
@@ -496,11 +497,11 @@ public class JavaMethodModel {
 		return null;
 	}
 
-	private static boolean checkIfCollectionParam(String type) {
+	private static boolean checkIfCollectionOrParameterizedType(String type) {
 		return (type.contains("<") && type.contains(">")) || type.contains("[]");
 	}
 
-	private Class<?> getCollectionType(String type) throws ClassNotFoundException {
+	private Class<?> getCollectionOrParameterizedType(String type) throws ClassNotFoundException {
 		if (type.contains("<")) {
 			return Class.forName(type.substring(0, type.indexOf('<')), false, classLoader);
 		}
