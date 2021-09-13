@@ -355,12 +355,23 @@ public class TestSequenceExtender {
 						}
 						return;
 					}
-					catch (NoClassDefFoundError ncdf) {
+                    catch (NoClassDefFoundError ncdf) {
                         String errmsg = "Error parsing: " + parseableMethodSig + "\n" + ncdf;
                         logger.warning(errmsg);
                         this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
                         this.extSummary.uncovTestPlanRows__excp__ClassNotFound += currTestPlanRows.length;
                         this.extSummary.classNotFoundTypes.add(ncdf.getMessage());
+                        for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
+                            methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
+                        }
+                        return;
+                    }
+                    catch (UnsatisfiedLinkError ule) {
+                        String errmsg = "Error parsing: " + parseableMethodSig + "\n" + ule;
+                        logger.warning(errmsg);
+                        this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
+                        this.extSummary.uncovTestPlanRows__excp__UnsatisfiedLink += currTestPlanRows.length;
+                        this.extSummary.classNotFoundTypes.add(ule.getMessage());
                         for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
                             methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
                         }
