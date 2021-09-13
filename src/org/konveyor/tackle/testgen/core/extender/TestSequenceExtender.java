@@ -655,7 +655,7 @@ public class TestSequenceExtender {
 						try {
 							return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") ||
 									! Modifier.isPrivate(Class.forName(impName).getModifiers());
-						} catch (ClassNotFoundException e) {
+						} catch (ClassNotFoundException | NoClassDefFoundError e) {
 							return true; // treat class as non-private, either way may result in compilation issues for the resulting JUnit test
 						}
 					}).
