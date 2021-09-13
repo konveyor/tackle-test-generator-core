@@ -959,6 +959,13 @@ public class TestSequenceExtender {
                 this.extSummary.uncovTestPlanRows__excp__ClassNotFound++;
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
                 throw new RuntimeException(errmsg, cnfe);
+            } catch (UnsatisfiedLinkError ule) {
+                String errmsg = "Unsatisfied link error for type: " + paramType + " in signature " +
+                    tgtMethodSig + "\n" + ule;
+                logger.warning(errmsg);
+                this.extSummary.uncovTestPlanRows__excp__UnsatisfiedLink++;
+                this.extSummary.classNotFoundTypes.add(ule.getMessage());
+                throw new RuntimeException(errmsg, ule);
             } catch (OperationParseException ope) {
                 String errmsg = "Operation parse error for type: " + paramType + " in signature " +
                     tgtMethodSig + "\n" + ope;

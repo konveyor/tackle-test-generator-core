@@ -50,6 +50,7 @@ public class ExtenderSummary {
     int uncovTestPlanRows__excp__OperationParse = 0;
     int uncovTestPlanRows__excp__randoop__IllegalArgument = 0;
     int uncovTestPlanRows__excp__ClassNotFound = 0;
+    int uncovTestPlanRows__excp__UnsatisfiedLink = 0;
     int uncovTestPlanRows__excp__NoSuchMethod = 0;
     int uncovTestPlanRows__excp__NoArrayElementType = 0;
     int uncovTestPlanRows__excp__NonInstantiableType = 0;
@@ -92,7 +93,6 @@ public class ExtenderSummary {
      * @param seqIdMap
      * @param extTestSeq
      * @param execExtSeq
-     * @param discardedExtSeq
      */
     void printSummaryInfo(HashMap<String, Sequence> seqIdMap,
                           Map<String, Map<String, Set<String>>> extTestSeq,
@@ -133,6 +133,7 @@ public class ExtenderSummary {
         System.out.println("    IllegalArgumentException (Randoop API): "
             + this.uncovTestPlanRows__excp__randoop__IllegalArgument);
         System.out.println("    ClassNotFoundException: " + this.uncovTestPlanRows__excp__ClassNotFound);
+        System.out.println("    UnsatisfiedLinkError: " + this.uncovTestPlanRows__excp__UnsatisfiedLink);
         System.out.println("    NoSuchMethodException: " + this.uncovTestPlanRows__excp__NoSuchMethod);
         System.out.println("    NoArrayElementType: " + this.uncovTestPlanRows__excp__NoArrayElementType);
         System.out.println("    UnsupportedCollectionType: " + this.uncovTestPlanRows__excp__UnsupportedCollectionType);
@@ -152,18 +153,18 @@ public class ExtenderSummary {
 
     /**
      * Writes summary information about test generation to a JSON file
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
     void writeSummaryFile(String appName, HashMap<String, Sequence> seqIdMap,
                           Map<String, Map<String, Set<String>>> extTestSeq,
                           HashMap<String, SequenceExecutor.SequenceResults> execExtSeq,
                           int assertionCount)
         throws JsonGenerationException, JsonMappingException, IOException {
-    	
+
     	ObjectMapper mapper = TackleTestJson.getObjectMapper();
-    	
+
         ObjectNode summaryJson = mapper.createObjectNode();
 
         // add information about building-block sequences
@@ -210,6 +211,7 @@ public class ExtenderSummary {
         excpInfo.put("randoop_operation_parse_exception", this.uncovTestPlanRows__excp__OperationParse);
         excpInfo.put("randoop_illegal_argument_exception", this.uncovTestPlanRows__excp__randoop__IllegalArgument);
         excpInfo.put("class_not_found_exception", this.uncovTestPlanRows__excp__ClassNotFound);
+        excpInfo.put("unsatisfied_link_error", this.uncovTestPlanRows__excp__UnsatisfiedLink);
         excpInfo.put("no_such_method_exception", this.uncovTestPlanRows__excp__NoSuchMethod);
         excpInfo.put("no_array_element_type", this.uncovTestPlanRows__excp__NoArrayElementType);
         excpInfo.put("unsupported_collection_type", this.uncovTestPlanRows__excp__UnsupportedCollectionType);
