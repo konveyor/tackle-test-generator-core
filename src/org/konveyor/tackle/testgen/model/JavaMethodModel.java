@@ -58,7 +58,7 @@ public class JavaMethodModel {
 	private final int maxCollectionDepth;
 
 	private static final String CLASS_NAME_PATTERN = "(([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*)";
-	private static final String PARAM_PATTERN = "(<[\\?a-zA-Z\\d\\s_$]*>)?";
+	private static final String PARAM_PATTERN = "(<[\\?a-zA-Z\\.\\d\\s_$]*>)?";
 	private static final String EXTEND_STRING = "\\? extends "+CLASS_NAME_PATTERN+PARAM_PATTERN;
 	private static final Pattern EXTEND_PATTERN = Pattern.compile(EXTEND_STRING);
 	private static final String SUPER_STRING = "\\? super "+CLASS_NAME_PATTERN+PARAM_PATTERN;
