@@ -621,7 +621,7 @@ public class TestSequenceExtender {
 				List<String> testSeq = methodTestSeq.get(methodSig);
 				if (!withDiffAssertions) {
 				    testSeq.addAll(partTestSeq.get(cls).stream()
-                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+>", ""))
+                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""))
                         .collect(Collectors.toList())
                     );
                 }
@@ -715,7 +715,7 @@ public class TestSequenceExtender {
 		DiffAssertionsGenerator diffAssertGen = new DiffAssertionsGenerator(applicationName);
 		for (String seqId : execExtSeq.keySet()) {
 			logger.fine("Adding diff assertions to sequence: " + seqId);
-			String seqStr = seqIdMap.get(seqId).toCodeString().replaceAll("<Capture\\d+>", "");
+			String seqStr = seqIdMap.get(seqId).toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", "");
 			SequenceExecutor.SequenceResults seqRes = execExtSeq.get(seqId);
 			// skip failing sequences
 			if (!seqRes.passed) {
