@@ -440,6 +440,8 @@ public class DiffAssertionsGenerator {
 			String val = runtimeVal;
 			if (val.equals("\\")) {
 				val = "\\\\";
+			} else if (val.equals("'")) {
+				val = "\\'";
 			}
 			return "'"+val+"'";
 		}
