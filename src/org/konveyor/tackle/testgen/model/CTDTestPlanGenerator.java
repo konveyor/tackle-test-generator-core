@@ -389,7 +389,7 @@ public class CTDTestPlanGenerator {
 				Class<?> returnType = method.getReturnType();
 				
 				if (! returnType.equals(Void.TYPE) &&  ! Utils.canBeInstantiated(returnType, cls)) {
-					System.out.println("Skipping method "+cls.getName()+":"+method.getName()+" since its return type "+returnType.getName()+" cannot be instantiated by a test");
+					logger.fine("Skipping method "+cls.getName()+":"+method.getName()+" since its return type "+returnType.getName()+" cannot be instantiated by a test");
 					String sig;
 					
 					try {
