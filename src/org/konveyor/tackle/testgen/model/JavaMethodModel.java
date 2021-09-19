@@ -16,7 +16,6 @@ package org.konveyor.tackle.testgen.model;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -213,7 +212,7 @@ public class JavaMethodModel {
 				continue;
 			}
 
-			if (currentSootClass.isConcrete() &&  canBeInstantiated(currentClass)) {
+			if (currentSootClass.isConcrete() &&  Utils.canBeInstantiated(currentClass, targetClass)) {
 				allConcreteTypes.add(currentClass);
 				if (typeAnalysisResults.inRTAResults(currentSootClass.getName())) {
 					resultTypes.add(currentClass);
@@ -223,7 +222,7 @@ public class JavaMethodModel {
 		
 		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
 		
-		if (paramClass.isConcrete() && canBeInstantiated(theParamClass)) {
+		if (paramClass.isConcrete() && Utils.canBeInstantiated(theParamClass,targetClass)) {
 			allConcreteTypes.add(theParamClass);
 			resultTypes.add(theParamClass);
 		}
@@ -241,24 +240,6 @@ public class JavaMethodModel {
 		}
 
 		return resultTypes;
-	}
-	
-	private boolean canBeInstantiated(Class<?> type) {
-		
-		int typeModifiers = type.getModifiers();
-		
-		/*
-		 * Type can be instantiated if either of the following conditions holds:
-		 * 1. Type is public and belongs to some package 
-		 * 2. Type is not private and in the same package as the class under test 
-		 * 3. Type is protected and the class under test is a subclass of type
-		 */
-		
-		return (Modifier.isPublic(typeModifiers) && type.getPackage() != null) || 
-			(! Modifier.isPrivate(typeModifiers) && 
-			type.getPackage() != null && targetClass.getPackage() != null && 
-			type.getPackage().getName().equals(targetClass.getPackage().getName())) ||
-			Modifier.isProtected(typeModifiers) && type.isAssignableFrom(targetClass);
 	}
 
 	private Set<SootClass> getAllSuperclasses(SootClass theClass) {

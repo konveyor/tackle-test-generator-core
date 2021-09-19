@@ -361,7 +361,7 @@ public class CTDTestPlanGenerator {
 			Map<Class<?>, Set<Method>> parameterizedInterfaceMethods = initParameterizedInterfaces(cls);
 
 			for (Method method : cls.getDeclaredMethods()) {
-
+				
 				if (Modifier.isPrivate(method.getModifiers())) {
 					String sig;
 					
@@ -383,6 +383,23 @@ public class CTDTestPlanGenerator {
 
 				if (Modifier.isAbstract(method.getModifiers()) && ! hasImplementations(cls, method, classToImplementingClasses, classLoader)) {
 					logger.fine("Skipping method "+cls.getName()+":"+method.getName()+" since it has no implementation");
+					continue;
+				}
+				
+				Class<?> returnType = method.getReturnType();
+				
+				if (! returnType.equals(Void.TYPE) &&  ! Utils.canBeInstantiated(returnType, cls)) {
+					logger.fine("Skipping method "+cls.getName()+":"+method.getName()+" since its return type "+returnType.getName()+" cannot be instantiated by a test");
+					String sig;
+					
+					try {
+						sig = Utils.getSignature(method);
+					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+							| IllegalAccessException e) {
+						logger.warning("Couldn't find signature for " + method.getName());
+						continue;
+					}
+					privateMethods.put(sig, getVisibility(method));
 					continue;
 				}
 
