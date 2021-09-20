@@ -751,6 +751,19 @@ public class TestSequenceExtender {
 					numSeqExecutions);
 			this.execExtSeq.put(sequenceID, execResult);
 			if (!execResult.passed) {
+				// find the exception that caused the sequence to fail and add to the summary 
+				for (int i=0; i<extendedSeq.size();i++) {
+					if (execResult.exception[i] != null) {
+						String excp = execResult.cause[i] != null? execResult.cause[i] : execResult.exception[i];
+						Integer count = this.extSummary.seqFailExcp.get(excp);
+						if (count == null) {
+							this.extSummary.seqFailExcp.put(excp, 1);
+						} else {
+							this.extSummary.seqFailExcp.put(excp, count+1);
+						}
+						break;
+					}
+				}
 				errMsgs.add("Error executing sequence");
 				errMsgs.addAll(
 						Arrays.stream(execResult.causeMessage).filter(str -> str != null).collect(Collectors.toSet()));
