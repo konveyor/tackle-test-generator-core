@@ -756,11 +756,7 @@ public class TestSequenceExtender {
 					if (execResult.exception[i] != null) {
 						String excp = execResult.cause[i] != null? execResult.cause[i] : execResult.exception[i];
 						Integer count = this.extSummary.seqFailExcp.get(excp);
-						if (count == null) {
-							this.extSummary.seqFailExcp.put(excp, 1);
-						} else {
-							this.extSummary.seqFailExcp.put(excp, count+1);
-						}
+						this.extSummary.seqFailExcp.put(excp, count == null? 1: count+1);
 						break;
 					}
 				}
