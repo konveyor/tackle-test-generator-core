@@ -65,6 +65,8 @@ public class ExtenderSummary {
     Set<String> nonInstantiableTypes = new HashSet<>();
     Set<String> classNotFoundTypes = new HashSet<>();
     Set<String> seqExecExcpOther = new HashSet<>();
+    
+    Map<String, Integer> seqFailExcp = new HashMap<String, Integer>();
 
     private SequencePool sequencePool;
     private ObjectNode testPlan;
@@ -241,6 +243,12 @@ public class ExtenderSummary {
         ArrayNode cnfTypes = mapper.createArrayNode();
         this.classNotFoundTypes.forEach(type -> cnfTypes.add(type));
         summaryJson.set("class_not_found_types", cnfTypes);
+        
+        ObjectNode execFailTypes = mapper.createObjectNode();
+
+        // add execution failure exception types count
+        this.seqFailExcp.forEach((key, value) -> execFailTypes.put(key, value));
+        summaryJson.set("execution_fail_exception_types", execFailTypes);
 
         // write JSON file
         String outFileName = appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX;
