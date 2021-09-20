@@ -215,22 +215,25 @@ public class Utils {
 			typeToCheck = typeToCheck.getComponentType();
 		}
 		
+		/*
+		 * Type can be instantiated if it is not private and either of these two conditions hold: 
+		 * 1. Type is public and is primitive/enum or belongs to some package 
+		 * 2. Type is in the same package as the class under test 
+		 */
+		
 		int typeModifiers = typeToCheck.getModifiers();
 		
 		if (Modifier.isPrivate(typeModifiers)) {
 			return false;
 		}
 		
-		/*
-		 * Type can be instantiated if either of the following conditions holds:
-		 * 1. Type is public and belongs to some package 
-		 * 2. Type is not private and in the same package as the class under test 
-		 */
-		
 		if (Modifier.isPublic(typeModifiers)) {
 			
 			return (typeToCheck.isPrimitive() || typeToCheck.isEnum() || typeToCheck.getPackage() != null);
 		}
+		
+		// Enums don't have package info but can be used in the same package as the class they are in
+		// Hence need a separate check
 		
 		if (typeToCheck.isEnum()) {
 			return true;
