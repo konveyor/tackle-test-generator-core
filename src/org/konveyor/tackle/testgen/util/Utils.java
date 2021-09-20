@@ -198,6 +198,48 @@ public class Utils {
 
 		return false;
 	}
+	
+	/**
+	 * Determines whether the given type can be instantiated by a test for target class.
+	 * Assumes the test class is in the same package as the target class.
+	 * @param type
+	 * @param targetClass
+	 * @return
+	 */
+	
+	public static boolean canBeInstantiated(Class<?> type, Class<?> targetClass) {
+		
+		Class<?> typeToCheck = type;
+		
+		while (typeToCheck.isArray()) {
+			typeToCheck = typeToCheck.getComponentType();
+		}
+		
+		int typeModifiers = typeToCheck.getModifiers();
+		
+		if (Modifier.isPrivate(typeModifiers)) {
+			return false;
+		}
+		
+		/*
+		 * Type can be instantiated if either of the following conditions holds:
+		 * 1. Type is public and belongs to some package 
+		 * 2. Type is not private and in the same package as the class under test 
+		 */
+		
+		if (Modifier.isPublic(typeModifiers)) {
+			
+			return (typeToCheck.isPrimitive() || typeToCheck.isEnum() || typeToCheck.getPackage() != null);
+		}
+		
+		if (typeToCheck.isEnum()) {
+			return true;
+		}
+		
+		Package pkg = typeToCheck.getPackage();
+		
+		return pkg != null && targetClass.getPackage() != null && pkg.getName().equals(targetClass.getPackage().getName());
+	}
 
 	public static String getEvoSuiteJarPath(String jarName) {
         Optional<String> evosuiteJarPath = Arrays.stream(
