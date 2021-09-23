@@ -52,7 +52,7 @@ public class SequenceExecutorTest {
 		TestUtils.launchProcess(SequenceExecutor.class.getSimpleName(),
             "DayTrader",
             "test/data/daytrader7/monolith/bin",
-            "test/data/daytrader7/DayTraderMonoClasspath.txt",
+            "test/data/daytrader7/daytrader7MonoClasspath.txt",
             "test/data/daytrader7/DayTrader_extended_sequences.json",
             null,
             true,

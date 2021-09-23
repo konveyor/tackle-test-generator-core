@@ -44,7 +44,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null,
 				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
-				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2,
+				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2,
 				false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 
@@ -65,7 +65,7 @@ public class CTDModelingTest {
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null, null, null, null,
-				"test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false, 1,
+				"test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2, false, 1,
 				null, null, null, null);
 		analyzer.modelPartitions();
 
@@ -87,7 +87,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
 				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
-				null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2, false,
+				null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2, false,
 				1, null, null, null, null);
 		analyzer.modelPartitions();
 
@@ -109,7 +109,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
 		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
 				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/DayTraderMonoClasspath.txt", 2,
+				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2,
 				false, 1, null, null, null, null);
 		analyzer.modelPartitions();
 

@@ -36,13 +36,13 @@ import static org.junit.Assert.assertTrue;
 
 public class TestgenIntegrationTest {
 
-    private static List<TestUtils.AppUnderTest> appsUnderTest;
+    private static List<TestUtils.ExtenderAppUnderTest> appsUnderTest;
     private static List<String> OUTDIRS;
 
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.createIrsApp(null, null));
+        appsUnderTest.add(TestUtils.createAppForExtenderTest("irs", null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class TestgenIntegrationTest {
      * Delete existing output files
      */
     public void cleanUp() throws IOException {
-        for (TestUtils.AppUnderTest testApp : appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest testApp : appsUnderTest) {
             Files.deleteIfExists(Paths.get(testApp.testPlanFilename));
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
@@ -68,7 +68,7 @@ public class TestgenIntegrationTest {
                     .forEach(File::delete);
             }
         }
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest app : appsUnderTest) {
         	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
         	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
         }
@@ -78,7 +78,7 @@ public class TestgenIntegrationTest {
     public void testModelerInitializerExtender() throws Exception {
 
         // run test on apps
-        for (TestUtils.AppUnderTest testApp: appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest testApp: appsUnderTest) {
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName,

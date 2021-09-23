@@ -43,18 +43,18 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class TestSequenceExtenderTest {
 
     private static List<String> OUTDIRS;
-    private static List<TestUtils.AppUnderTest> appsUnderTest;
+    private static List<TestUtils.ExtenderAppUnderTest> appsUnderTest;
 
     @BeforeClass
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.createDaytraderApp(
+        appsUnderTest.add(TestUtils.createAppForExtenderTest("daytrader7",
             "test"+File.separator+"data"+File.separator+"daytrader7"+
                 File.separator+"DayTrader_ctd_models_new_format.json",
             "test"+File.separator+"data"+File.separator+
                 "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
-        ));
-        appsUnderTest.add(TestUtils.createIrsApp(
+        )); 
+        appsUnderTest.add(TestUtils.createAppForExtenderTest("irs",
             "test"+File.separator+"data"+File.separator+"irs"+
                 File.separator+"irs_ctd_models_and_test_plans.json",
             "test"+File.separator+"data"+File.separator+"irs"+
@@ -79,14 +79,14 @@ public class TestSequenceExtenderTest {
             }
         }
 
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest app : appsUnderTest) {
         	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
         	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
         }
     }
 
     @SuppressWarnings("unchecked")
-	private void assertSummaryFile(TestUtils.AppUnderTest app) throws JsonProcessingException, IOException {
+	private void assertSummaryFile(TestUtils.ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path summaryFilePath = Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX);
         assertTrue(Files.exists(summaryFilePath));
 
@@ -134,7 +134,7 @@ public class TestSequenceExtenderTest {
 				parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
 	}
 
-    private void assertCoverageFile(TestUtils.AppUnderTest app) throws JsonProcessingException, IOException {
+    private void assertCoverageFile(TestUtils.ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path testCovFilePath = Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX);
         assertTrue(Files.exists(testCovFilePath));
         File testCovFile = new File(testCovFilePath.toString());
@@ -142,15 +142,15 @@ public class TestSequenceExtenderTest {
         // read coverage JSON file and assert over content
 		ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
 		assertEquals(app.exp__partition_count, summaryInfo.size());
-		for (String covKey : app.exp__tatget_method_coverage.keySet()) {
+		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
-			assertEquals(app.exp__tatget_method_coverage.get(covKey), actualCoverage);
+			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
 
-    private void assertTestClassesDir(TestUtils.AppUnderTest app) throws IOException {
+    private void assertTestClassesDir(TestUtils.ExtenderAppUnderTest app) throws IOException {
         Path testClassesDir = Paths.get(app.appOutdir);
         assertTrue(Files.exists(testClassesDir));
 
@@ -165,7 +165,7 @@ public class TestSequenceExtenderTest {
     @Test
     public void testGenerateTestsWithJEESupport() throws Exception {
 
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest app : appsUnderTest) {
 
             // skip irs app for execution with JEE support
             if (app.appName.equals("irs")) {
@@ -190,7 +190,7 @@ public class TestSequenceExtenderTest {
 
     @Test
     public void testGenerateTestsWithoutJEESupport() throws Exception {
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (TestUtils.ExtenderAppUnderTest app : appsUnderTest) {
 
 //            if (app.appName.equals("DayTrader")) {
 //                continue;
