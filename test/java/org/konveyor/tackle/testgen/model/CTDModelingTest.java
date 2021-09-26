@@ -17,13 +17,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
-// import org.konveyor.tackle.testgen.TestUtils;
+import org.konveyor.tackle.testgen.TestUtils;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 
@@ -38,94 +40,90 @@ public class CTDModelingTest {
 	 * Delete existing modeling output file
 	 */
 	public void cleanUp() {
-		FileUtils.deleteQuietly(new File("DayTrader_" + Constants.CTD_OUTFILE_SUFFIX));
+        List<String> appsNames = new ArrayList<>();
+        appsNames.add("daytrader7");
+        for (String appName: appsNames) {
+            FileUtils.deleteQuietly(new File(appName + "_" + Constants.CTD_OUTFILE_SUFFIX));
+        }
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null,
-				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
-				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2,
-				false, 1, null, null, null, null);
-		analyzer.modelPartitions();
+        TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
+            null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+            null, null, null, 2, false,
+            1, null, null, null, null,
+            "test/data/daytrader7/DayTrader_ctd_models_classlist.json");
+        
+        modelerAppUnderTest.analyzer.modelPartitions();
 
 		// assert that output file for CTD modeling is created
+		assertTrue(new File(modelerAppUnderTest.outFilename).exists());
 
-		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
+		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.outFilename));
 
-		assertTrue(new File(outFilename).exists());
-
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
-
-		JsonNode standardNode = TackleTestJson.getObjectMapper().
-				readTree(new File("test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
+		JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
 
 		compareModels(resultNode, standardNode);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null, null, null, null,
-				"test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2, false, 1,
-				null, null, null, null);
-		analyzer.modelPartitions();
+        TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
+            null, null, null, null, null,
+			2, false, 1, null, null,
+            null, null, "test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
+        
+        modelerAppUnderTest.analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is created
+        // assert that output file for CTD modeling is created
+        assertTrue(new File(modelerAppUnderTest.outFilename).exists());
 
-		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
+        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.outFilename));
 
-		assertTrue(new File(outFilename).exists());
+        JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
 
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
-
-		JsonNode standardNode = TackleTestJson.getObjectMapper().
-					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
-
-		compareModels(resultNode, standardNode);
+        compareModels(resultNode, standardNode);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
-				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log", null,
-				null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2, false,
-				1, null, null, null, null);
-		analyzer.modelPartitions();
+        TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
+            null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+            null, null, 2, false, 1,
+            null, null, null, null,
+            "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
+        
+        modelerAppUnderTest.analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is created
+        // assert that output file for CTD modeling is created
+        assertTrue(new File(modelerAppUnderTest.outFilename).exists());
 
-		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
+        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.outFilename));
 
-		assertTrue(new File(outFilename).exists());
+        JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
 
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
-
-		JsonNode standardNode = TackleTestJson.getObjectMapper().
-					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
-
-		compareModels(resultNode, standardNode);
+        compareModels(resultNode, standardNode);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
-		CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator("DayTrader", null, null,
-				"com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-				null, null, "test/data/daytrader7/monolith/bin", "test/data/daytrader7/daytrader7MonoClasspath.txt", 2,
-				false, 1, null, null, null, null);
-		analyzer.modelPartitions();
+        TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
+            null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
+			null, null, 2, false, 1,
+            null, null, null, null,
+            "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
+        
+        modelerAppUnderTest.analyzer.modelPartitions();
 
-		// assert that output file for CTD modeling is created
+        // assert that output file for CTD modeling is created
+        assertTrue(new File(modelerAppUnderTest.outFilename).exists());
 
-		String outFilename = "DayTrader_" + Constants.CTD_OUTFILE_SUFFIX;
+        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.outFilename));
 
-		assertTrue(new File(outFilename).exists());
+        JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
 
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(new File(outFilename));
-
-		JsonNode standardNode = TackleTestJson.getObjectMapper().
-					readTree(new File("test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
-
-		compareModels(resultNode, standardNode);
+        compareModels(resultNode, standardNode);
 	}
 
 	/*

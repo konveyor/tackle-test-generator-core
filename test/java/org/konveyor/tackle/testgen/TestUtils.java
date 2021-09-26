@@ -336,30 +336,24 @@ public class TestUtils {
     
 
     public static class ModelerAppUnderTest extends AppUnderTest {
-        public String fileName;
-        public String targetClassList;
-        public String excludedClassList;
-        public String partitionsCPPrefix;
-        public String partitionsCPSuffix;
-        public int maxNestDepth;
-        public boolean addLocalRemote;
-        public int level;
-        public String refactoringPrefix;
-        public String partitionsPrefix;
-        public String partitionsSuffix;
-        public String partitionsSeparator;
+
         public CTDTestPlanGenerator analyzer;
+        public String outFilename;
+        public String standardNodeFile;
 
         public ModelerAppUnderTest(String appName, String fileName, String targetClassList,
                                    String excludedClassList, String partitionsCPPrefix,
                                    String partitionsCPSuffix, int maxNestDepth, boolean addLocalRemote,
                                    int level, String refactoringPrefix, String partitionsPrefix,
-                                   String partitionsSuffix, String partitionsSeparator) throws Exception {
+                                   String partitionsSuffix, String partitionsSeparator,
+                                   String standardNodeFile) throws Exception {
             super(appName);
             this.analyzer = new CTDTestPlanGenerator(appName, fileName, targetClassList,
                 excludedClassList, partitionsCPPrefix, partitionsCPSuffix, this.appPath,
                 this.appClasspathFilename, maxNestDepth, addLocalRemote, level, refactoringPrefix,
                 partitionsPrefix, partitionsSuffix, partitionsSeparator);
+            this.outFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
+            this.standardNodeFile = standardNodeFile;
         }
     }
 }

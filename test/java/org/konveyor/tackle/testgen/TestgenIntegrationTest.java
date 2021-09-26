@@ -81,10 +81,10 @@ public class TestgenIntegrationTest {
         for (TestUtils.ExtenderAppUnderTest testApp: appsUnderTest) {
 
             // generate CTD test plan for app
-            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName,
-                null, null, null, 
-                null, null, testApp.appPath,
-                testApp.appClasspathFilename, 2, false, 2, null, null, null, null);
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
+                null, null, null, null,
+                testApp.appPath, testApp.appClasspathFilename, 2, false,
+                2, null, null, null, null);
             analyzer.modelPartitions();
 
             // assert that output file for CTD modeling is  created
