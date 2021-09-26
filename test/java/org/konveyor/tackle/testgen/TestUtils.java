@@ -195,6 +195,7 @@ public class TestUtils {
         public AppUnderTest(String appName) {
             String appRootDir = "test"+File.separator+"data"+File.separator+appName;
             this.appName = appName;
+            // for new apps: classpath file should be in this format:
             this.appClasspathFilename = appRootDir+File.separator+appName+"MonoClasspath.txt";
             this.appOutdir = appName+"-"+ Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
             

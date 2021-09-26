@@ -31,8 +31,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class TestSequenceInitializerTest {
-
-
+    
 	private final File outputFile = new File("DayTrader_"+EvoSuiteTestGenerator.class.getSimpleName()+"_"+
 	Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX);
 
