@@ -66,6 +66,11 @@ public class ExtenderSummary {
     Set<String> seqExecExcpOther = new HashSet<>();
     
     Map<String, Integer> seqFailExcp = new HashMap<String, Integer>();
+    
+    int tway = -1;
+    int totalMethodsOverOneRow = 0;
+    double totalCTDCov = 0;
+    double totalExistingCTDCov = 0;
 
     private SequencePool sequencePool;
     private ObjectNode testPlan;
@@ -201,6 +206,16 @@ public class ExtenderSummary {
         covInfo.put("rows_covered_partial_jee", this.covTestPlanRows__partial_jee);
         covInfo.put("rows_covered_bb_sequences", this.covTestPlanRows__initSeq);
         summaryJson.set("test_plan_coverage_info", covInfo);
+        
+     // add information about combinatorial coverage of test plan rows
+        if (tway > -1) {
+        	ObjectNode ctdCovInfo = mapper.createObjectNode();
+        	ctdCovInfo.put("interaction_level", this.tway);
+        	ctdCovInfo.put("methods_over_one_row", this.totalMethodsOverOneRow);
+        	ctdCovInfo.put("average_ctd_cov", this.totalMethodsOverOneRow == 0? "0" : String.format("%.2f", this.totalCTDCov/this.totalMethodsOverOneRow));
+        	ctdCovInfo.put("average_ctd_cov_bb_sequences", this.totalMethodsOverOneRow == 0? "0" : String.format("%.2f", this.totalExistingCTDCov/this.totalMethodsOverOneRow));
+        	summaryJson.set("ctd_coverage_info", ctdCovInfo);
+        }
 
         // add information about uncovered test plan rows
         ObjectNode uncovInfo = mapper.createObjectNode();

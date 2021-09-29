@@ -121,10 +121,16 @@ public class TestSequenceExtender {
 	// extended sequences that could not be executed (seq ID --> error messages)
 	private HashMap<String, String> seqExecErrors = new HashMap<>();
 
-	// coverage information about proxy classes, methods, and test plan rows
-	// partition --> proxy class --> proxy method --> test plan row -->
+	// coverage information about target classes, methods, and test plan rows
+	// partition --> proxy class --> target method --> test plan row -->
 	// [COVERED, PARTIAL, UNCOVERED]
 	private Map<String, Map<String, Map<String, Map<String, Constants.TestPlanRowCoverage>>>> coverageInfo;
+	
+	// coverage information about target classes, methods, and test plan rows
+		// partition --> target class --> target method --> ctd coverage percentage 
+	/// by ctd-amplified and by existing basic blocks sequences
+	
+	private Map<String, Map<String, Map<String, Pair<Double,Double>>>> ctdCoverageInfo = new HashMap<>();
 
 	// summary information about sequence extension
     ExtenderSummary extSummary;
@@ -147,6 +153,8 @@ public class TestSequenceExtender {
 	private final boolean diffAssertions;
 
 	private final int numSeqExecutions;
+	
+	private final int interactionLevel;
 
 	public HashMap<String, SortedSet<Sequence>> getClassTestSequencePool() {
 		return sequencePool.classTestSeqPool;
@@ -186,13 +194,14 @@ public class TestSequenceExtender {
 	 */
 	public TestSequenceExtender(String appName, String testPlanFilename, String testSeqFilename,
                                 boolean mineConstructorSequences, String outputDir, boolean jee, int numExecutions,
-                                boolean diffAssertions) throws IOException {
+                                boolean diffAssertions, int outputCoveredInteraction) throws IOException {
 
 		this.applicationName = appName;
 		this.outputDir = outputDir;
 		this.jeeSupport = jee;
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
+		interactionLevel = outputCoveredInteraction;
 
 		// read test plan from JSON file
 		File testPlanFile = new File(testPlanFilename);
@@ -238,6 +247,7 @@ public class TestSequenceExtender {
 
         // create extension summary object
         this.extSummary = new ExtenderSummary(this.testPlan);
+        this.extSummary.tway = interactionLevel;
 
 		// create sequence pool for classes and targeted proxy methods
         this.sequencePool = new SequencePool(this.initialTestSeqs, this.tgtProxyMethodSignatures, appName);
@@ -302,6 +312,9 @@ public class TestSequenceExtender {
 
 			// get test plan info for partition
 			ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partition);
+			
+			// Initialize data structure for collecting CTD coverage
+			Map<String, Map<String, Pair<Double, Double>>> classCTDCovInfo = new HashMap<>();
 
 			// iterate over each class in partition
 			partitionTestPlan.fieldNames().forEachRemaining(className -> {
@@ -317,6 +330,9 @@ public class TestSequenceExtender {
 
 				// initialize data structures needed for JEE trial for failing extended sequences for class
 				JEEExecutionInfo classJEEExecInfo = new JEEExecutionInfo();
+				
+				// Initialize data structure for collecting CTD coverage
+				Map<String, Pair<Double, Double>> methodCTDCovInfo = new HashMap<>();
 
 				// iterate over each method in class
 				classTestPlan.fieldNames().forEachRemaining(methodSig -> {
@@ -384,11 +400,12 @@ public class TestSequenceExtender {
 					}
 
 					// create extended test sequences for method
+					
                     classSeqCount += createExtendedSequencesForMethod(partition, qualMethodSig,
-                        parseableMethodSig, tgtMethodCall, classJEEExecInfo, methodCovInfo);
+                        parseableMethodSig, tgtMethodCall, classJEEExecInfo, methodCovInfo, methodCTDCovInfo);
 
 				});
-
+				
 				if (jeeSupport && ! classJEEExecInfo.failedSeqIds.isEmpty()) {
                     PrintStream origSysOut = System.out;
                     PrintStream origSysErr = System.err;
@@ -400,6 +417,10 @@ public class TestSequenceExtender {
                     System.setOut(origSysOut);
                     System.setErr(origSysErr);
                 }
+				
+				if ( ! methodCTDCovInfo.isEmpty()) {
+					classCTDCovInfo.put(className, methodCTDCovInfo);
+				}
 
 				totalTestPlanRows += classTestPlanRows;
 				totalSeqCount += classSeqCount;
@@ -413,6 +434,11 @@ public class TestSequenceExtender {
                 }
                 System.out.println("("+classSeqCount+"/"+classTestPlanRows+")");
 			});
+			
+			if ( ! classCTDCovInfo.isEmpty()) {
+				ctdCoverageInfo.put(partition, classCTDCovInfo);
+			}
+			
 		});
         double totalCovRate = (double)totalSeqCount * 100 / (double)totalTestPlanRows;
         System.out.println("* === total CTD test-plan coverage rate: "+
@@ -423,6 +449,14 @@ public class TestSequenceExtender {
         if (this.diffAssertions) {
             assertionCount = this.addDiffAssertions();
         }
+        
+        // write CTD coverage file
+        
+        try {
+			writeCTDCoverage();
+		} catch (IOException e) {
+			logger.warning("Error writing CTD coverage JSON: "+e);
+		}
 
         // write summary JSON file
 		try {
@@ -439,6 +473,43 @@ public class TestSequenceExtender {
 
         return this.extTestSeq;
 	}
+	
+	private void writeCTDCoverage() throws JsonGenerationException, JsonMappingException, IOException {
+
+		if (ctdCoverageInfo.isEmpty()) {
+			return;
+		}
+
+		ObjectMapper mapper = TackleTestJson.getObjectMapper();
+
+		ObjectNode ctdCovJson = mapper.createObjectNode();
+
+		ObjectNode partCovJson = mapper.createObjectNode();
+		for (String part : this.ctdCoverageInfo.keySet()) {
+			Map<String, Map<String, Pair<Double, Double>>> clsCovInfo = this.ctdCoverageInfo.get(part);
+			ObjectNode clsCovJson = mapper.createObjectNode();
+			for (String cls : clsCovInfo.keySet()) {
+				Map<String, Pair<Double, Double>> methodCovInfo = clsCovInfo.get(cls);
+				ObjectNode methodCovJson = mapper.createObjectNode();
+				for (String method : methodCovInfo.keySet()) {
+					Pair<Double, Double> ctdCovInfo = methodCovInfo.get(method);
+					ObjectNode ctdPerCovJson = mapper.createObjectNode();
+					ctdPerCovJson.put("ctd_coverage", String.format("%.2f",ctdCovInfo.a));
+					ctdPerCovJson.put("ctd_coverage_bb_sequences", String.format("%.2f",ctdCovInfo.b));
+					methodCovJson.set(method, ctdPerCovJson);
+				}
+				clsCovJson.set(cls, methodCovJson);
+			}
+			partCovJson.set(part, clsCovJson);
+		}
+
+		ctdCovJson.put("interaction_level", interactionLevel);
+		ctdCovJson.set("ctd_coverage", partCovJson);
+
+		// write JSON file
+		String outFileName = applicationName + Constants.CTD_COVERAGE_FILE_JSON_SUFFIX;
+		mapper.writeValue(new File(outFileName), ctdCovJson);
+	}
 
     /**
      * Creates extended test sequences for a given target method and adds them to test sequences
@@ -451,19 +522,24 @@ public class TestSequenceExtender {
      * @param tgtMethodCall
      * @param jeeExecInfo
      * @param methodCovInfo
+     * @param methodCTDCovInfo
      */
 	private int createExtendedSequencesForMethod(String partition, String qualMethodSig,
                                                  String parseableMethodSig,
                                                  TypedClassOperation tgtMethodCall,
                                                  JEEExecutionInfo jeeExecInfo,
-                                                 Map<String, Constants.TestPlanRowCoverage> methodCovInfo) {
+                                                 Map<String, Constants.TestPlanRowCoverage> methodCovInfo,
+                                                 Map<String, Pair<Double, Double>> methodCTDCovInfo) {
 
         logger.info("=========>>> Generating " + currTestPlanRows.length
             + " test cases for proxy method: " + qualMethodSig + " <<<=========");
         int methodSeqCount = 0;
 
         String className = qualMethodSig.split("::")[0];
-
+        
+        boolean[] usedExistingSeq = new boolean[currTestPlanRows.length];
+        boolean[] execSeqSuccess = new boolean[currTestPlanRows.length];
+        
         // iterate over each row of test plan for method
         int rowCtr = 0;
         for (ArrayNode row : currTestPlanRows) {
@@ -480,6 +556,7 @@ public class TestSequenceExtender {
             Sequence extendedSeq;
             if (candidateSeqCovPair.b) {
                 extendedSeq = candidateSeqCovPair.a;
+                usedExistingSeq[rowCtr-1] = true;
             } else {
                 try {
                     extendedSeq = extendSequence(candidateSeqCovPair.a, row,
@@ -518,13 +595,15 @@ public class TestSequenceExtender {
                     this.extSummary.uncovTestPlanRows__execFail++;
                     methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXEC_FAIL);
                     continue;
-                }
+                } 
             } catch (RuntimeException re) {
                 logger.warning(re.getMessage());
                 this.extSummary.uncovTestPlanRows__excp++;
                 methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
                 continue;
             }
+            
+            execSeqSuccess[rowCtr-1] = true;
 
             Map<String, Set<String>> partitionTestSeq = this.extTestSeq.get(partition);
             if (!partitionTestSeq.containsKey(qualMethodSig)) {
@@ -541,6 +620,20 @@ public class TestSequenceExtender {
                 this.extSummary.covTestPlanRows__full++;
             }
         }
+        
+        if (interactionLevel > -1 && currTestPlanRows.length > 1) {
+        	Pair<Double, Double> ctdCov = CTDCoverageComputer.calcCombinatorialCoverage(parseableMethodSig, currTestPlanRows, 
+        			execSeqSuccess, usedExistingSeq, interactionLevel);
+        	if (ctdCov.a >= 0 && ctdCov.b >= 0) {
+        		this.extSummary.totalMethodsOverOneRow++;
+        		this.extSummary.totalCTDCov += ctdCov.a;
+        		this.extSummary.totalExistingCTDCov += ctdCov.b;
+        		methodCTDCovInfo.put(qualMethodSig.split("::")[1], ctdCov);
+        	}
+        }
+        
+        
+        
         return methodSeqCount;
     }
 
@@ -1680,6 +1773,10 @@ public class TestSequenceExtender {
 		// option for output directory in which generated tests are written
 		options.addOption(Option.builder("od").longOpt("output-directory").hasArg()
 				.desc("Name of directory to which generate tests are written").type(String.class).build());
+		
+		// option for outputing covered type combinations
+				options.addOption(Option.builder("oc").longOpt("output-covered").hasArg()
+						.desc("Output percentage of covered type combinations according to given interaction level").type(Integer.class).build());
 
 		// help option
 		options.addOption(Option.builder("h").longOpt("help").desc("Print this help message").build());
@@ -1753,11 +1850,17 @@ public class TestSequenceExtender {
         if (cmd.hasOption("da")) {
             addDiffAsserts = true;
         }
-
+        
+        int outputCoveredInteraction = -1;
+        
+        if (cmd.hasOption("oc")) {
+        	outputCoveredInteraction = Integer.parseInt(cmd.getOptionValue("oc"));
+        }
+ 
 		// create extended sequences
 		TestSequenceExtender testSeqExt = new TestSequenceExtender(appName, testPlanFilename,
             testSeqFilename, true,
-				outputDir, jee, numExecutions, addDiffAsserts);
+				outputDir, jee, numExecutions, addDiffAsserts, outputCoveredInteraction);
 		testSeqExt.createExtendedSequences();
 
 		// write test classes

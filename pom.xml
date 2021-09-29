@@ -96,6 +96,14 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>edu.uta.cse.fireeye.acts</groupId>
+      <artifactId>ccmcl</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/ccmcl.jar</systemPath>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
     	<groupId>com.github.javaparser</groupId>
     	<artifactId>javaparser-symbol-solver-core</artifactId>
     	<version>3.16.1</version>
@@ -121,6 +129,22 @@
       <systemPath>${project.basedir}/lib/download/replacecall-${randoop.version}.jar</systemPath>
       <optional>true</optional>
     </dependency>
+    <dependency>
+  	<groupId>org.choco-solver</groupId>
+  	  <artifactId>choco-solver</artifactId>
+  	  <version>4.10.6</version>
+	</dependency>
+	<dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.0.18</version>
+    </dependency>
+	<dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jcommon</artifactId>
+    <version>1.0.24</version>
+</dependency>
+    
   </dependencies>
 
   <build>
