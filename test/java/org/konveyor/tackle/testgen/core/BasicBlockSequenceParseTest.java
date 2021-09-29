@@ -51,8 +51,8 @@ public class BasicBlockSequenceParseTest {
 		projectClasspath += Utils.entriesToClasspath(Utils.getClasspathEntries(file));
 		projectClasspath += (File.pathSeparator + "test/data/daytrader7/monolith/bin");
 
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
-        projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+        projectClasspath += (File.pathSeparator + Utils.getJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
 		// For SequenceExecutor class:
 		projectClasspath += (File.pathSeparator + System.getProperty("java.class.path"));
 
