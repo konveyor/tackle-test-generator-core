@@ -48,14 +48,14 @@ public class TestSequenceExtenderTest {
     @BeforeClass
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(ExtenderAppUnderTest.createAppForExtenderTest("daytrader7",
+        appsUnderTest.add(new ExtenderAppUnderTest("daytrader7",
             "test"+File.separator+"data"+File.separator+"daytrader7"+
                 File.separator+"DayTrader_ctd_models_new_format.json",
             "test"+File.separator+"data"+File.separator+
                 "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
         )); 
-        appsUnderTest.add(ExtenderAppUnderTest.createAppForExtenderTest("irs",
-            "test"+File.separator+"data"+File.separator+"irs"+
+        appsUnderTest.add(new ExtenderAppUnderTest("irs",
+            "test"+ File.separator+"data"+File.separator+"irs"+
                 File.separator+"irs_ctd_models_and_test_plans.json",
             "test"+File.separator+"data"+File.separator+"irs"+
                 File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"

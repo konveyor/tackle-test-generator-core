@@ -42,7 +42,7 @@ public class TestgenIntegrationTest {
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.ExtenderAppUnderTest.createAppForExtenderTest("irs", null, null));
+        appsUnderTest.add(new TestUtils.ExtenderAppUnderTest("irs", null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());

@@ -244,6 +244,16 @@ public class TestUtils {
             super(appName);
             this.testPlanFilename = testPlanFilename;
             this.testSeqFilename = testSeqFilename;
+            
+            if (this.testPlanFilename == null) {
+                this.testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
+            }
+            if (this.testSeqFilename == null) {
+                this.testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
+                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+            }
 
             // set expected values
             // for new apps: add expected values here
@@ -322,24 +332,6 @@ public class TestUtils {
 
         public static String getCoverageFileJsonName(String appName) {
             return appName + Constants.COVERAGE_FILE_JSON_SUFFIX;
-        }
-
-        public static ExtenderAppUnderTest createAppForExtenderTest(String appName, String testPlanFilename, String testSeqFilename) {
-
-            if (testPlanFilename == null) {
-                testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
-            }
-            if (testSeqFilename == null) {
-                testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
-                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
-                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
-                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
-            }
-
-            // construct app object
-            ExtenderAppUnderTest app = new ExtenderAppUnderTest(appName, testPlanFilename, testSeqFilename);
-
-            return app;
         }
     }
     
