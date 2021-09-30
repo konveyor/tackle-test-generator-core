@@ -24,8 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.konveyor.tackle.testgen.TestUtils;
-import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.TestUtils.SequenceInitializerAppUnderTest;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,11 +37,10 @@ public class TestSequenceInitializerTest {
 	 * Delete existing EvoSuite input files and generated test cases
 	 */
 	public void cleanUp() {
-        
-		FileUtils.deleteQuietly(new File("daytrader7"+EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX));
-		FileUtils.deleteQuietly(new File("daytrader7"+EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX));
-		FileUtils.deleteQuietly(new File("daytrader7_"+EvoSuiteTestGenerator.class.getSimpleName()+"_"+
-            Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX));
+        String appName = "daytrader7";
+		FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getTargetDirName(appName)));
+		FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getOutputDirName(appName)));
+		FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getOutputFileName(appName)));
 	}
 
 	@Test
@@ -56,17 +54,18 @@ public class TestSequenceInitializerTest {
                 "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
                 "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
         
-        TestUtils.SequenceInitializerAppUnderTest sequenceInitializerAppUnderTest = new TestUtils.SequenceInitializerAppUnderTest("daytrader7",
+        String appName = "daytrader7";
+        SequenceInitializerAppUnderTest sequenceInitializerAppUnderTest = new SequenceInitializerAppUnderTest(appName,
             "test/data/daytrader7/daytrader_ctd_models_shortened.json", "EvoSuiteTestGenerator",
             -1, false, false, targetClasses);
 
         sequenceInitializerAppUnderTest.seqInitializer.createInitialTests();
 
 		// assert that input/output files for evosuite are created
-		assertTrue(new File(sequenceInitializerAppUnderTest.targetDirName).exists());
-        assertTrue(new File(sequenceInitializerAppUnderTest.outputDirName).exists());
+		assertTrue(new File(SequenceInitializerAppUnderTest.getTargetDirName(appName)).exists());
+        assertTrue(new File(SequenceInitializerAppUnderTest.getOutputDirName(appName)).exists());
         
-        File outputFile = new File(sequenceInitializerAppUnderTest.outputFileName);
+        File outputFile = new File(SequenceInitializerAppUnderTest.getOutputFileName(appName));
         assertTrue(outputFile.exists());
 
 		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);

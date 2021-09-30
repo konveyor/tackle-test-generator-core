@@ -42,7 +42,7 @@ public class TestgenIntegrationTest {
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.createAppForExtenderTest("irs", null, null));
+        appsUnderTest.add(TestUtils.ExtenderAppUnderTest.createAppForExtenderTest("irs", null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -69,8 +69,8 @@ public class TestgenIntegrationTest {
             }
         }
         for (TestUtils.ExtenderAppUnderTest app : appsUnderTest) {
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
+            Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(app.appName)));
+            Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(app.appName)));
         }
     }
 
@@ -109,8 +109,8 @@ public class TestgenIntegrationTest {
 
             // assert that test directory and summary files are created
             assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
-            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX)));
-            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.COVERAGE_FILE_JSON_SUFFIX)));
+            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
+            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
             assertEquals(testApp.exp__test_classes_count, Files

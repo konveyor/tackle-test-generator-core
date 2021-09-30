@@ -240,7 +240,7 @@ public class TestUtils {
         public Map<String, String> exp__target_method_coverage;
         public int exp__test_classes_count;
 
-        public ExtenderAppUnderTest (String appName, String testPlanFilename, String testSeqFilename) {
+        public ExtenderAppUnderTest(String appName, String testPlanFilename, String testSeqFilename) {
             super(appName);
             this.testPlanFilename = testPlanFilename;
             this.testSeqFilename = testSeqFilename;
@@ -283,8 +283,7 @@ public class TestUtils {
                         {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
                 this.exp__test_classes_count = 5;
-            }
-            else if (appName == "daytrader7") {
+            } else if (appName == "daytrader7") {
                 this.exp__bb_sequences = 159;
                 this.exp__parsed_sequences_full = 155;
                 this.exp__parsed_sequences_partial = 0;
@@ -308,7 +307,7 @@ public class TestUtils {
                 this.exp__java_lang_Error = 17;
                 this.exp__partition_count = 4;
                 this.exp__target_method_coverage =
-                    Stream.of(new String[][] {
+                    Stream.of(new String[][]{
                         {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
                         {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
                         {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
@@ -316,44 +315,54 @@ public class TestUtils {
                 this.exp__test_classes_count = 42;
             }
         }
-    }
 
-    public static ExtenderAppUnderTest createAppForExtenderTest(String appName, String testPlanFilename, String testSeqFilename) {
-        
-        if (testPlanFilename == null) {
-            testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
-        }
-        if (testSeqFilename == null) {
-            testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
-                Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
-                appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
-                Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+        public static String getSummaryFileJsonName(String appName) {
+            return appName + Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX;
         }
 
-        // construct app object
-        ExtenderAppUnderTest app = new ExtenderAppUnderTest(appName, testPlanFilename, testSeqFilename);
+        public static String getCoverageFileJsonName(String appName) {
+            return appName + Constants.COVERAGE_FILE_JSON_SUFFIX;
+        }
 
-        return app;
+        public static ExtenderAppUnderTest createAppForExtenderTest(String appName, String testPlanFilename, String testSeqFilename) {
+
+            if (testPlanFilename == null) {
+                testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
+            }
+            if (testSeqFilename == null) {
+                testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
+                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+            }
+
+            // construct app object
+            ExtenderAppUnderTest app = new ExtenderAppUnderTest(appName, testPlanFilename, testSeqFilename);
+
+            return app;
+        }
     }
     
 
     public static class ModelerAppUnderTest extends AppUnderTest {
 
         public CTDTestPlanGenerator analyzer;
-        public String outFilename;
         public String standardNodeFile;
 
         public ModelerAppUnderTest(String appName, String fileName, String targetClassList,
                                    String excludedClassList, int maxNestDepth, boolean addLocalRemote,
                                    int level, String standardNodeFile) throws Exception {
             super(appName);
-            // for added mono2micro support: change the input for relevant fields based on app
+            // for added mono2micro support: change the input for relevant fields based on appName
             this.analyzer = new CTDTestPlanGenerator(appName, fileName, targetClassList,
                 excludedClassList, null, null, this.appPath,
                 this.appClasspathFilename, maxNestDepth, addLocalRemote, level, null,
                 null, null, null);
-            this.outFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
             this.standardNodeFile = standardNodeFile;
+        }
+        
+        public static String getCtdOutfileName(String appName) {
+            return appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
         }
     }
 
@@ -362,9 +371,6 @@ public class TestUtils {
 
         public TestSequenceInitializer seqInitializer;
         public Set<String> targetClasses;
-        public String targetDirName;
-        public String outputDirName;
-        public String outputFileName;
 
         public SequenceInitializerAppUnderTest(String appName, String ctdModelsFileName,
                                                String testGenName, int timeLimit,
@@ -374,9 +380,18 @@ public class TestUtils {
             this.seqInitializer = new TestSequenceInitializer(appName, ctdModelsFileName, this.appPath,
                 this.appClasspathFilename, testGenName, timeLimit, targetMethods, baseAssertions);
             this.targetClasses = targetClasses;
-            this.targetDirName = appName + EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX;
-            this.outputDirName = appName + EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX;
-            this.outputFileName = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName()+"_"+
+        }
+
+        public static String getTargetDirName(String appName) {
+            return appName + EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX;
+        }
+
+        public static String getOutputDirName(String appName) {
+            return appName + EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX;
+        }
+
+        public static String getOutputFileName(String appName) {
+            return appName + "_" + EvoSuiteTestGenerator.class.getSimpleName()+"_"+
                 Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
         }
     }
