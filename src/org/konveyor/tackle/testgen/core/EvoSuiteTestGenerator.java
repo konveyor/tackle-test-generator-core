@@ -41,10 +41,10 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 
 	private final String appName;
 	private boolean generateAssertions = false;
-	static final String EVOSUITE_OUTPUT_DIR_NAME_SUFFIX = "-evosuite-tests";
+	public static final String EVOSUITE_OUTPUT_DIR_NAME_SUFFIX = "-evosuite-tests";
 	private File evosuiteOutputDir;
-	static final String EVOSUITE_TARGET_DIR_NAME_SUFFIX = "-evosuite-targets";
-	static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
+    public static final String EVOSUITE_TARGET_DIR_NAME_SUFFIX = "-evosuite-targets";
+    public static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
 	private int timeLimit = 0;
 	private CoverageCriterion criterion = null;
 

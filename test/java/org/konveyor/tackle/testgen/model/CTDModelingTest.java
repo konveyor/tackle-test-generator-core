@@ -47,9 +47,8 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
         TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
             null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-            null, null, null, 2, false,
-            1, null, null, null, null,
-            "test/data/daytrader7/DayTrader_ctd_models_classlist.json");
+            null, 2, false,
+            1, "test/data/daytrader7/DayTrader_ctd_models_classlist.json");
 
         launchModelingTest(modelerAppUnderTest);
 	}
@@ -57,9 +56,8 @@ public class CTDModelingTest {
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
         TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
-            null, null, null, null, null,
-			2, false, 1, null, null,
-            null, null, "test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
+            null, null, null, 2, false,
+            1, "test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
 
         launchModelingTest(modelerAppUnderTest);
 	}
@@ -68,9 +66,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
         TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
             null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-            null, null, 2, false, 1,
-            null, null, null, null,
-            "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
+            2, false, 1, "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
 
         launchModelingTest(modelerAppUnderTest);
 	}
@@ -79,9 +75,7 @@ public class CTDModelingTest {
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
         TestUtils.ModelerAppUnderTest modelerAppUnderTest = new TestUtils.ModelerAppUnderTest("daytrader7",
             null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-			null, null, 2, false, 1,
-            null, null, null, null,
-            "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
+			2, false, 1, "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
 
         launchModelingTest(modelerAppUnderTest);
 	}

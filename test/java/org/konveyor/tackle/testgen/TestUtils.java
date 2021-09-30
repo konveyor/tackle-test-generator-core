@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.RandoopTestGenerator;
+import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
@@ -343,18 +344,40 @@ public class TestUtils {
         public String standardNodeFile;
 
         public ModelerAppUnderTest(String appName, String fileName, String targetClassList,
-                                   String excludedClassList, String partitionsCPPrefix,
-                                   String partitionsCPSuffix, int maxNestDepth, boolean addLocalRemote,
-                                   int level, String refactoringPrefix, String partitionsPrefix,
-                                   String partitionsSuffix, String partitionsSeparator,
-                                   String standardNodeFile) throws Exception {
+                                   String excludedClassList, int maxNestDepth, boolean addLocalRemote,
+                                   int level, String standardNodeFile) throws Exception {
             super(appName);
+            // for added mono2micro support: change the input for relevant fields based on app
             this.analyzer = new CTDTestPlanGenerator(appName, fileName, targetClassList,
-                excludedClassList, partitionsCPPrefix, partitionsCPSuffix, this.appPath,
-                this.appClasspathFilename, maxNestDepth, addLocalRemote, level, refactoringPrefix,
-                partitionsPrefix, partitionsSuffix, partitionsSeparator);
+                excludedClassList, null, null, this.appPath,
+                this.appClasspathFilename, maxNestDepth, addLocalRemote, level, null,
+                null, null, null);
             this.outFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
             this.standardNodeFile = standardNodeFile;
+        }
+    }
+
+
+    public static class SequenceInitializerAppUnderTest extends AppUnderTest {
+
+        public TestSequenceInitializer seqInitializer;
+        public Set<String> targetClasses;
+        public String targetDirName;
+        public String outputDirName;
+        public String outputFileName;
+
+        public SequenceInitializerAppUnderTest(String appName, String ctdModelsFileName,
+                                               String testGenName, int timeLimit,
+                                               boolean targetMethods, boolean baseAssertions,
+                                               Set<String> targetClasses) throws Exception {
+            super(appName);
+            this.seqInitializer = new TestSequenceInitializer(appName, ctdModelsFileName, this.appPath,
+                this.appClasspathFilename, testGenName, timeLimit, targetMethods, baseAssertions);
+            this.targetClasses = targetClasses;
+            this.targetDirName = appName + EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX;
+            this.outputDirName = appName + EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX;
+            this.outputFileName = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName()+"_"+
+                Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
         }
     }
 }
