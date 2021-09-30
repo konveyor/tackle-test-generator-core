@@ -540,6 +540,8 @@ public class TestSequenceExtender {
         boolean[] usedExistingSeq = new boolean[currTestPlanRows.length];
         boolean[] execSeqSuccess = new boolean[currTestPlanRows.length];
         
+        boolean hasCompoundTypes = false;
+        
         // iterate over each row of test plan for method
         int rowCtr = 0;
         for (ArrayNode row : currTestPlanRows) {
@@ -551,7 +553,7 @@ public class TestSequenceExtender {
             Pair<Sequence, Boolean> candidateSeqCovPair = getCandidateSequenceForRow(
                 className, qualMethodSig, tgtMethodCall, row
             );
-
+            
             // extend candidate sequence based on the parameter types specified in the test plan row
             Sequence extendedSeq;
             if (candidateSeqCovPair.b) {
@@ -579,6 +581,10 @@ public class TestSequenceExtender {
                     methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
                     continue;
                 }
+            }
+            
+            if ( ! hasCompoundTypes) {
+            	hasCompoundTypes = SequenceUtil.hasCompoundTypes(row, extendedSeq);
             }
 
             // generate sequence ID and add id, sequence to map
@@ -621,7 +627,7 @@ public class TestSequenceExtender {
             }
         }
         
-        if (interactionLevel > -1 && currTestPlanRows.length > 1) {
+        if (interactionLevel > -1 && currTestPlanRows.length > 1 && ! hasCompoundTypes) {
         	Pair<Double, Double> ctdCov = CTDCoverageComputer.calcCombinatorialCoverage(parseableMethodSig, currTestPlanRows, 
         			execSeqSuccess, usedExistingSeq, interactionLevel);
         	if (ctdCov.a >= 0 && ctdCov.b >= 0) {

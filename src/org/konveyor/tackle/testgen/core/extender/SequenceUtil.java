@@ -209,6 +209,30 @@ public class SequenceUtil {
         }
         return false;
     }
+    
+    public static boolean hasCompoundTypes(ArrayNode testPlanRow, Sequence sequence) {
+    	List<Type> methodCallParamTypes = new ArrayList<>();
+        TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
+        methodcallOper.getInputTypes().forEach(type -> methodCallParamTypes.add(type));
+
+        // if any param type is a collection or map type or an array of non-primitive types,
+        // return false; in such cases, the test plan would typically require objects of specific
+        // types to be added to the collection/map/array
+        for (Type paramType : methodCallParamTypes) {
+            if (isCollectionType(paramType) || isMapType(paramType))  {
+                return true;
+            }
+            
+            if (paramType.isArray()) {
+                Type elemType = ((ArrayType) paramType).getElementType();
+                if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * Finds and returns signature of the target method or constructor call for the given sequence.
