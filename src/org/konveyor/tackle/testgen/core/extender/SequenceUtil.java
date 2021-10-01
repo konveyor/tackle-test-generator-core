@@ -33,12 +33,7 @@ import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import randoop.operation.CallableOperation;
-import randoop.operation.ConstructorCall;
-import randoop.operation.EnumConstant;
-import randoop.operation.MethodCall;
-import randoop.operation.OperationParseException;
-import randoop.operation.TypedOperation;
+import randoop.operation.*;
 import randoop.sequence.Sequence;
 import randoop.sequence.Statement;
 import randoop.sequence.Variable;
@@ -170,23 +165,64 @@ public class SequenceUtil {
         // build list of parameter types for the last method call in the sequence
         List<Type> methodCallParamTypes = new ArrayList<>();
         TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
-        methodcallOper.getInputTypes().forEach(type -> methodCallParamTypes.add(type));
+//        methodcallOper.getInputTypes().forEach(type -> methodCallParamTypes.add(type));
 
-        // if any param type is a collection or map type or an array of non-primitive types,
-        // return false; in such cases, the test plan would typically require objects of specific
-        // types to be added to the collection/map/array
-        for (Type paramType : methodCallParamTypes) {
-            if (isCollectionType(paramType) || isMapType(paramType))  {
-                // TODO: check parameter/argument types of collection/map
+        // get input variables for the last statement
+        List<Variable> methodCallInputVars = sequence.getInputs(sequence.size()-1);
+        for (Variable var : methodCallInputVars) {
+            Type varType = var.getType();
+            if (isCollectionType(varType) || isMapType(varType))  {
                 return false;
             }
-            if (paramType.isArray()) {
-                Type elemType = ((ArrayType)paramType).getElementType();
+            if (varType.isArray()) {
+                Type elemType = ((ArrayType)varType).getElementType();
                 if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
                     return false;
                 }
             }
+
+            // add primitive type to the list of method parameter types
+            if (varType.isPrimitive()) {
+                methodCallParamTypes.add(varType);
+                continue;
+            }
+
+            // get type from the declaring statement of variable
+            CallableOperation declStmtOper = var.getDeclaringStatement().getOperation().getOperation();
+            if (declStmtOper.isConstructorCall()) {
+                // add actual type being created to parameter type list (may be a subtype of the
+                // declared parameter type)
+                Class<?> ctorDeclClass = ((ConstructorCall)declStmtOper).getConstructor().getDeclaringClass();
+                methodCallParamTypes.add(Type.forClass(ctorDeclClass));
+            }
+            else if (declStmtOper.isMethodCall()) {
+                // add method return type to parameter type list (may be a subtype of th declared
+                // parameter type); can still be inaccurate since this is the declared method type
+                Class<?> methodRetType = ((MethodCall)declStmtOper).getMethod().getReturnType();
+                methodCallParamTypes.add(Type.forClass(methodRetType));
+            }
+            else {
+                // TODO: any other substype of callable operation to be handled:
+                // https://randoop.github.io/randoop/api/randoop/operation/CallableOperation.html
+                methodCallParamTypes.add(varType);
+            }
         }
+
+        // if any param type is a collection or map type or an array of non-primitive types,
+        // return false; in such cases, the test plan would typically require objects of specific
+        // types to be added to the collection/map/array
+//        for (Type paramType : methodCallParamTypes) {
+//            if (isCollectionType(paramType) || isMapType(paramType))  {
+//                // TODO: check parameter/argument types of collection/map
+//                return false;
+//            }
+//            if (paramType.isArray()) {
+//                Type elemType = ((ArrayType)paramType).getElementType();
+//                if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
+//                    return false;
+//                }
+//            }
+//        }
         // build list of parameter type names
         List<String> methodCallParamTypeNames = methodCallParamTypes.stream()
             .map(type -> type.getBinaryName())
@@ -202,14 +238,14 @@ public class SequenceUtil {
         testPlanRow.elements().forEachRemaining(entry -> {
         	testPlanRowTypes.add(entry.get("type").asText());
         });
-        	
+
         // if the two lists are equal, the sequence covers the test plan row
         if (methodCallParamTypeNames.equals(testPlanRowTypes)) {
             return true;
         }
         return false;
     }
-    
+
     public static boolean hasCompoundTypes(ArrayNode testPlanRow, Sequence sequence) {
     	List<Type> methodCallParamTypes = new ArrayList<>();
         TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
@@ -222,7 +258,7 @@ public class SequenceUtil {
             if (isCollectionType(paramType) || isMapType(paramType))  {
                 return true;
             }
-            
+
             if (paramType.isArray()) {
                 Type elemType = ((ArrayType) paramType).getElementType();
                 if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
