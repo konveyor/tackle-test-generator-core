@@ -171,6 +171,9 @@ public class SequenceUtil {
         List<Variable> methodCallInputVars = sequence.getInputs(sequence.size()-1);
         for (Variable var : methodCallInputVars) {
             Type varType = var.getType();
+            // if any param type is a collection or map type or an array of non-primitive types,
+            // return false; in such cases, the test plan would typically require objects of specific
+            // types to be added to the collection/map/array
             if (isCollectionType(varType) || isMapType(varType))  {
                 return false;
             }
@@ -202,27 +205,11 @@ public class SequenceUtil {
                 methodCallParamTypes.add(Type.forClass(methodRetType));
             }
             else {
-                // TODO: any other substype of callable operation to be handled:
-                // https://randoop.github.io/randoop/api/randoop/operation/CallableOperation.html
+                // TODO: any other subtype of callable operation to be handled
                 methodCallParamTypes.add(varType);
             }
         }
 
-        // if any param type is a collection or map type or an array of non-primitive types,
-        // return false; in such cases, the test plan would typically require objects of specific
-        // types to be added to the collection/map/array
-//        for (Type paramType : methodCallParamTypes) {
-//            if (isCollectionType(paramType) || isMapType(paramType))  {
-//                // TODO: check parameter/argument types of collection/map
-//                return false;
-//            }
-//            if (paramType.isArray()) {
-//                Type elemType = ((ArrayType)paramType).getElementType();
-//                if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
-//                    return false;
-//                }
-//            }
-//        }
         // build list of parameter type names
         List<String> methodCallParamTypeNames = methodCallParamTypes.stream()
             .map(type -> type.getBinaryName())
@@ -266,7 +253,7 @@ public class SequenceUtil {
                 }
             }
         }
-        
+
         return false;
     }
 

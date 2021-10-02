@@ -219,7 +219,7 @@ public class TestUtils {
         app.exp__generated_sequences = 1486;
         app.exp__executed_sequences = 1471;
         app.exp__test_plan_rows = 1486;
-        app.exp__rows_covered_bb_sequences = 282;
+        app.exp__rows_covered_bb_sequences = 264;
         app.expmin_final_sequences = 1146;
         app.exp__no_bb_sequence_for_target_method = 0;
         app.exp__non_instantiable_param_type = 0;
