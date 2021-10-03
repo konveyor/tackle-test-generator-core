@@ -39,7 +39,6 @@ public class TestUtils {
     private static final String COVERAGE_OUTDIR = "target"+File.separator+"jacoco-output";
     private static final String COVERAGE_FILE_PREFIX = "jacoco-";
     private static int COVERAGE_FILE_COUNTER = 1;
-    // private static Map<String, AppData> = {("irs", irsAppData)}
 
     public static String getJacocoAgentJarPath() {
         Optional<String> evosuiteJarPath = Arrays.stream(
@@ -142,47 +141,7 @@ public class TestUtils {
         }
         return new File("/dev/null");
     }
-    
-    /*
-    public static class AppData {
-        // general data
-        public String appRootDir;
-        public String appClasspathFilename;
-        public String appPath;
-        // modeler test data
-        public String partitionsCPPrefix;
-        public String partitionsCPSuffix;
-        public String refactoringPrefix;
-        public String partitionsPrefix;
-        public String partitionsSuffix;
-        public String partitionsSeparator;
-        // extender test data
-        public int exp__bb_sequences;
-        public int exp__parsed_sequences_full;
-        public int exp__parsed_sequences_partial;
-        public int exp__skipped_sequences;
-        public int exp__exception_sequences;
-        public int exp__method_sequence_pool_keys;
-        public int exp__class_sequence_pool_keys;
-        public int exp__generated_sequences;
-        public int exp__executed_sequences;
-        public int exp__test_plan_rows;
-        public int exp__rows_covered_bb_sequences;
-        public int expmin_final_sequences;
-        public int exp__no_bb_sequence_for_target_method;
-        public int exp__non_instantiable_param_type;
-        public int exp__excp_during_extension;
-        public List<String> exp__execution_exception_types_other;
-        public int exp__class_not_found_types;
-        public Set<String> exp__parse_exception_types;
-        public int exp__randoop_sequence_SequenceParseException;
-        public int exp__java_lang_Error;
-        public int exp__partition_count;
-        public Map<String, String> exp__target_method_coverage;
-        public int exp__test_classes_count;
-    }
-*/
-    
+
     /**
      * Class containing information about an application under test
      */
@@ -194,20 +153,24 @@ public class TestUtils {
         
         
         public AppUnderTest(String appName) {
-            String appRootDir = "test"+File.separator+"data"+File.separator+appName;
+            String appRootDir = "test" + File.separator + "data" + File.separator + appName;
             this.appName = appName;
+            
             // for new apps: classpath file should be in this format:
-            this.appClasspathFilename = appRootDir+File.separator+appName+"MonoClasspath.txt";
-            this.appOutdir = appName+"-"+ Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
+            this.appClasspathFilename = appRootDir + File.separator + appName + "MonoClasspath.txt";
+            this.appOutdir = appName + "-" + Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
             
             // for new apps: add appPath here
-            if (appName == "irs") {
+            if (appName.equals("irs")) {
                 this.appPath = appRootDir + File.separator + "monolith" +
                     File.separator + "target" + File.separator + "classes";
             }
-            else if (appName == "daytrader7") {
+            else if (appName.equals("daytrader7")) {
                 this.appPath = appRootDir + File.separator + "monolith" +
                     File.separator + "bin";
+            }
+            else {
+                System.out.println("App name is not recognized: " + appName);
             }
         }
     }
@@ -257,7 +220,9 @@ public class TestUtils {
 
             // set expected values
             // for new apps: add expected values here
-            if (appName == "irs") { // todo: ask how to implement this better, dict? json?
+            if (appName.equals("irs") && ((testPlanFilename == null && testSeqFilename == null) ||
+                                     (testPlanFilename.equals("test"+ File.separator+"data"+File.separator+"irs"+File.separator+"irs_ctd_models_and_test_plans.json") &&
+                                         testSeqFilename.equals("test"+File.separator+"data"+File.separator+"irs"+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json")))) {
                 this.exp__bb_sequences = 13;
                 this.exp__parsed_sequences_full = 12;
                 this.exp__parsed_sequences_partial = 0;
@@ -293,7 +258,10 @@ public class TestUtils {
                         {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
                 this.exp__test_classes_count = 5;
-            } else if (appName == "daytrader7") {
+                
+            } else if (appName.equals("daytrader7") &&
+                (testPlanFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json") &&
+                    testSeqFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"))) {
                 this.exp__bb_sequences = 159;
                 this.exp__parsed_sequences_full = 155;
                 this.exp__parsed_sequences_partial = 0;
@@ -323,6 +291,8 @@ public class TestUtils {
                         {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
                 this.exp__test_classes_count = 42;
+            } else {
+                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (" + appName + ", " + testPlanFilename + ", " + testSeqFilename + ")");
             }
         }
 
@@ -332,6 +302,13 @@ public class TestUtils {
 
         public static String getCoverageFileJsonName(String appName) {
             return appName + Constants.COVERAGE_FILE_JSON_SUFFIX;
+        }
+    }
+
+    
+    public static class IntegrationAppUnderTest extends ExtenderAppUnderTest {
+        public IntegrationAppUnderTest(String appName) {
+            super(appName, null, null);
         }
     }
     

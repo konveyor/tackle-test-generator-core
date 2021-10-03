@@ -59,22 +59,26 @@ public class TestSequenceInitializerTest {
             "test/data/daytrader7/daytrader_ctd_models_shortened.json", "EvoSuiteTestGenerator",
             -1, false, false, targetClasses);
 
+        executeSequenceInitializerTest(sequenceInitializerAppUnderTest);
+	}
+	
+    private void executeSequenceInitializerTest(SequenceInitializerAppUnderTest sequenceInitializerAppUnderTest) throws Exception {
         sequenceInitializerAppUnderTest.seqInitializer.createInitialTests();
 
-		// assert that input/output files for evosuite are created
-		assertTrue(new File(SequenceInitializerAppUnderTest.getTargetDirName(appName)).exists());
-        assertTrue(new File(SequenceInitializerAppUnderTest.getOutputDirName(appName)).exists());
-        
-        File outputFile = new File(SequenceInitializerAppUnderTest.getOutputFileName(appName));
+        // assert that input/output files for evosuite are created
+        assertTrue(new File(SequenceInitializerAppUnderTest.getTargetDirName(sequenceInitializerAppUnderTest.appName)).exists());
+        assertTrue(new File(SequenceInitializerAppUnderTest.getOutputDirName(sequenceInitializerAppUnderTest.appName)).exists());
+
+        File outputFile = new File(SequenceInitializerAppUnderTest.getOutputFileName(sequenceInitializerAppUnderTest.appName));
         assertTrue(outputFile.exists());
 
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
+        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
 
-		ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
+        ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
 
-		@SuppressWarnings("unchecked")
-		Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
+        @SuppressWarnings("unchecked")
+        Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
 
-		assertTrue(reachedClasses.equals(targetClasses));
-	}
+        assertTrue(reachedClasses.equals(sequenceInitializerAppUnderTest.targetClasses));
+    }
 }
