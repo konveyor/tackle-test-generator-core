@@ -234,20 +234,20 @@ public class SequenceUtil {
     }
 
     public static boolean hasCompoundTypes(ArrayNode testPlanRow, Sequence sequence) {
-    	List<Type> methodCallParamTypes = new ArrayList<>();
-        TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
-        methodcallOper.getInputTypes().forEach(type -> methodCallParamTypes.add(type));
-
+        
+        List<Variable> methodCallInputVars = sequence.getInputs(sequence.size()-1);
+        for (Variable var : methodCallInputVars) {
+            Type varType = var.getType();
+        
         // if any param type is a collection or map type or an array of non-primitive types,
         // return false; in such cases, the test plan would typically require objects of specific
         // types to be added to the collection/map/array
-        for (Type paramType : methodCallParamTypes) {
-            if (isCollectionType(paramType) || isMapType(paramType))  {
+            if (isCollectionType(varType) || isMapType(varType))  {
                 return true;
             }
 
-            if (paramType.isArray()) {
-                Type elemType = ((ArrayType) paramType).getElementType();
+            if (varType.isArray()) {
+                Type elemType = ((ArrayType) varType).getElementType();
                 if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
                     return true;
                 }
