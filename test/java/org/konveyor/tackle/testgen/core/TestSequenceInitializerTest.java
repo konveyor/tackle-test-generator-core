@@ -70,7 +70,7 @@ public class TestSequenceInitializerTest {
         for (SequenceInitializerAppUnderTest sequenceInitializerAppUnderTest : appsUnderTest) {
             TestSequenceInitializer seqInitializer = new TestSequenceInitializer(
                 sequenceInitializerAppUnderTest.appName,
-                sequenceInitializerAppUnderTest.ctdModelsFileName,
+                sequenceInitializerAppUnderTest.testPlanFilename,
                 sequenceInitializerAppUnderTest.appPath,
                 sequenceInitializerAppUnderTest.appClasspathFilename,
                 sequenceInitializerAppUnderTest.testGenName,

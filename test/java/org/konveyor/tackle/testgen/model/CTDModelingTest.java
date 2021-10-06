@@ -102,7 +102,7 @@ public class CTDModelingTest {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
-                modelerAppUnderTest.fileName,
+                modelerAppUnderTest.testPlanFilename,
                 modelerAppUnderTest.targetClassList,
                 modelerAppUnderTest.excludedClassList,
                 modelerAppUnderTest.partitionsCPPrefix,

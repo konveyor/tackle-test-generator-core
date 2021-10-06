@@ -150,12 +150,13 @@ public class TestUtils {
         public String appOutdir;
         public String appPath;
         public String appClasspathFilename;
-        // todo: add public String testPlanFilename;
+        public String testPlanFilename;
         
         
-        public AppUnderTest(String appName) {
+        public AppUnderTest(String appName, String testPlanFilename) {
             String appRootDir = "test" + File.separator + "data" + File.separator + appName;
             this.appName = appName;
+            this.testPlanFilename = testPlanFilename;
             
             // for new apps: classpath file should be in this format:
             this.appClasspathFilename = appRootDir + File.separator + appName + "MonoClasspath.txt";
@@ -177,7 +178,6 @@ public class TestUtils {
     }
 
     public static class ExtenderAppUnderTest extends AppUnderTest {
-        public String testPlanFilename;
         public String testSeqFilename;
         // expected values
         public int exp__bb_sequences;
@@ -205,8 +205,7 @@ public class TestUtils {
         public int exp__test_classes_count;
 
         public ExtenderAppUnderTest(String appName, String testPlanFilename, String testSeqFilename) {
-            super(appName);
-            this.testPlanFilename = testPlanFilename;
+            super(appName, testPlanFilename);
             this.testSeqFilename = testSeqFilename;
             
             if (this.testPlanFilename == null) {
@@ -308,8 +307,7 @@ public class TestUtils {
     
 
     public static class ModelerAppUnderTest extends AppUnderTest {
-
-        public String fileName;
+        
         public String targetClassList;
         public String excludedClassList;
         public int maxNestDepth;
@@ -324,12 +322,11 @@ public class TestUtils {
         public String partitionsSuffix;
         public String partitionsSeparator;
 
-        public ModelerAppUnderTest(String appName, String fileName, String targetClassList,
+        public ModelerAppUnderTest(String appName, String testPlanFilename, String targetClassList,
                                    String excludedClassList, int maxNestDepth, boolean addLocalRemote,
                                    int level, String standardNodeFile) {
-            super(appName);
+            super(appName, testPlanFilename);
             this.standardNodeFile = standardNodeFile;
-            this.fileName = fileName;
             this.targetClassList = targetClassList;
             this.excludedClassList = excludedClassList;
             this.maxNestDepth = maxNestDepth;
@@ -353,19 +350,17 @@ public class TestUtils {
 
     public static class SequenceInitializerAppUnderTest extends AppUnderTest {
 
-        public String ctdModelsFileName;
         public String testGenName;
         public int timeLimit;
         public boolean targetMethods;
         public boolean baseAssertions;
         public Set<String> targetClasses;
 
-        public SequenceInitializerAppUnderTest(String appName, String ctdModelsFileName,
+        public SequenceInitializerAppUnderTest(String appName, String testPlanFilename,
                                                String testGenName, int timeLimit,
                                                boolean targetMethods, boolean baseAssertions,
                                                Set<String> targetClasses){
-            super(appName);
-            this.ctdModelsFileName = ctdModelsFileName;
+            super(appName, testPlanFilename);
             this.testGenName = testGenName;
             this.timeLimit = timeLimit;
             this.targetMethods = targetMethods;
