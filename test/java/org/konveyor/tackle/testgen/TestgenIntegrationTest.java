@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
-import org.konveyor.tackle.testgen.TestUtils.IntegrationAppUnderTest;
+import org.konveyor.tackle.testgen.TestUtils.ExtenderAppUnderTest;
 import org.konveyor.tackle.testgen.util.Constants;
 
 import java.io.File;
@@ -37,13 +37,13 @@ import static org.junit.Assert.assertTrue;
 
 public class TestgenIntegrationTest {
 
-    private static List<IntegrationAppUnderTest> appsUnderTest;
+    private static List<ExtenderAppUnderTest> appsUnderTest;
     private static List<String> OUTDIRS;
 
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(new IntegrationAppUnderTest("irs"));
+        appsUnderTest.add(new ExtenderAppUnderTest("irs", null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -54,7 +54,7 @@ public class TestgenIntegrationTest {
      * Delete existing output files
      */
     public void cleanUp() throws IOException {
-        for (IntegrationAppUnderTest testApp : appsUnderTest) {
+        for (ExtenderAppUnderTest testApp : appsUnderTest) {
             Files.deleteIfExists(Paths.get(testApp.testPlanFilename));
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
@@ -69,7 +69,7 @@ public class TestgenIntegrationTest {
                     .forEach(File::delete);
             }
         }
-        for (IntegrationAppUnderTest app : appsUnderTest) {
+        for (ExtenderAppUnderTest app : appsUnderTest) {
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(app.appName)));
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(app.appName)));
         }
@@ -79,7 +79,7 @@ public class TestgenIntegrationTest {
     public void testModelerInitializerExtender() throws Exception {
 
         // run test on apps
-        for (IntegrationAppUnderTest testApp: appsUnderTest) {
+        for (ExtenderAppUnderTest testApp: appsUnderTest) {
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,

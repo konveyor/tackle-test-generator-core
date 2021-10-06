@@ -305,13 +305,6 @@ public class TestUtils {
             return appName + Constants.COVERAGE_FILE_JSON_SUFFIX;
         }
     }
-
-    
-    public static class IntegrationAppUnderTest extends ExtenderAppUnderTest {
-        public IntegrationAppUnderTest(String appName) {
-            super(appName, null, null);
-        }
-    }
     
 
     public static class ModelerAppUnderTest extends AppUnderTest {
