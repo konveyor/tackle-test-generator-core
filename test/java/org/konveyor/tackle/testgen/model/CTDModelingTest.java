@@ -17,7 +17,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
@@ -43,39 +45,49 @@ public class CTDModelingTest {
 
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
-        ModelerAppUnderTest modelerAppUnderTest = new ModelerAppUnderTest("daytrader7",
-            null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-            null, 2, false,
-            1, "test/data/daytrader7/DayTrader_ctd_models_classlist.json");
+        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(
+            new ModelerAppUnderTest("daytrader7", null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                null, 2, false,
+                1, "test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
 
-        executeModelingTest(modelerAppUnderTest);
+        executeModelingTest(appsUnderTest);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
-        ModelerAppUnderTest modelerAppUnderTest = new ModelerAppUnderTest("daytrader7",
-            null, null, null, 2, false,
-            1, "test/data/daytrader7/DayTrader_ctd_models_all_classes.json");
+        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(
+            new ModelerAppUnderTest("daytrader7", null, null,
+                null, 2, false, 1,
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
 
-        executeModelingTest(modelerAppUnderTest);
+        executeModelingTest(appsUnderTest);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
-        ModelerAppUnderTest modelerAppUnderTest = new ModelerAppUnderTest("daytrader7",
-            null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-            2, false, 1, "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json");
+        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(
+            new ModelerAppUnderTest("daytrader7", null, null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                2, false, 1,
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
 
-        executeModelingTest(modelerAppUnderTest);
+        executeModelingTest(appsUnderTest);
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
-        ModelerAppUnderTest modelerAppUnderTest = new ModelerAppUnderTest("daytrader7",
-            null, null, "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-			2, false, 1, "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
+        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(
+            new ModelerAppUnderTest("daytrader7", null, null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
+                2, false, 1,
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
 
-        executeModelingTest(modelerAppUnderTest);
+        executeModelingTest(appsUnderTest);
 	}
 
 	/*
@@ -86,17 +98,35 @@ public class CTDModelingTest {
 
 	@SuppressWarnings("unchecked")
     
-    private void executeModelingTest(ModelerAppUnderTest modelerAppUnderTest) throws Exception {
-        
-	    modelerAppUnderTest.analyzer.modelPartitions();
+    private void executeModelingTest(List<ModelerAppUnderTest> appsUnderTest) throws Exception {
+        for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
+                modelerAppUnderTest.appName,
+                modelerAppUnderTest.fileName,
+                modelerAppUnderTest.targetClassList,
+                modelerAppUnderTest.excludedClassList,
+                modelerAppUnderTest.partitionsCPPrefix,
+                modelerAppUnderTest.partitionsCPSuffix,
+                modelerAppUnderTest.appPath,
+                modelerAppUnderTest.appClasspathFilename,
+                modelerAppUnderTest.maxNestDepth,
+                modelerAppUnderTest.addLocalRemote,
+                modelerAppUnderTest.level,
+                modelerAppUnderTest.refactoringPrefix,
+                modelerAppUnderTest.partitionsPrefix,
+                modelerAppUnderTest.partitionsSuffix,
+                modelerAppUnderTest.partitionsSeparator);
 
-        // assert that output file for CTD modeling is created
-        File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(modelerAppUnderTest.appName));
-        assertTrue(outfile.exists());
+            analyzer.modelPartitions();
 
-        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outfile);
-        JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
-        compareModels(resultNode, standardNode);
+            // assert that output file for CTD modeling is created
+            File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(modelerAppUnderTest.appName));
+            assertTrue(outfile.exists());
+
+            JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outfile);
+            JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
+            compareModels(resultNode, standardNode);
+        }
     }
     
 	private void compareModels(JsonNode resultObject, JsonNode standardObject) {

@@ -150,6 +150,7 @@ public class TestUtils {
         public String appOutdir;
         public String appPath;
         public String appClasspathFilename;
+        // todo: add public String testPlanFilename;
         
         
         public AppUnderTest(String appName) {
@@ -315,19 +316,40 @@ public class TestUtils {
 
     public static class ModelerAppUnderTest extends AppUnderTest {
 
-        public CTDTestPlanGenerator analyzer;
+        public String fileName;
+        public String targetClassList;
+        public String excludedClassList;
+        public int maxNestDepth;
+        public boolean addLocalRemote;
+        public int level;
+        
         public String standardNodeFile;
+        public String partitionsCPPrefix;
+        public String partitionsCPSuffix;
+        public String refactoringPrefix;
+        public String partitionsPrefix;
+        public String partitionsSuffix;
+        public String partitionsSeparator;
 
         public ModelerAppUnderTest(String appName, String fileName, String targetClassList,
                                    String excludedClassList, int maxNestDepth, boolean addLocalRemote,
-                                   int level, String standardNodeFile) throws Exception {
+                                   int level, String standardNodeFile) {
             super(appName);
-            // for added mono2micro support: change the input for relevant fields based on appName
-            this.analyzer = new CTDTestPlanGenerator(appName, fileName, targetClassList,
-                excludedClassList, null, null, this.appPath,
-                this.appClasspathFilename, maxNestDepth, addLocalRemote, level, null,
-                null, null, null);
             this.standardNodeFile = standardNodeFile;
+            this.fileName = fileName;
+            this.targetClassList = targetClassList;
+            this.excludedClassList = excludedClassList;
+            this.maxNestDepth = maxNestDepth;
+            this.addLocalRemote = addLocalRemote;
+            this.level = level;
+            
+            // for added partitions file support: change the input for relevant fields based on appName
+            this.partitionsCPPrefix = null;
+            this.partitionsCPSuffix = null;
+            this.refactoringPrefix = null;
+            this.partitionsPrefix = null;
+            this.partitionsSuffix = null;
+            this.partitionsSeparator = null;
         }
         
         public static String getCtdOutfileName(String appName) {
@@ -338,16 +360,23 @@ public class TestUtils {
 
     public static class SequenceInitializerAppUnderTest extends AppUnderTest {
 
-        public TestSequenceInitializer seqInitializer;
+        public String ctdModelsFileName;
+        public String testGenName;
+        public int timeLimit;
+        public boolean targetMethods;
+        public boolean baseAssertions;
         public Set<String> targetClasses;
 
         public SequenceInitializerAppUnderTest(String appName, String ctdModelsFileName,
                                                String testGenName, int timeLimit,
                                                boolean targetMethods, boolean baseAssertions,
-                                               Set<String> targetClasses) throws Exception {
+                                               Set<String> targetClasses){
             super(appName);
-            this.seqInitializer = new TestSequenceInitializer(appName, ctdModelsFileName, this.appPath,
-                this.appClasspathFilename, testGenName, timeLimit, targetMethods, baseAssertions);
+            this.ctdModelsFileName = ctdModelsFileName;
+            this.testGenName = testGenName;
+            this.timeLimit = timeLimit;
+            this.targetMethods = targetMethods;
+            this.baseAssertions = baseAssertions;
             this.targetClasses = targetClasses;
         }
 
