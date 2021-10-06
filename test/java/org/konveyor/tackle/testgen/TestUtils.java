@@ -27,10 +27,8 @@ import java.util.stream.Stream;
 import org.konveyor.tackle.testgen.core.DiffAssertionsGenerator;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.RandoopTestGenerator;
-import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
-import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.Utils;
 
@@ -173,6 +171,7 @@ public class TestUtils {
             }
             else {
                 System.out.println("App name is not recognized: " + appName);
+                System.exit(1);
             }
         }
     }
@@ -207,7 +206,7 @@ public class TestUtils {
         public ExtenderAppUnderTest(String appName, String testPlanFilename, String testSeqFilename) {
             super(appName, testPlanFilename);
             this.testSeqFilename = testSeqFilename;
-            
+
             if (this.testPlanFilename == null) {
                 this.testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
             }
@@ -219,10 +218,25 @@ public class TestUtils {
             }
 
             // set expected values
-            // for new apps: add expected values here
-            if (appName.equals("irs") && ((testPlanFilename == null && testSeqFilename == null) ||
-                                     (testPlanFilename.equals("test"+ File.separator+"data"+File.separator+"irs"+File.separator+"irs_ctd_models_and_test_plans.json") &&
-                                         testSeqFilename.equals("test"+File.separator+"data"+File.separator+"irs"+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json")))) {
+            // for new apps: add expected values and a new function here
+            if (appName.equals("irs")){
+                setExpectedValuesInExtenderAppUnderTestIrs(testPlanFilename, testSeqFilename);
+            }
+            
+            else if (appName.equals("daytrader7")){
+                setExpectedValuesInExtenderAppUnderTestDaytrader7(testPlanFilename, testSeqFilename);
+            }
+            
+            else {
+                System.out.println("Missing expected ExtenderAppUnderTest values for the app: " + appName);
+                System.exit(1);
+            }
+        }
+
+        private void setExpectedValuesInExtenderAppUnderTestIrs(String testPlanFilename, String testSeqFilename){
+            if ((testPlanFilename == null && testSeqFilename == null) ||
+                (testPlanFilename.equals("test"+ File.separator+"data"+File.separator+"irs"+File.separator+"irs_ctd_models_and_test_plans.json") &&
+                    testSeqFilename.equals("test"+File.separator+"data"+File.separator+"irs"+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"))) {
                 this.exp__bb_sequences = 13;
                 this.exp__parsed_sequences_full = 12;
                 this.exp__parsed_sequences_partial = 0;
@@ -258,9 +272,15 @@ public class TestUtils {
                         {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
                 this.exp__test_classes_count = 5;
-                
-            } else if (appName.equals("daytrader7") &&
-                (testPlanFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json") &&
+            }
+            else {
+                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (irs, " + testPlanFilename + ", " + testSeqFilename + ")");
+                System.exit(1);
+            }
+        }
+
+        private void setExpectedValuesInExtenderAppUnderTestDaytrader7(String testPlanFilename, String testSeqFilename) {
+            if ((testPlanFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json") &&
                     testSeqFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"))) {
                 this.exp__bb_sequences = 159;
                 this.exp__parsed_sequences_full = 155;
@@ -291,8 +311,10 @@ public class TestUtils {
                         {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
                 this.exp__test_classes_count = 42;
-            } else {
-                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (" + appName + ", " + testPlanFilename + ", " + testSeqFilename + ")");
+            }
+            else {
+                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (daytrader7, " + testPlanFilename + ", " + testSeqFilename + ")");
+                System.exit(1);
             }
         }
 
@@ -369,11 +391,11 @@ public class TestUtils {
         }
 
         public static String getTargetDirName(String appName) {
-            return appName + EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX;
+            return appName + Constants.EVOSUITE_TARGET_DIR_NAME_SUFFIX;
         }
 
         public static String getOutputDirName(String appName) {
-            return appName + EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX;
+            return appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX;
         }
 
         public static String getOutputFileName(String appName) {

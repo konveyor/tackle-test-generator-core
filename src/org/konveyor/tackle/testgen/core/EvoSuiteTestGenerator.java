@@ -36,16 +36,13 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 	public EvoSuiteTestGenerator(List<String> targetPath, String appName) {
 		super(targetPath);
 		this.appName = appName;
-		evosuiteOutputDir = new File(appName+EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
+		evosuiteOutputDir = new File(appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
 	}
 
 	private final String appName;
 	private boolean generateAssertions = false;
-	public static final String EVOSUITE_OUTPUT_DIR_NAME_SUFFIX = "-evosuite-tests";
-	private File evosuiteOutputDir;
-    public static final String EVOSUITE_TARGET_DIR_NAME_SUFFIX = "-evosuite-targets";
-    public static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
-	private int timeLimit = 0;
+    private File evosuiteOutputDir;
+    private int timeLimit = 0;
 	private CoverageCriterion criterion = null;
 
 	private static final Logger logger = TackleTestLogger.getLogger(EvoSuiteTestGenerator.class);
@@ -116,14 +113,14 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 		// path into a new location - otherwise all constructors of other classes in that same path will
 		// be targeted as well
 
-		File destinationDir = new File(appName+EVOSUITE_TARGET_DIR_NAME_SUFFIX);
+		File destinationDir = new File(appName + Constants.EVOSUITE_TARGET_DIR_NAME_SUFFIX);
 		destinationDir.mkdir();
 
 		if ( ! destinationDir.isDirectory()) {
 			throw new IOException("Could not create directory "+destinationDir.getAbsolutePath());
 		}
 
-		File copyDir = new File(appName+EVOSUITE_APP_COPY_DIR_NAME_SUFFIX);
+		File copyDir = new File(appName + Constants.EVOSUITE_APP_COPY_DIR_NAME_SUFFIX);
 		copyDir.mkdir();
 
 		if ( ! copyDir.isDirectory()) {
@@ -219,7 +216,7 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 			} else if (entry.getKey().equals(Options.CRITERION.name())) {
 				criterion = CoverageCriterion.valueOf(entry.getValue());
 			} else if (entry.getKey().equals(Options.BASE_DIR.name())) {
-				evosuiteOutputDir = new File(entry.getValue(), appName+EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
+				evosuiteOutputDir = new File(entry.getValue(), appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
 			} else  if (entry.getKey().equals(Options.ASSERTIONS.name())) {
 				generateAssertions = Boolean.valueOf(entry.getValue());
 			} else {
