@@ -49,12 +49,16 @@ public class TestSequenceExtenderTest {
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
         appsUnderTest.add(new ExtenderAppUnderTest("daytrader7",
+            "test/data/daytrader7/daytrader7MonoClasspath.txt",
+            "test/data/daytrader7/monolith/bin",
             "test"+File.separator+"data"+File.separator+"daytrader7"+
                 File.separator+"DayTrader_ctd_models_new_format.json",
             "test"+File.separator+"data"+File.separator+
                 "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
         )); 
         appsUnderTest.add(new ExtenderAppUnderTest("irs",
+            "test/data/irs/irsMonoClasspath.txt",
+            "test/data/irs/monolith/target/classes",
             "test"+ File.separator+"data"+File.separator+"irs"+
                 File.separator+"irs_ctd_models_and_test_plans.json",
             "test"+File.separator+"data"+File.separator+"irs"+

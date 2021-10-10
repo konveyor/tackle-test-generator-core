@@ -151,28 +151,12 @@ public class TestUtils {
         public String testPlanFilename;
         
         
-        public AppUnderTest(String appName, String testPlanFilename) {
-            String appRootDir = "test" + File.separator + "data" + File.separator + appName;
+        public AppUnderTest(String appName, String appClasspath, String appPath, String testPlanFilename) {
             this.appName = appName;
+            this.appClasspathFilename = appClasspath;
+            this.appPath = appPath;
             this.testPlanFilename = testPlanFilename;
-            
-            // for new apps: classpath file should be in this format:
-            this.appClasspathFilename = appRootDir + File.separator + appName + "MonoClasspath.txt";
             this.appOutdir = appName + "-" + Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
-            
-            // for new apps: add appPath here
-            if (appName.equals("irs")) {
-                this.appPath = appRootDir + File.separator + "monolith" +
-                    File.separator + "target" + File.separator + "classes";
-            }
-            else if (appName.equals("daytrader7")) {
-                this.appPath = appRootDir + File.separator + "monolith" +
-                    File.separator + "bin";
-            }
-            else {
-                System.out.println("App name is not recognized: " + appName);
-                System.exit(1);
-            }
         }
     }
 
@@ -203,8 +187,8 @@ public class TestUtils {
         public Map<String, String> exp__target_method_coverage;
         public int exp__test_classes_count;
 
-        public ExtenderAppUnderTest(String appName, String testPlanFilename, String testSeqFilename) {
-            super(appName, testPlanFilename);
+        public ExtenderAppUnderTest(String appName, String appClasspath, String appPath, String testPlanFilename, String testSeqFilename) {
+            super(appName, appClasspath, appPath, testPlanFilename);
             this.testSeqFilename = testSeqFilename;
 
             if (this.testPlanFilename == null) {
@@ -358,6 +342,8 @@ public class TestUtils {
         public String partitionsSeparator;
 
         public ModelerAppUnderTest(String appName,
+                                   String appClasspath,
+                                   String appPath,
                                    String testPlanFilename,
                                    int maxNestDepth,
                                    boolean addLocalRemote,
@@ -374,7 +360,7 @@ public class TestUtils {
                                    String targetClassListForAllClassesButExcludedClassAndPackageTest,
                                    String excludedClassListForAllClassesButExcludedClassAndPackageTest,
                                    String standardNodeFileForAllClassesButExcludedClassAndPackageTest) {
-            super(appName, testPlanFilename);
+            super(appName, appClasspath, appPath, testPlanFilename);
             this.maxNestDepth = maxNestDepth;
             this.addLocalRemote = addLocalRemote;
             this.level = level;
@@ -418,11 +404,12 @@ public class TestUtils {
         public boolean baseAssertions;
         public Set<String> targetClasses;
 
-        public SequenceInitializerAppUnderTest(String appName, String testPlanFilename,
+        public SequenceInitializerAppUnderTest(String appName, String appClasspath,
+                                               String appPath, String testPlanFilename,
                                                String testGenName, int timeLimit,
                                                boolean targetMethods, boolean baseAssertions,
                                                Set<String> targetClasses){
-            super(appName, testPlanFilename);
+            super(appName, appClasspath, appPath, testPlanFilename);
             this.testGenName = testGenName;
             this.timeLimit = timeLimit;
             this.targetMethods = targetMethods;

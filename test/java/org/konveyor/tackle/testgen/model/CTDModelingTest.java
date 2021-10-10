@@ -41,6 +41,8 @@ public class CTDModelingTest {
         appsUnderTest = new ArrayList<>();
         appsUnderTest.add(
             new ModelerAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
                 null,
                 2,
                 false,

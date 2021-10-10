@@ -43,7 +43,9 @@ public class TestgenIntegrationTest {
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(new ExtenderAppUnderTest("irs", null, null));
+        appsUnderTest.add(new ExtenderAppUnderTest("irs",
+            "test/data/irs/irsMonoClasspath.txt",
+            "test/data/irs/monolith/target/classes",null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());

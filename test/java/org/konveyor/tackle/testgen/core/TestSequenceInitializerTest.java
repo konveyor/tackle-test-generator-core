@@ -59,6 +59,8 @@ public class TestSequenceInitializerTest {
         
         appsUnderTest.add(
             new SequenceInitializerAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
                 "test/data/daytrader7/daytrader_ctd_models_shortened.json",
                 "EvoSuiteTestGenerator", -1, false,
                 false, targetClassesOfDaytrader7));
