@@ -33,32 +33,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 public class CTDModelingTest {
+    
     private static List<ModelerAppUnderTest> appsUnderTest;
     
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(
-            new ModelerAppUnderTest("daytrader7",
-                "test/data/daytrader7/daytrader7MonoClasspath.txt",
-                "test/data/daytrader7/monolith/bin",
-                null,
-                2,
-                false,
-                1,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-                null,
-                "test/data/daytrader7/DayTrader_ctd_models_classlist.json",
-                null,
-                null,
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes.json",
-                null,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json",
-                null,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
+        appsUnderTest.add(ModelerAppUnderTest.createDaytrader7ModelerAppUnderTest());
     }
     
 	@Before
@@ -66,7 +49,9 @@ public class CTDModelingTest {
 	 * Delete existing modeling output file
 	 */
 	public void cleanUp() {
-        FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName("daytrader7")));
+	    for (ModelerAppUnderTest appUnderTest : appsUnderTest) {
+            FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName(appUnderTest.appName)));
+        }
 	}
 
 	@Test

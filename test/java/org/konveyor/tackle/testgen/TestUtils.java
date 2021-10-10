@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -160,6 +161,7 @@ public class TestUtils {
         }
     }
 
+    
     public static class ExtenderAppUnderTest extends AppUnderTest {
         public String testSeqFilename;
         // expected values
@@ -200,50 +202,39 @@ public class TestUtils {
                     appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
                     Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
             }
-
-            // set expected values
-            // for new apps: add expected values and a new function here
-            if (appName.equals("irs")){
-                setExpectedValuesInExtenderAppUnderTestIrs(testPlanFilename, testSeqFilename);
-            }
-            
-            else if (appName.equals("daytrader7")){
-                setExpectedValuesInExtenderAppUnderTestDaytrader7(testPlanFilename, testSeqFilename);
-            }
-            
-            else {
-                System.out.println("Missing expected ExtenderAppUnderTest values for the app: " + appName);
-                System.exit(1);
-            }
         }
 
-        private void setExpectedValuesInExtenderAppUnderTestIrs(String testPlanFilename, String testSeqFilename){
-            if ((testPlanFilename == null && testSeqFilename == null) ||
-                (testPlanFilename.equals("test"+ File.separator+"data"+File.separator+"irs"+File.separator+"irs_ctd_models_and_test_plans.json") &&
-                    testSeqFilename.equals("test"+File.separator+"data"+File.separator+"irs"+File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"))) {
-                this.exp__bb_sequences = 13;
-                this.exp__parsed_sequences_full = 12;
-                this.exp__parsed_sequences_partial = 0;
-                this.exp__skipped_sequences = 0;
-                this.exp__exception_sequences = 1;
-                this.exp__method_sequence_pool_keys = 11;
-                this.exp__class_sequence_pool_keys = 5;
-                this.exp__generated_sequences = 25;
-                this.exp__executed_sequences = 25;
-                this.exp__test_plan_rows = 25;
-                this.exp__rows_covered_bb_sequences = 11;
-                this.expmin_final_sequences = 23;
-                this.exp__no_bb_sequence_for_target_method = 0;
-                this.exp__non_instantiable_param_type = 0;
-                this.exp__excp_during_extension = 0;
-                this.exp__execution_exception_types_other = Arrays.asList();
-                this.exp__class_not_found_types = 0;
-                this.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
+        public static ExtenderAppUnderTest createIrsExtenderAppUnderTest(String testPlanFilename, String testSeqFilename){
+            
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("irs",
+                "test/data/irs/irsMonoClasspath.txt",
+                "test/data/irs/monolith/target/classes",
+                testPlanFilename,
+                testSeqFilename);
+
+            appUnderTest.exp__bb_sequences = 13;
+            appUnderTest.exp__parsed_sequences_full = 12;
+            appUnderTest.exp__parsed_sequences_partial = 0;
+            appUnderTest.exp__skipped_sequences = 0;
+            appUnderTest.exp__exception_sequences = 1;
+            appUnderTest.exp__method_sequence_pool_keys = 11;
+            appUnderTest.exp__class_sequence_pool_keys = 5;
+            appUnderTest.exp__generated_sequences = 25;
+            appUnderTest.exp__executed_sequences = 25;
+            appUnderTest.exp__test_plan_rows = 25;
+            appUnderTest.exp__rows_covered_bb_sequences = 11;
+            appUnderTest.expmin_final_sequences = 23;
+            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
+            appUnderTest.exp__non_instantiable_param_type = 0;
+            appUnderTest.exp__excp_during_extension = 0;
+            appUnderTest.exp__execution_exception_types_other = Arrays.asList();
+            appUnderTest.exp__class_not_found_types = 0;
+            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
                     collect(Collectors.toSet());
-                this.exp__randoop_sequence_SequenceParseException = 1;
-                this.exp__java_lang_Error = 0;
-                this.exp__partition_count = 2;
-                this.exp__target_method_coverage =
+            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
+            appUnderTest.exp__java_lang_Error = 0;
+            appUnderTest.exp__partition_count = 2;
+            appUnderTest.exp__target_method_coverage =
                     Stream.of(new String[][]{
                         {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
                         {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
@@ -255,51 +246,50 @@ public class TestUtils {
                         {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
                         {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-                this.exp__test_classes_count = 5;
-            }
-            else {
-                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (irs, " + testPlanFilename + ", " + testSeqFilename + ")");
-                System.exit(1);
-            }
+            appUnderTest.exp__test_classes_count = 5;
+            
+            return appUnderTest;
         }
 
-        private void setExpectedValuesInExtenderAppUnderTestDaytrader7(String testPlanFilename, String testSeqFilename) {
-            if ((testPlanFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_ctd_models_new_format.json") &&
-                    testSeqFilename.equals("test"+File.separator+"data"+File.separator+"daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"))) {
-                this.exp__bb_sequences = 159;
-                this.exp__parsed_sequences_full = 155;
-                this.exp__parsed_sequences_partial = 0;
-                this.exp__skipped_sequences = 3;
-                this.exp__exception_sequences = 1;
-                this.exp__method_sequence_pool_keys = 102;
-                this.exp__class_sequence_pool_keys = 39;
-                this.exp__generated_sequences = 1486;
-                this.exp__executed_sequences = 1471;
-                this.exp__test_plan_rows = 1486;
-                this.exp__rows_covered_bb_sequences = 282;
-                this.expmin_final_sequences = 1146;
-                this.exp__no_bb_sequence_for_target_method = 0;
-                this.exp__non_instantiable_param_type = 0;
-                this.exp__excp_during_extension = 15;
-                this.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
-                this.exp__class_not_found_types = 0;
-                this.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
+        public static ExtenderAppUnderTest createDaytrader7ExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+            
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
+                testPlanFilename,
+                testSeqFilename);
+
+            appUnderTest.exp__bb_sequences = 159;
+            appUnderTest.exp__parsed_sequences_full = 155;
+            appUnderTest.exp__parsed_sequences_partial = 0;
+            appUnderTest.exp__skipped_sequences = 3;
+            appUnderTest.exp__exception_sequences = 1;
+            appUnderTest.exp__method_sequence_pool_keys = 102;
+            appUnderTest.exp__class_sequence_pool_keys = 39;
+            appUnderTest.exp__generated_sequences = 1486;
+            appUnderTest.exp__executed_sequences = 1471;
+            appUnderTest.exp__test_plan_rows = 1486;
+            appUnderTest.exp__rows_covered_bb_sequences = 282;
+            appUnderTest.expmin_final_sequences = 1146;
+            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
+            appUnderTest.exp__non_instantiable_param_type = 0;
+            appUnderTest.exp__excp_during_extension = 15;
+            appUnderTest.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
+            appUnderTest.exp__class_not_found_types = 0;
+            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
                     collect(Collectors.toSet());
-                this.exp__randoop_sequence_SequenceParseException = 1;
-                this.exp__java_lang_Error = 17;
-                this.exp__partition_count = 4;
-                this.exp__target_method_coverage =
+            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
+            appUnderTest.exp__java_lang_Error = 17;
+            appUnderTest.exp__partition_count = 4;
+            appUnderTest.exp__target_method_coverage =
                     Stream.of(new String[][]{
                         {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
                         {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
                         {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-                this.exp__test_classes_count = 42;
-            }
-            else {
-                System.out.println("Combination of (appName, testPlanFilename, testSeqFilename) is not recognized: (daytrader7, " + testPlanFilename + ", " + testSeqFilename + ")");
-                System.exit(1);
-            }
+            appUnderTest.exp__test_classes_count = 42;
+                
+            return appUnderTest;
         }
 
         public static String getSummaryFileJsonName(String appName) {
@@ -360,6 +350,7 @@ public class TestUtils {
                                    String targetClassListForAllClassesButExcludedClassAndPackageTest,
                                    String excludedClassListForAllClassesButExcludedClassAndPackageTest,
                                    String standardNodeFileForAllClassesButExcludedClassAndPackageTest) {
+            
             super(appName, appClasspath, appPath, testPlanFilename);
             this.maxNestDepth = maxNestDepth;
             this.addLocalRemote = addLocalRemote;
@@ -381,13 +372,35 @@ public class TestUtils {
             this.excludedClassListForAllClassesButExcludedClassAndPackageTest = excludedClassListForAllClassesButExcludedClassAndPackageTest;
             this.standardNodeFileForAllClassesButExcludedClassAndPackageTest = standardNodeFileForAllClassesButExcludedClassAndPackageTest;
             
-            // for added partitions file support: change the input for relevant fields based on appName
+            // for added partitions file support: change the input for relevant fields
             this.partitionsCPPrefix = null;
             this.partitionsCPSuffix = null;
             this.refactoringPrefix = null;
             this.partitionsPrefix = null;
             this.partitionsSuffix = null;
             this.partitionsSeparator = null;
+        }
+
+        public static ModelerAppUnderTest createDaytrader7ModelerAppUnderTest() {
+            return new ModelerAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
+                null,
+                2,
+                false,
+                1,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                null,
+                "test/data/daytrader7/DayTrader_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes.json",
+                null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json",
+                null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
         }
         
         public static String getCtdOutfileName(String appName) {
@@ -415,6 +428,26 @@ public class TestUtils {
             this.targetMethods = targetMethods;
             this.baseAssertions = baseAssertions;
             this.targetClasses = targetClasses;
+        }
+        
+        public static SequenceInitializerAppUnderTest createDaytrader7SequenceInitializerAppUnderTest() {
+            Set<String> targetClassesOfDaytrader7 = new HashSet<>();
+            targetClassesOfDaytrader7.addAll(Arrays.asList(new String[] {
+                "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
+                "com.ibm.websphere.samples.daytrader.util.TradeConfig",
+                "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
+                "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
+                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
+            
+            return new SequenceInitializerAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
+                "test/data/daytrader7/daytrader_ctd_models_shortened.json",
+                "EvoSuiteTestGenerator",
+                -1,
+                false,
+                false,
+                targetClassesOfDaytrader7);
         }
 
         public static String getTargetDirName(String appName) {

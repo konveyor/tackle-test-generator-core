@@ -40,6 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 public class TestSequenceExtenderTest {
 
     private static List<String> OUTDIRS;
@@ -48,21 +49,13 @@ public class TestSequenceExtenderTest {
     @BeforeClass
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(new ExtenderAppUnderTest("daytrader7",
-            "test/data/daytrader7/daytrader7MonoClasspath.txt",
-            "test/data/daytrader7/monolith/bin",
-            "test"+File.separator+"data"+File.separator+"daytrader7"+
-                File.separator+"DayTrader_ctd_models_new_format.json",
-            "test"+File.separator+"data"+File.separator+
-                "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
+        appsUnderTest.add(ExtenderAppUnderTest.createDaytrader7ExtenderAppUnderTest(
+            "test/data/daytrader7/DayTrader_ctd_models_new_format.json",
+            "test/data/daytrader7/DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
         )); 
-        appsUnderTest.add(new ExtenderAppUnderTest("irs",
-            "test/data/irs/irsMonoClasspath.txt",
-            "test/data/irs/monolith/target/classes",
-            "test"+ File.separator+"data"+File.separator+"irs"+
-                File.separator+"irs_ctd_models_and_test_plans.json",
-            "test"+File.separator+"data"+File.separator+"irs"+
-                File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"
+        appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(
+            "test/data/irs/irs_ctd_models_and_test_plans.json",
+            "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)

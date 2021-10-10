@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+
 public class TestgenIntegrationTest {
 
     private static List<ExtenderAppUnderTest> appsUnderTest;
@@ -43,9 +44,7 @@ public class TestgenIntegrationTest {
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(new ExtenderAppUnderTest("irs",
-            "test/data/irs/irsMonoClasspath.txt",
-            "test/data/irs/monolith/target/classes",null, null));
+        appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -63,7 +62,7 @@ public class TestgenIntegrationTest {
                 Files.deleteIfExists(Paths.get(testSeqFile));
             }
         }
-        for (String outdir: OUTDIRS) {
+        for (String outdir : OUTDIRS) {
             if (Files.exists(Paths.get(outdir))) {
                 Files.walk(Paths.get(outdir))
                     .sorted(Comparator.reverseOrder())
