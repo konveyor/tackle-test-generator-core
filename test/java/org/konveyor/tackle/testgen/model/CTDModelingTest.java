@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils.ModelerAppUnderTest;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
@@ -33,78 +34,47 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CTDModelingTest {
-
+    private static List<ModelerAppUnderTest> appsUnderTest;
+    
+    @BeforeClass
+    public static void createAppsUnderTest() {
+        appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(
+            new ModelerAppUnderTest("daytrader7",
+                null,
+                2,
+                false,
+                1,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                null,
+                "test/data/daytrader7/DayTrader_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes.json",
+                null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json",
+                null,
+                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
+    }
+    
 	@Before
 	/**
 	 * Delete existing modeling output file
 	 */
 	public void cleanUp() {
-	    String appName = "daytrader7";
-        FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName(appName)));
+        FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName("daytrader7")));
 	}
 
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
-        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(
-            new ModelerAppUnderTest("daytrader7", null,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-                null, 2, false,
-                1, "test/data/daytrader7/DayTrader_ctd_models_classlist.json"));
-
-        executeModelingTest(appsUnderTest);
-	}
-
-	@Test
-	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
-        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(
-            new ModelerAppUnderTest("daytrader7", null, null,
-                null, 2, false, 1,
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes.json"));
-
-        executeModelingTest(appsUnderTest);
-	}
-
-	@Test
-	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
-        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(
-            new ModelerAppUnderTest("daytrader7", null, null,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.util.Log",
-                2, false, 1,
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json"));
-
-        executeModelingTest(appsUnderTest);
-	}
-
-	@Test
-	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
-        List<ModelerAppUnderTest> appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(
-            new ModelerAppUnderTest("daytrader7", null, null,
-                "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-                2, false, 1,
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json"));
-
-        executeModelingTest(appsUnderTest);
-	}
-
-	/*
-	 * We cannot compare the objects in a straightforward way because CTD result
-	 * might differ between different JVMs. Hence we just compare the models to each
-	 * other.
-	 */
-
-	@SuppressWarnings("unchecked")
-    
-    private void executeModelingTest(List<ModelerAppUnderTest> appsUnderTest) throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
                 modelerAppUnderTest.testPlanFilename,
-                modelerAppUnderTest.targetClassList,
-                modelerAppUnderTest.excludedClassList,
+                modelerAppUnderTest.targetClassListForClassListTest,
+                modelerAppUnderTest.excludedClassListForClassListTest,
                 modelerAppUnderTest.partitionsCPPrefix,
                 modelerAppUnderTest.partitionsCPSuffix,
                 modelerAppUnderTest.appPath,
@@ -119,14 +89,104 @@ public class CTDModelingTest {
 
             analyzer.modelPartitions();
 
-            // assert that output file for CTD modeling is created
-            File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(modelerAppUnderTest.appName));
-            assertTrue(outfile.exists());
-
-            JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outfile);
-            JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(modelerAppUnderTest.standardNodeFile));
-            compareModels(resultNode, standardNode);
+            executeModelingTest(modelerAppUnderTest.appName, modelerAppUnderTest.standardNodeFileForClassListTest);
         }
+	}
+
+	@Test
+	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
+        for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
+                modelerAppUnderTest.appName,
+                modelerAppUnderTest.testPlanFilename,
+                modelerAppUnderTest.targetClassListForAllClassesTest,
+                modelerAppUnderTest.excludedClassListForAllClassesTest,
+                modelerAppUnderTest.partitionsCPPrefix,
+                modelerAppUnderTest.partitionsCPSuffix,
+                modelerAppUnderTest.appPath,
+                modelerAppUnderTest.appClasspathFilename,
+                modelerAppUnderTest.maxNestDepth,
+                modelerAppUnderTest.addLocalRemote,
+                modelerAppUnderTest.level,
+                modelerAppUnderTest.refactoringPrefix,
+                modelerAppUnderTest.partitionsPrefix,
+                modelerAppUnderTest.partitionsSuffix,
+                modelerAppUnderTest.partitionsSeparator);
+
+            analyzer.modelPartitions();
+
+            executeModelingTest(modelerAppUnderTest.appName, modelerAppUnderTest.standardNodeFileForAllClassesTest);
+        }
+	}
+
+	@Test
+	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
+        for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
+                modelerAppUnderTest.appName,
+                modelerAppUnderTest.testPlanFilename,
+                modelerAppUnderTest.targetClassListForAllClassesButExcludedTest,
+                modelerAppUnderTest.excludedClassListForAllClassesButExcludedTest,
+                modelerAppUnderTest.partitionsCPPrefix,
+                modelerAppUnderTest.partitionsCPSuffix,
+                modelerAppUnderTest.appPath,
+                modelerAppUnderTest.appClasspathFilename,
+                modelerAppUnderTest.maxNestDepth,
+                modelerAppUnderTest.addLocalRemote,
+                modelerAppUnderTest.level,
+                modelerAppUnderTest.refactoringPrefix,
+                modelerAppUnderTest.partitionsPrefix,
+                modelerAppUnderTest.partitionsSuffix,
+                modelerAppUnderTest.partitionsSeparator);
+
+            analyzer.modelPartitions();
+
+            executeModelingTest(modelerAppUnderTest.appName, modelerAppUnderTest.standardNodeFileForAllClassesButExcludedTest);
+        }
+    }
+    
+	@Test
+	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
+        for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
+                modelerAppUnderTest.appName,
+                modelerAppUnderTest.testPlanFilename,
+                modelerAppUnderTest.targetClassListForAllClassesButExcludedClassAndPackageTest,
+                modelerAppUnderTest.excludedClassListForAllClassesButExcludedClassAndPackageTest,
+                modelerAppUnderTest.partitionsCPPrefix,
+                modelerAppUnderTest.partitionsCPSuffix,
+                modelerAppUnderTest.appPath,
+                modelerAppUnderTest.appClasspathFilename,
+                modelerAppUnderTest.maxNestDepth,
+                modelerAppUnderTest.addLocalRemote,
+                modelerAppUnderTest.level,
+                modelerAppUnderTest.refactoringPrefix,
+                modelerAppUnderTest.partitionsPrefix,
+                modelerAppUnderTest.partitionsSuffix,
+                modelerAppUnderTest.partitionsSeparator);
+
+            analyzer.modelPartitions();
+
+            executeModelingTest(modelerAppUnderTest.appName, modelerAppUnderTest.standardNodeFileForAllClassesButExcludedClassAndPackageTest);
+        }
+	}
+
+	/*
+	 * We cannot compare the objects in a straightforward way because CTD result
+	 * might differ between different JVMs. Hence we just compare the models to each
+	 * other.
+	 */
+
+	@SuppressWarnings("unchecked")
+    
+    private void executeModelingTest(String appName, String standardNodeFile) throws Exception {
+        // assert that output file for CTD modeling is created
+        File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(appName));
+        assertTrue(outfile.exists());
+
+        JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outfile);
+        JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(standardNodeFile));
+        compareModels(resultNode, standardNode);
     }
     
 	private void compareModels(JsonNode resultObject, JsonNode standardObject) {

@@ -330,13 +330,26 @@ public class TestUtils {
 
     public static class ModelerAppUnderTest extends AppUnderTest {
         
-        public String targetClassList;
-        public String excludedClassList;
         public int maxNestDepth;
         public boolean addLocalRemote;
         public int level;
+
+        public String targetClassListForClassListTest;
+        public String excludedClassListForClassListTest;
+        public String standardNodeFileForClassListTest;
+
+        public String targetClassListForAllClassesTest;
+        public String excludedClassListForAllClassesTest;
+        public String standardNodeFileForAllClassesTest;
+
+        public String targetClassListForAllClassesButExcludedTest;
+        public String excludedClassListForAllClassesButExcludedTest;
+        public String standardNodeFileForAllClassesButExcludedTest;
+
+        public String targetClassListForAllClassesButExcludedClassAndPackageTest;
+        public String excludedClassListForAllClassesButExcludedClassAndPackageTest;
+        public String standardNodeFileForAllClassesButExcludedClassAndPackageTest;
         
-        public String standardNodeFile;
         public String partitionsCPPrefix;
         public String partitionsCPSuffix;
         public String refactoringPrefix;
@@ -344,16 +357,43 @@ public class TestUtils {
         public String partitionsSuffix;
         public String partitionsSeparator;
 
-        public ModelerAppUnderTest(String appName, String testPlanFilename, String targetClassList,
-                                   String excludedClassList, int maxNestDepth, boolean addLocalRemote,
-                                   int level, String standardNodeFile) {
+        public ModelerAppUnderTest(String appName,
+                                   String testPlanFilename,
+                                   int maxNestDepth,
+                                   boolean addLocalRemote,
+                                   int level,
+                                   String targetClassListForClassListTest,
+                                   String excludedClassListForClassListTest,
+                                   String standardNodeFileForClassListTest,
+                                   String targetClassListForAllClassesTest,
+                                   String excludedClassListForAllClassesTest,
+                                   String standardNodeFileForAllClassesTest,
+                                   String targetClassListForAllClassesButExcludedTest,
+                                   String excludedClassListForAllClassesButExcludedTest,
+                                   String standardNodeFileForAllClassesButExcludedTest,
+                                   String targetClassListForAllClassesButExcludedClassAndPackageTest,
+                                   String excludedClassListForAllClassesButExcludedClassAndPackageTest,
+                                   String standardNodeFileForAllClassesButExcludedClassAndPackageTest) {
             super(appName, testPlanFilename);
-            this.standardNodeFile = standardNodeFile;
-            this.targetClassList = targetClassList;
-            this.excludedClassList = excludedClassList;
             this.maxNestDepth = maxNestDepth;
             this.addLocalRemote = addLocalRemote;
             this.level = level;
+
+            this.targetClassListForClassListTest = targetClassListForClassListTest;
+            this.excludedClassListForClassListTest = excludedClassListForClassListTest;
+            this.standardNodeFileForClassListTest = standardNodeFileForClassListTest;
+
+            this.targetClassListForAllClassesTest = targetClassListForAllClassesTest;
+            this.excludedClassListForAllClassesTest = excludedClassListForAllClassesTest;
+            this.standardNodeFileForAllClassesTest = standardNodeFileForAllClassesTest;
+
+            this.targetClassListForAllClassesButExcludedTest = targetClassListForAllClassesButExcludedTest;
+            this.excludedClassListForAllClassesButExcludedTest = excludedClassListForAllClassesButExcludedTest;
+            this.standardNodeFileForAllClassesButExcludedTest = standardNodeFileForAllClassesButExcludedTest;
+
+            this.targetClassListForAllClassesButExcludedClassAndPackageTest = targetClassListForAllClassesButExcludedClassAndPackageTest;
+            this.excludedClassListForAllClassesButExcludedClassAndPackageTest = excludedClassListForAllClassesButExcludedClassAndPackageTest;
+            this.standardNodeFileForAllClassesButExcludedClassAndPackageTest = standardNodeFileForAllClassesButExcludedClassAndPackageTest;
             
             // for added partitions file support: change the input for relevant fields based on appName
             this.partitionsCPPrefix = null;
