@@ -1,0 +1,18 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:axis2="http://densebrain.com/rif/client/service" xmlns:ns0="http://densebrain.com/rif/client/service/types" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://densebrain.com/rif/client/service"><wsdl:types><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://densebrain.com/rif/client/service/types" targetNamespace="http://densebrain.com/rif/client/service/types" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+<xs:element name="invoke">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:string" name="className" />
+<xs:element type="xs:string" name="methodName" />
+<xs:element type="xs:string" name="serializedParams" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="invokeResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element type="xs:string" name="return" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:schema></wsdl:types><wsdl:message name="invokeMessage"><wsdl:part element="ns0:invoke" name="part1" /></wsdl:message><wsdl:message name="invokeResponse"><wsdl:part element="ns0:invokeResponse" name="part1" /></wsdl:message><wsdl:portType name="RIFServicePortType"><wsdl:operation name="invoke"><wsdl:input message="axis2:invokeMessage" /><wsdl:output message="axis2:invokeResponse" /></wsdl:operation></wsdl:portType><wsdl:binding type="axis2:RIFServicePortType" name="RIFServiceSOAP11Binding"><soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" /><wsdl:operation name="invoke"><soap:operation style="document" soapAction="urn:invoke" /><wsdl:input><soap:body namespace="http://densebrain.com/rif/client/service" use="literal" /></wsdl:input><wsdl:output><soap:body namespace="http://densebrain.com/rif/client/service" use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:binding type="axis2:RIFServicePortType" name="RIFServiceSOAP12Binding"><soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" /><wsdl:operation name="invoke"><soap12:operation style="document" soapAction="urn:invoke" /><wsdl:input><soap12:body namespace="http://densebrain.com/rif/client/service" use="literal" /></wsdl:input><wsdl:output><soap12:body namespace="http://densebrain.com/rif/client/service" use="literal" /></wsdl:output></wsdl:operation></wsdl:binding><wsdl:service name="RIFService"><wsdl:port binding="axis2:RIFServiceSOAP11Binding" name="RIFServiceSOAP11port0"><soap:address location="http://JGLANZLT:10001/rif/services/RIFService" /></wsdl:port><wsdl:port binding="axis2:RIFServiceSOAP12Binding" name="RIFServiceSOAP12port0"><soap12:address location="http://JGLANZLT:10001/rif/services/RIFService" /></wsdl:port></wsdl:service></wsdl:definitions>

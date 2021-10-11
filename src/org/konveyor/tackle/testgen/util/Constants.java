@@ -117,6 +117,12 @@ public class Constants {
     public static final String EVOSUITE_HELP_CLASS_SUFFIX = "_ESTest_scaffolding";
 
     public static final String EVOSUITE_HELP_FILE_SUFFIX = EVOSUITE_HELP_CLASS_SUFFIX+JAVA_FILE_SUFFIX;
+    
+    public static final String EVOSUITE_OUTPUT_DIR_NAME_SUFFIX = "-evosuite-tests";
+    
+    public static final String EVOSUITE_TARGET_DIR_NAME_SUFFIX = "-evosuite-targets";
+    
+    public static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
 
     /** Java classes to be excluded from coverage target list - contain only package info */
 

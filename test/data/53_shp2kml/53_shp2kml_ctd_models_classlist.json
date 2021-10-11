@@ -1,0 +1,40 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "net.sourceforge.shp2kml.KMLObject" : {
+        "addPlacemark(Ljava/lang/String;)Z" : {
+          "formatted_signature" : "boolean addPlacemark(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;)" : {
+          "formatted_signature" : "net.sourceforge.shp2kml.KMLObject(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 2,
+    "target_classes" : 2,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 2,
+    "total_tests" : 2
+  }
+}

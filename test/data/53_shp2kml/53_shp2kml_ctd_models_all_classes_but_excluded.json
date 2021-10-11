@@ -1,0 +1,100 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter" : {
+        "<init>(Lnet/sourceforge/shp2kml/Shp2KMLGUI;)" : {
+          "formatted_signature" : "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter(net.sourceforge.shp2kml.Shp2KMLGUI)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "net.sourceforge.shp2kml.Shp2KMLGUI"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "net.sourceforge.shp2kml.Shp2KMLGUI"
+          } ] ]
+        },
+        "accept(Ljava/io/File;)Z" : {
+          "formatted_signature" : "boolean accept(java.io.File)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.io.File"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.io.File"
+          } ] ]
+        }
+      },
+      "net.sourceforge.shp2kml.Converter" : {
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "convertShp(Ljava/lang/String;)Z" : {
+          "formatted_signature" : "boolean convertShp(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "net.sourceforge.shp2kml.KMLObject" : {
+        "addPlacemark(Ljava/lang/String;)Z" : {
+          "formatted_signature" : "boolean addPlacemark(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;)" : {
+          "formatted_signature" : "net.sourceforge.shp2kml.KMLObject(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 4,
+    "target_classes" : 4,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 6,
+    "total_tests" : 6
+  }
+}

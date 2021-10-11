@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-config>
+	<main_tree>
+		<main_sql>
+	        select   A.img,
+                     A.name,
+				     A.idno,
+                     A.parentid,
+			         A.url,
+			         A.sort,
+					 A.oper,
+					 A.status
+			   from menu A
+			   left join a_district B on A.idno = B.menuid
+			   where B.groupid=? and A.status='0' order by A.sort
+			</main_sql>
+		</main_tree>
+	<grid_menu>
+		<main_sql>
+	        select   A.img,
+                     A.name,
+				     A.idno,
+                     A.parentid,
+			         A.url,
+			         A.sort,
+					 A.oper,
+					 A.status
+			   from menu A order by A.sort
+			</main_sql>
+		</grid_menu>
+	</sql-config>

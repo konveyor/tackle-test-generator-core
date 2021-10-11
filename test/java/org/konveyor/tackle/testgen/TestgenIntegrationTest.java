@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
+import org.konveyor.tackle.testgen.TestUtils.ExtenderAppUnderTest;
 import org.konveyor.tackle.testgen.util.Constants;
 
 import java.io.File;
@@ -34,15 +35,16 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+
 public class TestgenIntegrationTest {
 
-    private static List<TestUtils.AppUnderTest> appsUnderTest;
+    private static List<ExtenderAppUnderTest> appsUnderTest;
     private static List<String> OUTDIRS;
 
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.createIrsApp(null, null));
+        appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(null, null));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -53,14 +55,14 @@ public class TestgenIntegrationTest {
      * Delete existing output files
      */
     public void cleanUp() throws IOException {
-        for (TestUtils.AppUnderTest testApp : appsUnderTest) {
+        for (ExtenderAppUnderTest testApp : appsUnderTest) {
             Files.deleteIfExists(Paths.get(testApp.testPlanFilename));
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
                 Files.deleteIfExists(Paths.get(testSeqFile));
             }
         }
-        for (String outdir: OUTDIRS) {
+        for (String outdir : OUTDIRS) {
             if (Files.exists(Paths.get(outdir))) {
                 Files.walk(Paths.get(outdir))
                     .sorted(Comparator.reverseOrder())
@@ -68,9 +70,9 @@ public class TestgenIntegrationTest {
                     .forEach(File::delete);
             }
         }
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
+        for (ExtenderAppUnderTest app : appsUnderTest) {
+            Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(app.appName)));
+            Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(app.appName)));
         }
     }
 
@@ -78,16 +80,16 @@ public class TestgenIntegrationTest {
     public void testModelerInitializerExtender() throws Exception {
 
         // run test on apps
-        for (TestUtils.AppUnderTest testApp: appsUnderTest) {
+        for (ExtenderAppUnderTest testApp: appsUnderTest) {
 
             // generate CTD test plan for app
-            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName,
-                null, null, null, 
-                null, null, testApp.appPath,
-                testApp.appClasspathFilename, 2, false, 2, null, null, null, null);
+            CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
+                null, null, null, null,
+                testApp.appPath, testApp.appClasspathFilename, 2, false,
+                2, null, null, null, null);
             analyzer.modelPartitions();
 
-            // assert that output file for CTD modeling is  created
+            // assert that output file for CTD modeling is created
             assertTrue(new File(testApp.testPlanFilename).exists());
 
             // create building-block test sequences using combined test generator
@@ -109,8 +111,8 @@ public class TestgenIntegrationTest {
 
             // assert that test directory and summary files are created
             assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
-            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX)));
-            assertTrue(Files.exists(Paths.get(testApp.appName+Constants.COVERAGE_FILE_JSON_SUFFIX)));
+            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
+            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
             assertEquals(testApp.exp__test_classes_count, Files

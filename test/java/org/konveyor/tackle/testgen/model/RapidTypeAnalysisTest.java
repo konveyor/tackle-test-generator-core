@@ -33,7 +33,7 @@ public class RapidTypeAnalysisTest {
 
 		Set<String> result = new RapidTypeAnalysis().
 				performAnalysis("test/data/daytrader7/monolith/bin",
-						Utils.getClasspathEntries(new File("test/data/daytrader7/DayTraderMonoClasspath.txt")));
+						Utils.getClasspathEntries(new File("test/data/daytrader7/daytrader7MonoClasspath.txt")));
 
 		// read standard types and make sure they are the same as what we got
 		

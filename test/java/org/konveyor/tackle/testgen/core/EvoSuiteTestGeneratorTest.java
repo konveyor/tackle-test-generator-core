@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.konveyor.tackle.testgen.util.Constants;
 
 public class EvoSuiteTestGeneratorTest {
 
@@ -32,9 +33,9 @@ public class EvoSuiteTestGeneratorTest {
 	 */
 	public void cleanUp() {
 
-		File targetDir = new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX);
+		File targetDir = new File("DayTrader"+ Constants.EVOSUITE_TARGET_DIR_NAME_SUFFIX);
 		FileUtils.deleteQuietly(targetDir);
-		FileUtils.deleteQuietly(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX));
+		FileUtils.deleteQuietly(new File("DayTrader"+ Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX));
 	}
 
 	@Test
@@ -54,7 +55,7 @@ public class EvoSuiteTestGeneratorTest {
 		evosuoiteTestgen.generateTests();
 
 		// assert that input/output files for evosuite are created
-		assertTrue(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX).exists());
-		assertTrue(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX).exists());
+		assertTrue(new File("DayTrader"+ Constants.EVOSUITE_TARGET_DIR_NAME_SUFFIX).exists());
+		assertTrue(new File("DayTrader"+ Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX).exists());
 	}
 }

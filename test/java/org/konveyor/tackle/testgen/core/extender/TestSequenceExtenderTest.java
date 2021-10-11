@@ -32,7 +32,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
-import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.TestUtils.ExtenderAppUnderTest;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,25 +40,22 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 public class TestSequenceExtenderTest {
 
     private static List<String> OUTDIRS;
-    private static List<TestUtils.AppUnderTest> appsUnderTest;
+    private static List<ExtenderAppUnderTest> appsUnderTest;
 
     @BeforeClass
     public static void createAppsUnderTest() throws IOException {
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(TestUtils.createDaytraderApp(
-            "test"+File.separator+"data"+File.separator+"daytrader7"+
-                File.separator+"DayTrader_ctd_models_new_format.json",
-            "test"+File.separator+"data"+File.separator+
-                "daytrader7"+File.separator+"DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
-        ));
-        appsUnderTest.add(TestUtils.createIrsApp(
-            "test"+File.separator+"data"+File.separator+"irs"+
-                File.separator+"irs_ctd_models_and_test_plans.json",
-            "test"+File.separator+"data"+File.separator+"irs"+
-                File.separator+"irs_EvoSuiteTestGenerator_bb_test_sequences.json"
+        appsUnderTest.add(ExtenderAppUnderTest.createDaytrader7ExtenderAppUnderTest(
+            "test/data/daytrader7/DayTrader_ctd_models_new_format.json",
+            "test/data/daytrader7/DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
+        )); 
+        appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(
+            "test/data/irs/irs_ctd_models_and_test_plans.json",
+            "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
@@ -79,15 +76,15 @@ public class TestSequenceExtenderTest {
             }
         }
 
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX));
-        	Files.deleteIfExists(Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX));
+        for (ExtenderAppUnderTest app : appsUnderTest) {
+        	Files.deleteIfExists(Paths.get(ExtenderAppUnderTest.getSummaryFileJsonName(app.appName)));
+            Files.deleteIfExists(Paths.get(ExtenderAppUnderTest.getCoverageFileJsonName(app.appName)));
         }
     }
 
     @SuppressWarnings("unchecked")
-	private void assertSummaryFile(TestUtils.AppUnderTest app) throws JsonProcessingException, IOException {
-        Path summaryFilePath = Paths.get(app.appName+Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX);
+	private void assertSummaryFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
+        Path summaryFilePath = Paths.get(ExtenderAppUnderTest.getSummaryFileJsonName(app.appName));
         assertTrue(Files.exists(summaryFilePath));
 
         // read summary JSON file and assert over content
@@ -134,23 +131,23 @@ public class TestSequenceExtenderTest {
 				parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
 	}
 
-    private void assertCoverageFile(TestUtils.AppUnderTest app) throws JsonProcessingException, IOException {
-        Path testCovFilePath = Paths.get(app.appName+Constants.COVERAGE_FILE_JSON_SUFFIX);
+    private void assertCoverageFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
+        Path testCovFilePath = Paths.get(ExtenderAppUnderTest.getCoverageFileJsonName(app.appName));
         assertTrue(Files.exists(testCovFilePath));
         File testCovFile = new File(testCovFilePath.toString());
 
         // read coverage JSON file and assert over content
 		ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
 		assertEquals(app.exp__partition_count, summaryInfo.size());
-		for (String covKey : app.exp__tatget_method_coverage.keySet()) {
+		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
-			assertEquals(app.exp__tatget_method_coverage.get(covKey), actualCoverage);
+			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
 
-    private void assertTestClassesDir(TestUtils.AppUnderTest app) throws IOException {
+    private void assertTestClassesDir(ExtenderAppUnderTest app) throws IOException {
         Path testClassesDir = Paths.get(app.appOutdir);
         assertTrue(Files.exists(testClassesDir));
 
@@ -165,7 +162,7 @@ public class TestSequenceExtenderTest {
     @Test
     public void testGenerateTestsWithJEESupport() throws Exception {
 
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (ExtenderAppUnderTest app : appsUnderTest) {
 
             // skip irs app for execution with JEE support
             if (app.appName.equals("irs")) {
@@ -190,7 +187,7 @@ public class TestSequenceExtenderTest {
 
     @Test
     public void testGenerateTestsWithoutJEESupport() throws Exception {
-        for (TestUtils.AppUnderTest app : appsUnderTest) {
+        for (ExtenderAppUnderTest app : appsUnderTest) {
 
 //            if (app.appName.equals("DayTrader")) {
 //                continue;

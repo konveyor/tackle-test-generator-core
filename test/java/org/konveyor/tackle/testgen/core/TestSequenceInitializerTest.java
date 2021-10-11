@@ -16,69 +16,75 @@ package org.konveyor.tackle.testgen.core;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.konveyor.tackle.testgen.util.Constants;
+import org.konveyor.tackle.testgen.TestUtils.SequenceInitializerAppUnderTest;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 public class TestSequenceInitializerTest {
+    
+    private static List<SequenceInitializerAppUnderTest> appsUnderTest;
+    
+    @BeforeClass
+    public static void createAppsUnderTest() {
+        appsUnderTest = new ArrayList<>();
+        appsUnderTest.add(SequenceInitializerAppUnderTest.createDaytrader7SequenceInitializerAppUnderTest());
+    }
 
-
-	private final File outputFile = new File("DayTrader_"+EvoSuiteTestGenerator.class.getSimpleName()+"_"+
-	Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX);
-
-	@Before
+    @Before
 	/**
 	 * Delete existing EvoSuite input files and generated test cases
 	 */
 	public void cleanUp() {
-
-		File targetDir = new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX);
-		FileUtils.deleteQuietly(targetDir);
-		FileUtils.deleteQuietly(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX));
-		FileUtils.deleteQuietly(outputFile);
+        for (SequenceInitializerAppUnderTest appUnderTest : appsUnderTest) {
+            FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getTargetDirName(appUnderTest.appName)));
+            FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getOutputDirName(appUnderTest.appName)));
+            FileUtils.deleteQuietly(new File(SequenceInitializerAppUnderTest.getOutputFileName(appUnderTest.appName)));
+        }
 	}
 
 	@Test
 	public void testGenerateInitialSequences() throws Exception {
+        for (SequenceInitializerAppUnderTest sequenceInitializerAppUnderTest : appsUnderTest) {
+            TestSequenceInitializer seqInitializer = new TestSequenceInitializer(
+                sequenceInitializerAppUnderTest.appName,
+                sequenceInitializerAppUnderTest.testPlanFilename,
+                sequenceInitializerAppUnderTest.appPath,
+                sequenceInitializerAppUnderTest.appClasspathFilename,
+                sequenceInitializerAppUnderTest.testGenName,
+                sequenceInitializerAppUnderTest.timeLimit,
+                sequenceInitializerAppUnderTest.targetMethods,
+                sequenceInitializerAppUnderTest.baseAssertions);
 
-		TestSequenceInitializer seqInitializer = new TestSequenceInitializer("DayTrader",
-				"test/data/daytrader7/daytrader_ctd_models_shortened.json", "test/data/daytrader7/monolith/bin",
-				"test/data/daytrader7/DayTraderMonoClasspath.txt", "EvoSuiteTestGenerator", -1, false, false);
+            seqInitializer.createInitialTests();
 
-		seqInitializer.createInitialTests();
+            // assert that input/output files for evosuite are created
+            assertTrue(new File(SequenceInitializerAppUnderTest.getTargetDirName(sequenceInitializerAppUnderTest.appName)).exists());
+            assertTrue(new File(SequenceInitializerAppUnderTest.getOutputDirName(sequenceInitializerAppUnderTest.appName)).exists());
 
-		// assert that input/output files for evosuite are created
-		assertTrue(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_TARGET_DIR_NAME_SUFFIX).exists());
-		assertTrue(new File("DayTrader"+EvoSuiteTestGenerator.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX).exists());
-		assertTrue(outputFile.exists());
+            File outputFile = new File(SequenceInitializerAppUnderTest.getOutputFileName(sequenceInitializerAppUnderTest.appName));
+            assertTrue(outputFile.exists());
 
-		Set<String> targetClasses = new HashSet<String>();
+            JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
 
-		targetClasses
-				.addAll(Arrays.asList(new String[] { "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean",
-						"com.ibm.websphere.samples.daytrader.util.TradeConfig",
-						"com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
-						"com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-						"com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
-		
-		JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outputFile);
+            ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
 
-		ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
+            @SuppressWarnings("unchecked")
+            Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
 
-		@SuppressWarnings("unchecked")
-		Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
-
-		assertTrue(reachedClasses.equals(targetClasses));
+            assertTrue(reachedClasses.equals(sequenceInitializerAppUnderTest.targetClasses));
+        }
 	}
-
 }

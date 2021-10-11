@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-config>
+	<sel_all_person>
+		<main_sql>
+			select p.personid,p.name,p.sex,p.birthday,p.department,p.indate,p.persontype,p.outdate,p.reason,p.pym,p.wbm,p.mobile from a_person_info p
+		</main_sql>
+	</sel_all_person>
+	<sel_all_group>
+		<main_sql>
+			select g.idno,g.name,g.mark from a_group g
+		</main_sql>
+		<query_sql>
+			g.idno = '?' or g.mark='?'
+			</query_sql>
+	</sel_all_group>
+</sql-config>

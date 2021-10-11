@@ -44,7 +44,7 @@ public class BasicBlockSequenceParseTest {
 
 		String projectClasspath = "";
 
-		File file = new File("test/data/daytrader7/DayTraderMonoClasspath.txt");
+		File file = new File("test/data/daytrader7/daytrader7MonoClasspath.txt");
 		if (!file.isFile()) {
 			throw new IOException(file.getAbsolutePath() + " is not a valid file");
 		}

@@ -1,0 +1,13 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : { }
+  },
+  "statistics" : {
+    "total_classes" : 0,
+    "target_classes" : 0,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 0,
+    "total_tests" : 0
+  }
+}
