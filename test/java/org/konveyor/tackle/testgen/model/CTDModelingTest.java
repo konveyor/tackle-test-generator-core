@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +43,10 @@ public class CTDModelingTest {
     public static void createAppsUnderTest() {
         appsUnderTest = new ArrayList<>();
         appsUnderTest.add(ModelerAppUnderTest.createDaytrader7ModelerAppUnderTest());
+        appsUnderTest.add(ModelerAppUnderTest.create4_rifModelerAppUnderTest());
+        appsUnderTest.add(ModelerAppUnderTest.create7_sfmisModelerAppUnderTest());
+        appsUnderTest.add(ModelerAppUnderTest.create40_glengineerModelerAppUnderTest());
+        appsUnderTest.add(ModelerAppUnderTest.create53_shp2kmlModelerAppUnderTest());
     }
     
 	@Before
@@ -53,6 +58,14 @@ public class CTDModelingTest {
             FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName(appUnderTest.appName)));
         }
 	}
+
+    @AfterClass
+    public static void deleteGeneratedOutFiles() {
+        for (ModelerAppUnderTest appUnderTest : appsUnderTest) {
+            FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdOutfileName(appUnderTest.appName)));
+            FileUtils.deleteQuietly(new File(ModelerAppUnderTest.getCtdNonTargetedOutFileName(appUnderTest.appName)));
+        }
+    }
 
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
@@ -80,7 +93,7 @@ public class CTDModelingTest {
         }
 	}
 
-	@Test
+    @Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
@@ -106,7 +119,7 @@ public class CTDModelingTest {
         }
 	}
 
-	@Test
+    @Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(

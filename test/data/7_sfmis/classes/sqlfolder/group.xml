@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-config>
+	<sel_all_group>
+		<main_sql>
+			select g.idno,g.name from a_group g
+		</main_sql>
+	</sel_all_group>
+</sql-config>

@@ -402,9 +402,101 @@ public class TestUtils {
                 "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
                 "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
         }
+
+        public static ModelerAppUnderTest create4_rifModelerAppUnderTest() {
+            return new ModelerAppUnderTest("4_rif",
+                "test/data/4_rif/4_rifMonoClasspath.txt",
+                "test/data/4_rif/classes",
+                null,
+                2,
+                false,
+                1,
+                "com.densebrain.rif.client.RIFManagerFactory::com.densebrain.rif.util.ObjectUtility",
+                null,
+                "test/data/4_rif/4_rif_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/4_rif/4_rif_ctd_models_all_classes.json",
+                null,
+                "com.densebrain.rif.client.RIFManagerFactory::com.densebrain.rif.util.ObjectUtility",
+                "test/data/4_rif/4_rif_ctd_models_all_classes_but_excluded.json",
+                null,
+                "com.densebrain.rif.client.service.*::com.densebrain.rif.server.transport.WebServiceDescriptor",
+                "test/data/4_rif/4_rif_ctd_models_all_classes_but_excluded_package.json");
+        }
+
+        public static ModelerAppUnderTest create7_sfmisModelerAppUnderTest() {
+            return new ModelerAppUnderTest("7_sfmis",
+                "test/data/7_sfmis/7_sfmisMonoClasspath.txt",
+                "test/data/7_sfmis/classes",
+                null,
+                2,
+                false,
+                1,
+                "com.hf.sfm.crypt.Base64::com.hf.sfm.filter.setCharacterEncodingFilter::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo",
+                null,
+                "test/data/7_sfmis/7_sfmis_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/7_sfmis/7_sfmis_ctd_models_all_classes.json",
+                null,
+                "com.hf.sfm.sfmis.personinfo.business.PersonInfoMgr::com.hf.sfm.system.business.MenuManage",
+                "test/data/7_sfmis/7_sfmis_ctd_models_all_classes_but_excluded.json",
+                null,
+                "com.hf.sfm.system.pdo.*::com.hf.sfm.filter.setCharacterEncodingFilter::com.hf.sfm.util.DaoFactoryUtil::com.hf.sfm.util.DaoFactory",
+                "test/data/7_sfmis/7_sfmis_ctd_models_all_classes_but_excluded_package.json");
+        }
+
+        public static ModelerAppUnderTest create40_glengineerModelerAppUnderTest() {
+            return new ModelerAppUnderTest("40_glengineer",
+                "test/data/40_glengineer/40_glengineerMonoClasspath.txt",
+                "test/data/40_glengineer/classes",
+                null,
+                2,
+                false,
+                1,
+                "glengineer.GroupLayoutEngineer::glengineer.agents.setters.FunctionsOnParallelGroup",
+                null,
+                "test/data/40_glengineer/40_glengineer_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/40_glengineer/40_glengineer_ctd_models_all_classes.json",
+                null,
+                "glengineer.agents.setters.FunctionsOnTopSequentialGroup::glengineer.agents.settings.Settings",
+                "test/data/40_glengineer/40_glengineer_ctd_models_all_classes_but_excluded.json",
+                null,
+                "glengineer.agents.settings.*::glengineer.agents.setters.*::glengineer.positions.HWordPosition",
+                "test/data/40_glengineer/40_glengineer_ctd_models_all_classes_but_excluded_package.json");
+        }
+
+        public static ModelerAppUnderTest create53_shp2kmlModelerAppUnderTest() {
+            return new ModelerAppUnderTest("53_shp2kml",
+                "test/data/53_shp2kml/53_shp2kmlMonoClasspath.txt",
+                "test/data/53_shp2kml/classes",
+                null,
+                2,
+                false,
+                1,
+                "net.sourceforge.shp2kml.Shp2KMLGUI::net.sourceforge.shp2kml.KMLObject",
+                null,
+                "test/data/53_shp2kml/53_shp2kml_ctd_models_classlist.json",
+                null,
+                null,
+                "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes.json",
+                null,
+                "net.sourceforge.shp2kml.GeomConverter",
+                "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded.json",
+                null,
+                "net.sourceforge.*",
+                "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded_package.json");
+        }
         
         public static String getCtdOutfileName(String appName) {
             return appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
+        }
+
+        public static String getCtdNonTargetedOutFileName(String appName) {
+            return appName + "_" + Constants.CTD_NON_TARGETED_OUTFILE_SUFFIX;
         }
     }
 

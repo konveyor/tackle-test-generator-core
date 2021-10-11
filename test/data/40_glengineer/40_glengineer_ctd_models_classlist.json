@@ -1,0 +1,479 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "glengineer.agents.setters.FunctionsOnParallelGroup" : {
+        "getComponent(Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnParallelGroupAndElement;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnParallelGroupAndElement getComponent(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setResizable(Z)V" : {
+          "formatted_signature" : "void setResizable(boolean)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "boolean"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "boolean"
+          } ] ]
+        },
+        "setContentAlignment(Ljavax/swing/GroupLayout$Alignment;)V" : {
+          "formatted_signature" : "void setContentAlignment(javax.swing.GroupLayout$Alignment)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.swing.GroupLayout$Alignment"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.swing.GroupLayout$Alignment"
+          } ] ]
+        },
+        "getGroup(Ljava/lang/String;Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnParallelGroupAndElement;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnParallelGroupAndElement getGroup(java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "glengineer.GroupLayoutEngineer" : {
+        "getSequentialGroup(Lglengineer/Axis;Ljava/lang/String;Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnSequentialGroup;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnSequentialGroup getSequentialGroup(glengineer.Axis,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "linkSize(Lglengineer/Axis;[Ljava/lang/String;)V" : {
+          "formatted_signature" : "void linkSize(glengineer.Axis,java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          }, {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "associateGap(Ljava/lang/String;Ljavax/swing/LayoutStyle$ComponentPlacement;)V" : {
+          "formatted_signature" : "void associateGap(java.lang.String,javax.swing.LayoutStyle$ComponentPlacement)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "javax.swing.LayoutStyle$ComponentPlacement"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "javax.swing.LayoutStyle$ComponentPlacement"
+          } ] ]
+        },
+        "linkSize([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void linkSize(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "getTopSequentialGroup(Lglengineer/Axis;)Lglengineer/agents/setters/FunctionsOnTopSequentialGroup;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnTopSequentialGroup getTopSequentialGroup(glengineer.Axis)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          } ] ]
+        },
+        "disable([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void disable(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "getGroup(Lglengineer/Axis;Ljava/lang/String;Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnGroup;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnGroup getGroup(glengineer.Axis,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "associateGap(Ljava/lang/String;III)V" : {
+          "formatted_signature" : "void associateGap(java.lang.String,int,int,int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "int"
+          }, {
+            "type" : "int"
+          }, {
+            "type" : "int"
+          } ] ]
+        },
+        "setAutoCreateContainerGaps(Z)V" : {
+          "formatted_signature" : "void setAutoCreateContainerGaps(boolean)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "boolean"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "boolean"
+          } ] ]
+        },
+        "compouseTopSequentialGroup(Lglengineer/Axis;)Lglengineer/agents/TopSequentialGroupAgent;" : {
+          "formatted_signature" : "glengineer.agents.TopSequentialGroupAgent compouseTopSequentialGroup(glengineer.Axis)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          } ] ]
+        },
+        "getComponent(Lglengineer/Axis;Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnComponent;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnComponent getComponent(glengineer.Axis,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/awt/Container;[Ljava/lang/String;)" : {
+          "formatted_signature" : "glengineer.GroupLayoutEngineer(java.awt.Container,java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.awt.Container"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.awt.Container"
+          }, {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "composeParallelGroupFromBlock(Lglengineer/blocks/Block;)Lglengineer/agents/Agent;" : {
+          "formatted_signature" : "glengineer.agents.Agent composeParallelGroupFromBlock(glengineer.blocks.Block)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.blocks.VerticalBlock"
+            }, {
+              "val_1" : "glengineer.blocks.HorizontalBlock"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.blocks.VerticalBlock"
+          } ], [ {
+            "type" : "glengineer.blocks.HorizontalBlock"
+          } ] ]
+        },
+        "compouseSequentialGroupFromBlock(Lglengineer/blocks/Block;)Lglengineer/agents/Agent;" : {
+          "formatted_signature" : "glengineer.agents.Agent compouseSequentialGroupFromBlock(glengineer.blocks.Block)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.blocks.VerticalBlock"
+            }, {
+              "val_1" : "glengineer.blocks.HorizontalBlock"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.blocks.VerticalBlock"
+          } ], [ {
+            "type" : "glengineer.blocks.HorizontalBlock"
+          } ] ]
+        },
+        "associateGap(Ljava/lang/String;I)V" : {
+          "formatted_signature" : "void associateGap(java.lang.String,int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "int"
+          } ] ]
+        },
+        "associateGap(Ljava/lang/String;Ljavax/swing/LayoutStyle$ComponentPlacement;II)V" : {
+          "formatted_signature" : "void associateGap(java.lang.String,javax.swing.LayoutStyle$ComponentPlacement,int,int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "javax.swing.LayoutStyle$ComponentPlacement"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "javax.swing.LayoutStyle$ComponentPlacement"
+          }, {
+            "type" : "int"
+          }, {
+            "type" : "int"
+          } ] ]
+        },
+        "getParallelGroup(Lglengineer/Axis;Ljava/lang/String;Ljava/lang/String;)Lglengineer/agents/setters/FunctionsOnParallelGroup;" : {
+          "formatted_signature" : "glengineer.agents.setters.FunctionsOnParallelGroup getParallelGroup(glengineer.Axis,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "glengineer.Axis"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "glengineer.Axis"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setAutoAlignJTextFields(Z)V" : {
+          "formatted_signature" : "void setAutoAlignJTextFields(boolean)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "boolean"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "boolean"
+          } ] ]
+        },
+        "associate(Ljava/lang/String;Ljava/awt/Component;)V" : {
+          "formatted_signature" : "void associate(java.lang.String,java.awt.Component)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.awt.Container"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.awt.Container"
+          } ] ]
+        },
+        "setAutoCreateGaps(Z)V" : {
+          "formatted_signature" : "void setAutoCreateGaps(boolean)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "boolean"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "boolean"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 2,
+    "target_classes" : 2,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 24,
+    "total_tests" : 26
+  }
+}
