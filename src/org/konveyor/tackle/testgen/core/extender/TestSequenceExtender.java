@@ -273,6 +273,7 @@ public class TestSequenceExtender {
 	private boolean rowPartiallyCovered = false;
 
 	private ArrayNode[] currTestPlanRows = null;
+	private ArrayNode currModelDef = null;
 	private int currTestPlanRowIndex = -1;
 	private int currTestPlanRowParamIndex = -1;
 
@@ -342,6 +343,7 @@ public class TestSequenceExtender {
                     // get test plan rows for method
 					ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
 					currTestPlanRows = mapper.convertValue(methodTestPlan.get("test_plan"), new TypeReference<ArrayNode[]>(){});
+					currModelDef = mapper.convertValue(methodTestPlan.get("attributes"), new TypeReference<ArrayNode>(){});
 					classTestPlanRows +=  currTestPlanRows.length;
 
 					// method signature qualified with the class name
@@ -540,7 +542,7 @@ public class TestSequenceExtender {
         boolean[] usedExistingSeq = new boolean[currTestPlanRows.length];
         boolean[] execSeqSuccess = new boolean[currTestPlanRows.length];
         
-        boolean hasCompoundTypes = false;
+        boolean hasCompoundTypes = SequenceUtil.hasCompoundTypes(currModelDef);
         
         // iterate over each row of test plan for method
         int rowCtr = 0;
@@ -583,10 +585,6 @@ public class TestSequenceExtender {
                 }
             }
             
-            if ( ! hasCompoundTypes) {
-            	hasCompoundTypes = SequenceUtil.hasCompoundTypes(row, extendedSeq);
-            }
-
             // generate sequence ID and add id, sequence to map
             String sequenceID = getSequenceID();
             this.seqIdMap.put(sequenceID, extendedSeq);

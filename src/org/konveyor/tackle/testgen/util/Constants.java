@@ -136,4 +136,10 @@ public class Constants {
     public static final String EVOSUITE_RUNTIME_JAR_NAME = "evosuite-standalone-runtime-"+ EVOSUITE_VERSION+".jar";
     public static final String CCM_JAR_NAME = "ccmcl.jar";
 
+	public static final String LIST_TAG = "_list";
+
+	public static final String MAP_KEY_TAG = "_key";
+
+	public static final String MAP_VALUE_TAG = "_value";
+
 }

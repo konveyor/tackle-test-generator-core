@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Dictionary;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -28,9 +29,11 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import randoop.operation.CallableOperation;
@@ -210,27 +213,26 @@ public class SequenceUtil {
         return false;
     }
     
-    public static boolean hasCompoundTypes(ArrayNode testPlanRow, Sequence sequence) {
-    	List<Type> methodCallParamTypes = new ArrayList<>();
-        TypedOperation methodcallOper = sequence.getStatement(sequence.size() - 1).getOperation();
-        methodcallOper.getInputTypes().forEach(type -> methodCallParamTypes.add(type));
-
-        // if any param type is a collection or map type or an array of non-primitive types,
-        // return false; in such cases, the test plan would typically require objects of specific
-        // types to be added to the collection/map/array
-        for (Type paramType : methodCallParamTypes) {
-            if (isCollectionType(paramType) || isMapType(paramType))  {
-                return true;
-            }
-            
-            if (paramType.isArray()) {
-                Type elemType = ((ArrayType) paramType).getElementType();
-                if (!(elemType.isPrimitive() || elemType.isBoxedPrimitive() || elemType.isString())) {
-                    return true;
-                }
-            }
-        }
-        
+    public static boolean hasCompoundTypes(ArrayNode modelRows) {
+    	
+    	Iterator<JsonNode> iter = modelRows.elements();
+    	
+    	while (iter.hasNext()) {
+    		
+    		JsonNode node = iter.next();
+    		
+    		JsonNode name = node.get("attribute_name");
+    		
+    		if (name != null) {
+    			String attrName = name.asText();
+    			if (attrName.endsWith(Constants.LIST_TAG) || attrName.endsWith(Constants.MAP_KEY_TAG) || 
+    					attrName.endsWith(Constants.MAP_VALUE_TAG)) {
+    				return true;
+    				
+    			}
+    		}
+    	}
+    	
         return false;
     }
 
