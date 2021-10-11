@@ -244,15 +244,15 @@ public class Utils {
 		return pkg != null && targetClass.getPackage() != null && pkg.getName().equals(targetClass.getPackage().getName());
 	}
 
-	public static String getEvoSuiteJarPath(String jarName) {
-        Optional<String> evosuiteJarPath = Arrays.stream(
+	public static String getJarPath(String jarName) {
+        Optional<String> jarPath = Arrays.stream(
             System.getProperty("java.class.path").split(File.pathSeparator))
             .filter(elem -> elem.contains(jarName))
             .findFirst();
-        if (!evosuiteJarPath.isPresent()) {
-            throw new RuntimeException("EvoSuite jar \""+ jarName +"\" not found");
+        if (!jarPath.isPresent()) {
+            throw new RuntimeException("jar \""+ jarName +"\" not found");
         }
-        return evosuiteJarPath.get();
+        return jarPath.get();
     }
 
 }

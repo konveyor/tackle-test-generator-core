@@ -84,6 +84,9 @@ public class Constants {
 
     /** Name of JSON file to which extender summary information is written */
     public static final String EXTENDER_SUMMARY_FILE_JSON_SUFFIX = "_test_generation_summary.json";
+    
+    /** Name of JSON file to which extender CTD coverage is written */
+    public static final String CTD_COVERAGE_FILE_JSON_SUFFIX = "_ctd_coverage_report.json";
 
     /** Name of JSON file to which information about sequence parse errors is written */
     public static final String SEQUENCE_PARSE_ERRORS_FILE_JSON_SUFFIX = "_base_sequence_parse_errors.json";
@@ -137,5 +140,12 @@ public class Constants {
     public static final String EVOSUITE_VERSION = "1.0.7";
     public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-master-"+ EVOSUITE_VERSION+".jar";
     public static final String EVOSUITE_RUNTIME_JAR_NAME = "evosuite-standalone-runtime-"+ EVOSUITE_VERSION+".jar";
+    public static final String CCM_JAR_NAME = "ccmcl.jar";
+
+	public static final String LIST_TAG = "_list";
+
+	public static final String MAP_KEY_TAG = "_key";
+
+	public static final String MAP_VALUE_TAG = "_value";
 
 }
