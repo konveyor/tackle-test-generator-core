@@ -52,7 +52,7 @@ public class TestSequenceExtenderTest {
         appsUnderTest.add(ExtenderAppUnderTest.createDaytrader7ExtenderAppUnderTest(
             "test/data/daytrader7/DayTrader_ctd_models_new_format.json",
             "test/data/daytrader7/DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
-        )); 
+        ));
         appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(
             "test/data/irs/irs_ctd_models_and_test_plans.json",
             "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
@@ -89,45 +89,64 @@ public class TestSequenceExtenderTest {
 
         // read summary JSON file and assert over content
         File testCovFile = new File(summaryFilePath.toString());
+        File stdCovFile = new File(app.summaryStandardFilename);
         
-        ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);	
+        ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
+        ObjectNode summaryInfoStd = (ObjectNode) TackleTestJson.getObjectMapper().readTree(stdCovFile);
+        
         ObjectNode bbSeqInfo = (ObjectNode) summaryInfo.get("building_block_sequences_info");
+        ObjectNode bbSeqInfoStd = (ObjectNode) summaryInfoStd.get("building_block_sequences_info");
         
-		assertEquals(app.exp__bb_sequences, bbSeqInfo.get("base_sequences").asInt());
-		assertEquals(app.exp__parsed_sequences_full, bbSeqInfo.get("parsed_base_sequences_full").asInt());
-		assertEquals(app.exp__parsed_sequences_partial, bbSeqInfo.get("parsed_base_sequences_partial").asInt());
-		assertEquals(app.exp__skipped_sequences, bbSeqInfo.get("skipped_base_sequences").asInt());
-		assertEquals(app.exp__exception_sequences, bbSeqInfo.get("exception_base_sequences").asInt());
-		assertEquals(app.exp__method_sequence_pool_keys, bbSeqInfo.get("method_sequence_pool_keys").asInt());
-		assertEquals(app.exp__class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt());
+		assertEquals(bbSeqInfoStd.get("base_sequences").asInt(), bbSeqInfo.get("base_sequences").asInt());
+		assertEquals(bbSeqInfoStd.get("parsed_base_sequences_full").asInt(), bbSeqInfo.get("parsed_base_sequences_full").asInt());
+		assertEquals(bbSeqInfoStd.get("parsed_base_sequences_partial").asInt(), bbSeqInfo.get("parsed_base_sequences_partial").asInt());
+		assertEquals(bbSeqInfoStd.get("skipped_base_sequences").asInt(), bbSeqInfo.get("skipped_base_sequences").asInt());
+		assertEquals(bbSeqInfoStd.get("exception_base_sequences").asInt(), bbSeqInfo.get("exception_base_sequences").asInt());
+		assertEquals(bbSeqInfoStd.get("method_sequence_pool_keys").asInt(), bbSeqInfo.get("method_sequence_pool_keys").asInt());
+		assertEquals(bbSeqInfoStd.get("class_sequence_pool_keys").asInt(), bbSeqInfo.get("class_sequence_pool_keys").asInt());
 
 		ObjectNode extSeqInfo = (ObjectNode) summaryInfo.get("extended_sequences_info");
-		assertEquals(app.exp__generated_sequences, extSeqInfo.get("generated_sequences").asInt());
+        ObjectNode extSeqInfoStd = (ObjectNode) summaryInfoStd.get("extended_sequences_info");
+
+        assertEquals(extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
 		assertTrue(app.exp__executed_sequences <= extSeqInfo.get("executed_sequences").asInt());
 		assertTrue(extSeqInfo.get("final_sequences").asInt() >= app.expmin_final_sequences);
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
-		assertEquals(app.exp__test_plan_rows, covInfo.get("test_plan_rows").asInt());
-		assertEquals(app.exp__rows_covered_bb_sequences, covInfo.get("rows_covered_bb_sequences").asInt());
+        ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
+		
+		assertEquals(covInfoStd.get("test_plan_rows").asInt(), covInfo.get("test_plan_rows").asInt());
+		assertEquals(covInfoStd.get("rows_covered_bb_sequences").asInt(), covInfo.get("rows_covered_bb_sequences").asInt());
 
 		ObjectNode uncovInfo = (ObjectNode) summaryInfo.get("uncovered_test_plan_rows_info");
-		assertEquals(app.exp__no_bb_sequence_for_target_method, uncovInfo.get("no_bb_sequence_for_target_method").asInt());
-		assertEquals(app.exp__non_instantiable_param_type, uncovInfo.get("non_instantiable_param_type").asInt());
-		assertEquals(app.exp__excp_during_extension, uncovInfo.get("exception_during_extension").asInt());
+        ObjectNode uncovInfoStd = (ObjectNode) summaryInfoStd.get("uncovered_test_plan_rows_info");
+        
+		assertEquals(uncovInfoStd.get("no_bb_sequence_for_target_method").asInt(), uncovInfo.get("no_bb_sequence_for_target_method").asInt());
+		assertEquals(uncovInfoStd.get("non_instantiable_param_type").asInt(), uncovInfo.get("non_instantiable_param_type").asInt());
+		assertEquals(uncovInfoStd.get("exception_during_extension").asInt(), uncovInfo.get("exception_during_extension").asInt());
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
-		assertEquals(app.exp__execution_exception_types_other, 
-				TackleTestJson.getObjectMapper().convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
+        ArrayNode execExcpTypesStd = (ArrayNode) summaryInfoStd.get("execution_exception_types_other");
+		
+		assertEquals(TackleTestJson.getObjectMapper().convertValue(execExcpTypesStd, new TypeReference<List<String>>(){}),
+            TackleTestJson.getObjectMapper().convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
 				
 		ArrayNode nonInstTypes = (ArrayNode) summaryInfo.get("non_instantiable_types");
-		assertEquals(app.exp__non_instantiable_param_type, nonInstTypes.size());
+        ArrayNode nonInstTypesStd = (ArrayNode) summaryInfoStd.get("non_instantiable_types");
+        
+		assertEquals(nonInstTypesStd.size(), nonInstTypes.size());
 
 		ArrayNode cnfTypes = (ArrayNode) summaryInfo.get("class_not_found_types");
-		assertEquals(app.exp__class_not_found_types, cnfTypes.size());
+        ArrayNode cnfTypesStd = (ArrayNode) summaryInfoStd.get("class_not_found_types");
+        
+		assertEquals(cnfTypesStd.size(), cnfTypes.size());
 
 		ObjectNode parseExcpTypes = (ObjectNode) summaryInfo.get("parse_exception_types");
-		assertEquals(app.exp__parse_exception_types, new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
-		assertEquals(app.exp__randoop_sequence_SequenceParseException,
+        ObjectNode parseExcpTypesStd = (ObjectNode) summaryInfoStd.get("parse_exception_types");
+        
+		assertEquals(new HashSet<String>(IteratorUtils.toList(parseExcpTypesStd.fieldNames())),
+            new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
+		assertEquals(parseExcpTypesStd.get("randoop.sequence.SequenceParseException").asInt(),
 				parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
 	}
 
@@ -135,10 +154,13 @@ public class TestSequenceExtenderTest {
         Path testCovFilePath = Paths.get(ExtenderAppUnderTest.getCoverageFileJsonName(app.appName));
         assertTrue(Files.exists(testCovFilePath));
         File testCovFile = new File(testCovFilePath.toString());
+        File testCovFileStd = new File(app.coverageStandardFilename);
 
         // read coverage JSON file and assert over content
 		ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
-		assertEquals(app.exp__partition_count, summaryInfo.size());
+        ObjectNode summaryInfoStd = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFileStd);
+        
+		assertEquals(summaryInfoStd.size(), summaryInfo.size());
 		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])

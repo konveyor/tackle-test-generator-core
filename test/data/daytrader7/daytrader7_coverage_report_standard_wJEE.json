@@ -1,0 +1,2858 @@
+{
+  "DayTraderCoreBiz" : {
+    "com.ibm.websphere.samples.daytrader.web.TradeBuildDB" : {
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.TradeConfig" : {
+      "rndFloat(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPercentSentToWebsocket(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getScenarioAction(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrimIterations(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPage(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setMAX_QUOTES(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUseRemoteEJBInterface(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setScenarioCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getOrderFee(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLongRun(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setJDBCDriverNeedsGlobalTransation(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDisplayOrderAlerts(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_HOLDINGS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMarketSummaryInterval(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndInt(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPublishQuotePriceChange(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderProcessingMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_USERS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeModeNames(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setConfigParam(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setWebInterface(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndBigDecimal(float)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUpdateQuotePrices(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccessMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.Log" : {
+      "trace(java.lang.String,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "printObject(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "debug(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceExit(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.lang.String,java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "error(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "print(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceEnter(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "stat(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.direct.TradeDirect" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.direct.TradeDirect(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountData(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolumeInt(java.lang.String,java.math.BigDecimal,double,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "recreateDBTables(java.lang.Object[],java.io.PrintWriter)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    }
+  },
+  "DayTraderProcessor" : {
+    "com.ibm.websphere.samples.daytrader.util.FinancialUtils" : {
+      "printGainPercentHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGainPercent(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeHoldingsTotal(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "printGainHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGain(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printQuoteLink(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printChangeHTML(double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean" : {
+      "setBuyOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDeletedOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSellOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeStockCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCancelledOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setNewUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.TradeAction" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "sell(java.lang.String,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "com.ibm.websphere.samples.daytrader.TradeAction(com.ibm.websphere.samples.daytrader.TradeServices)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopLosers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean(java.math.BigDecimal,java.math.BigDecimal,double,java.util.Collection,java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSummaryDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopGainers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean" : {
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchasePrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchaseDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuoteID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(java.lang.Integer,double,java.math.BigDecimal,java.util.Date,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(double,java.math.BigDecimal,java.util.Date,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.ejb3.TradeSLSBBean" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "publishQuotePriceChange(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "pingTwoPhase(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "investmentReturn(double,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountDataBean" : {
+      "setHoldings(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreationDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccountID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfileID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLastLogin(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrders(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(java.lang.Integer,int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.TradeConfig" : {
+      "rndFloat(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPercentSentToWebsocket(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getScenarioAction(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrimIterations(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPage(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setMAX_QUOTES(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUseRemoteEJBInterface(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setScenarioCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getOrderFee(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLongRun(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setJDBCDriverNeedsGlobalTransation(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDisplayOrderAlerts(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_HOLDINGS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMarketSummaryInterval(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndInt(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPublishQuotePriceChange(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderProcessingMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_USERS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeModeNames(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setConfigParam(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setWebInterface(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndBigDecimal(float)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUpdateQuotePrices(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccessMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompanyName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String,java.lang.String,double,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setChange(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpen(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLow(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHigh(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.Log" : {
+      "trace(java.lang.String,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "printObject(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "debug(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceExit(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.lang.String,java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "error(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "print(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceEnter(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "stat(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean" : {
+      "setPassword(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreditCard(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUserID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setFullName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAddress(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" : {
+      "setHolding(com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompletionDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderStatus(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderType(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderFee(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.Integer,java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  },
+  "DayTraderWeb" : {
+    "com.ibm.websphere.samples.daytrader.util.FinancialUtils" : {
+      "printGainPercentHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGainPercent(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeHoldingsTotal(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "printGainHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGain(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printQuoteLink(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printChangeHTML(double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean" : {
+      "setBuyOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDeletedOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSellOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeStockCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCancelledOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setNewUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean" : {
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchasePrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchaseDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuoteID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(java.lang.Integer,double,java.math.BigDecimal,java.util.Date,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(double,java.math.BigDecimal,java.util.Date,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.web.TradeBuildDB" : {
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.ejb3.TradeSLSBBean" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "publishQuotePriceChange(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "pingTwoPhase(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "investmentReturn(double,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountDataBean" : {
+      "setHoldings(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreationDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccountID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfileID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLastLogin(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrders(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(java.lang.Integer,int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.TradeConfig" : {
+      "rndFloat(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPercentSentToWebsocket(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getScenarioAction(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrimIterations(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPage(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setMAX_QUOTES(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUseRemoteEJBInterface(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setScenarioCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getOrderFee(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLongRun(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setJDBCDriverNeedsGlobalTransation(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDisplayOrderAlerts(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_HOLDINGS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMarketSummaryInterval(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndInt(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPublishQuotePriceChange(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderProcessingMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMAX_USERS(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRunTimeModeNames(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setConfigParam(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setWebInterface(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "rndBigDecimal(float)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUpdateQuotePrices(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccessMode(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompanyName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String,java.lang.String,double,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setChange(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpen(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLow(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHigh(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.util.Log" : {
+      "trace(java.lang.String,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "printObject(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_25" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "debug(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceExit(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "log(java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.lang.String,java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "error(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setActionTrace(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "print(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "traceEnter(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "stat(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printCollection(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.Throwable,java.lang.String,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "error(java.lang.String,java.lang.String,java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "trace(java.lang.String,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)" : {
+        "test_plan_row_16" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_20" : "COVERED",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.direct.TradeDirect" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.direct.TradeDirect(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountData(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolumeInt(java.lang.String,java.math.BigDecimal,double,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "recreateDBTables(java.lang.Object[],java.io.PrintWriter)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.TradeAction" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "sell(java.lang.String,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "com.ibm.websphere.samples.daytrader.TradeAction(com.ibm.websphere.samples.daytrader.TradeServices)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopLosers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean(java.math.BigDecimal,java.math.BigDecimal,double,java.util.Collection,java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSummaryDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopGainers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean" : {
+      "setPassword(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreditCard(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUserID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setFullName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAddress(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" : {
+      "setHolding(com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompletionDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderStatus(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderType(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_19" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_25" : "COVERED",
+        "test_plan_row_24" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_23" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_22" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_21" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_20" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderFee(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.Integer,java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  },
+  "DayTraderUtil" : {
+    "com.ibm.websphere.samples.daytrader.util.FinancialUtils" : {
+      "printGainPercentHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGainPercent(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeHoldingsTotal(java.util.Collection)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "printGainHTML(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "computeGain(java.math.BigDecimal,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printQuoteLink(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "printChangeHTML(double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean" : {
+      "setBuyOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDeletedOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSellOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeStockCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCancelledOrderCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTradeUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSumLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setNewUserCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.TradeAction" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "sell(java.lang.String,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "com.ibm.websphere.samples.daytrader.TradeAction(com.ibm.websphere.samples.daytrader.TradeServices)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopLosers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenTSIA(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.beans.MarketSummaryDataBean(java.math.BigDecimal,java.math.BigDecimal,double,java.util.Collection,java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSummaryDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTopGainers(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean" : {
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchasePrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPurchaseDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuoteID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(java.lang.Integer,double,java.math.BigDecimal,java.util.Date,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean(double,java.math.BigDecimal,java.util.Date,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHoldingID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.web.TradeBuildDB" : {
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.ejb3.TradeSLSBBean" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "publishQuotePriceChange(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "pingTwoPhase(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "investmentReturn(double,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountDataBean" : {
+      "setHoldings(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreationDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLoginCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setBalance(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLogoutCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccountID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfileID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLastLogin(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrders(java.util.Collection)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountDataBean(java.lang.Integer,int,int,java.util.Date,java.util.Date,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean" : {
+      "setVolume(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompanyName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean(java.lang.String,java.lang.String,double,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setChange(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpen(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLow(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHigh(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean" : {
+      "setPassword(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCreditCard(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUserID(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmail(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setFullName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAddress(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.direct.TradeDirect" : {
+      "getAccountData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "resetTrade(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "queueOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "login(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.direct.TradeDirect(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountData(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getAccountProfileData(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "buy(java.lang.String,java.lang.String,double,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "updateQuotePriceVolume(java.lang.String,java.math.BigDecimal,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "logout(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "completeOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getHolding(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getQuote(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "cancelOrder(java.lang.Integer,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getClosedOrders(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateQuotePriceVolumeInt(java.lang.String,java.math.BigDecimal,double,boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "sell(java.lang.String,java.lang.Integer,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "orderCompleted(java.lang.String,java.lang.Integer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getHoldings(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "updateAccountProfile(com.ibm.websphere.samples.daytrader.entities.AccountProfileDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "createQuote(java.lang.String,java.lang.String,java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "recreateDBTables(java.lang.Object[],java.io.PrintWriter)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" : {
+      "setHolding(com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,com.ibm.websphere.samples.daytrader.entities.AccountDataBean,com.ibm.websphere.samples.daytrader.entities.QuoteDataBean,com.ibm.websphere.samples.daytrader.entities.HoldingDataBean)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderID(java.lang.Integer)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(com.ibm.websphere.samples.daytrader.entities.AccountDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuote(com.ibm.websphere.samples.daytrader.entities.QuoteDataBean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setCompletionDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPrice(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderStatus(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSymbol(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderType(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuantity(double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOpenDate(java.util.Date)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_16" : "COVERED",
+        "test_plan_row_15" : "COVERED",
+        "test_plan_row_14" : "COVERED",
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_18" : "COVERED",
+        "test_plan_row_17" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOrderFee(java.math.BigDecimal)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.ibm.websphere.samples.daytrader.entities.OrderDataBean(java.lang.Integer,java.lang.String,java.lang.String,java.util.Date,java.util.Date,double,java.math.BigDecimal,java.math.BigDecimal,java.lang.String)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  }
+}

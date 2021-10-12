@@ -164,7 +164,11 @@ public class TestUtils {
     
     public static class ExtenderAppUnderTest extends AppUnderTest {
         public String testSeqFilename;
+        public String summaryStandardFilename;
+        public String coverageStandardFilename;
+        
         // expected values
+        /*
         public int exp__bb_sequences;
         public int exp__parsed_sequences_full;
         public int exp__parsed_sequences_partial;
@@ -188,10 +192,24 @@ public class TestUtils {
         public int exp__partition_count;
         public Map<String, String> exp__target_method_coverage;
         public int exp__test_classes_count;
-
-        public ExtenderAppUnderTest(String appName, String appClasspath, String appPath, String testPlanFilename, String testSeqFilename) {
+        */
+        
+        public int exp__executed_sequences;
+        public int expmin_final_sequences;
+        public Map<String, String> exp__target_method_coverage;
+        public int exp__test_classes_count;
+        
+        public ExtenderAppUnderTest(String appName,
+                                    String appClasspath,
+                                    String appPath,
+                                    String testPlanFilename,
+                                    String testSeqFilename,
+                                    String summaryStandardFilename,
+                                    String coverageStandardFilename) {
             super(appName, appClasspath, appPath, testPlanFilename);
             this.testSeqFilename = testSeqFilename;
+            this.summaryStandardFilename = summaryStandardFilename;
+            this.coverageStandardFilename = coverageStandardFilename;
 
             if (this.testPlanFilename == null) {
                 this.testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
@@ -210,8 +228,10 @@ public class TestUtils {
                 "test/data/irs/irsMonoClasspath.txt",
                 "test/data/irs/monolith/target/classes",
                 testPlanFilename,
-                testSeqFilename);
-
+                testSeqFilename,
+                "test/data/irs/irs_test_generation_summary_standard_woJEE.json",
+                "test/data/irs/irs_coverage_report_standard_woJEE.json");
+            /*
             appUnderTest.exp__bb_sequences = 13;
             appUnderTest.exp__parsed_sequences_full = 12;
             appUnderTest.exp__parsed_sequences_partial = 0;
@@ -247,7 +267,23 @@ public class TestUtils {
                         {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
             appUnderTest.exp__test_classes_count = 5;
-            
+            */
+
+            appUnderTest.exp__executed_sequences = 25;
+            appUnderTest.expmin_final_sequences = 23;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setAllSalarySets(java.util.Map)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setAllSalaryMaps(java.util.Map)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerSalaryListMap(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerSalaryListSet(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerArrayList(java.util.List[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
+                    .collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.exp__test_classes_count = 5;
             return appUnderTest;
         }
 
@@ -257,8 +293,10 @@ public class TestUtils {
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
                 "test/data/daytrader7/monolith/bin",
                 testPlanFilename,
-                testSeqFilename);
-
+                testSeqFilename,
+                "test/data/daytrader7/daytrader7_test_generation_summary_standard_wJEE.json",
+                "test/data/daytrader7/daytrader7_coverage_report_standard_wJEE.json");
+            /*
             appUnderTest.exp__bb_sequences = 159;
             appUnderTest.exp__parsed_sequences_full = 155;
             appUnderTest.exp__parsed_sequences_partial = 0;
@@ -288,7 +326,16 @@ public class TestUtils {
                         {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                         .collect(Collectors.toMap(value -> value[0], value -> value[1]));
             appUnderTest.exp__test_classes_count = 42;
-                
+            */
+            appUnderTest.exp__executed_sequences = 1471;
+            appUnderTest.expmin_final_sequences = 1146;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
+                    .collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.exp__test_classes_count = 42;
             return appUnderTest;
         }
 
