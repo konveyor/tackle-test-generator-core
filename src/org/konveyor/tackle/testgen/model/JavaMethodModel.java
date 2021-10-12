@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
 import org.konveyor.tackle.testgen.util.Utils;
 
@@ -64,10 +65,6 @@ public class JavaMethodModel {
 	private static final Pattern SUPER_PATTERN = Pattern.compile(SUPER_STRING);
 	private static final String JAVA_OBJECT_NAME = "java.lang.Object";
 	private final URLClassLoader classLoader;
-	static final String LIST_TAG = "_list";
-	static final String MAP_KEY_TAG = "_key";
-	static final String MAP_VALUE_TAG = "_value";
-	
 	private static final Logger logger = TackleTestLogger.getLogger(JavaMethodModel.class);
 
 	private static class CollectionTypeInfo {
@@ -305,16 +302,16 @@ public class JavaMethodModel {
 		params.add(new ModelAttribute(possibleTypes, Collections.emptyMap(), attrName));
 
 		if ( ! possibleTypesInfo.listTypes.isEmpty()) {
-			getCollectionAttributes(possibleTypesInfo.listTypes, params, 1, attrName+LIST_TAG, typeAnalysisResults,
+			getCollectionAttributes(possibleTypesInfo.listTypes, params, 1, attrName+Constants.LIST_TAG, typeAnalysisResults,
 					possibleTypesInfo.mapTypeParamForKey, cls, methodTypeParameters);
 		}
 
 
 		// It can be the case that only key or value has types due to rapid type analysis
 		if ( ! possibleTypesInfo.mapKeyTypes.isEmpty() && ! possibleTypesInfo.mapValueTypes.isEmpty()) {
-			getCollectionAttributes(possibleTypesInfo.mapKeyTypes, params, 1, attrName+MAP_KEY_TAG, typeAnalysisResults,
+			getCollectionAttributes(possibleTypesInfo.mapKeyTypes, params, 1, attrName+Constants.MAP_KEY_TAG, typeAnalysisResults,
 					possibleTypesInfo.mapTypeParamForKey, cls, methodTypeParameters);
-			getCollectionAttributes(possibleTypesInfo.mapValueTypes, params, 1, attrName+MAP_VALUE_TAG, typeAnalysisResults,
+			getCollectionAttributes(possibleTypesInfo.mapValueTypes, params, 1, attrName+Constants.MAP_VALUE_TAG, typeAnalysisResults,
 					possibleTypesInfo.mapTypeParamForValue, cls, methodTypeParameters);
 		}
 
@@ -584,13 +581,13 @@ public class JavaMethodModel {
 			}
 			CollectionTypeInfo typeInfo = typeInferenceForCollection(currentTypeClass, typeParam, typeAnalysisResults, cls, methodTypeParams);
 			if ( ! typeInfo.listTypes.isEmpty()) {
-				getCollectionAttributes(typeInfo.listTypes, params, depth+1, attrName+LIST_TAG, typeAnalysisResults, typeInfo.mapTypeParamForKey,
+				getCollectionAttributes(typeInfo.listTypes, params, depth+1, attrName+Constants.LIST_TAG, typeAnalysisResults, typeInfo.mapTypeParamForKey,
 						cls, methodTypeParams);
 			}
 			if ( ! typeInfo.mapKeyTypes.isEmpty() && ! typeInfo.mapValueTypes.isEmpty()) {
-				getCollectionAttributes(typeInfo.mapKeyTypes, params, depth+1, attrName+MAP_KEY_TAG, typeAnalysisResults,
+				getCollectionAttributes(typeInfo.mapKeyTypes, params, depth+1, attrName+Constants.MAP_KEY_TAG, typeAnalysisResults,
 						typeInfo.mapTypeParamForKey, cls, methodTypeParams);
-				getCollectionAttributes(typeInfo.mapValueTypes, params, depth+1, attrName+MAP_VALUE_TAG, typeAnalysisResults,
+				getCollectionAttributes(typeInfo.mapValueTypes, params, depth+1, attrName+Constants.MAP_VALUE_TAG, typeAnalysisResults,
 						typeInfo.mapTypeParamForValue, cls, methodTypeParams);
 			}
 		}

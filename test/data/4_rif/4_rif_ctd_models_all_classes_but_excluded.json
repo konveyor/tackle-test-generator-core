@@ -1,0 +1,704 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "com.densebrain.rif.server.RIFImplementationManager" : {
+        "registerImplementation(Ljava/lang/Class;Ljava/lang/Object;)V" : {
+          "formatted_signature" : "void registerImplementation(java.lang.Class,java.lang.Object)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Class"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "com.densebrain.rif.client.service.types.Invoke"
+            }, {
+              "val_1" : "org.apache.axis2.util.StreamWrapper"
+            }, {
+              "val_2" : "java.lang.Object"
+            }, {
+              "val_3" : "com.densebrain.rif.client.service.types.InvokeResponse"
+            }, {
+              "val_4" : "org.apache.bcel.generic.InstructionFactory"
+            }, {
+              "val_5" : "org.apache.bcel.generic.InstructionList"
+            }, {
+              "val_6" : "org.apache.bcel.generic.PUSH"
+            }, {
+              "val_7" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+            }, {
+              "val_8" : "org.apache.axis2.transport.http.turnup.SimpleHTTPServer"
+            }, {
+              "val_9" : "org.apache.axis2.addressing.EndpointReference"
+            }, {
+              "val_10" : "javax.xml.namespace.QName"
+            }, {
+              "val_11" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+            }, {
+              "val_12" : "org.apache.axis2.client.ServiceClient"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "com.densebrain.rif.client.service.types.Invoke"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.axis2.util.StreamWrapper"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "java.lang.Object"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "com.densebrain.rif.client.service.types.InvokeResponse"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.bcel.generic.InstructionFactory"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.bcel.generic.InstructionList"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.bcel.generic.PUSH"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.axis2.transport.http.turnup.SimpleHTTPServer"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.axis2.addressing.EndpointReference"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "javax.xml.namespace.QName"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+          } ], [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "org.apache.axis2.client.ServiceClient"
+          } ] ]
+        },
+        "invoke(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;" : {
+          "formatted_signature" : "java.lang.Object invoke(java.lang.String,java.lang.String,java.lang.Object[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.Object[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_2_list",
+            "values" : [ {
+              "val_0" : [ "com.densebrain.rif.client.service.types.Invoke", "org.apache.axis2.util.StreamWrapper", "java.lang.Object", "com.densebrain.rif.client.service.types.InvokeResponse", "org.apache.bcel.generic.InstructionFactory", "org.apache.bcel.generic.InstructionList", "org.apache.bcel.generic.PUSH", "com.densebrain.rif.server.transport.WebServiceDescriptor", "org.apache.axis2.transport.http.turnup.SimpleHTTPServer", "org.apache.axis2.addressing.EndpointReference", "javax.xml.namespace.QName", "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl", "org.apache.axis2.client.ServiceClient" ]
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.Object[]",
+            "list_types" : {
+              "types" : [ "com.densebrain.rif.client.service.types.Invoke", "org.apache.axis2.util.StreamWrapper", "java.lang.Object", "com.densebrain.rif.client.service.types.InvokeResponse", "org.apache.bcel.generic.InstructionFactory", "org.apache.bcel.generic.InstructionList", "org.apache.bcel.generic.PUSH", "com.densebrain.rif.server.transport.WebServiceDescriptor", "org.apache.axis2.transport.http.turnup.SimpleHTTPServer", "org.apache.axis2.addressing.EndpointReference", "javax.xml.namespace.QName", "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl", "org.apache.axis2.client.ServiceClient" ]
+            }
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.RIFService" : {
+        "invoke(Lcom/densebrain/rif/client/service/types/Invoke;)Lcom/densebrain/rif/client/service/types/InvokeResponse;" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.types.InvokeResponse invoke(com.densebrain.rif.client.service.types.Invoke)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.densebrain.rif.client.service.types.Invoke"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.densebrain.rif.client.service.types.Invoke"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.server.RIFService" : {
+        "invoke(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String invoke(java.lang.String,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.RIFInvoker" : {
+        "invoke(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;" : {
+          "formatted_signature" : "java.lang.Object invoke(java.lang.String,java.lang.Object[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.Object[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list",
+            "values" : [ {
+              "val_0" : [ "com.densebrain.rif.client.service.types.Invoke", "org.apache.axis2.util.StreamWrapper", "java.lang.Object", "com.densebrain.rif.client.service.types.InvokeResponse", "org.apache.bcel.generic.InstructionFactory", "org.apache.bcel.generic.InstructionList", "org.apache.bcel.generic.PUSH", "com.densebrain.rif.server.transport.WebServiceDescriptor", "org.apache.axis2.transport.http.turnup.SimpleHTTPServer", "org.apache.axis2.addressing.EndpointReference", "javax.xml.namespace.QName", "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl", "org.apache.axis2.client.ServiceClient" ]
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.Object[]",
+            "list_types" : {
+              "types" : [ "com.densebrain.rif.client.service.types.Invoke", "org.apache.axis2.util.StreamWrapper", "java.lang.Object", "com.densebrain.rif.client.service.types.InvokeResponse", "org.apache.bcel.generic.InstructionFactory", "org.apache.bcel.generic.InstructionList", "org.apache.bcel.generic.PUSH", "com.densebrain.rif.server.transport.WebServiceDescriptor", "org.apache.axis2.transport.http.turnup.SimpleHTTPServer", "org.apache.axis2.addressing.EndpointReference", "javax.xml.namespace.QName", "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl", "org.apache.axis2.client.ServiceClient" ]
+            }
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.server.transport.WebServiceContainer" : {
+        "configureService(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)V" : {
+          "formatted_signature" : "void configureService(java.lang.Class,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Class"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "getEPRForService(Ljava/lang/String;Ljava/lang/String;)Lorg/apache/axis2/addressing/EndpointReference;" : {
+          "formatted_signature" : "org.apache.axis2.addressing.EndpointReference getEPRForService(java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "newInstance(Ljava/lang/String;ILjava/lang/String;)Lcom/densebrain/rif/server/transport/WebServiceContainer;" : {
+          "formatted_signature" : "com.densebrain.rif.server.transport.WebServiceContainer newInstance(java.lang.String,int,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "int"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "newInstance(Lorg/apache/axis2/context/ConfigurationContext;)Lcom/densebrain/rif/server/transport/WebServiceContainer;" : {
+          "formatted_signature" : "com.densebrain.rif.server.transport.WebServiceContainer newInstance(org.apache.axis2.context.ConfigurationContext)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.context.ConfigurationContext"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.context.ConfigurationContext"
+          } ] ]
+        },
+        "<init>(Lorg/apache/axis2/context/ConfigurationContext;Ljava/lang/String;Ljava/lang/String;I)" : {
+          "formatted_signature" : "com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext,java.lang.String,java.lang.String,int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.context.ConfigurationContext"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.context.ConfigurationContext"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "int"
+          } ] ]
+        },
+        "<init>(Lorg/apache/axis2/context/ConfigurationContext;)" : {
+          "formatted_signature" : "com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.context.ConfigurationContext"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.context.ConfigurationContext"
+          } ] ]
+        },
+        "configureService(Lcom/densebrain/rif/server/transport/WebServiceDescriptor;)V" : {
+          "formatted_signature" : "void configureService(com.densebrain.rif.server.transport.WebServiceDescriptor)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.types.Invoke$Factory" : {
+        "parse(Ljavax/xml/stream/XMLStreamReader;)Lcom/densebrain/rif/client/service/types/Invoke;" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.types.Invoke parse(javax.xml.stream.XMLStreamReader)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.util.StreamWrapper"
+            }, {
+              "val_1" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.util.StreamWrapper"
+          } ], [ {
+            "type" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.types.InvokeResponse" : {
+        "getPullParser(Ljavax/xml/namespace/QName;)Ljavax/xml/stream/XMLStreamReader;" : {
+          "formatted_signature" : "javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.xml.namespace.QName"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.xml.namespace.QName"
+          } ] ]
+        },
+        "set_return(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void set_return(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.RIFClassLoader" : {
+        "registerClass(Ljava/lang/String;[B)V" : {
+          "formatted_signature" : "void registerClass(java.lang.String,byte[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "byte[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list",
+            "values" : [ {
+              "val_0" : "byte"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "byte[]",
+            "list_types" : {
+              "types" : [ "byte" ]
+            }
+          } ] ]
+        },
+        "findClass(Ljava/lang/String;)Ljava/lang/Class<*>;" : {
+          "formatted_signature" : "java.lang.Class findClass(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.server.transport.WebServiceDescriptor" : {
+        "equals(Ljava/lang/Object;)Z" : {
+          "formatted_signature" : "boolean equals(java.lang.Object)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.densebrain.rif.client.service.types.Invoke"
+            }, {
+              "val_1" : "org.apache.axis2.util.StreamWrapper"
+            }, {
+              "val_2" : "java.lang.Object"
+            }, {
+              "val_3" : "com.densebrain.rif.client.service.types.InvokeResponse"
+            }, {
+              "val_4" : "org.apache.bcel.generic.InstructionFactory"
+            }, {
+              "val_5" : "org.apache.bcel.generic.InstructionList"
+            }, {
+              "val_6" : "org.apache.bcel.generic.PUSH"
+            }, {
+              "val_7" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+            }, {
+              "val_8" : "org.apache.axis2.transport.http.turnup.SimpleHTTPServer"
+            }, {
+              "val_9" : "org.apache.axis2.addressing.EndpointReference"
+            }, {
+              "val_10" : "javax.xml.namespace.QName"
+            }, {
+              "val_11" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+            }, {
+              "val_12" : "org.apache.axis2.client.ServiceClient"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.densebrain.rif.client.service.types.Invoke"
+          } ], [ {
+            "type" : "org.apache.axis2.util.StreamWrapper"
+          } ], [ {
+            "type" : "java.lang.Object"
+          } ], [ {
+            "type" : "com.densebrain.rif.client.service.types.InvokeResponse"
+          } ], [ {
+            "type" : "org.apache.bcel.generic.InstructionFactory"
+          } ], [ {
+            "type" : "org.apache.bcel.generic.InstructionList"
+          } ], [ {
+            "type" : "org.apache.bcel.generic.PUSH"
+          } ], [ {
+            "type" : "com.densebrain.rif.server.transport.WebServiceDescriptor"
+          } ], [ {
+            "type" : "org.apache.axis2.transport.http.turnup.SimpleHTTPServer"
+          } ], [ {
+            "type" : "org.apache.axis2.addressing.EndpointReference"
+          } ], [ {
+            "type" : "javax.xml.namespace.QName"
+          } ], [ {
+            "type" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+          } ], [ {
+            "type" : "org.apache.axis2.client.ServiceClient"
+          } ] ]
+        },
+        "setServiceClazz(Ljava/lang/Class;)V" : {
+          "formatted_signature" : "void setServiceClazz(java.lang.Class)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Class"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Class"
+          } ] ]
+        },
+        "<init>(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;)" : {
+          "formatted_signature" : "com.densebrain.rif.server.transport.WebServiceDescriptor(java.lang.Class,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Class"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Class"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setTypesNamespace(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setTypesNamespace(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setTargetNamespace(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setTargetNamespace(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.RIFManager" : {
+        "getInvoker(Ljava/lang/Class;)Lcom/densebrain/rif/client/RIFInvoker;" : {
+          "formatted_signature" : "com.densebrain.rif.client.RIFInvoker getInvoker(java.lang.Class)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Class"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Class"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.types.InvokeResponse$Factory" : {
+        "parse(Ljavax/xml/stream/XMLStreamReader;)Lcom/densebrain/rif/client/service/types/InvokeResponse;" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.types.InvokeResponse parse(javax.xml.stream.XMLStreamReader)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.util.StreamWrapper"
+            }, {
+              "val_1" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.util.StreamWrapper"
+          } ], [ {
+            "type" : "org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.RIFServiceStub" : {
+        "<init>(Lorg/apache/axis2/context/ConfigurationContext;Ljava/lang/String;)" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.RIFServiceStub(org.apache.axis2.context.ConfigurationContext,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.apache.axis2.context.ConfigurationContext"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.apache.axis2.context.ConfigurationContext"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;)" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.RIFServiceStub(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "invoke(Lcom/densebrain/rif/client/service/types/Invoke;)Lcom/densebrain/rif/client/service/types/InvokeResponse;" : {
+          "formatted_signature" : "com.densebrain.rif.client.service.types.InvokeResponse invoke(com.densebrain.rif.client.service.types.Invoke)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.densebrain.rif.client.service.types.Invoke"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.densebrain.rif.client.service.types.Invoke"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.client.service.types.Invoke" : {
+        "setMethodName(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setMethodName(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setSerializedParams(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSerializedParams(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setClassName(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setClassName(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "getPullParser(Ljavax/xml/namespace/QName;)Ljavax/xml/stream/XMLStreamReader;" : {
+          "formatted_signature" : "javax.xml.stream.XMLStreamReader getPullParser(javax.xml.namespace.QName)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.xml.namespace.QName"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.xml.namespace.QName"
+          } ] ]
+        }
+      },
+      "com.densebrain.rif.server.RIFServer" : {
+        "<init>(I)" : {
+          "formatted_signature" : "com.densebrain.rif.server.RIFServer(int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "int"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 15,
+    "target_classes" : 15,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 32,
+    "total_tests" : 58
+  }
+}

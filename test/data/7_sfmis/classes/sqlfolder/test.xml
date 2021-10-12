@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-config>
+	<test_sql>
+		  <main_sql>
+		  	  select A.account,
+			         A.password,
+					 A.state,
+					 B.name,
+					 B.sex,
+					 B.birthday
+			   from a_worker A
+			   left join a_person_info B on A.personid=B.personid
+			   where account=? and password=?
+		  	</main_sql>
+		</test_sql>
+		
+		<test_tree>
+			  <main_sql>
+			  	   select A.name,A.idno from menu A 
+                      where  A.parentid=?
+			  	</main_sql>
+			</test_tree>
+	</sql-config>

@@ -1,0 +1,1015 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "com.hf.sfm.util.BasePara" : {
+        "setGroupsql(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setGroupsql(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setArr2params([[Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setArr2params(java.lang.String[][])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[][]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[][]",
+            "list_types" : {
+              "types" : [ "java.lang.String[]" ],
+              "list_types" : {
+                "types" : [ "java.lang.String" ]
+              }
+            }
+          } ] ]
+        },
+        "setOrdersql(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setOrdersql(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setQuerySql(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setQuerySql(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setSql(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSql(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setDir(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setDir(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setSqlpath(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSqlpath(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setQueryparams([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setQueryparams(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "setStart(I)V" : {
+          "formatted_signature" : "void setStart(int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "int"
+          } ] ]
+        },
+        "setPaging(Z)V" : {
+          "formatted_signature" : "void setPaging(boolean)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "boolean"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "boolean"
+          } ] ]
+        },
+        "setSort(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSort(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setLimit(I)V" : {
+          "formatted_signature" : "void setLimit(int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "int"
+          } ] ]
+        },
+        "setQueryValue(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setQueryValue(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.system.business.Login" : {
+        "doGet(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V" : {
+          "formatted_signature" : "void doGet(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.servlet.http.HttpServletRequest"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "javax.servlet.http.HttpServletResponse"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.servlet.http.HttpServletRequest"
+          }, {
+            "type" : "javax.servlet.http.HttpServletResponse"
+          } ] ]
+        },
+        "doPost(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V" : {
+          "formatted_signature" : "void doPost(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.servlet.http.HttpServletRequest"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "javax.servlet.http.HttpServletResponse"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.servlet.http.HttpServletRequest"
+          }, {
+            "type" : "javax.servlet.http.HttpServletResponse"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.sfmis.personinfo.business.PersonInfoMgr" : {
+        "saveOrUpdate(Lcom/hf/sfm/sfmis/personinfo/pdo/APersonInfo;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String saveOrUpdate(com.hf.sfm.sfmis.personinfo.pdo.APersonInfo)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo"
+          } ] ]
+        },
+        "deleteByIds([Ljava/lang/String;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String deleteByIds(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        }
+      },
+      "com.hf.sfm.util.HibernateSessionFactory" : {
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        }
+      },
+      "com.hf.sfm.crypt.Base64" : {
+        "base64ToByteArray(Ljava/lang/String;)[B" : {
+          "formatted_signature" : "byte[] base64ToByteArray(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "byteArrayToAltBase64([B)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String byteArrayToAltBase64(byte[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "byte[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "byte"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "byte[]",
+            "list_types" : {
+              "types" : [ "byte" ]
+            }
+          } ] ]
+        },
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "altBase64ToByteArray(Ljava/lang/String;)[B" : {
+          "formatted_signature" : "byte[] altBase64ToByteArray(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "byteArrayToBase64([B)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String byteArrayToBase64(byte[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "byte[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "byte"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "byte[]",
+            "list_types" : {
+              "types" : [ "byte" ]
+            }
+          } ] ]
+        }
+      },
+      "com.hf.sfm.util.DataSource" : {
+        "getSession(Ljavax/servlet/http/HttpSession;Ljava/lang/String;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getSession(javax.servlet.http.HttpSession,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.servlet.http.HttpSession"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.servlet.http.HttpSession"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "getComboData(Lcom/hf/sfm/util/BasePara;)Lcom/hf/sfm/util/ListRange;" : {
+          "formatted_signature" : "com.hf.sfm.util.ListRange getComboData(com.hf.sfm.util.BasePara)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.util.BasePara"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.util.BasePara"
+          } ] ]
+        },
+        "getPlanarArrData(Lcom/hf/sfm/util/BasePara;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getPlanarArrData(com.hf.sfm.util.BasePara)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.util.BasePara"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.util.BasePara"
+          } ] ]
+        },
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "getGridData(Lcom/hf/sfm/util/BasePara;)Lcom/hf/sfm/util/ListRange;" : {
+          "formatted_signature" : "com.hf.sfm.util.ListRange getGridData(com.hf.sfm.util.BasePara)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.util.BasePara"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.util.BasePara"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo" : {
+        "setIndate(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setIndate(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)" : {
+          "formatted_signature" : "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo(java.lang.String,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_4",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_5",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_6",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_7",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_8",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_9",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setPersonid(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPersonid(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setOutdate(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setOutdate(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "setPersontype(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPersontype(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setMobile(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setMobile(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setName(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setName(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setPym(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPym(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setWbm(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setWbm(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setSex(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSex(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setBirthday(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setBirthday(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "setReason(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setReason(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setDepartment(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setDepartment(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.system.business.MenuManage" : {
+        "del([Ljava/lang/String;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String del(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "saveOrUpdate(Lcom/hf/sfm/system/pdo/Menu;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String saveOrUpdate(com.hf.sfm.system.pdo.Menu)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.system.pdo.Menu"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.system.pdo.Menu"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.sfmis.department.pdo.ADepartment" : {
+        "setMark(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setMark(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setIdno(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setIdno(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setName(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setName(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;Ljava/lang/String;)" : {
+          "formatted_signature" : "com.hf.sfm.sfmis.department.pdo.ADepartment(java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.system.business.WorkerMgr" : {
+        "deleteByIds([Ljava/lang/String;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String deleteByIds(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "saveOrUpdate(Lcom/hf/sfm/system/pdo/AWorker;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String saveOrUpdate(com.hf.sfm.system.pdo.AWorker)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.system.pdo.AWorker"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.system.pdo.AWorker"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.util.ListRange" : {
+        "setTotalSize(I)V" : {
+          "formatted_signature" : "void setTotalSize(int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "int"
+          } ] ]
+        },
+        "setData(Ljava/util/ArrayList<Ljava/lang/Object;>;)V" : {
+          "formatted_signature" : "void setData(java.util.ArrayList)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.ArrayList"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : [ "com.hf.sfm.util.BasePara", "org.hibernate.cfg.Configuration", "java.io.File", "java.lang.ThreadLocal", "com.hf.sfm.util.DaoFactory", "com.hf.sfm.util.ListRange", "java.lang.String", "com.hf.sfm.util.Loader", "java.lang.Object", "org.dom4j.io.SAXReader", "com.hf.sfm.util.DataSource" ]
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.ArrayList",
+            "list_types" : {
+              "types" : [ "com.hf.sfm.util.BasePara", "org.hibernate.cfg.Configuration", "java.io.File", "java.lang.ThreadLocal", "com.hf.sfm.util.DaoFactory", "com.hf.sfm.util.ListRange", "java.lang.String", "com.hf.sfm.util.Loader", "java.lang.Object", "org.dom4j.io.SAXReader", "com.hf.sfm.util.DataSource" ]
+            }
+          } ] ]
+        }
+      },
+      "com.hf.sfm.util.Loader" : {
+        "setRange(Lcom/hf/sfm/util/ListRange;)V" : {
+          "formatted_signature" : "void setRange(com.hf.sfm.util.ListRange)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.util.ListRange"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.util.ListRange"
+          } ] ]
+        },
+        "collectToMap(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void collectToMap(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setRs(Ljava/util/List;)V" : {
+          "formatted_signature" : "void setRs(java.util.List)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.List"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : [ "com.hf.sfm.util.BasePara", "org.hibernate.cfg.Configuration", "java.io.File", "java.lang.ThreadLocal", "com.hf.sfm.util.DaoFactory", "com.hf.sfm.util.ListRange", "java.lang.String", "com.hf.sfm.util.Loader", "java.lang.Object", "org.dom4j.io.SAXReader", "com.hf.sfm.util.DataSource" ]
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.List",
+            "list_types" : {
+              "types" : [ "com.hf.sfm.util.BasePara", "org.hibernate.cfg.Configuration", "java.io.File", "java.lang.ThreadLocal", "com.hf.sfm.util.DaoFactory", "com.hf.sfm.util.ListRange", "java.lang.String", "com.hf.sfm.util.Loader", "java.lang.Object", "org.dom4j.io.SAXReader", "com.hf.sfm.util.DataSource" ]
+            }
+          } ] ]
+        },
+        "setTotalCount(I)V" : {
+          "formatted_signature" : "void setTotalCount(int)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "int"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "int"
+          } ] ]
+        },
+        "run(Lcom/hf/sfm/util/BasePara;)V" : {
+          "formatted_signature" : "void run(com.hf.sfm.util.BasePara)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.hf.sfm.util.BasePara"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.hf.sfm.util.BasePara"
+          } ] ]
+        },
+        "setColNames([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setColNames(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "getParams(Lorg/hibernate/Query;[[Ljava/lang/String;)Lorg/hibernate/Query;" : {
+          "formatted_signature" : "org.hibernate.Query getParams(org.hibernate.Query,java.lang.String[][])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "org.hibernate.Query"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String[][]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_1_list_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "org.hibernate.Query"
+          }, {
+            "type" : "java.lang.String[][]",
+            "list_types" : {
+              "types" : [ "java.lang.String[]" ],
+              "list_types" : {
+                "types" : [ "java.lang.String" ]
+              }
+            }
+          } ] ]
+        }
+      },
+      "com.hf.sfm.util.OddParamsOfArrayInLoader" : {
+        "<init>(Ljava/lang/String;Ljava/lang/Throwable;)" : {
+          "formatted_signature" : "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.Throwable"
+            }, {
+              "val_1" : "java.lang.Exception"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.Throwable"
+          } ], [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.Exception"
+          } ] ]
+        },
+        "<init>(Ljava/lang/Throwable;)" : {
+          "formatted_signature" : "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.Throwable"
+            }, {
+              "val_1" : "java.lang.Exception"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.Throwable"
+          } ], [ {
+            "type" : "java.lang.Exception"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;)" : {
+          "formatted_signature" : "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 13,
+    "target_classes" : 13,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 61,
+    "total_tests" : 63
+  }
+}

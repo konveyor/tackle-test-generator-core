@@ -1,0 +1,361 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "com.hf.sfm.crypt.Base64" : {
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        },
+        "altBase64ToByteArray(Ljava/lang/String;)[B" : {
+          "formatted_signature" : "byte[] altBase64ToByteArray(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "byteArrayToBase64([B)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String byteArrayToBase64(byte[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "byte[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "byte"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "byte[]",
+            "list_types" : {
+              "types" : [ "byte" ]
+            }
+          } ] ]
+        },
+        "byteArrayToAltBase64([B)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String byteArrayToAltBase64(byte[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "byte[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "byte"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "byte[]",
+            "list_types" : {
+              "types" : [ "byte" ]
+            }
+          } ] ]
+        },
+        "base64ToByteArray(Ljava/lang/String;)[B" : {
+          "formatted_signature" : "byte[] base64ToByteArray(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.filter.setCharacterEncodingFilter" : {
+        "doFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;Ljavax/servlet/FilterChain;)V" : {
+          "formatted_signature" : "void doFilter(javax.servlet.ServletRequest,javax.servlet.ServletResponse,javax.servlet.FilterChain)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.servlet.ServletRequest"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "javax.servlet.ServletResponse"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "javax.servlet.FilterChain"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.servlet.ServletRequest"
+          }, {
+            "type" : "javax.servlet.ServletResponse"
+          }, {
+            "type" : "javax.servlet.FilterChain"
+          } ] ]
+        },
+        "init(Ljavax/servlet/FilterConfig;)V" : {
+          "formatted_signature" : "void init(javax.servlet.FilterConfig)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "javax.servlet.FilterConfig"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "javax.servlet.FilterConfig"
+          } ] ]
+        }
+      },
+      "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo" : {
+        "setName(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setName(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setMobile(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setMobile(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setDepartment(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setDepartment(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setPersontype(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPersontype(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setWbm(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setWbm(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setPym(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPym(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setPersonid(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setPersonid(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setSex(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setSex(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setOutdate(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setOutdate(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "setBirthday(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setBirthday(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "setIndate(Ljava/util/Date;)V" : {
+          "formatted_signature" : "void setIndate(java.util.Date)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.util.Date"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/util/Date;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)" : {
+          "formatted_signature" : "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo(java.lang.String,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.lang.String,java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_4",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_5",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_6",
+            "values" : [ {
+              "val_0" : "java.util.Date"
+            } ]
+          }, {
+            "attribute_name" : "attr_7",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_8",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_9",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.util.Date"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "setReason(Ljava/lang/String;)V" : {
+          "formatted_signature" : "void setReason(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 3,
+    "target_classes" : 3,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 20,
+    "total_tests" : 20
+  }
+}
