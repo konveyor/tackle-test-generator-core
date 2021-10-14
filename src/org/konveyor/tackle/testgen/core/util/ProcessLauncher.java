@@ -51,8 +51,8 @@ public class ProcessLauncher {
 		projectClasspath += (File.pathSeparator + appPath);
 
 		// Adding evosuite runtime classes in case in what used to generate the tests
-		projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
-		projectClasspath += (File.pathSeparator + Utils.getEvoSuiteJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
+		projectClasspath += (File.pathSeparator + Utils.getJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
+		projectClasspath += (File.pathSeparator + Utils.getJarPath(Constants.EVOSUITE_RUNTIME_JAR_NAME));
 
 		// For SequenceExecutor class:
 		projectClasspath += (File.pathSeparator+System.getProperty("java.class.path"));

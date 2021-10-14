@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +54,7 @@ class ModelJsonConvertor {
 
 			// Handle attributes that are detailing the content of collections represented by other attributes
 
-			if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
+			if (attrName.endsWith(Constants.LIST_TAG) || attrName.endsWith(Constants.MAP_KEY_TAG) || attrName.endsWith(Constants.MAP_VALUE_TAG)) {
 				setReferredAttr(attrName, attrIndex, attrNames, refersTo);
 			}
 
@@ -148,7 +149,7 @@ class ModelJsonConvertor {
 		String attrName = attrNames.get(indexToAdd);
 		String valueToAdd = getParamTestValue(methodModel.getParam(indexToAdd), test, paramToTestLoc);
 
-		if (attrName.endsWith(JavaMethodModel.LIST_TAG) || attrName.endsWith(JavaMethodModel.MAP_KEY_TAG) || attrName.endsWith(JavaMethodModel.MAP_VALUE_TAG)) {
+		if (attrName.endsWith(Constants.LIST_TAG) || attrName.endsWith(Constants.MAP_KEY_TAG) || attrName.endsWith(Constants.MAP_VALUE_TAG)) {
 
 			ObjectNode collectNode = TackleTestJson.getObjectMapper().createObjectNode();
 			collectNode.set("types", getArrayFromVal(valueToAdd));
