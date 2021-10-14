@@ -1,0 +1,194 @@
+{
+  "monolithic" : {
+    "com.densebrain.rif.server.RIFImplementationManager" : {
+      "invoke(java.lang.String,java.lang.String,java.lang.Object[])" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "registerImplementation(java.lang.Class,java.lang.Object)" : {
+        "test_plan_row_13" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_6" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_12" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_7" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_11" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_8" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_10" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_9" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_2" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_3" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_4" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_5" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.client.service.RIFService" : {
+      "invoke(com.densebrain.rif.client.service.types.Invoke)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.server.RIFService" : {
+      "invoke(java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "com.densebrain.rif.client.RIFInvoker" : {
+      "invoke(java.lang.String,java.lang.Object[])" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.server.transport.WebServiceContainer" : {
+      "configureService(java.lang.Class,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "newInstance(java.lang.String,int,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "configureService(com.densebrain.rif.server.transport.WebServiceDescriptor)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getEPRForService(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "newInstance(org.apache.axis2.context.ConfigurationContext)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext,java.lang.String,java.lang.String,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.densebrain.rif.client.service.types.Invoke$Factory" : {
+      "parse(javax.xml.stream.XMLStreamReader)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.densebrain.rif.client.RIFManagerFactory" : {
+      "getInvoker(java.lang.String,java.lang.Class)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "getManager(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "getImpl(java.lang.String,java.lang.Class)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.client.service.types.InvokeResponse" : {
+      "getPullParser(javax.xml.namespace.QName)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "set_return(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.densebrain.rif.client.RIFClassLoader" : {
+      "registerClass(java.lang.String,byte[])" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "findClass(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.server.transport.WebServiceDescriptor" : {
+      "com.densebrain.rif.server.transport.WebServiceDescriptor(java.lang.Class,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "setTypesNamespace(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(java.lang.Object)" : {
+        "test_plan_row_13" : "COVERED",
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_12" : "COVERED",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTargetNamespace(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setServiceClazz(java.lang.Class)" : {
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      }
+    },
+    "com.densebrain.rif.client.RIFManager" : {
+      "getInvoker(java.lang.Class)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "com.densebrain.rif.client.service.types.InvokeResponse$Factory" : {
+      "parse(javax.xml.stream.XMLStreamReader)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.densebrain.rif.client.service.RIFServiceStub" : {
+      "com.densebrain.rif.client.service.RIFServiceStub(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "invoke(com.densebrain.rif.client.service.types.Invoke)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "com.densebrain.rif.client.service.RIFServiceStub(org.apache.axis2.context.ConfigurationContext,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.densebrain.rif.client.service.types.Invoke" : {
+      "getPullParser(javax.xml.namespace.QName)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMethodName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setClassName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSerializedParams(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.densebrain.rif.server.RIFServer" : {
+      "com.densebrain.rif.server.RIFServer(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.densebrain.rif.util.ObjectUtility" : {
+      "serializeObject(java.lang.Object)" : {
+        "test_plan_row_13" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_12" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_7" : "COVERED",
+        "test_plan_row_11" : "COVERED",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_10" : "COVERED",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "deserializeObjectBase64Encoded(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "decodeString(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "deserializeObject(byte[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "encodeBytes(byte[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  }
+}
