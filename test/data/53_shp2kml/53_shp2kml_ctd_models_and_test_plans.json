@@ -1,0 +1,328 @@
+{
+  "models_and_test_plans" : {
+    "monolithic" : {
+      "net.sourceforge.shp2kml.GeomConverter" : {
+        "convertPolygon([Lcom/vividsolutions/jts/geom/Coordinate;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertPolygon(com.vividsolutions.jts.geom.Coordinate[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          } ] ]
+        },
+        "convertPoint([Lcom/vividsolutions/jts/geom/Coordinate;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertPoint(com.vividsolutions.jts.geom.Coordinate[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          } ] ]
+        },
+        "getLinearRingKML([Lcom/vividsolutions/jts/geom/Coordinate;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getLinearRingKML(com.vividsolutions.jts.geom.Coordinate[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          } ] ]
+        },
+        "convertPolygonWithAltitude([Lcom/vividsolutions/jts/geom/Coordinate;D)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertPolygonWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "double"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          }, {
+            "type" : "double"
+          } ] ]
+        },
+        "getPlacemarkKML(Lcom/vividsolutions/jts/geom/Geometry;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getPlacemarkKML(com.vividsolutions.jts.geom.Geometry)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Point"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Point"
+          } ] ]
+        },
+        "getCoordinatesKML([Lcom/vividsolutions/jts/geom/Coordinate;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getCoordinatesKML(com.vividsolutions.jts.geom.Coordinate[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          } ] ]
+        },
+        "convertPointWithAltitude([Lcom/vividsolutions/jts/geom/Coordinate;D)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertPointWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "double"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          }, {
+            "type" : "double"
+          } ] ]
+        },
+        "convertLineWithAltitude([Lcom/vividsolutions/jts/geom/Coordinate;D)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertLineWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "double"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          }, {
+            "type" : "double"
+          } ] ]
+        },
+        "convertLine([Lcom/vividsolutions/jts/geom/Coordinate;)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String convertLine(com.vividsolutions.jts.geom.Coordinate[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Coordinate"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Coordinate[]",
+            "list_types" : {
+              "types" : [ "com.vividsolutions.jts.geom.Coordinate" ]
+            }
+          } ] ]
+        },
+        "getPlacemarkKML(Lcom/vividsolutions/jts/geom/Geometry;Ljava/lang/String;Ljava/lang/String;D)Ljava/lang/String;" : {
+          "formatted_signature" : "java.lang.String getPlacemarkKML(com.vividsolutions.jts.geom.Geometry,java.lang.String,java.lang.String,double)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "com.vividsolutions.jts.geom.Point"
+            } ]
+          }, {
+            "attribute_name" : "attr_1",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_2",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          }, {
+            "attribute_name" : "attr_3",
+            "values" : [ {
+              "val_0" : "double"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "com.vividsolutions.jts.geom.Point"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "java.lang.String"
+          }, {
+            "type" : "double"
+          } ] ]
+        }
+      },
+      "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter" : {
+        "<init>(Lnet/sourceforge/shp2kml/Shp2KMLGUI;)" : {
+          "formatted_signature" : "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter(net.sourceforge.shp2kml.Shp2KMLGUI)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "net.sourceforge.shp2kml.Shp2KMLGUI"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "net.sourceforge.shp2kml.Shp2KMLGUI"
+          } ] ]
+        },
+        "accept(Ljava/io/File;)Z" : {
+          "formatted_signature" : "boolean accept(java.io.File)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.io.File"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.io.File"
+          } ] ]
+        }
+      },
+      "net.sourceforge.shp2kml.Converter" : {
+        "convertShp(Ljava/lang/String;)Z" : {
+          "formatted_signature" : "boolean convertShp(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "main([Ljava/lang/String;)V" : {
+          "formatted_signature" : "void main(java.lang.String[])",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String[]"
+            } ]
+          }, {
+            "attribute_name" : "attr_0_list",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String[]",
+            "list_types" : {
+              "types" : [ "java.lang.String" ]
+            }
+          } ] ]
+        }
+      },
+      "net.sourceforge.shp2kml.KMLObject" : {
+        "addPlacemark(Ljava/lang/String;)Z" : {
+          "formatted_signature" : "boolean addPlacemark(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        },
+        "<init>(Ljava/lang/String;)" : {
+          "formatted_signature" : "net.sourceforge.shp2kml.KMLObject(java.lang.String)",
+          "attributes" : [ {
+            "attribute_name" : "attr_0",
+            "values" : [ {
+              "val_0" : "java.lang.String"
+            } ]
+          } ],
+          "test_plan" : [ [ {
+            "type" : "java.lang.String"
+          } ] ]
+        }
+      }
+    }
+  },
+  "statistics" : {
+    "total_classes" : 5,
+    "target_classes" : 5,
+    "non_public_classes" : 0,
+    "classes_no_public_methods" : 0,
+    "target_methods" : 16,
+    "total_tests" : 16
+  }
+}

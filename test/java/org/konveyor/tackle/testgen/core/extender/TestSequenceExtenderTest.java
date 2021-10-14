@@ -57,6 +57,17 @@ public class TestSequenceExtenderTest {
             "test/data/irs/irs_ctd_models_and_test_plans.json",
             "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
+        /*
+        appsUnderTest.add(ExtenderAppUnderTest.create4_rifExtenderAppUnderTest(
+            "test/data/4_rif/4_rif_ctd_models_and_test_plans.json",
+            "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        */
+        appsUnderTest.add(ExtenderAppUnderTest.create7_sfmisExtenderAppUnderTest(
+            "test/data/7_sfmis/7_sfmis_ctd_models_and_test_plans.json",
+            "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -153,6 +164,7 @@ public class TestSequenceExtenderTest {
     private void assertCoverageFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path testCovFilePath = Paths.get(ExtenderAppUnderTest.getCoverageFileJsonName(app.appName));
         assertTrue(Files.exists(testCovFilePath));
+        
         File testCovFile = new File(testCovFilePath.toString());
         File testCovFileStd = new File(app.coverageStandardFilename);
 
@@ -161,10 +173,12 @@ public class TestSequenceExtenderTest {
         ObjectNode summaryInfoStd = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFileStd);
         
 		assertEquals(summaryInfoStd.size(), summaryInfo.size());
+		
 		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
+					
 			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
@@ -174,6 +188,12 @@ public class TestSequenceExtenderTest {
         assertTrue(Files.exists(testClassesDir));
 
         // expected values
+        long numOfTestFiles = Files
+            .walk(testClassesDir)
+            .filter(p -> p.toFile().isFile())
+            .count();
+
+        System.out.println("Num of test classes: " + numOfTestFiles);
         assertTrue(app.exp__test_classes_count <= Files
             .walk(testClassesDir)
             .filter(p -> p.toFile().isFile())
@@ -187,7 +207,8 @@ public class TestSequenceExtenderTest {
         for (ExtenderAppUnderTest app : appsUnderTest) {
 
             // skip irs app for execution with JEE support
-            if (app.appName.equals("irs")) {
+            // skip 7_sfmis app until todo extender writes test OR fix local commons.io.FileUtils package
+            if (app.appName.equals("irs") || app.appName.equals("7_sfmis")) {
                  continue;
             }
 

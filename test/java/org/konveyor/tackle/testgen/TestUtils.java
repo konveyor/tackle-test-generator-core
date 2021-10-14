@@ -231,43 +231,6 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/irs/irs_test_generation_summary_standard_woJEE.json",
                 "test/data/irs/irs_coverage_report_standard_woJEE.json");
-            /*
-            appUnderTest.exp__bb_sequences = 13;
-            appUnderTest.exp__parsed_sequences_full = 12;
-            appUnderTest.exp__parsed_sequences_partial = 0;
-            appUnderTest.exp__skipped_sequences = 0;
-            appUnderTest.exp__exception_sequences = 1;
-            appUnderTest.exp__method_sequence_pool_keys = 11;
-            appUnderTest.exp__class_sequence_pool_keys = 5;
-            appUnderTest.exp__generated_sequences = 25;
-            appUnderTest.exp__executed_sequences = 25;
-            appUnderTest.exp__test_plan_rows = 25;
-            appUnderTest.exp__rows_covered_bb_sequences = 11;
-            appUnderTest.expmin_final_sequences = 23;
-            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
-            appUnderTest.exp__non_instantiable_param_type = 0;
-            appUnderTest.exp__excp_during_extension = 0;
-            appUnderTest.exp__execution_exception_types_other = Arrays.asList();
-            appUnderTest.exp__class_not_found_types = 0;
-            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
-                    collect(Collectors.toSet());
-            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
-            appUnderTest.exp__java_lang_Error = 0;
-            appUnderTest.exp__partition_count = 2;
-            appUnderTest.exp__target_method_coverage =
-                    Stream.of(new String[][]{
-                        {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setAllSalarySets(java.util.Map)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setAllSalaryMaps(java.util.Map)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerSalaryListMap(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerSalaryListSet(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerArrayList(java.util.List[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
-                        .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 5;
-            */
 
             appUnderTest.exp__executed_sequences = 25;
             appUnderTest.expmin_final_sequences = 23;
@@ -296,37 +259,7 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/daytrader7/daytrader7_test_generation_summary_standard_wJEE.json",
                 "test/data/daytrader7/daytrader7_coverage_report_standard_wJEE.json");
-            /*
-            appUnderTest.exp__bb_sequences = 159;
-            appUnderTest.exp__parsed_sequences_full = 155;
-            appUnderTest.exp__parsed_sequences_partial = 0;
-            appUnderTest.exp__skipped_sequences = 3;
-            appUnderTest.exp__exception_sequences = 1;
-            appUnderTest.exp__method_sequence_pool_keys = 102;
-            appUnderTest.exp__class_sequence_pool_keys = 39;
-            appUnderTest.exp__generated_sequences = 1486;
-            appUnderTest.exp__executed_sequences = 1471;
-            appUnderTest.exp__test_plan_rows = 1486;
-            appUnderTest.exp__rows_covered_bb_sequences = 282;
-            appUnderTest.expmin_final_sequences = 1146;
-            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
-            appUnderTest.exp__non_instantiable_param_type = 0;
-            appUnderTest.exp__excp_during_extension = 15;
-            appUnderTest.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
-            appUnderTest.exp__class_not_found_types = 0;
-            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
-                    collect(Collectors.toSet());
-            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
-            appUnderTest.exp__java_lang_Error = 17;
-            appUnderTest.exp__partition_count = 4;
-            appUnderTest.exp__target_method_coverage =
-                    Stream.of(new String[][]{
-                        {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                        {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                        {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
-                        .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 42;
-            */
+            
             appUnderTest.exp__executed_sequences = 1471;
             appUnderTest.expmin_final_sequences = 1146;
             appUnderTest.exp__target_method_coverage =
@@ -336,6 +269,151 @@ public class TestUtils {
                     {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                     .collect(Collectors.toMap(value -> value[0], value -> value[1]));
             appUnderTest.exp__test_classes_count = 42;
+            return appUnderTest;
+        }
+        
+        public static ExtenderAppUnderTest create4_rifExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("4_rif",
+                "test/data/4_rif/4_rifMonoClasspath.txt",
+                "test/data/4_rif/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/4_rif/4_rif_test_generation_summary_standard_wJEE.json",
+                "test/data/4_rif/4_rif_coverage_report_standard_wJEE.json");
+            
+            appUnderTest.exp__executed_sequences = 51;
+            appUnderTest.expmin_final_sequences = 36;
+            appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(java.lang.String,int,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::getEPRForService(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(org.apache.axis2.context.ConfigurationContext)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext,java.lang.String,java.lang.String,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.InvokeResponse::getPullParser(javax.xml.namespace.QName)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.InvokeResponse::set_return(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::setTypesNamespace(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_13", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_6", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_12", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_7", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_11", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_8", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_10", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_3", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_4", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_5", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::setTargetNamespace(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.RIFServiceStub::com.densebrain.rif.client.service.RIFServiceStub(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.RIFServiceStub::com.densebrain.rif.client.service.RIFServiceStub(org.apache.axis2.context.ConfigurationContext,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::getPullParser(javax.xml.namespace.QName)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setMethodName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setClassName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setSerializedParams(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.RIFServer::com.densebrain.rif.server.RIFServer(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_7", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_11", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_8", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_10", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_5", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::decodeString(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::deserializeObject(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::encodeBytes(byte[])::test_plan_row_1", "COVERED"}
+            }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            
+            appUnderTest.exp__test_classes_count = 7;
+            return appUnderTest;
+        }
+
+        public static ExtenderAppUnderTest create7_sfmisExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("7_sfmis",
+                "test/data/7_sfmis/7_sfmisMonoClasspath.txt",
+                "test/data/7_sfmis/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/7_sfmis/7_sfmis_test_generation_summary_standard_woJEE.json",
+                "test/data/7_sfmis/7_sfmis_coverage_report_standard_woJEE.json");
+
+            appUnderTest.exp__executed_sequences = 108;
+            appUnderTest.expmin_final_sequences = 70;
+            appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
+                {"monolithic::com.hf.sfm.util.BasePara::setOrdersql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSort(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQueryparams(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setPaging(boolean)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQueryValue(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setDir(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSqlpath(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setStart(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQuerySql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setGroupsql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setLimit(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setFlatid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setPassword(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setGroupid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setAccount(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::com.hf.sfm.system.pdo.AWorker(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setState(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setPersonid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setUrl(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::com.hf.sfm.system.pdo.Menu(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setStatus(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setImg(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setOper(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setParentid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setSort(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::byteArrayToAltBase64(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::base64ToByteArray(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::byteArrayToBase64(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::altBase64ToByteArray(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::main(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.DataSource::getSession(javax.servlet.http.HttpSession,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setSex(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPersontype(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setMobile(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setIndate(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setBirthday(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPersonid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setWbm(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo(java.lang.String,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setReason(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setOutdate(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPym(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setDepartment(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setMark(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::com.hf.sfm.system.pdo.AGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setMark(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::com.hf.sfm.sfmis.department.pdo.ADepartment(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.DaoFactory::encrypt(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.ListRange::setData(java.util.ArrayList)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.ListRange::setTotalSize(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setRs(java.util.List)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::collectToMap(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setColNames(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setRange(com.hf.sfm.util.ListRange)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setTotalCount(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.filter.setCharacterEncodingFilter::init(javax.servlet.FilterConfig)::test_plan_row_1", "COVERED"}
+                
+            }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+
+            appUnderTest.exp__test_classes_count = 13;
             return appUnderTest;
         }
 
