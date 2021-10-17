@@ -567,6 +567,40 @@ public class TestUtils {
             return appUnderTest;
         }
 
+        public static ExtenderAppUnderTest create53_shp2kmlExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("53_shp2kml",
+                "test/data/53_shp2kml/53_shp2kmlMonoClasspath.txt",
+                "test/data/53_shp2kml/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/53_shp2kml/53_shp2kml_test_generation_summary_standard_woJEE.json",
+                "test/data/53_shp2kml/53_shp2kml_coverage_report_standard_woJEE.json");
+
+            appUnderTest.exp__executed_sequences = 16;
+            appUnderTest.expmin_final_sequences = 15;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPolygon(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertLine(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertLineWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getCoordinatesKML(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPoint(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPolygonWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPointWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry,java.lang.String,java.lang.String,double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter::net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter(net.sourceforge.shp2kml.Shp2KMLGUI)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter::accept(java.io.File)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Converter::convertShp(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Converter::main(java.lang.String[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.KMLObject::addPlacemark(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.KMLObject::net.sourceforge.shp2kml.KMLObject(java.lang.String)::test_plan_row_1", "COVERED"}
+                }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.exp__test_classes_count = 4;
+            return appUnderTest;
+        }
+
         public static String getSummaryFileJsonName(String appName) {
             return appName + Constants.EXTENDER_SUMMARY_FILE_JSON_SUFFIX;
         }

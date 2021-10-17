@@ -21,12 +21,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -67,7 +65,14 @@ public class TestSequenceExtenderTest {
             "test/data/7_sfmis/7_sfmis_ctd_models_and_test_plans.json",
             "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
-        
+        appsUnderTest.add(ExtenderAppUnderTest.create40_glengineerExtenderAppUnderTest(
+            "test/data/40_glengineer/40_glengineer_ctd_models_and_test_plans.json",
+            "test/data/40_glengineer/40_glengineer_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(ExtenderAppUnderTest.create53_shp2kmlExtenderAppUnderTest(
+            "test/data/53_shp2kml/53_shp2kml_ctd_models_and_test_plans.json",
+            "test/data/53_shp2kml/53_shp2kml_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -157,8 +162,13 @@ public class TestSequenceExtenderTest {
         
 		assertEquals(new HashSet<String>(IteratorUtils.toList(parseExcpTypesStd.fieldNames())),
             new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
-		assertEquals(parseExcpTypesStd.get("randoop.sequence.SequenceParseException").asInt(),
-				parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
+		if (parseExcpTypesStd.has("randoop.sequence.SequenceParseException")) {
+            assertEquals(parseExcpTypesStd.get("randoop.sequence.SequenceParseException").asInt(),
+                parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
+        }
+		else {
+		    assertTrue(! parseExcpTypes.has("randoop.sequence.SequenceParseException"));
+        }
 	}
 
     private void assertCoverageFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
@@ -174,11 +184,15 @@ public class TestSequenceExtenderTest {
         
 		assertEquals(summaryInfoStd.size(), summaryInfo.size());
 		
+		//printTargetMethodCoverage(summaryInfoStd);
+        		
 		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
-					
+			if(! app.exp__target_method_coverage.get(covKey).equals((actualCoverage))) {
+			    System.out.println(covKeyTokens[1]+"::"+covKeyTokens[2]+"::"+covKeyTokens[3]);
+            }
 			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
@@ -186,14 +200,9 @@ public class TestSequenceExtenderTest {
     private void assertTestClassesDir(ExtenderAppUnderTest app) throws IOException {
         Path testClassesDir = Paths.get(app.appOutdir);
         assertTrue(Files.exists(testClassesDir));
-
-        // expected values
-        long numOfTestFiles = Files
-            .walk(testClassesDir)
-            .filter(p -> p.toFile().isFile())
-            .count();
-
-        System.out.println("Num of test classes: " + numOfTestFiles);
+        
+        //printTestClassesCount(testClassesDir);
+        
         assertTrue(app.exp__test_classes_count <= Files
             .walk(testClassesDir)
             .filter(p -> p.toFile().isFile())
@@ -251,5 +260,44 @@ public class TestSequenceExtenderTest {
             assertTestClassesDir(app);
         }
     }
+    
+    /** Prints to stdout the number of generated test classes.
+     * This is the value for the field exp__test_classes_count in ExtenderAppUnderTest. */
+    private static void printTestClassesCount(Path testClassesDir) throws IOException{
+        long numOfTestFiles = Files
+            .walk(testClassesDir)
+            .filter(p -> p.toFile().isFile())
+            .count();
 
+        System.out.println("Num of test classes: " + numOfTestFiles);
+    }
+    
+    /** Prints to stdout the covered test plan's rows, in the format that matches the array of
+     * the field exp__target_method_coverage in ExtenderAppUnderTest. */
+    private static void printTargetMethodCoverage(ObjectNode summaryInfoStd) {
+        Iterator<String> partitionNames = summaryInfoStd.fieldNames();
+        while(partitionNames.hasNext()) {
+            String current_partition_name = partitionNames.next();
+            JsonNode current_partition_node = summaryInfoStd.get(current_partition_name);
+            Iterator<String> packagesNames = current_partition_node.fieldNames();
+            while(packagesNames.hasNext()) {
+                String current_package_name = packagesNames.next();
+                JsonNode current_package_node = current_partition_node.get(current_package_name);
+                Iterator<String> functionsNames = current_package_node.fieldNames();
+                while(functionsNames.hasNext()) {
+                    String current_function_name = functionsNames.next();
+                    JsonNode current_function_node = current_package_node.get(current_function_name);
+                    Iterator<String> rowsNames = current_function_node.fieldNames();
+                    while(rowsNames.hasNext()) {
+                        String current_row_name = rowsNames.next();
+                        String current_row_value = current_function_node.get(current_row_name).asText();
+                        if (current_row_value.equals("COVERED")) {
+                            System.out.println(
+                                "{\""+current_partition_name+"::"+current_package_name+"::"+current_function_name+"::"+current_row_name+"\", \"COVERED\"},");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
