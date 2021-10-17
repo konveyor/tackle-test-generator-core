@@ -55,12 +55,10 @@ public class TestSequenceExtenderTest {
             "test/data/irs/irs_ctd_models_and_test_plans.json",
             "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
-        /*
         appsUnderTest.add(ExtenderAppUnderTest.create4_rifExtenderAppUnderTest(
             "test/data/4_rif/4_rif_ctd_models_and_test_plans.json",
             "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
-        */
         appsUnderTest.add(ExtenderAppUnderTest.create7_sfmisExtenderAppUnderTest(
             "test/data/7_sfmis/7_sfmis_ctd_models_and_test_plans.json",
             "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences.json"
@@ -119,14 +117,14 @@ public class TestSequenceExtenderTest {
 		assertEquals(bbSeqInfoStd.get("skipped_base_sequences").asInt(), bbSeqInfo.get("skipped_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("exception_base_sequences").asInt(), bbSeqInfo.get("exception_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("method_sequence_pool_keys").asInt(), bbSeqInfo.get("method_sequence_pool_keys").asInt());
-		assertEquals(bbSeqInfoStd.get("class_sequence_pool_keys").asInt(), bbSeqInfo.get("class_sequence_pool_keys").asInt());
+		assertTrue(app.expmin_class_sequence_pool_keys <= bbSeqInfo.get("class_sequence_pool_keys").asInt());
 
 		ObjectNode extSeqInfo = (ObjectNode) summaryInfo.get("extended_sequences_info");
         ObjectNode extSeqInfoStd = (ObjectNode) summaryInfoStd.get("extended_sequences_info");
 
         assertEquals(extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
-		assertTrue(app.exp__executed_sequences <= extSeqInfo.get("executed_sequences").asInt());
-		assertTrue(extSeqInfo.get("final_sequences").asInt() >= app.expmin_final_sequences);
+		assertTrue(app.expmin_executed_sequences <= extSeqInfo.get("executed_sequences").asInt());
+		assertTrue(app.expmin_final_sequences <= extSeqInfo.get("final_sequences").asInt());
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
         ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
@@ -139,7 +137,7 @@ public class TestSequenceExtenderTest {
         
 		assertEquals(uncovInfoStd.get("no_bb_sequence_for_target_method").asInt(), uncovInfo.get("no_bb_sequence_for_target_method").asInt());
 		assertEquals(uncovInfoStd.get("non_instantiable_param_type").asInt(), uncovInfo.get("non_instantiable_param_type").asInt());
-		assertEquals(uncovInfoStd.get("exception_during_extension").asInt(), uncovInfo.get("exception_during_extension").asInt());
+        assertTrue(app.expmin_exception_during_extension <= uncovInfo.get("exception_during_extension").asInt());
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
         ArrayNode execExcpTypesStd = (ArrayNode) summaryInfoStd.get("execution_exception_types_other");

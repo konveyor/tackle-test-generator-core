@@ -194,8 +194,10 @@ public class TestUtils {
         public int exp__test_classes_count;
         */
         
-        public int exp__executed_sequences;
+        public int expmin_class_sequence_pool_keys;
+        public int expmin_executed_sequences;
         public int expmin_final_sequences;
+        public int expmin_exception_during_extension;
         public Map<String, String> exp__target_method_coverage;
         public int exp__test_classes_count;
         
@@ -231,9 +233,11 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/irs/irs_test_generation_summary_standard_woJEE.json",
                 "test/data/irs/irs_coverage_report_standard_woJEE.json");
-
-            appUnderTest.exp__executed_sequences = 25;
+            
+            appUnderTest.expmin_class_sequence_pool_keys = 5;
+            appUnderTest.expmin_executed_sequences = 25;
             appUnderTest.expmin_final_sequences = 23;
+            appUnderTest.expmin_exception_during_extension = 0;
             appUnderTest.exp__target_method_coverage =
                 Stream.of(new String[][]{
                     {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
@@ -259,9 +263,11 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/daytrader7/daytrader7_test_generation_summary_standard_wJEE.json",
                 "test/data/daytrader7/daytrader7_coverage_report_standard_wJEE.json");
-            
-            appUnderTest.exp__executed_sequences = 1471;
+
+            appUnderTest.expmin_class_sequence_pool_keys = 39;
+            appUnderTest.expmin_executed_sequences = 1471;
             appUnderTest.expmin_final_sequences = 1146;
+            appUnderTest.expmin_exception_during_extension = 15;
             appUnderTest.exp__target_method_coverage =
                 Stream.of(new String[][]{
                     {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
@@ -281,9 +287,11 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/4_rif/4_rif_test_generation_summary_standard_wJEE.json",
                 "test/data/4_rif/4_rif_coverage_report_standard_wJEE.json");
-            
-            appUnderTest.exp__executed_sequences = 51;
-            appUnderTest.expmin_final_sequences = 36;
+
+            appUnderTest.expmin_class_sequence_pool_keys = 25;
+            appUnderTest.expmin_executed_sequences = 51;
+            appUnderTest.expmin_final_sequences = 34;
+            appUnderTest.expmin_exception_during_extension = 1;
             appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(java.lang.String,int,java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::getEPRForService(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
@@ -299,7 +307,6 @@ public class TestUtils {
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_7", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_11", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_8", "COVERED"},
-                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_10", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_2", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_3", "COVERED"},
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_4", "COVERED"},
@@ -316,7 +323,6 @@ public class TestUtils {
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_7", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_11", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_8", "COVERED"},
-                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_10", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_5", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::decodeString(java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::deserializeObject(byte[])::test_plan_row_1", "COVERED"},
@@ -337,8 +343,10 @@ public class TestUtils {
                 "test/data/7_sfmis/7_sfmis_test_generation_summary_standard_woJEE.json",
                 "test/data/7_sfmis/7_sfmis_coverage_report_standard_woJEE.json");
 
-            appUnderTest.exp__executed_sequences = 108;
+            appUnderTest.expmin_class_sequence_pool_keys = 32;
+            appUnderTest.expmin_executed_sequences = 108;
             appUnderTest.expmin_final_sequences = 70;
+            appUnderTest.expmin_exception_during_extension = 2;
             appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
                 {"monolithic::com.hf.sfm.util.BasePara::setOrdersql(java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.hf.sfm.util.BasePara::setSort(java.lang.String)::test_plan_row_1", "COVERED"},
@@ -427,8 +435,10 @@ public class TestUtils {
                 "test/data/40_glengineer/40_glengineer_test_generation_summary_standard_woJEE.json",
                 "test/data/40_glengineer/40_glengineer_coverage_report_standard_woJEE.json");
 
-            appUnderTest.exp__executed_sequences = 232;
+            appUnderTest.expmin_class_sequence_pool_keys = 41;
+            appUnderTest.expmin_executed_sequences = 232;
             appUnderTest.expmin_final_sequences = 70;
+            appUnderTest.expmin_exception_during_extension = 54;
             appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
                 {"monolithic::glengineer.agents.settings.ContainerGapSettings::glengineer.agents.settings.ContainerGapSettings(int,int)::test_plan_row_1", "COVERED"},
                 {"monolithic::glengineer.agents.settings.ContainerGapSettings::glengineer.agents.settings.ContainerGapSettings(glengineer.agents.settings.SpecialGapSizes)::test_plan_row_1", "COVERED"},
@@ -577,8 +587,10 @@ public class TestUtils {
                 "test/data/53_shp2kml/53_shp2kml_test_generation_summary_standard_woJEE.json",
                 "test/data/53_shp2kml/53_shp2kml_coverage_report_standard_woJEE.json");
 
-            appUnderTest.exp__executed_sequences = 16;
+            appUnderTest.expmin_class_sequence_pool_keys = 13;
+            appUnderTest.expmin_executed_sequences = 16;
             appUnderTest.expmin_final_sequences = 15;
+            appUnderTest.expmin_exception_during_extension = 0;
             appUnderTest.exp__target_method_coverage =
                 Stream.of(new String[][]{
                     {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPolygon(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
@@ -838,7 +850,7 @@ public class TestUtils {
                 "com.ibm.websphere.samples.daytrader.util.TradeConfig",
                 "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
                 "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
+                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"}));
             
             return new SequenceInitializerAppUnderTest("daytrader7",
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
