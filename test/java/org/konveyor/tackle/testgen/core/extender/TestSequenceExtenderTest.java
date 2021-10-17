@@ -131,6 +131,8 @@ public class TestSequenceExtenderTest {
 		
 		assertEquals(covInfoStd.get("test_plan_rows").asInt(), covInfo.get("test_plan_rows").asInt());
 		assertEquals(covInfoStd.get("rows_covered_bb_sequences").asInt(), covInfo.get("rows_covered_bb_sequences").asInt());
+		//System.out.println("Jee for app "+app.appName+":");
+		//System.out.println("rows_covered_full_jee = "+covInfo.get("rows_covered_full_jee").asInt()+", rows_covered_partial_jee = "+covInfo.get("rows_covered_partial_jee").asInt());
 
 		ObjectNode uncovInfo = (ObjectNode) summaryInfo.get("uncovered_test_plan_rows_info");
         ObjectNode uncovInfoStd = (ObjectNode) summaryInfoStd.get("uncovered_test_plan_rows_info");
@@ -213,9 +215,8 @@ public class TestSequenceExtenderTest {
 
         for (ExtenderAppUnderTest app : appsUnderTest) {
 
-            // skip irs app for execution with JEE support
-            // skip 7_sfmis app until todo extender writes test OR fix local commons.io.FileUtils package
-            if (app.appName.equals("irs") || app.appName.equals("7_sfmis")) {
+            // skip irs app for execution with JEE support (not an JEE app)
+            if (app.appName.equals("irs")) {
                  continue;
             }
 
