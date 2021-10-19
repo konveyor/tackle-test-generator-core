@@ -178,7 +178,7 @@ public class TestUtils {
         public int expmin_final_sequences;
         public int expmin_exception_during_extension;
         public Map<String, String> exp__target_method_coverage;
-        public int exp__test_classes_count;
+        public int expmin_test_classes_count;
         
         public ExtenderAppUnderTest(String appName,
                                     String appClasspath,
@@ -229,7 +229,7 @@ public class TestUtils {
                     {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
                     {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
                     .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 5;
+            appUnderTest.expmin_test_classes_count = 5;
             return appUnderTest;
         }
 
@@ -253,7 +253,7 @@ public class TestUtils {
                     {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
                     {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                     .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 42;
+            appUnderTest.expmin_test_classes_count = 42;
             return appUnderTest;
         }
         
@@ -307,7 +307,7 @@ public class TestUtils {
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::encodeBytes(byte[])::test_plan_row_1", "COVERED"}
             }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
             
-            appUnderTest.exp__test_classes_count = 7;
+            appUnderTest.expmin_test_classes_count = 6;
             return appUnderTest;
         }
 
@@ -399,7 +399,7 @@ public class TestUtils {
                 
             }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
 
-            appUnderTest.exp__test_classes_count = 13;
+            appUnderTest.expmin_test_classes_count = 13;
             return appUnderTest;
         }
 
@@ -551,7 +551,7 @@ public class TestUtils {
                 {"monolithic::glengineer.agents.settings.PreferredGapSettings::glengineer.agents.settings.PreferredGapSettings(javax.swing.LayoutStyle$ComponentPlacement,int,int)::test_plan_row_1", "COVERED"}
             }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
 
-            appUnderTest.exp__test_classes_count = 22;
+            appUnderTest.expmin_test_classes_count = 22;
             return appUnderTest;
         }
 
@@ -587,7 +587,7 @@ public class TestUtils {
                     {"monolithic::net.sourceforge.shp2kml.KMLObject::addPlacemark(java.lang.String)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.KMLObject::net.sourceforge.shp2kml.KMLObject(java.lang.String)::test_plan_row_1", "COVERED"}
                 }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 4;
+            appUnderTest.expmin_test_classes_count = 4;
             return appUnderTest;
         }
 

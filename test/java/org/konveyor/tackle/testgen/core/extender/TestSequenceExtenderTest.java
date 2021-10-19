@@ -205,7 +205,7 @@ public class TestSequenceExtenderTest {
             .filter(p -> p.toFile().isFile())
             .count();
 
-        assertMinimum(app.exp__test_classes_count, Math.toIntExact(numOfTestFiles), app.appName);
+        assertMinimum(app.expmin_test_classes_count, Math.toIntExact(numOfTestFiles), app.appName);
     }
 
     @Test
