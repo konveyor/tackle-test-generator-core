@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
-import org.konveyor.tackle.testgen.TestUtils.ExtenderAppUnderTest;
+import org.konveyor.tackle.testgen.TestUtils.IntegrationAppUnderTest;
 import org.konveyor.tackle.testgen.util.Constants;
 
 import java.io.File;
@@ -38,26 +38,21 @@ import static org.junit.Assert.assertTrue;
 
 public class TestgenIntegrationTest {
 
-    private static List<ExtenderAppUnderTest> appsUnderTestWithSeqInit;
-    private static List<ExtenderAppUnderTest> appsUnderTest;
+    private static List<IntegrationAppUnderTest> appsUnderTestWithSeqInit;
+    private static List<IntegrationAppUnderTest> appsUnderTest;
     private static List<String> OUTDIRS;
 
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTestWithSeqInit = new ArrayList<>();
-        appsUnderTestWithSeqInit.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(null,null));
+        appsUnderTestWithSeqInit.add(IntegrationAppUnderTest.createIrsIntegrationAppUnderTest());
 
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(ExtenderAppUnderTest.createDaytrader7ExtenderAppUnderTest(null,
-            "test/data/daytrader7/daytrader7_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/daytrader7/daytrader7_RandoopTestGenerator_bb_test_sequences_integration.json"));
-        appsUnderTest.add(ExtenderAppUnderTest.create4_rifExtenderAppUnderTest(null,
-            "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/4_rif/4_rif_RandoopTestGenerator_bb_test_sequences_integration.json"));
-        appsUnderTest.add(ExtenderAppUnderTest.create7_sfmisExtenderAppUnderTest(null,
-            "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/7_sfmis/7_sfmis_RandoopTestGenerator_bb_test_sequences_integration.json"));
-        appsUnderTest.add(ExtenderAppUnderTest.create40_glengineerExtenderAppUnderTest(null, 
-            "test/data/40_glengineer/40_glengineer_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/40_glengineer/40_glengineer_RandoopTestGenerator_bb_test_sequences_integration.json"));
-        appsUnderTest.add(ExtenderAppUnderTest.create53_shp2kmlExtenderAppUnderTest(null, 
-            "test/data/53_shp2kml/53_shp2kml_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/53_shp2kml/53_shp2kml_RandoopTestGenerator_bb_test_sequences_integration.json"));
+        appsUnderTest.add(IntegrationAppUnderTest.createDaytrader7IntegrationAppUnderTest());
+        appsUnderTest.add(IntegrationAppUnderTest.create4_rifIntegrationAppUnderTest());
+        appsUnderTest.add(IntegrationAppUnderTest.create7_sfmisIntegrationAppUnderTest());
+        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest()); 
+        appsUnderTest.add(IntegrationAppUnderTest.create53_shp2kmlIntegrationAppUnderTest());
         
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
@@ -72,7 +67,7 @@ public class TestgenIntegrationTest {
      * Delete existing output files
      */
     public void cleanUp() throws IOException {
-        for (ExtenderAppUnderTest testApp : appsUnderTestWithSeqInit) {
+        for (IntegrationAppUnderTest testApp : appsUnderTestWithSeqInit) {
             Files.deleteIfExists(Paths.get(testApp.testPlanFilename));
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
@@ -82,7 +77,7 @@ public class TestgenIntegrationTest {
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName)));
         }
 
-        for (ExtenderAppUnderTest testApp : appsUnderTest) {
+        for (IntegrationAppUnderTest testApp : appsUnderTest) {
             Files.deleteIfExists(Paths.get(testApp.testPlanFilename));
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName)));
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName)));
@@ -102,11 +97,11 @@ public class TestgenIntegrationTest {
     public void testModelerInitializerExtender() throws Exception {
 
         // run test on apps
-        for (ExtenderAppUnderTest testApp: appsUnderTestWithSeqInit) {
+        for (IntegrationAppUnderTest testApp: appsUnderTestWithSeqInit) {
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
-                null, null, null, null,
+                testApp.targetClassList, null, null, null,
                 testApp.appPath, testApp.appClasspathFilename, 2, false,
                 2, null, null, null, null);
             analyzer.modelPartitions();
@@ -137,7 +132,7 @@ public class TestgenIntegrationTest {
             assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
-            assertEquals(testApp.exp__test_classes_count, Files
+            assertTrue(testApp.exp__test_classes_count <= Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count()
@@ -149,11 +144,11 @@ public class TestgenIntegrationTest {
     public void testModelerExtenderReusingBB() throws Exception {
 
         // run test on apps
-        for (ExtenderAppUnderTest testApp: appsUnderTest) {
+        for (IntegrationAppUnderTest testApp: appsUnderTest) {
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
-                null, null, null, null,
+                testApp.targetClassList, null, null, null,
                 testApp.appPath, testApp.appClasspathFilename, 2, false,
                 2, null, null, null, null);
             analyzer.modelPartitions();

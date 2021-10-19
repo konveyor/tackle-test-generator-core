@@ -876,4 +876,87 @@ public class TestUtils {
                 Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
         }
     }
+
+    public static class IntegrationAppUnderTest extends AppUnderTest {
+        public String targetClassList;
+        public String testSeqFilename;
+        public int exp__test_classes_count;
+
+        public IntegrationAppUnderTest(String appName,
+                                       String appClasspath,
+                                       String appPath,
+                                       String targetClassList,
+                                       String testSeqFilename) {
+            super(appName, appClasspath, appPath, appName + "_" + Constants.CTD_OUTFILE_SUFFIX);
+            this.testSeqFilename = testSeqFilename;
+            this.targetClassList = targetClassList;
+            
+            if (this.testSeqFilename == null) {
+                this.testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
+                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+            }
+        }
+
+        public static IntegrationAppUnderTest createIrsIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("irs",
+                "test/data/irs/irsMonoClasspath.txt",
+                "test/data/irs/monolith/target/classes",
+                null,
+                null);
+            app.exp__test_classes_count = 5;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest createDaytrader7IntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
+                "com.ibm.websphere.samples.daytrader.direct.TradeDirect::com.ibm.websphere.samples.daytrader.util.TradeConfig::com.ibm.websphere.samples.daytrader.TradeServices",
+                "test/data/daytrader7/daytrader7_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/daytrader7/daytrader7_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 2;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create4_rifIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("4_rif",
+                "test/data/4_rif/4_rifMonoClasspath.txt",
+                "test/data/4_rif/classes",
+                "com.densebrain.rif.client.RIFInvoker::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.util.ObjectUtility",
+                "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/4_rif/4_rif_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 2;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create7_sfmisIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("7_sfmis",
+                "test/data/7_sfmis/7_sfmisMonoClasspath.txt",
+                "test/data/7_sfmis/classes",
+                "com.hf.sfm.system.business.Login::com.hf.sfm.system.business.MenuManage::com.hf.sfm.util.Loader",
+                "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/7_sfmis/7_sfmis_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 1;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create40_glengineerIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("40_glengineer",
+                "test/data/40_glengineer/40_glengineerMonoClasspath.txt",
+                "test/data/40_glengineer/classes",
+                "glengineer.GroupLayoutEngineer::glengineer.blocks.VerticalBlock::glengineer.agents.SequentialGroupAgent",
+                "test/data/40_glengineer/40_glengineer_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/40_glengineer/40_glengineer_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 1;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create53_shp2kmlIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("53_shp2kml",
+                "test/data/53_shp2kml/53_shp2kmlMonoClasspath.txt",
+                "test/data/53_shp2kml/classes",
+                "net.sourceforge.shp2kml.Converter::net.sourceforge.shp2kml.GeomConverter::net.sourceforge.shp2kml.KMLObject",
+                "test/data/53_shp2kml/53_shp2kml_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/53_shp2kml/53_shp2kml_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 3;
+            return app;
+        }
+    }
 }
