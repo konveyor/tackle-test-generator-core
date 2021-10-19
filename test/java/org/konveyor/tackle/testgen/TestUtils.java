@@ -567,7 +567,7 @@ public class TestUtils {
 
             appUnderTest.expmin_class_sequence_pool_keys = 13;
             appUnderTest.expmin_executed_sequences = 16;
-            appUnderTest.expmin_final_sequences = 15;
+            appUnderTest.expmin_final_sequences = 13;
             appUnderTest.expmin_exception_during_extension = 0;
             appUnderTest.exp__target_method_coverage =
                 Stream.of(new String[][]{
