@@ -70,6 +70,8 @@ public class CTDModelingTest {
 	@Test
 	public void testGenerateModelsAndTestPlansForClassList() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            System.out.println("Current app under test in testGenerateModelsAndTestPlansForClassList: " + modelerAppUnderTest.appName);
+
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
                 modelerAppUnderTest.testPlanFilename,
@@ -96,6 +98,8 @@ public class CTDModelingTest {
     @Test
 	public void testGenerateModelsAndTestPlansForAllClasses() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            System.out.println("Current app under test in testGenerateModelsAndTestPlansForAllClasses: " + modelerAppUnderTest.appName);
+
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
                 modelerAppUnderTest.testPlanFilename,
@@ -122,6 +126,8 @@ public class CTDModelingTest {
     @Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcluded() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            System.out.println("Current app under test in testGenerateModelsAndTestPlansForAllClassesButExcluded: " + modelerAppUnderTest.appName);
+            
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
                 modelerAppUnderTest.testPlanFilename,
@@ -148,6 +154,8 @@ public class CTDModelingTest {
 	@Test
 	public void testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage() throws Exception {
         for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+            System.out.println("Current app under test in testGenerateModelsAndTestPlansForAllClassesButExcludedClassAndPackage: " + modelerAppUnderTest.appName);
+            
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(
                 modelerAppUnderTest.appName,
                 modelerAppUnderTest.testPlanFilename,

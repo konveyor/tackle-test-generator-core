@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.konveyor.tackle.testgen.TestUtils.assertMinimum;
 
 
 public class TestgenIntegrationTest {
@@ -119,7 +120,7 @@ public class TestgenIntegrationTest {
             // assert that test sequences files are created
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
-                assertTrue(new File(testSeqFile).exists());
+                assertTrue("Missing testSeqFile: " + testSeqFile, new File(testSeqFile).exists());
             }
 
             // generate test cases via process launcher
@@ -168,12 +169,11 @@ public class TestgenIntegrationTest {
             assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
             assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
-            // assert over the number of expected test classes
-            assertTrue(testApp.exp__test_classes_count <= Files
+            long numOfTestFiles = Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
-                .count()
-            );
+                .count();
+            assertMinimum(testApp.exp__test_classes_count, Math.toIntExact(numOfTestFiles));
         }
     }
 }

@@ -15,6 +15,7 @@ package org.konveyor.tackle.testgen.core.extender;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.konveyor.tackle.testgen.TestUtils.assertMinimum;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,29 +118,29 @@ public class TestSequenceExtenderTest {
 		assertEquals(bbSeqInfoStd.get("skipped_base_sequences").asInt(), bbSeqInfo.get("skipped_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("exception_base_sequences").asInt(), bbSeqInfo.get("exception_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("method_sequence_pool_keys").asInt(), bbSeqInfo.get("method_sequence_pool_keys").asInt());
-		assertTrue(app.expmin_class_sequence_pool_keys <= bbSeqInfo.get("class_sequence_pool_keys").asInt());
+        assertMinimum(app.expmin_class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt());
 
 		ObjectNode extSeqInfo = (ObjectNode) summaryInfo.get("extended_sequences_info");
         ObjectNode extSeqInfoStd = (ObjectNode) summaryInfoStd.get("extended_sequences_info");
 
         assertEquals(extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
-		assertTrue(app.expmin_executed_sequences <= extSeqInfo.get("executed_sequences").asInt());
-		assertTrue(app.expmin_final_sequences <= extSeqInfo.get("final_sequences").asInt());
+        assertMinimum(app.expmin_executed_sequences, extSeqInfo.get("executed_sequences").asInt());
+        assertMinimum(app.expmin_final_sequences, extSeqInfo.get("final_sequences").asInt());
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
         ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
 		
 		assertEquals(covInfoStd.get("test_plan_rows").asInt(), covInfo.get("test_plan_rows").asInt());
 		assertEquals(covInfoStd.get("rows_covered_bb_sequences").asInt(), covInfo.get("rows_covered_bb_sequences").asInt());
-		//System.out.println("Jee for app "+app.appName+":");
-		//System.out.println("rows_covered_full_jee = "+covInfo.get("rows_covered_full_jee").asInt()+", rows_covered_partial_jee = "+covInfo.get("rows_covered_partial_jee").asInt());
+		//System.out.println("Jee for app " + app.appName + ":");
+		//System.out.println("rows_covered_full_jee = " + covInfo.get("rows_covered_full_jee").asInt() + ", rows_covered_partial_jee = " + covInfo.get("rows_covered_partial_jee").asInt());
 
 		ObjectNode uncovInfo = (ObjectNode) summaryInfo.get("uncovered_test_plan_rows_info");
         ObjectNode uncovInfoStd = (ObjectNode) summaryInfoStd.get("uncovered_test_plan_rows_info");
         
 		assertEquals(uncovInfoStd.get("no_bb_sequence_for_target_method").asInt(), uncovInfo.get("no_bb_sequence_for_target_method").asInt());
 		assertEquals(uncovInfoStd.get("non_instantiable_param_type").asInt(), uncovInfo.get("non_instantiable_param_type").asInt());
-        assertTrue(app.expmin_exception_during_extension <= uncovInfo.get("exception_during_extension").asInt());
+        assertMinimum(app.expmin_exception_during_extension, uncovInfo.get("exception_during_extension").asInt());
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
         ArrayNode execExcpTypesStd = (ArrayNode) summaryInfoStd.get("execution_exception_types_other");
@@ -201,13 +202,12 @@ public class TestSequenceExtenderTest {
         Path testClassesDir = Paths.get(app.appOutdir);
         assertTrue(Files.exists(testClassesDir));
         
-        //printTestClassesCount(testClassesDir);
-        
-        assertTrue(app.exp__test_classes_count <= Files
+        long numOfTestFiles = Files
             .walk(testClassesDir)
             .filter(p -> p.toFile().isFile())
-            .count()
-        );
+            .count();
+
+        assertMinimum(app.exp__test_classes_count, Math.toIntExact(numOfTestFiles));
     }
 
     @Test
@@ -262,16 +262,6 @@ public class TestSequenceExtenderTest {
         }
     }
     
-    /** Prints to stdout the number of generated test classes.
-     * This is the value for the field exp__test_classes_count in ExtenderAppUnderTest. */
-    private static void printTestClassesCount(Path testClassesDir) throws IOException{
-        long numOfTestFiles = Files
-            .walk(testClassesDir)
-            .filter(p -> p.toFile().isFile())
-            .count();
-
-        System.out.println("Num of test classes: " + numOfTestFiles);
-    }
     
     /** Prints to stdout the covered test plan's rows, in the format that matches the array of
      * the field exp__target_method_coverage in ExtenderAppUnderTest. */

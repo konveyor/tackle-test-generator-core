@@ -33,6 +33,8 @@ import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.Utils;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestUtils {
 
     private static final String COVERAGE_OUTDIR = "target"+File.separator+"jacoco-output";
@@ -141,6 +143,11 @@ public class TestUtils {
         return new File("/dev/null");
     }
 
+    public static void assertMinimum(int expected_min, int actual) {
+        assertTrue("App's actual value = " + actual + ", expected min = " + expected_min,
+            expected_min <= actual);
+    }
+
     /**
      * Class containing information about an application under test
      */
@@ -166,34 +173,6 @@ public class TestUtils {
         public String testSeqFilename;
         public String summaryStandardFilename;
         public String coverageStandardFilename;
-        
-        // expected values
-        /*
-        public int exp__bb_sequences;
-        public int exp__parsed_sequences_full;
-        public int exp__parsed_sequences_partial;
-        public int exp__skipped_sequences;
-        public int exp__exception_sequences;
-        public int exp__method_sequence_pool_keys;
-        public int exp__class_sequence_pool_keys;
-        public int exp__generated_sequences;
-        public int exp__executed_sequences;
-        public int exp__test_plan_rows;
-        public int exp__rows_covered_bb_sequences;
-        public int expmin_final_sequences;
-        public int exp__no_bb_sequence_for_target_method;
-        public int exp__non_instantiable_param_type;
-        public int exp__excp_during_extension;
-        public List<String> exp__execution_exception_types_other;
-        public int exp__class_not_found_types;
-        public Set<String> exp__parse_exception_types;
-        public int exp__randoop_sequence_SequenceParseException;
-        public int exp__java_lang_Error;
-        public int exp__partition_count;
-        public Map<String, String> exp__target_method_coverage;
-        public int exp__test_classes_count;
-        */
-        
         public int expmin_class_sequence_pool_keys;
         public int expmin_executed_sequences;
         public int expmin_final_sequences;
