@@ -143,8 +143,8 @@ public class TestUtils {
         return new File("/dev/null");
     }
 
-    public static void assertMinimum(int expected_min, int actual) {
-        assertTrue("App's actual value = " + actual + ", expected min = " + expected_min,
+    public static void assertMinimum(int expected_min, int actual, String appName) {
+        assertTrue("App = " + appName + ", actual value = " + actual + ", expected min = " + expected_min,
             expected_min <= actual);
     }
 
@@ -269,7 +269,7 @@ public class TestUtils {
 
             appUnderTest.expmin_class_sequence_pool_keys = 25;
             appUnderTest.expmin_executed_sequences = 51;
-            appUnderTest.expmin_final_sequences = 34;
+            appUnderTest.expmin_final_sequences = 33;
             appUnderTest.expmin_exception_during_extension = 1;
             appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
                 {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(java.lang.String,int,java.lang.String)::test_plan_row_1", "COVERED"},

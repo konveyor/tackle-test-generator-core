@@ -173,7 +173,7 @@ public class TestgenIntegrationTest {
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count();
-            assertMinimum(testApp.exp__test_classes_count, Math.toIntExact(numOfTestFiles));
+            assertMinimum(testApp.exp__test_classes_count, Math.toIntExact(numOfTestFiles), testApp.appName);
         }
     }
 }

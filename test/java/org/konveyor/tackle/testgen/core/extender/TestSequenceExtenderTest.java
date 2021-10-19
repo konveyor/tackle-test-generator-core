@@ -118,14 +118,14 @@ public class TestSequenceExtenderTest {
 		assertEquals(bbSeqInfoStd.get("skipped_base_sequences").asInt(), bbSeqInfo.get("skipped_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("exception_base_sequences").asInt(), bbSeqInfo.get("exception_base_sequences").asInt());
 		assertEquals(bbSeqInfoStd.get("method_sequence_pool_keys").asInt(), bbSeqInfo.get("method_sequence_pool_keys").asInt());
-        assertMinimum(app.expmin_class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt());
+        assertMinimum(app.expmin_class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt(), app.appName);
 
 		ObjectNode extSeqInfo = (ObjectNode) summaryInfo.get("extended_sequences_info");
         ObjectNode extSeqInfoStd = (ObjectNode) summaryInfoStd.get("extended_sequences_info");
 
         assertEquals(extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
-        assertMinimum(app.expmin_executed_sequences, extSeqInfo.get("executed_sequences").asInt());
-        assertMinimum(app.expmin_final_sequences, extSeqInfo.get("final_sequences").asInt());
+        assertMinimum(app.expmin_executed_sequences, extSeqInfo.get("executed_sequences").asInt(), app.appName);
+        assertMinimum(app.expmin_final_sequences, extSeqInfo.get("final_sequences").asInt(), app.appName);
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
         ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
@@ -140,7 +140,7 @@ public class TestSequenceExtenderTest {
         
 		assertEquals(uncovInfoStd.get("no_bb_sequence_for_target_method").asInt(), uncovInfo.get("no_bb_sequence_for_target_method").asInt());
 		assertEquals(uncovInfoStd.get("non_instantiable_param_type").asInt(), uncovInfo.get("non_instantiable_param_type").asInt());
-        assertMinimum(app.expmin_exception_during_extension, uncovInfo.get("exception_during_extension").asInt());
+        assertMinimum(app.expmin_exception_during_extension, uncovInfo.get("exception_during_extension").asInt(), app.appName);
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
         ArrayNode execExcpTypesStd = (ArrayNode) summaryInfoStd.get("execution_exception_types_other");
@@ -207,7 +207,7 @@ public class TestSequenceExtenderTest {
             .filter(p -> p.toFile().isFile())
             .count();
 
-        assertMinimum(app.exp__test_classes_count, Math.toIntExact(numOfTestFiles));
+        assertMinimum(app.exp__test_classes_count, Math.toIntExact(numOfTestFiles), app.appName);
     }
 
     @Test
