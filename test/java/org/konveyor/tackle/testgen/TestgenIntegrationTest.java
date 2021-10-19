@@ -46,14 +46,14 @@ public class TestgenIntegrationTest {
     @BeforeClass
     public static void createAppsUnderTest() {
         appsUnderTestWithSeqInit = new ArrayList<>();
-        appsUnderTestWithSeqInit.add(IntegrationAppUnderTest.createIrsIntegrationAppUnderTest());
+        //appsUnderTestWithSeqInit.add(IntegrationAppUnderTest.createIrsIntegrationAppUnderTest());
 
         appsUnderTest = new ArrayList<>();
-        appsUnderTest.add(IntegrationAppUnderTest.createDaytrader7IntegrationAppUnderTest());
-        appsUnderTest.add(IntegrationAppUnderTest.create4_rifIntegrationAppUnderTest());
-        appsUnderTest.add(IntegrationAppUnderTest.create7_sfmisIntegrationAppUnderTest());
-        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest()); 
-        appsUnderTest.add(IntegrationAppUnderTest.create53_shp2kmlIntegrationAppUnderTest());
+        //appsUnderTest.add(IntegrationAppUnderTest.createDaytrader7IntegrationAppUnderTest());
+        //appsUnderTest.add(IntegrationAppUnderTest.create4_rifIntegrationAppUnderTest());
+        //appsUnderTest.add(IntegrationAppUnderTest.create7_sfmisIntegrationAppUnderTest());
+        //appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest()); 
+        //appsUnderTest.add(IntegrationAppUnderTest.create53_shp2kmlIntegrationAppUnderTest());
         
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)

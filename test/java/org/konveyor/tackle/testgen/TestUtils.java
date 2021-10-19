@@ -580,7 +580,6 @@ public class TestUtils {
                     {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPointWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry,java.lang.String,java.lang.String,double)::test_plan_row_1", "COVERED"},
-                    {"monolithic::net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter::net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter(net.sourceforge.shp2kml.Shp2KMLGUI)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.Converter::convertShp(java.lang.String)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.Converter::main(java.lang.String[])::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.KMLObject::addPlacemark(java.lang.String)::test_plan_row_1", "COVERED"},
