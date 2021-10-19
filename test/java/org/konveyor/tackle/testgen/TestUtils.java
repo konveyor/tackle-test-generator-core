@@ -298,7 +298,6 @@ public class TestUtils {
                 {"monolithic::com.densebrain.rif.client.service.types.Invoke::setMethodName(java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.client.service.types.Invoke::setClassName(java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.client.service.types.Invoke::setSerializedParams(java.lang.String)::test_plan_row_1", "COVERED"},
-                {"monolithic::com.densebrain.rif.server.RIFServer::com.densebrain.rif.server.RIFServer(int)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_7", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_11", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_8", "COVERED"},

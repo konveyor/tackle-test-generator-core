@@ -191,10 +191,8 @@ public class TestSequenceExtenderTest {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
-			if(! app.exp__target_method_coverage.get(covKey).equals((actualCoverage))) {
-			    System.out.println(covKeyTokens[1]+"::"+covKeyTokens[2]+"::"+covKeyTokens[3]);
-            }
-			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
+			assertEquals("Row is not covered: " + covKeyTokens[0]+"::"+covKeyTokens[1]+"::"+covKeyTokens[2]+"::"+covKeyTokens[3],
+                app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
 
