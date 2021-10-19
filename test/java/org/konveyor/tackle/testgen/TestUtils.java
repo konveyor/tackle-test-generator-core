@@ -585,7 +585,7 @@ public class TestUtils {
                     {"monolithic::net.sourceforge.shp2kml.KMLObject::addPlacemark(java.lang.String)::test_plan_row_1", "COVERED"},
                     {"monolithic::net.sourceforge.shp2kml.KMLObject::net.sourceforge.shp2kml.KMLObject(java.lang.String)::test_plan_row_1", "COVERED"}
                 }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.expmin_test_classes_count = 4;
+            appUnderTest.expmin_test_classes_count = 3;
             return appUnderTest;
         }
 
