@@ -219,7 +219,8 @@ public class TestSequenceExtenderTest {
             if (app.appName.equals("irs")) {
                  continue;
             }
-
+            System.out.println("Current app under test in testGenerateTestsWithJEESupport: " + app.appName);
+            
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
@@ -243,7 +244,8 @@ public class TestSequenceExtenderTest {
 //            if (app.appName.equals("DayTrader")) {
 //                continue;
 //            }
-
+            System.out.println("Current app under test in testGenerateTestsWithoutJEESupport: " + app.appName);
+            
             // execute test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,

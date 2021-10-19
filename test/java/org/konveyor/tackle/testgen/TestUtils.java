@@ -876,7 +876,8 @@ public class TestUtils {
                 Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
         }
     }
-
+    
+    
     public static class IntegrationAppUnderTest extends AppUnderTest {
         public String targetClassList;
         public String testSeqFilename;

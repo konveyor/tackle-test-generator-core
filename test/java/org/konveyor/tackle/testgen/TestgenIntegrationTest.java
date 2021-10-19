@@ -98,6 +98,7 @@ public class TestgenIntegrationTest {
 
         // run test on apps
         for (IntegrationAppUnderTest testApp: appsUnderTestWithSeqInit) {
+            System.out.println("Current app under test in testModelerInitializerExtender: " + testApp.appName);
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
@@ -132,7 +133,7 @@ public class TestgenIntegrationTest {
             assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
-            assertTrue(testApp.exp__test_classes_count <= Files
+            assertEquals(testApp.exp__test_classes_count, Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count()
@@ -145,6 +146,7 @@ public class TestgenIntegrationTest {
 
         // run test on apps
         for (IntegrationAppUnderTest testApp: appsUnderTest) {
+            System.out.println("Current app under test in testModelerExtenderReusingBB: " + testApp.appName);
 
             // generate CTD test plan for app
             CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(testApp.appName, null,
@@ -167,7 +169,7 @@ public class TestgenIntegrationTest {
             assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
-            assertEquals(testApp.exp__test_classes_count, Files
+            assertTrue(testApp.exp__test_classes_count <= Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count()
