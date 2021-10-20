@@ -143,8 +143,8 @@ public class TestUtils {
         return new File("/dev/null");
     }
 
-    public static void assertMinimum(int expected_min, int actual, String appName) {
-        assertTrue("App = " + appName + ", actual value = " + actual + ", expected min = " + expected_min,
+    public static void assertMinimum(String appName, int expected_min, int actual) {
+        assertTrue("App = " + appName + ", expected min = " + expected_min + ", actual value = " + actual,
             expected_min <= actual);
     }
 
@@ -890,7 +890,7 @@ public class TestUtils {
             IntegrationAppUnderTest app = new IntegrationAppUnderTest("daytrader7",
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
                 "test/data/daytrader7/monolith/bin",
-                "com.ibm.websphere.samples.daytrader.direct.TradeDirect::com.ibm.websphere.samples.daytrader.util.TradeConfig::com.ibm.websphere.samples.daytrader.TradeServices",
+                "com.ibm.websphere.samples.daytrader.direct.TradeDirect::com.ibm.websphere.samples.daytrader.util.TradeConfig",
                 "test/data/daytrader7/daytrader7_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/daytrader7/daytrader7_RandoopTestGenerator_bb_test_sequences_integration.json");
             app.exp__test_classes_count = 2;
             return app;

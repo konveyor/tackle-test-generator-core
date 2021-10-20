@@ -109,7 +109,7 @@ public class TestgenIntegrationTest {
             analyzer.modelPartitions();
 
             // assert that output file for CTD modeling is created
-            assertTrue(new File(testApp.testPlanFilename).exists());
+            assertTrue(testApp.appName, new File(testApp.testPlanFilename).exists());
 
             // create building-block test sequences using combined test generator
             TestSequenceInitializer seqInitializer = new TestSequenceInitializer(testApp.appName,
@@ -120,7 +120,7 @@ public class TestgenIntegrationTest {
             // assert that test sequences files are created
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
             for (String testSeqFile : testSeqFilenames) {
-                assertTrue("Missing testSeqFile: " + testSeqFile, new File(testSeqFile).exists());
+                assertTrue(testApp.appName + ": Missing testSeqFile: " + testSeqFile, new File(testSeqFile).exists());
             }
 
             // generate test cases via process launcher
@@ -129,12 +129,12 @@ public class TestgenIntegrationTest {
                 testApp.testPlanFilename, null, true,null);
 
             // assert that test directory and summary files are created
-            assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
-            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
-            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
+            assertTrue(testApp.appName, Files.exists(Paths.get(testApp.appOutdir)));
+            assertTrue(testApp.appName, Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
+            assertTrue(testApp.appName, Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             // assert over the number of expected test classes
-            assertEquals(testApp.exp__test_classes_count, Files
+            assertEquals(testApp.appName, testApp.exp__test_classes_count, Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count()
@@ -157,7 +157,7 @@ public class TestgenIntegrationTest {
             analyzer.modelPartitions();
 
             // assert that output file for CTD modeling is created
-            assertTrue(new File(testApp.testPlanFilename).exists());
+            assertTrue(testApp.appName, new File(testApp.testPlanFilename).exists());
 
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
@@ -165,15 +165,15 @@ public class TestgenIntegrationTest {
                 testApp.testPlanFilename, null, true,null);
 
             // assert that test directory and summary files are created
-            assertTrue(Files.exists(Paths.get(testApp.appOutdir)));
-            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
-            assertTrue(Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
+            assertTrue(testApp.appName, Files.exists(Paths.get(testApp.appOutdir)));
+            assertTrue(testApp.appName, Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName))));
+            assertTrue(testApp.appName, Files.exists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName))));
 
             long numOfTestFiles = Files
                 .walk(Paths.get(testApp.appOutdir))
                 .filter(p -> p.toFile().isFile())
                 .count();
-            assertMinimum(testApp.exp__test_classes_count, Math.toIntExact(numOfTestFiles), testApp.appName);
+            assertMinimum(testApp.appName, testApp.exp__test_classes_count, Math.toIntExact(numOfTestFiles));
         }
     }
 }

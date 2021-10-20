@@ -190,19 +190,19 @@ public class CTDModelingTest {
     private void executeModelingTest(String appName, String standardNodeFile) throws Exception {
         // assert that output file for CTD modeling is created
         File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(appName));
-        assertTrue(outfile.exists());
+        assertTrue(appName, outfile.exists());
 
         JsonNode resultNode = TackleTestJson.getObjectMapper().readTree(outfile);
         JsonNode standardNode = TackleTestJson.getObjectMapper().readTree(new File(standardNodeFile));
-        compareModels(resultNode, standardNode);
+        compareModels(appName, resultNode, standardNode);
     }
     
-	private void compareModels(JsonNode resultObject, JsonNode standardObject) {
+	private void compareModels(String appName, JsonNode resultObject, JsonNode standardObject) {
 		ObjectNode resultObjects = (ObjectNode) resultObject.get("models_and_test_plans");
 		ObjectNode standardObjects = (ObjectNode) standardObject.get("models_and_test_plans");
 
-		assertEquals(new HashSet<String>(IteratorUtils.toList(standardObjects.fieldNames())),
-				new HashSet<String>(IteratorUtils.toList(resultObjects.fieldNames())));
+		assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardObjects.fieldNames())),
+			new HashSet<String>(IteratorUtils.toList(resultObjects.fieldNames())));
 
 		resultObjects.fieldNames().forEachRemaining(partition -> {
 
@@ -212,9 +212,9 @@ public class CTDModelingTest {
 
 			assert (standardClassesObject != null);
 			
-			assertEquals(standardClassesObject.size(), classesObject.size());
+			assertEquals(appName, standardClassesObject.size(), classesObject.size());
 
-			assertEquals(new HashSet<String>(IteratorUtils.toList(standardClassesObject.fieldNames())),
+			assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardClassesObject.fieldNames())),
 					new HashSet<String>(IteratorUtils.toList(classesObject.fieldNames())));
 
 			classesObject.fieldNames().forEachRemaining(className -> {
@@ -225,9 +225,9 @@ public class CTDModelingTest {
 
 				assert (standardMethodsObject != null);
 				
-				assertEquals(standardMethodsObject.size(), methodsObject.size());
+				assertEquals(appName, standardMethodsObject.size(), methodsObject.size());
 
-				assertEquals(new HashSet<String>(IteratorUtils.toList(standardMethodsObject.fieldNames())),
+				assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardMethodsObject.fieldNames())),
 						new HashSet<String>(IteratorUtils.toList(methodsObject.fieldNames())));
 
 				methodsObject.fieldNames().forEachRemaining(methodName -> {
@@ -238,13 +238,13 @@ public class CTDModelingTest {
 
 					assert(standardMethodObject != null);
 
-					assertEquals(standardMethodObject.get("formatted_signature"),
+					assertEquals(appName, standardMethodObject.get("formatted_signature"),
 							methodObject.get("formatted_signature"));
 
 					ArrayNode attrsArray = (ArrayNode) methodObject.get("attributes");
 					ArrayNode standardAttrsArray = (ArrayNode) standardMethodObject.get("attributes");
 
-					assertEquals(standardAttrsArray.size(), attrsArray.size());
+					assertEquals(appName, standardAttrsArray.size(), attrsArray.size());
 
 					for (int k = 0; k < attrsArray.size(); k++) {
 						ObjectNode attrObject = (ObjectNode) attrsArray.get(k);
@@ -252,7 +252,7 @@ public class CTDModelingTest {
 						ObjectNode standardAttrObject = (ObjectNode) standardAttrsArray.get(k);
 						ArrayNode standardValuesArray = (ArrayNode) standardAttrObject.get("values");
 
-						assertEquals(standardValuesArray.size(), valuesArray.size());
+						assertEquals(appName, standardValuesArray.size(), valuesArray.size());
 					}
 
 				});
