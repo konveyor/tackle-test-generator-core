@@ -15,18 +15,17 @@ package org.konveyor.tackle.testgen.core.extender;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.konveyor.tackle.testgen.TestUtils.assertMinimum;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -52,10 +51,26 @@ public class TestSequenceExtenderTest {
         appsUnderTest.add(ExtenderAppUnderTest.createDaytrader7ExtenderAppUnderTest(
             "test/data/daytrader7/DayTrader_ctd_models_new_format.json",
             "test/data/daytrader7/DayTrader_EvoSuiteTestGenerator_bb_test_sequences.json"
-        )); 
+        ));
         appsUnderTest.add(ExtenderAppUnderTest.createIrsExtenderAppUnderTest(
             "test/data/irs/irs_ctd_models_and_test_plans.json",
             "test/data/irs/irs_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(ExtenderAppUnderTest.create4_rifExtenderAppUnderTest(
+            "test/data/4_rif/4_rif_ctd_models_and_test_plans.json",
+            "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(ExtenderAppUnderTest.create7_sfmisExtenderAppUnderTest(
+            "test/data/7_sfmis/7_sfmis_ctd_models_and_test_plans.json",
+            "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(ExtenderAppUnderTest.create40_glengineerExtenderAppUnderTest(
+            "test/data/40_glengineer/40_glengineer_ctd_models_and_test_plans.json",
+            "test/data/40_glengineer/40_glengineer_EvoSuiteTestGenerator_bb_test_sequences.json"
+        ));
+        appsUnderTest.add(ExtenderAppUnderTest.create53_shp2kmlExtenderAppUnderTest(
+            "test/data/53_shp2kml/53_shp2kml_ctd_models_and_test_plans.json",
+            "test/data/53_shp2kml/53_shp2kml_EvoSuiteTestGenerator_bb_test_sequences.json"
         ));
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
@@ -85,78 +100,112 @@ public class TestSequenceExtenderTest {
     @SuppressWarnings("unchecked")
 	private void assertSummaryFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path summaryFilePath = Paths.get(ExtenderAppUnderTest.getSummaryFileJsonName(app.appName));
-        assertTrue(Files.exists(summaryFilePath));
+        assertTrue(app.appName, Files.exists(summaryFilePath));
 
         // read summary JSON file and assert over content
         File testCovFile = new File(summaryFilePath.toString());
+        File stdCovFile = new File(app.summaryStandardFilename);
         
-        ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);	
+        ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
+        ObjectNode summaryInfoStd = (ObjectNode) TackleTestJson.getObjectMapper().readTree(stdCovFile);
+        
         ObjectNode bbSeqInfo = (ObjectNode) summaryInfo.get("building_block_sequences_info");
+        ObjectNode bbSeqInfoStd = (ObjectNode) summaryInfoStd.get("building_block_sequences_info");
         
-		assertEquals(app.exp__bb_sequences, bbSeqInfo.get("base_sequences").asInt());
-		assertEquals(app.exp__parsed_sequences_full, bbSeqInfo.get("parsed_base_sequences_full").asInt());
-		assertEquals(app.exp__parsed_sequences_partial, bbSeqInfo.get("parsed_base_sequences_partial").asInt());
-		assertEquals(app.exp__skipped_sequences, bbSeqInfo.get("skipped_base_sequences").asInt());
-		assertEquals(app.exp__exception_sequences, bbSeqInfo.get("exception_base_sequences").asInt());
-		assertEquals(app.exp__method_sequence_pool_keys, bbSeqInfo.get("method_sequence_pool_keys").asInt());
-		assertEquals(app.exp__class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("base_sequences").asInt(), bbSeqInfo.get("base_sequences").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("parsed_base_sequences_full").asInt(), bbSeqInfo.get("parsed_base_sequences_full").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("parsed_base_sequences_partial").asInt(), bbSeqInfo.get("parsed_base_sequences_partial").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("skipped_base_sequences").asInt(), bbSeqInfo.get("skipped_base_sequences").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("exception_base_sequences").asInt(), bbSeqInfo.get("exception_base_sequences").asInt());
+		assertEquals(app.appName, bbSeqInfoStd.get("method_sequence_pool_keys").asInt(), bbSeqInfo.get("method_sequence_pool_keys").asInt());
+        assertMinimum(app.appName, app.expmin_class_sequence_pool_keys, bbSeqInfo.get("class_sequence_pool_keys").asInt());
 
 		ObjectNode extSeqInfo = (ObjectNode) summaryInfo.get("extended_sequences_info");
-		assertEquals(app.exp__generated_sequences, extSeqInfo.get("generated_sequences").asInt());
-		assertTrue(app.exp__executed_sequences <= extSeqInfo.get("executed_sequences").asInt());
-		assertTrue(extSeqInfo.get("final_sequences").asInt() >= app.expmin_final_sequences);
+        ObjectNode extSeqInfoStd = (ObjectNode) summaryInfoStd.get("extended_sequences_info");
+
+        assertEquals(app.appName, extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
+        assertMinimum(app.appName, app.expmin_executed_sequences, extSeqInfo.get("executed_sequences").asInt());
+        assertMinimum(app.appName, app.expmin_final_sequences, extSeqInfo.get("final_sequences").asInt());
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
-		assertEquals(app.exp__test_plan_rows, covInfo.get("test_plan_rows").asInt());
-		assertEquals(app.exp__rows_covered_bb_sequences, covInfo.get("rows_covered_bb_sequences").asInt());
+        ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
+		
+		assertEquals(app.appName, covInfoStd.get("test_plan_rows").asInt(), covInfo.get("test_plan_rows").asInt());
+		assertEquals(app.appName, covInfoStd.get("rows_covered_bb_sequences").asInt(), covInfo.get("rows_covered_bb_sequences").asInt());
+		//System.out.println("Jee for app " + app.appName + ":");
+		//System.out.println("rows_covered_full_jee = " + covInfo.get("rows_covered_full_jee").asInt() + ", rows_covered_partial_jee = " + covInfo.get("rows_covered_partial_jee").asInt());
 
 		ObjectNode uncovInfo = (ObjectNode) summaryInfo.get("uncovered_test_plan_rows_info");
-		assertEquals(app.exp__no_bb_sequence_for_target_method, uncovInfo.get("no_bb_sequence_for_target_method").asInt());
-		assertEquals(app.exp__non_instantiable_param_type, uncovInfo.get("non_instantiable_param_type").asInt());
-		assertEquals(app.exp__excp_during_extension, uncovInfo.get("exception_during_extension").asInt());
+        ObjectNode uncovInfoStd = (ObjectNode) summaryInfoStd.get("uncovered_test_plan_rows_info");
+        
+		assertEquals(app.appName, uncovInfoStd.get("no_bb_sequence_for_target_method").asInt(), uncovInfo.get("no_bb_sequence_for_target_method").asInt());
+		assertEquals(app.appName, uncovInfoStd.get("non_instantiable_param_type").asInt(), uncovInfo.get("non_instantiable_param_type").asInt());
+        assertMinimum(app.appName, app.expmin_exception_during_extension, uncovInfo.get("exception_during_extension").asInt());
 
 		ArrayNode execExcpTypes = (ArrayNode) summaryInfo.get("execution_exception_types_other");
-		assertEquals(app.exp__execution_exception_types_other, 
-				TackleTestJson.getObjectMapper().convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
+        ArrayNode execExcpTypesStd = (ArrayNode) summaryInfoStd.get("execution_exception_types_other");
+		
+		assertEquals(app.appName, TackleTestJson.getObjectMapper().convertValue(execExcpTypesStd, new TypeReference<List<String>>(){}),
+            TackleTestJson.getObjectMapper().convertValue(execExcpTypes, new TypeReference<List<String>>(){}));
 				
 		ArrayNode nonInstTypes = (ArrayNode) summaryInfo.get("non_instantiable_types");
-		assertEquals(app.exp__non_instantiable_param_type, nonInstTypes.size());
+        ArrayNode nonInstTypesStd = (ArrayNode) summaryInfoStd.get("non_instantiable_types");
+        
+		assertEquals(app.appName, nonInstTypesStd.size(), nonInstTypes.size());
 
 		ArrayNode cnfTypes = (ArrayNode) summaryInfo.get("class_not_found_types");
-		assertEquals(app.exp__class_not_found_types, cnfTypes.size());
+        ArrayNode cnfTypesStd = (ArrayNode) summaryInfoStd.get("class_not_found_types");
+        
+		assertEquals(app.appName, cnfTypesStd.size(), cnfTypes.size());
 
 		ObjectNode parseExcpTypes = (ObjectNode) summaryInfo.get("parse_exception_types");
-		assertEquals(app.exp__parse_exception_types, new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
-		assertEquals(app.exp__randoop_sequence_SequenceParseException,
-				parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
+        ObjectNode parseExcpTypesStd = (ObjectNode) summaryInfoStd.get("parse_exception_types");
+        
+		assertEquals(app.appName, new HashSet<String>(IteratorUtils.toList(parseExcpTypesStd.fieldNames())),
+            new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
+		if (parseExcpTypesStd.has("randoop.sequence.SequenceParseException")) {
+            assertEquals(app.appName, parseExcpTypesStd.get("randoop.sequence.SequenceParseException").asInt(),
+                parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());
+        }
+		else {
+		    assertTrue(app.appName, ! parseExcpTypes.has("randoop.sequence.SequenceParseException"));
+        }
 	}
 
     private void assertCoverageFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path testCovFilePath = Paths.get(ExtenderAppUnderTest.getCoverageFileJsonName(app.appName));
-        assertTrue(Files.exists(testCovFilePath));
+        assertTrue(app.appName, Files.exists(testCovFilePath));
+        
         File testCovFile = new File(testCovFilePath.toString());
+        File testCovFileStd = new File(app.coverageStandardFilename);
 
         // read coverage JSON file and assert over content
 		ObjectNode summaryInfo = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFile);
-		assertEquals(app.exp__partition_count, summaryInfo.size());
+        ObjectNode summaryInfoStd = (ObjectNode) TackleTestJson.getObjectMapper().readTree(testCovFileStd);
+        
+		assertEquals(app.appName, summaryInfoStd.size(), summaryInfo.size());
+		
+		//printTargetMethodCoverage(summaryInfoStd);
+        		
 		for (String covKey : app.exp__target_method_coverage.keySet()) {
 			String[] covKeyTokens = covKey.split("::");
 			String actualCoverage = summaryInfo.get(covKeyTokens[0]).get(covKeyTokens[1])
 					.get(covKeyTokens[2]).get(covKeyTokens[3]).asText();
-			assertEquals(app.exp__target_method_coverage.get(covKey), actualCoverage);
+			assertEquals(app.appName + ": Row is not covered: " + covKeyTokens[0]+"::"+covKeyTokens[1]+"::"+covKeyTokens[2]+"::"+covKeyTokens[3],
+                app.exp__target_method_coverage.get(covKey), actualCoverage);
 		}
 	}
 
     private void assertTestClassesDir(ExtenderAppUnderTest app) throws IOException {
         Path testClassesDir = Paths.get(app.appOutdir);
-        assertTrue(Files.exists(testClassesDir));
-
-        // expected values
-        assertTrue(app.exp__test_classes_count <= Files
+        assertTrue(app.appName, Files.exists(testClassesDir));
+        
+        long numOfTestFiles = Files
             .walk(testClassesDir)
             .filter(p -> p.toFile().isFile())
-            .count()
-        );
+            .count();
+
+        assertMinimum(app.appName, app.expmin_test_classes_count, Math.toIntExact(numOfTestFiles));
     }
 
     @Test
@@ -164,11 +213,12 @@ public class TestSequenceExtenderTest {
 
         for (ExtenderAppUnderTest app : appsUnderTest) {
 
-            // skip irs app for execution with JEE support
+            // skip irs app for execution with JEE support (not an JEE app)
             if (app.appName.equals("irs")) {
                  continue;
             }
-
+            System.out.println("Current app under test in testGenerateTestsWithJEESupport: " + app.appName);
+            
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
@@ -192,7 +242,8 @@ public class TestSequenceExtenderTest {
 //            if (app.appName.equals("DayTrader")) {
 //                continue;
 //            }
-
+            System.out.println("Current app under test in testGenerateTestsWithoutJEESupport: " + app.appName);
+            
             // execute test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
@@ -208,5 +259,34 @@ public class TestSequenceExtenderTest {
             assertTestClassesDir(app);
         }
     }
-
+    
+    
+    /** Prints to stdout the covered test plan's rows, in the format that matches the array of
+     * the field exp__target_method_coverage in ExtenderAppUnderTest. */
+    private static void printTargetMethodCoverage(ObjectNode summaryInfoStd) {
+        Iterator<String> partitionNames = summaryInfoStd.fieldNames();
+        while(partitionNames.hasNext()) {
+            String current_partition_name = partitionNames.next();
+            JsonNode current_partition_node = summaryInfoStd.get(current_partition_name);
+            Iterator<String> packagesNames = current_partition_node.fieldNames();
+            while(packagesNames.hasNext()) {
+                String current_package_name = packagesNames.next();
+                JsonNode current_package_node = current_partition_node.get(current_package_name);
+                Iterator<String> functionsNames = current_package_node.fieldNames();
+                while(functionsNames.hasNext()) {
+                    String current_function_name = functionsNames.next();
+                    JsonNode current_function_node = current_package_node.get(current_function_name);
+                    Iterator<String> rowsNames = current_function_node.fieldNames();
+                    while(rowsNames.hasNext()) {
+                        String current_row_name = rowsNames.next();
+                        String current_row_value = current_function_node.get(current_row_name).asText();
+                        if (current_row_value.equals("COVERED")) {
+                            System.out.println(
+                                "{\""+current_partition_name+"::"+current_package_name+"::"+current_function_name+"::"+current_row_name+"\", \"COVERED\"},");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

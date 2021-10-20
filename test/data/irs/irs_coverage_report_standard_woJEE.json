@@ -1,0 +1,91 @@
+{
+  "app-partition_1" : {
+    "irs.Employer" : {
+      "setEmployees(java.util.List)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployerName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "addEmployees(irs.Employee[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "irs.Salary" : {
+      "setEmployeeId(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployerId(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "irs.Salary(int,int,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSalary(double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "irs.IRS" : {
+      "setEmployerArrayMap(java.util.Map[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSalaryList(java.util.List)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getSalarySet(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployerSalaryListMap(java.util.List)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAllSalaryMaps(java.util.Map)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getSalaryfromIRS(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setAllSalarySets(java.util.Map)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setYear(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployerArrayList(java.util.List[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployerSalaryListSet(java.util.List)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "irs.Employee" : {
+      "setLevel(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setEmployeeId(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "irs.Employee(int,java.lang.String,int,double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setHours(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRate(double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  },
+  "app-partition_2" : {
+    "irs.BusinessProcess" : {
+      "genSalarySlip(irs.IRS)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  }
+}

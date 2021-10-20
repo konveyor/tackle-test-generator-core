@@ -1,0 +1,871 @@
+{
+  "monolithic" : {
+    "glengineer.agents.GroupCreatorAndElementAdder" : {
+      "addComponentToGroup(java.lang.String,javax.swing.GroupLayout$Group,glengineer.agents.settings.ComponentSettings)" : {
+        "test_plan_row_2" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "createParallelGroup(glengineer.agents.settings.ParallelGroupSettings)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addGroupToGroup(javax.swing.GroupLayout$Group,glengineer.agents.settings.Settings,javax.swing.GroupLayout$Group)" : {
+        "test_plan_row_6" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_2" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_3" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_4" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_5" : "UNCOVERED_NO_INIT_SEQ",
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.settings.ContainerGapSettings" : {
+      "glengineer.agents.settings.ContainerGapSettings(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.settings.ContainerGapSettings(glengineer.agents.settings.SpecialGapSizes)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.SequentialGroupAgent$FunctionsOnSequentialGroupImplemenation" : {
+      "getGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getComponent(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnGroupAndElement" : {
+      "addFollowingGap(int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addPrecedingGap(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addPrecedingGap(int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addFollowingGap(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnGroup" : {
+      "getGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "getComponent(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.SequentialGroupAgent" : {
+      "addPreferredGapAfter(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "groupContent(glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "addPreferredGapBefore(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.positions.WordPosition" : {
+      "contains(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "contains(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "textAt(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "liesIn(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "intersects(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getLengthInsideOf(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "equals(glengineer.positions.WordPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "glengineer.GroupLayoutEngineer$GroupPrinter" : {
+      "printTopGroupStructure(glengineer.Axis)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "printGroupStructure(glengineer.agents.GroupAgent)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.GroupLayoutEngineer$GroupPrinter(glengineer.GroupLayoutEngineer)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnComponent" : {
+      "setSize(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "setSize(int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.positions.VWordPosition" : {
+      "compareTo(glengineer.positions.VWordPosition)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.positions.VWordPosition(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "contains(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.positions.VWordPosition(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "liesIn(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "textAt(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getLengthInsideOf(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "intersects(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.positions.VWordPosition(glengineer.positions.CharPosition,int)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "equals(glengineer.positions.WordPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.positions.VWordPosition(int,glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.positions.VWordPosition(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.positions.CharPosition" : {
+      "glengineer.positions.CharPosition(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.settings.Sizes" : {
+      "glengineer.agents.settings.Sizes(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.settings.Sizes(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.blocks.CharTable" : {
+      "contains(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_3" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "charAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "contains(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "charAt(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_3" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "textAt(glengineer.positions.WordPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "isLetter(char)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "textAt(glengineer.positions.HWordPosition)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "splitterAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "textAt(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "permitsY(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "wordCharAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "letterAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "firstWordAfter_Vertically(glengineer.positions.HWordPosition)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "isSplitter(char)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "permitsX(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "isWordChar(char)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "firstWordAfter_Horizontally(glengineer.positions.HWordPosition)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "textAt(glengineer.positions.VWordPosition)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "glengineer.blocks.HorizontalBlock" : {
+      "glengineer.blocks.HorizontalBlock(glengineer.blocks.Scheme,glengineer.positions.CharPosition,glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.HorizontalBlock(glengineer.blocks.Scheme)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.HorizontalBlock(glengineer.blocks.Block,int,int,int,int)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cloneWith(glengineer.positions.CharPosition1)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "extractParallelSubblocksSeparatedByLines(java.util.Set)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "subblock(int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.HorizontalBlock(glengineer.blocks.Scheme,int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.HorizontalBlock(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.agents.ContainerGapAgent" : {
+      "glengineer.agents.ContainerGapAgent(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "addOneselfToGroup(javax.swing.GroupLayout$SequentialGroup)" : {
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      }
+    },
+    "glengineer.agents.TopSequentialGroupAgent" : {
+      "groupContent(glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.GroupLayoutEngineer$TemporaryGapsToGaps" : {
+      "gap(glengineer.agents.TemporaryGapAgent)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation" : {
+      "addFollowingGap(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "addPrecedingGap(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "addPrecedingGap(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "addFollowingGap(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation(glengineer.agents.GroupAgent,glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.Axis" : {
+      "valueOf(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.GroupLayoutEngineer" : {
+      "composeParallelGroupFromBlock(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "linkSize(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "associateGap(java.lang.String,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "compouseSequentialGroupFromBlock(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "associateGap(java.lang.String,javax.swing.LayoutStyle$ComponentPlacement,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "associateGap(java.lang.String,javax.swing.LayoutStyle$ComponentPlacement)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "linkSize(glengineer.Axis,java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getTopSequentialGroup(glengineer.Axis)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "setAutoCreateContainerGaps(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setAutoCreateGaps(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.GroupLayoutEngineer(java.awt.Container,java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setAutoAlignJTextFields(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "associateGap(java.lang.String,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "compouseTopSequentialGroup(glengineer.Axis)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getComponent(glengineer.Axis,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getGroup(glengineer.Axis,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "disable(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "associate(java.lang.String,java.awt.Component)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getSequentialGroup(glengineer.Axis,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getParallelGroup(glengineer.Axis,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnParallelGroupAndElement" : {
+      "setAlignmentWithinParent(javax.swing.GroupLayout$Alignment)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.TemporaryGapAgent" : {
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.TemporaryGapAgent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnParallelGroup" : {
+      "getGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "getComponent(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "setResizable(boolean)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "setContentAlignment(javax.swing.GroupLayout$Alignment)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.Agent" : {
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_3" : "UNCOVERED_EXCP",
+        "test_plan_row_4" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "glengineer.agents.GroupAgent" : {
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "UNCOVERED_EXCP",
+        "test_plan_row_3" : "UNCOVERED_EXCP",
+        "test_plan_row_4" : "UNCOVERED_EXCP",
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "getComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "groupContent(glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "addAgent(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "addGapBefore(glengineer.agents.GapAgent,glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "addGapAfter(glengineer.agents.GapAgent,glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "replaceTemporaryGapsByRealGaps(glengineer.GroupLayoutEngineer$TemporaryGapsToGaps)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnTopSequentialGroup" : {
+      "addPrecedingContainerGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addFollowingContainerGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addBothContainerGaps(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.settings.SpecialGapSizes" : {
+      "glengineer.agents.settings.SpecialGapSizes(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.PreferredGapAgent" : {
+      "glengineer.agents.PreferredGapAgent(javax.swing.LayoutStyle$ComponentPlacement,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.PreferredGapAgent(javax.swing.LayoutStyle$ComponentPlacement)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSettings(javax.swing.LayoutStyle$ComponentPlacement,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.ParallelGroupAgent" : {
+      "groupContent(glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.blocks.Block" : {
+      "glengineer.blocks.Block(glengineer.blocks.Scheme)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "textAt(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "charAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.Block(glengineer.blocks.Scheme,int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "subblock(int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.Block(glengineer.blocks.Scheme,glengineer.positions.CharPosition,glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.positions.HWordPosition" : {
+      "glengineer.positions.HWordPosition(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.positions.HWordPosition(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "contains(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.positions.HWordPosition(glengineer.positions.CharPosition,int)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.positions.HWordPosition(int,glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "liesIn(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "textAt(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.positions.HWordPosition(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getLengthInsideOf(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "intersects(glengineer.blocks.CharTable)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "equals(glengineer.positions.WordPosition)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnSequentialGroupAndElement" : {
+      "addPrecedingRelatedGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addPrecedingUnrelatedGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addFollowingRelatedGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "addFollowingUnrelatedGap(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.agents.ComponentAgent" : {
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.ComponentAgent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.GapAgent" : {
+      "isComponent(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "addContentToGroup(javax.swing.GroupLayout$Group,glengineer.agents.GroupCreatorAndElementAdder)" : {
+        "test_plan_row_2" : "UNCOVERED_NON_INST_TYPE",
+        "test_plan_row_1" : "UNCOVERED_NON_INST_TYPE"
+      },
+      "findDependingSequentialGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.GapAgent(glengineer.agents.settings.Sizes)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.GapAgent(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingComponentByName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "equals(glengineer.agents.Agent)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.GapAgent(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSizes(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "findDependingParallelGroupByNames(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "isGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.Println" : {
+      "glengineer.Println(java.lang.Object)" : {
+        "test_plan_row_6" : "COVERED",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "COVERED",
+        "test_plan_row_9" : "COVERED",
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_3" : "COVERED",
+        "test_plan_row_4" : "COVERED",
+        "test_plan_row_5" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.positions.CharPosition2" : {
+      "glengineer.positions.CharPosition2(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.positions.CharPosition1" : {
+      "glengineer.positions.CharPosition1(int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.settings.GapSettings" : {
+      "glengineer.agents.settings.GapSettings(int,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.settings.GapSettings(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.settings.GapSettings(glengineer.agents.settings.Sizes)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.agents.settings.PreferredGapSettings" : {
+      "glengineer.agents.settings.PreferredGapSettings(javax.swing.LayoutStyle$ComponentPlacement)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "glengineer.agents.settings.PreferredGapSettings(javax.swing.LayoutStyle$ComponentPlacement,int,int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "glengineer.blocks.Scheme" : {
+      "textAt(int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "charAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "containsGapName(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "gapAt(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "containsComponentName(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "verticalLineAt(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "verticalLineAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.Scheme(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "gapAtLine(glengineer.positions.WordPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "gapAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "anyHElementAt(glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "anyHElementAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "glengineer.agents.setters.FunctionsOnSequentialGroup" : {
+      "getGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      },
+      "getComponent(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_NO_INIT_SEQ"
+      }
+    },
+    "glengineer.blocks.VerticalBlock" : {
+      "glengineer.blocks.VerticalBlock(glengineer.blocks.Scheme,glengineer.positions.CharPosition,glengineer.positions.CharPosition)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.VerticalBlock(glengineer.blocks.Block)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "wordCharAt(int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "cloneWith(glengineer.positions.CharPosition1)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.VerticalBlock(glengineer.blocks.Block,int,int,int,int)" : {
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "extractParallelSubblocksSeparatedByLines(java.util.Set)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.VerticalBlock(glengineer.blocks.Scheme,int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "glengineer.blocks.VerticalBlock(glengineer.blocks.Scheme)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "subblock(int,int,int,int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    }
+  }
+}

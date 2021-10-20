@@ -1,0 +1,55 @@
+{
+  "building_block_sequences_info" : {
+    "base_sequences" : 13,
+    "parsed_base_sequences_full" : 12,
+    "parsed_base_sequences_partial" : 0,
+    "skipped_base_sequences" : 0,
+    "exception_base_sequences" : 1,
+    "method_sequence_pool_keys" : 11,
+    "class_sequence_pool_keys" : 5
+  },
+  "extended_sequences_info" : {
+    "generated_sequences" : 25,
+    "executed_sequences" : 25,
+    "failing_sequences" : 2,
+    "final_sequences" : 23,
+    "diff_assertions" : 78
+  },
+  "test_plan_coverage_info" : {
+    "test_plan_target_methods" : 2,
+    "test_plan_rows" : 25,
+    "rows_covered_full" : 23,
+    "rows_covered_partial" : 0,
+    "rows_covered_full_jee" : 0,
+    "rows_covered_partial_jee" : 0,
+    "rows_covered_bb_sequences" : 11
+  },
+  "uncovered_test_plan_rows_info" : {
+    "no_bb_sequence_for_target_method" : 0,
+    "non_instantiable_param_type" : 0,
+    "execution_failed" : 2,
+    "exception_during_extension" : 0,
+    "exception_info" : {
+      "randoop_operation_parse_exception" : 0,
+      "randoop_illegal_argument_exception" : 0,
+      "class_not_found_exception" : 0,
+      "no_such_method_exception" : 0,
+      "no_array_element_type" : 0,
+      "unsupported_collection_type" : 0,
+      "sequence_exec_invocation_target_exception" : 0,
+      "sequence_exec_illegal_access_exception" : 0,
+      "sequence_exec_illegal_argument_exception" : 0,
+      "sequence_exec_error" : 0,
+      "sequence_exec_other_exception" : 0
+    }
+  },
+  "execution_exception_types_other" : [ ],
+  "parse_exception_types" : {
+    "randoop.sequence.SequenceParseException" : 1
+  },
+  "non_instantiable_types" : [ ],
+  "class_not_found_types" : [ ],
+  "execution_fail_exception_types" : {
+    "java.lang.NullPointerException" : 2
+  }
+}

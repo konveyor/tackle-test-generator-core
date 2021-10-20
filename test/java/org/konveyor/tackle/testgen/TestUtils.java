@@ -33,6 +33,8 @@ import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.Utils;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestUtils {
 
     private static final String COVERAGE_OUTDIR = "target"+File.separator+"jacoco-output";
@@ -141,6 +143,11 @@ public class TestUtils {
         return new File("/dev/null");
     }
 
+    public static void assertMinimum(String appName, int expected_min, int actual) {
+        assertTrue("App = " + appName + ", expected min = " + expected_min + ", actual value = " + actual,
+            expected_min <= actual);
+    }
+
     /**
      * Class containing information about an application under test
      */
@@ -164,34 +171,26 @@ public class TestUtils {
     
     public static class ExtenderAppUnderTest extends AppUnderTest {
         public String testSeqFilename;
-        // expected values
-        public int exp__bb_sequences;
-        public int exp__parsed_sequences_full;
-        public int exp__parsed_sequences_partial;
-        public int exp__skipped_sequences;
-        public int exp__exception_sequences;
-        public int exp__method_sequence_pool_keys;
-        public int exp__class_sequence_pool_keys;
-        public int exp__generated_sequences;
-        public int exp__executed_sequences;
-        public int exp__test_plan_rows;
-        public int exp__rows_covered_bb_sequences;
+        public String summaryStandardFilename;
+        public String coverageStandardFilename;
+        public int expmin_class_sequence_pool_keys;
+        public int expmin_executed_sequences;
         public int expmin_final_sequences;
-        public int exp__no_bb_sequence_for_target_method;
-        public int exp__non_instantiable_param_type;
-        public int exp__excp_during_extension;
-        public List<String> exp__execution_exception_types_other;
-        public int exp__class_not_found_types;
-        public Set<String> exp__parse_exception_types;
-        public int exp__randoop_sequence_SequenceParseException;
-        public int exp__java_lang_Error;
-        public int exp__partition_count;
+        public int expmin_exception_during_extension;
         public Map<String, String> exp__target_method_coverage;
-        public int exp__test_classes_count;
-
-        public ExtenderAppUnderTest(String appName, String appClasspath, String appPath, String testPlanFilename, String testSeqFilename) {
+        public int expmin_test_classes_count;
+        
+        public ExtenderAppUnderTest(String appName,
+                                    String appClasspath,
+                                    String appPath,
+                                    String testPlanFilename,
+                                    String testSeqFilename,
+                                    String summaryStandardFilename,
+                                    String coverageStandardFilename) {
             super(appName, appClasspath, appPath, testPlanFilename);
             this.testSeqFilename = testSeqFilename;
+            this.summaryStandardFilename = summaryStandardFilename;
+            this.coverageStandardFilename = coverageStandardFilename;
 
             if (this.testPlanFilename == null) {
                 this.testPlanFilename = appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
@@ -210,44 +209,27 @@ public class TestUtils {
                 "test/data/irs/irsMonoClasspath.txt",
                 "test/data/irs/monolith/target/classes",
                 testPlanFilename,
-                testSeqFilename);
-
-            appUnderTest.exp__bb_sequences = 13;
-            appUnderTest.exp__parsed_sequences_full = 12;
-            appUnderTest.exp__parsed_sequences_partial = 0;
-            appUnderTest.exp__skipped_sequences = 0;
-            appUnderTest.exp__exception_sequences = 1;
-            appUnderTest.exp__method_sequence_pool_keys = 11;
-            appUnderTest.exp__class_sequence_pool_keys = 5;
-            appUnderTest.exp__generated_sequences = 25;
-            appUnderTest.exp__executed_sequences = 25;
-            appUnderTest.exp__test_plan_rows = 25;
-            appUnderTest.exp__rows_covered_bb_sequences = 11;
-            appUnderTest.expmin_final_sequences = 23;
-            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
-            appUnderTest.exp__non_instantiable_param_type = 0;
-            appUnderTest.exp__excp_during_extension = 0;
-            appUnderTest.exp__execution_exception_types_other = Arrays.asList();
-            appUnderTest.exp__class_not_found_types = 0;
-            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
-                    collect(Collectors.toSet());
-            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
-            appUnderTest.exp__java_lang_Error = 0;
-            appUnderTest.exp__partition_count = 2;
-            appUnderTest.exp__target_method_coverage =
-                    Stream.of(new String[][]{
-                        {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setAllSalarySets(java.util.Map)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setAllSalaryMaps(java.util.Map)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerSalaryListMap(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerSalaryListSet(java.util.List)::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerArrayList(java.util.List[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
-                        {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
-                        .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 5;
+                testSeqFilename,
+                "test/data/irs/irs_test_generation_summary_standard_woJEE.json",
+                "test/data/irs/irs_coverage_report_standard_woJEE.json");
             
+            appUnderTest.expmin_class_sequence_pool_keys = 5;
+            appUnderTest.expmin_executed_sequences = 25;
+            appUnderTest.expmin_final_sequences = 23;
+            appUnderTest.expmin_exception_during_extension = 0;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"app-partition_1::irs.Employer::setEmployees(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.Employer::addEmployees(irs.Employee[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setAllSalarySets(java.util.Map)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setAllSalaryMaps(java.util.Map)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerSalaryListMap(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerSalaryListSet(java.util.List)::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerArrayList(java.util.List[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_1::irs.IRS::setEmployerArrayMap(java.util.Map[])::test_plan_row_1", "COVERED"},
+                    {"app-partition_2::irs.BusinessProcess::main(java.lang.String[])::test_plan_row_1", "COVERED"}})
+                    .collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.expmin_test_classes_count = 5;
             return appUnderTest;
         }
 
@@ -257,38 +239,353 @@ public class TestUtils {
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
                 "test/data/daytrader7/monolith/bin",
                 testPlanFilename,
-                testSeqFilename);
+                testSeqFilename,
+                "test/data/daytrader7/daytrader7_test_generation_summary_standard_wJEE.json",
+                "test/data/daytrader7/daytrader7_coverage_report_standard_wJEE.json");
 
-            appUnderTest.exp__bb_sequences = 159;
-            appUnderTest.exp__parsed_sequences_full = 155;
-            appUnderTest.exp__parsed_sequences_partial = 0;
-            appUnderTest.exp__skipped_sequences = 3;
-            appUnderTest.exp__exception_sequences = 1;
-            appUnderTest.exp__method_sequence_pool_keys = 102;
-            appUnderTest.exp__class_sequence_pool_keys = 39;
-            appUnderTest.exp__generated_sequences = 1486;
-            appUnderTest.exp__executed_sequences = 1471;
-            appUnderTest.exp__test_plan_rows = 1486;
-            appUnderTest.exp__rows_covered_bb_sequences = 282;
+            appUnderTest.expmin_class_sequence_pool_keys = 39;
+            appUnderTest.expmin_executed_sequences = 1471;
             appUnderTest.expmin_final_sequences = 1146;
-            appUnderTest.exp__no_bb_sequence_for_target_method = 0;
-            appUnderTest.exp__non_instantiable_param_type = 0;
-            appUnderTest.exp__excp_during_extension = 15;
-            appUnderTest.exp__execution_exception_types_other = Arrays.asList("java.lang.StringIndexOutOfBoundsException");
-            appUnderTest.exp__class_not_found_types = 0;
-            appUnderTest.exp__parse_exception_types = Stream.of("randoop.sequence.SequenceParseException").
-                    collect(Collectors.toSet());
-            appUnderTest.exp__randoop_sequence_SequenceParseException = 1;
-            appUnderTest.exp__java_lang_Error = 17;
-            appUnderTest.exp__partition_count = 4;
+            appUnderTest.expmin_exception_during_extension = 15;
             appUnderTest.exp__target_method_coverage =
-                    Stream.of(new String[][]{
-                        {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                        {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
-                        {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
-                        .collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            appUnderTest.exp__test_classes_count = 42;
+                Stream.of(new String[][]{
+                    {"DayTraderProcessor::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"DayTraderWeb::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
+                    .collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.expmin_test_classes_count = 42;
+            return appUnderTest;
+        }
+        
+        public static ExtenderAppUnderTest create4_rifExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("4_rif",
+                "test/data/4_rif/4_rifMonoClasspath.txt",
+                "test/data/4_rif/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/4_rif/4_rif_test_generation_summary_standard_wJEE.json",
+                "test/data/4_rif/4_rif_coverage_report_standard_wJEE.json");
+
+            appUnderTest.expmin_class_sequence_pool_keys = 25;
+            appUnderTest.expmin_executed_sequences = 51;
+            appUnderTest.expmin_final_sequences = 33;
+            appUnderTest.expmin_exception_during_extension = 1;
+            appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(java.lang.String,int,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::getEPRForService(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::newInstance(org.apache.axis2.context.ConfigurationContext)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.server.transport.WebServiceContainer(org.apache.axis2.context.ConfigurationContext,java.lang.String,java.lang.String,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.InvokeResponse::getPullParser(javax.xml.namespace.QName)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.InvokeResponse::set_return(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::setTypesNamespace(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_13", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_6", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_12", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_7", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_11", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_8", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_3", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_4", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_5", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::equals(java.lang.Object)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.server.transport.WebServiceDescriptor::setTargetNamespace(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.RIFServiceStub::com.densebrain.rif.client.service.RIFServiceStub(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.RIFServiceStub::com.densebrain.rif.client.service.RIFServiceStub(org.apache.axis2.context.ConfigurationContext,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::getPullParser(javax.xml.namespace.QName)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setMethodName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setClassName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.client.service.types.Invoke::setSerializedParams(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_7", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_11", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_8", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::serializeObject(java.lang.Object)::test_plan_row_5", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::decodeString(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::deserializeObject(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.densebrain.rif.util.ObjectUtility::encodeBytes(byte[])::test_plan_row_1", "COVERED"}
+            }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            
+            appUnderTest.expmin_test_classes_count = 6;
+            return appUnderTest;
+        }
+
+        public static ExtenderAppUnderTest create7_sfmisExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("7_sfmis",
+                "test/data/7_sfmis/7_sfmisMonoClasspath.txt",
+                "test/data/7_sfmis/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/7_sfmis/7_sfmis_test_generation_summary_standard_woJEE.json",
+                "test/data/7_sfmis/7_sfmis_coverage_report_standard_woJEE.json");
+
+            appUnderTest.expmin_class_sequence_pool_keys = 32;
+            appUnderTest.expmin_executed_sequences = 108;
+            appUnderTest.expmin_final_sequences = 70;
+            appUnderTest.expmin_exception_during_extension = 2;
+            appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
+                {"monolithic::com.hf.sfm.util.BasePara::setOrdersql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSort(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQueryparams(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setPaging(boolean)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQueryValue(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setDir(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setSqlpath(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setStart(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setQuerySql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setGroupsql(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.BasePara::setLimit(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setFlatid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setPassword(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setGroupid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setAccount(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::com.hf.sfm.system.pdo.AWorker(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setState(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AWorker::setPersonid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setUrl(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::com.hf.sfm.system.pdo.Menu(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setStatus(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setImg(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setOper(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setParentid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.Menu::setSort(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::byteArrayToAltBase64(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::base64ToByteArray(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::byteArrayToBase64(byte[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::altBase64ToByteArray(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.crypt.Base64::main(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.DataSource::getSession(javax.servlet.http.HttpSession,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setSex(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPersontype(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setMobile(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setIndate(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setBirthday(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPersonid(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setWbm(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo(java.lang.String,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setReason(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setOutdate(java.util.Date)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setPym(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.personinfo.pdo.APersonInfo::setDepartment(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setMark(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.system.pdo.AGroup::com.hf.sfm.system.pdo.AGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setIdno(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setMark(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::setName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.sfmis.department.pdo.ADepartment::com.hf.sfm.sfmis.department.pdo.ADepartment(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.DaoFactory::encrypt(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.ListRange::setData(java.util.ArrayList)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.ListRange::setTotalSize(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setRs(java.util.List)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::collectToMap(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setColNames(java.lang.String[])::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setRange(com.hf.sfm.util.ListRange)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.Loader::setTotalCount(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)::test_plan_row_2", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::com.hf.sfm.filter.setCharacterEncodingFilter::init(javax.servlet.FilterConfig)::test_plan_row_1", "COVERED"}
                 
+            }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+
+            appUnderTest.expmin_test_classes_count = 13;
+            return appUnderTest;
+        }
+
+        public static ExtenderAppUnderTest create40_glengineerExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("40_glengineer",
+                "test/data/40_glengineer/40_glengineerMonoClasspath.txt",
+                "test/data/40_glengineer/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/40_glengineer/40_glengineer_test_generation_summary_standard_woJEE.json",
+                "test/data/40_glengineer/40_glengineer_coverage_report_standard_woJEE.json");
+
+            appUnderTest.expmin_class_sequence_pool_keys = 41;
+            appUnderTest.expmin_executed_sequences = 232;
+            appUnderTest.expmin_final_sequences = 70;
+            appUnderTest.expmin_exception_during_extension = 54;
+            appUnderTest.exp__target_method_coverage = Stream.of(new String[][]{
+                {"monolithic::glengineer.agents.settings.ContainerGapSettings::glengineer.agents.settings.ContainerGapSettings(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.ContainerGapSettings::glengineer.agents.settings.ContainerGapSettings(glengineer.agents.settings.SpecialGapSizes)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapAfter(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapAfter(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapAfter(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapAfter(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapBefore(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapBefore(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapBefore(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.SequentialGroupAgent::addPreferredGapBefore(glengineer.agents.PreferredGapAgent,glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.WordPosition::contains(glengineer.positions.CharPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.WordPosition::contains(glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.WordPosition::contains(glengineer.positions.CharPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::compareTo(glengineer.positions.VWordPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(glengineer.positions.CharPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(glengineer.positions.CharPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::contains(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(glengineer.positions.CharPosition,int)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::equals(glengineer.positions.WordPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::equals(glengineer.positions.WordPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.VWordPosition::glengineer.positions.VWordPosition(int,glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition::glengineer.positions.CharPosition(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition::equals(glengineer.positions.CharPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition::equals(glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition::equals(glengineer.positions.CharPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.Sizes::glengineer.agents.settings.Sizes(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.Sizes::glengineer.agents.settings.Sizes(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.blocks.CharTable::isLetter(char)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.blocks.CharTable::isSplitter(char)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.blocks.CharTable::isWordChar(char)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ContainerGapAgent::glengineer.agents.ContainerGapAgent(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation::addFollowingGap(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation(glengineer.agents.GroupAgent,glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation(glengineer.agents.GroupAgent,glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation(glengineer.agents.GroupAgent,glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation::glengineer.agents.GroupAgent$FunctionsOnGroupAndElementImplementation(glengineer.agents.GroupAgent,glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.Axis::valueOf(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::isComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::findDependingSequentialGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::findDependingComponentByName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::glengineer.agents.TemporaryGapAgent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::findDependingGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::equals(glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::equals(glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::equals(glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::equals(glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::isGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.TemporaryGapAgent::findDependingParallelGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::findDependingSequentialGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::findDependingGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::getComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addAgent(glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addAgent(glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addAgent(glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addAgent(glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapBefore(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapBefore(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapBefore(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapBefore(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::findDependingParallelGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::isComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::findDependingComponentByName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapAfter(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapAfter(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapAfter(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.GroupAgent::addGapAfter(glengineer.agents.GapAgent,glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.SpecialGapSizes::glengineer.agents.settings.SpecialGapSizes(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::glengineer.agents.PreferredGapAgent(javax.swing.LayoutStyle$ComponentPlacement,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::isComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::glengineer.agents.PreferredGapAgent(javax.swing.LayoutStyle$ComponentPlacement)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::findDependingSequentialGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::setSettings(javax.swing.LayoutStyle$ComponentPlacement,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::findDependingComponentByName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::findDependingGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::equals(glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::equals(glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::equals(glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::equals(glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::isGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.PreferredGapAgent::findDependingParallelGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(glengineer.positions.CharPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(glengineer.positions.CharPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::contains(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(glengineer.positions.CharPosition,int)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(int,glengineer.positions.CharPosition)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::glengineer.positions.HWordPosition(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::equals(glengineer.positions.WordPosition)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.positions.HWordPosition::equals(glengineer.positions.WordPosition)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::isComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::findDependingSequentialGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::findDependingComponentByName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::glengineer.agents.ComponentAgent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::findDependingGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::equals(glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::equals(glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::equals(glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::equals(glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::isGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.ComponentAgent::findDependingParallelGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::isComponent(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::findDependingSequentialGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::glengineer.agents.GapAgent(glengineer.agents.settings.Sizes)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::glengineer.agents.GapAgent(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::findDependingComponentByName(java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::findDependingGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::equals(glengineer.agents.Agent)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::equals(glengineer.agents.Agent)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::equals(glengineer.agents.Agent)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::equals(glengineer.agents.Agent)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::glengineer.agents.GapAgent(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::setSizes(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::findDependingParallelGroupByNames(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.GapAgent::isGroup(java.lang.String,java.lang.String)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_6", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_8", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_9", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_2", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_3", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_4", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_5", "COVERED"},
+                {"monolithic::glengineer.Println::glengineer.Println(java.lang.Object)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition2::glengineer.positions.CharPosition2(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.positions.CharPosition1::glengineer.positions.CharPosition1(int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.GapSettings::glengineer.agents.settings.GapSettings(int,int,int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.GapSettings::glengineer.agents.settings.GapSettings(int)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.GapSettings::glengineer.agents.settings.GapSettings(glengineer.agents.settings.Sizes)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.PreferredGapSettings::glengineer.agents.settings.PreferredGapSettings(javax.swing.LayoutStyle$ComponentPlacement)::test_plan_row_1", "COVERED"},
+                {"monolithic::glengineer.agents.settings.PreferredGapSettings::glengineer.agents.settings.PreferredGapSettings(javax.swing.LayoutStyle$ComponentPlacement,int,int)::test_plan_row_1", "COVERED"}
+            }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+
+            appUnderTest.expmin_test_classes_count = 22;
+            return appUnderTest;
+        }
+
+        public static ExtenderAppUnderTest create53_shp2kmlExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("53_shp2kml",
+                "test/data/53_shp2kml/53_shp2kmlMonoClasspath.txt",
+                "test/data/53_shp2kml/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/53_shp2kml/53_shp2kml_test_generation_summary_standard_woJEE.json",
+                "test/data/53_shp2kml/53_shp2kml_coverage_report_standard_woJEE.json");
+
+            appUnderTest.expmin_class_sequence_pool_keys = 13;
+            appUnderTest.expmin_executed_sequences = 16;
+            appUnderTest.expmin_final_sequences = 13;
+            appUnderTest.expmin_exception_during_extension = 0;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPolygon(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertLine(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertLineWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getCoordinatesKML(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPoint(com.vividsolutions.jts.geom.Coordinate[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPolygonWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::convertPointWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.GeomConverter::getPlacemarkKML(com.vividsolutions.jts.geom.Geometry,java.lang.String,java.lang.String,double)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Converter::convertShp(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.Converter::main(java.lang.String[])::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.KMLObject::addPlacemark(java.lang.String)::test_plan_row_1", "COVERED"},
+                    {"monolithic::net.sourceforge.shp2kml.KMLObject::net.sourceforge.shp2kml.KMLObject(java.lang.String)::test_plan_row_1", "COVERED"}
+                }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.expmin_test_classes_count = 3;
             return appUnderTest;
         }
 
@@ -529,7 +826,7 @@ public class TestUtils {
                 "com.ibm.websphere.samples.daytrader.util.TradeConfig",
                 "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
                 "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean" }));
+                "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"}));
             
             return new SequenceInitializerAppUnderTest("daytrader7",
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
@@ -553,6 +850,90 @@ public class TestUtils {
         public static String getOutputFileName(String appName) {
             return appName + "_" + EvoSuiteTestGenerator.class.getSimpleName()+"_"+
                 Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+        }
+    }
+    
+    
+    public static class IntegrationAppUnderTest extends AppUnderTest {
+        public String targetClassList;
+        public String testSeqFilename;
+        public int exp__test_classes_count;
+
+        public IntegrationAppUnderTest(String appName,
+                                       String appClasspath,
+                                       String appPath,
+                                       String targetClassList,
+                                       String testSeqFilename) {
+            super(appName, appClasspath, appPath, appName + "_" + Constants.CTD_OUTFILE_SUFFIX);
+            this.testSeqFilename = testSeqFilename;
+            this.targetClassList = targetClassList;
+            
+            if (this.testSeqFilename == null) {
+                this.testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
+                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+            }
+        }
+
+        public static IntegrationAppUnderTest createIrsIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("irs",
+                "test/data/irs/irsMonoClasspath.txt",
+                "test/data/irs/monolith/target/classes",
+                null,
+                null);
+            app.exp__test_classes_count = 5;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest createDaytrader7IntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("daytrader7",
+                "test/data/daytrader7/daytrader7MonoClasspath.txt",
+                "test/data/daytrader7/monolith/bin",
+                "com.ibm.websphere.samples.daytrader.direct.TradeDirect::com.ibm.websphere.samples.daytrader.util.TradeConfig",
+                "test/data/daytrader7/daytrader7_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/daytrader7/daytrader7_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 2;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create4_rifIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("4_rif",
+                "test/data/4_rif/4_rifMonoClasspath.txt",
+                "test/data/4_rif/classes",
+                "com.densebrain.rif.client.RIFInvoker::com.densebrain.rif.server.transport.WebServiceContainer::com.densebrain.rif.util.ObjectUtility",
+                "test/data/4_rif/4_rif_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/4_rif/4_rif_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 2;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create7_sfmisIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("7_sfmis",
+                "test/data/7_sfmis/7_sfmisMonoClasspath.txt",
+                "test/data/7_sfmis/classes",
+                "com.hf.sfm.system.business.Login::com.hf.sfm.system.business.MenuManage::com.hf.sfm.util.Loader",
+                "test/data/7_sfmis/7_sfmis_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/7_sfmis/7_sfmis_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 1;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create40_glengineerIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("40_glengineer",
+                "test/data/40_glengineer/40_glengineerMonoClasspath.txt",
+                "test/data/40_glengineer/classes",
+                "glengineer.GroupLayoutEngineer::glengineer.blocks.VerticalBlock::glengineer.agents.SequentialGroupAgent",
+                "test/data/40_glengineer/40_glengineer_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/40_glengineer/40_glengineer_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 1;
+            return app;
+        }
+
+        public static IntegrationAppUnderTest create53_shp2kmlIntegrationAppUnderTest() {
+            IntegrationAppUnderTest app = new IntegrationAppUnderTest("53_shp2kml",
+                "test/data/53_shp2kml/53_shp2kmlMonoClasspath.txt",
+                "test/data/53_shp2kml/classes",
+                "net.sourceforge.shp2kml.Converter::net.sourceforge.shp2kml.GeomConverter::net.sourceforge.shp2kml.KMLObject",
+                "test/data/53_shp2kml/53_shp2kml_EvoSuiteTestGenerator_bb_test_sequences_integration.json,test/data/53_shp2kml/53_shp2kml_RandoopTestGenerator_bb_test_sequences_integration.json");
+            app.exp__test_classes_count = 3;
+            return app;
         }
     }
 }
