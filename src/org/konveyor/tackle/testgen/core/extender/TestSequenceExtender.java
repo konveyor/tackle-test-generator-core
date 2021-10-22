@@ -35,6 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -109,9 +110,9 @@ public class TestSequenceExtender {
 	// map from sequence ID to extended sequence
 	private HashMap<String, Sequence> seqIdMap = new HashMap<>();
 
-	// map from sequence ID to code string representation of extended sequence with
-	// diff assertions added
-	private HashMap<String, String> seqWithDiffAsserts = new HashMap<>();
+	// map from sequence ID to code string representation of extended sequence
+	// the string representation contains assertions if the assertion option is specified
+    private HashMap<String, String> extSeqStr = new HashMap<>();
 
 	// information about extended sequences that are discarded because they fail execution
     // on the monolith
@@ -125,11 +126,11 @@ public class TestSequenceExtender {
 	// partition --> proxy class --> target method --> test plan row -->
 	// [COVERED, PARTIAL, UNCOVERED]
 	private Map<String, Map<String, Map<String, Map<String, Constants.TestPlanRowCoverage>>>> coverageInfo;
-	
+
 	// coverage information about target classes, methods, and test plan rows
-		// partition --> target class --> target method --> ctd coverage percentage 
+		// partition --> target class --> target method --> ctd coverage percentage
 	/// by ctd-amplified and by existing basic blocks sequences
-	
+
 	private Map<String, Map<String, Map<String, Pair<Double,Double>>>> ctdCoverageInfo = new HashMap<>();
 
 	// summary information about sequence extension
@@ -153,7 +154,7 @@ public class TestSequenceExtender {
 	private final boolean diffAssertions;
 
 	private final int numSeqExecutions;
-	
+
 	private final int interactionLevel;
 
 	public HashMap<String, SortedSet<Sequence>> getClassTestSequencePool() {
@@ -197,11 +198,18 @@ public class TestSequenceExtender {
                                 boolean diffAssertions, int outputCoveredInteraction) throws IOException {
 
 		this.applicationName = appName;
-		this.outputDir = outputDir;
 		this.jeeSupport = jee;
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
 		interactionLevel = outputCoveredInteraction;
+
+        // if output dir not specified, set default output dir
+        if (outputDir == null) {
+            this.outputDir = applicationName + "-" + Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
+        }
+        else {
+            this.outputDir = outputDir;
+        }
 
 		// read test plan from JSON file
 		File testPlanFile = new File(testPlanFilename);
@@ -276,6 +284,9 @@ public class TestSequenceExtender {
 	private ArrayNode currModelDef = null;
 	private int currTestPlanRowIndex = -1;
 	private int currTestPlanRowParamIndex = -1;
+    private int assertionCount = 0;
+    private int testClassCount = 0;
+    private int testMethodCount = 0;
 
     /**
      * Information needed for execution with JEE support for failing  test sequences generated
@@ -304,76 +315,80 @@ public class TestSequenceExtender {
         // iterate over each partition
         this.testPlan.fieldNames().forEachRemaining(partition -> {
 
-		    System.out.println("* Partition: "+partition);
+            System.out.println("* Partition: " + partition);
 
-		    // initialize extended sequence info for partition
-			if (!this.extTestSeq.containsKey(partition)) {
-				this.extTestSeq.put(partition, new HashMap<>());
-			}
+            // initialize extended sequence info for partition
+            if (!this.extTestSeq.containsKey(partition)) {
+                this.extTestSeq.put(partition, new HashMap<>());
+            }
 
-			// get test plan info for partition
-			ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partition);
-			
-			// Initialize data structure for collecting CTD coverage
-			Map<String, Map<String, Pair<Double, Double>>> classCTDCovInfo = new HashMap<>();
+            // get test plan info for partition
+            ObjectNode partitionTestPlan = (ObjectNode) this.testPlan.get(partition);
 
-			// iterate over each class in partition
-			partitionTestPlan.fieldNames().forEachRemaining(className -> {
+            // Initialize data structure for collecting CTD coverage
+            Map<String, Map<String, Pair<Double, Double>>> classCTDCovInfo = new HashMap<>();
 
-			    System.out.println("* Processing class "+className);
+            // iterate over each class in partition
+            partitionTestPlan.fieldNames().forEachRemaining(className -> {
+
+                System.out.println("* Processing class " + className);
 
                 // get test plan info for class
-			    ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
+                ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
 
-			    System.out.print("*   "+classTestPlan.size()+" methods ");
-			    classSeqCount = 0;
-			    classTestPlanRows = 0;
+                System.out.print("*   " + classTestPlan.size() + " methods ");
+                classSeqCount = 0;
+                classTestPlanRows = 0;
 
-				// initialize data structures needed for JEE trial for failing extended sequences for class
-				JEEExecutionInfo classJEEExecInfo = new JEEExecutionInfo();
-				
-				// Initialize data structure for collecting CTD coverage
-				Map<String, Pair<Double, Double>> methodCTDCovInfo = new HashMap<>();
+                // initialize data structures needed for JEE trial for failing extended sequences for class
+                JEEExecutionInfo classJEEExecInfo = new JEEExecutionInfo();
 
-				// iterate over each method in class
-				classTestPlan.fieldNames().forEachRemaining(methodSig -> {
+                // Initialize data structure for collecting CTD coverage
+                Map<String, Pair<Double, Double>> methodCTDCovInfo = new HashMap<>();
+
+                // map from method signatures to sequence IDs for methods in the class
+                Map<String, List<String>> classSeqIdMap = new HashMap<>();
+
+                // iterate over each method in class
+                classTestPlan.fieldNames().forEachRemaining(methodSig -> {
 
                     System.out.print(".");
 
                     // get test plan rows for method
-					ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
-					currTestPlanRows = mapper.convertValue(methodTestPlan.get("test_plan"), new TypeReference<ArrayNode[]>(){});
-					currModelDef = mapper.convertValue(methodTestPlan.get("attributes"), new TypeReference<ArrayNode>(){});
-					classTestPlanRows +=  currTestPlanRows.length;
+                    ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
+                    currTestPlanRows = mapper.convertValue(methodTestPlan.get("test_plan"), new TypeReference<ArrayNode[]>() {
+                    });
+                    currModelDef = mapper.convertValue(methodTestPlan.get("attributes"), new TypeReference<ArrayNode>() {
+                    });
+                    classTestPlanRows += currTestPlanRows.length;
 
-					// method signature qualified with the class name
+                    // method signature qualified with the class name
                     String qualMethodSig = className + "::" + methodSig;
 
                     // get initialized coverage info for proxy method
-					String[] msigTokens = formattedMethodSigMap.get(qualMethodSig).split(" ");
-					String methodSigCovFmt = (msigTokens.length == 1) ? msigTokens[0] : msigTokens[1];
-					Map<String, Constants.TestPlanRowCoverage> methodCovInfo = getProxyMethodCovInfo(partition,
+                    String[] msigTokens = formattedMethodSigMap.get(qualMethodSig).split(" ");
+                    String methodSigCovFmt = (msigTokens.length == 1) ? msigTokens[0] : msigTokens[1];
+                    Map<String, Constants.TestPlanRowCoverage> methodCovInfo = getProxyMethodCovInfo(partition,
                         className, methodSigCovFmt, currTestPlanRows);
 
-					// get target method signature in format needed for creating Randoop statements
-					// create randoop's MethodCall object for target method or constructor
-					String parseableMethodSig = qualMethodSig;
-					TypedClassOperation tgtMethodCall;
-					try {
-					    Pair<String, TypedClassOperation> methodSigTgtCallPair =
+                    // get target method signature in format needed for creating Randoop statements
+                    // create randoop's MethodCall object for target method or constructor
+                    String parseableMethodSig = qualMethodSig;
+                    TypedClassOperation tgtMethodCall;
+                    try {
+                        Pair<String, TypedClassOperation> methodSigTgtCallPair =
                             getTargetMethodCall(className, formattedMethodSigMap.get(qualMethodSig));
-					    parseableMethodSig = methodSigTgtCallPair.a;
-					    tgtMethodCall = methodSigTgtCallPair.b;
-					} catch (OperationParseException ope) {
-						logger.warning("Error parsing: " + parseableMethodSig);
-						this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
-						this.extSummary.uncovTestPlanRows__excp__OperationParse += currTestPlanRows.length;
-						for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
-							methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
-						}
-						return;
-					}
-					catch (NoClassDefFoundError ncdf) {
+                        parseableMethodSig = methodSigTgtCallPair.a;
+                        tgtMethodCall = methodSigTgtCallPair.b;
+                    } catch (OperationParseException ope) {
+                        logger.warning("Error parsing: " + parseableMethodSig);
+                        this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
+                        this.extSummary.uncovTestPlanRows__excp__OperationParse += currTestPlanRows.length;
+                        for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
+                            methodCovInfo.put(getTestPlanRowId(rowCtr), Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
+                        }
+                        return;
+                    } catch (NoClassDefFoundError ncdf) {
                         String errmsg = "Error parsing: " + parseableMethodSig + "\n" + ncdf;
                         logger.warning(errmsg);
                         this.extSummary.uncovTestPlanRows__excp += currTestPlanRows.length;
@@ -385,75 +400,91 @@ public class TestSequenceExtender {
                         return;
                     }
 
-					// if method is non-static/constructor and no test sequence exists for it in the
+                    // if method is non-static/constructor and no test sequence exists for it in the
                     // sequence pool (i.e., a sequence that creates the receiver object), skip method
-					if (!tgtMethodCall.isStatic() && !tgtMethodCall.isConstructorCall()) {
-						if (!this.sequencePool.methodTestSeqPool.containsKey(qualMethodSig)
+                    if (!tgtMethodCall.isStatic() && !tgtMethodCall.isConstructorCall()) {
+                        if (!this.sequencePool.methodTestSeqPool.containsKey(qualMethodSig)
                             && !this.sequencePool.classTestSeqPool.containsKey(className)) {
-							logger.warning("No initial method/class sequence exists for target method " +
+                            logger.warning("No initial method/class sequence exists for target method " +
                                 qualMethodSig + " skipping");
-							this.extSummary.uncovTestPlanRows__noInitSeq += currTestPlanRows.length;
-							for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
-								methodCovInfo.put(getTestPlanRowId(rowCtr),
+                            this.extSummary.uncovTestPlanRows__noInitSeq += currTestPlanRows.length;
+                            for (int rowCtr = 1; rowCtr <= currTestPlanRows.length; rowCtr++) {
+                                methodCovInfo.put(getTestPlanRowId(rowCtr),
                                     Constants.TestPlanRowCoverage.UNCOVERED_NO_INIT_SEQ);
-							}
-							return;
-						}
-					}
+                            }
+                            return;
+                        }
+                    }
 
-					// create extended test sequences for method
-					
-                    classSeqCount += createExtendedSequencesForMethod(partition, qualMethodSig,
+                    // create extended test sequences for method
+                    List<String> methodSeqIds = createExtendedSequencesForMethod(partition, qualMethodSig,
                         parseableMethodSig, tgtMethodCall, classJEEExecInfo, methodCovInfo, methodCTDCovInfo);
+                    classSeqCount += methodSeqIds.size();
 
-				});
-				
-				if (jeeSupport && ! classJEEExecInfo.failedSeqIds.isEmpty()) {
+                    // create string representation of sequences and add to class sequence map
+//                    List<String> methodSeqStr = methodSeqIds.stream()
+//                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""))
+//                        .collect(Collectors.toList());
+//                    classSeqIdMap.put(methodSig, methodSeqStr);
+
+                    classSeqIdMap.put(methodSig, methodSeqIds);
+                });
+
+                if (jeeSupport && !classJEEExecInfo.failedSeqIds.isEmpty()) {
                     PrintStream origSysOut = System.out;
                     PrintStream origSysErr = System.err;
                     System.setOut(NullPrintStream.NULL_PRINT_STREAM);
                     System.setErr(NullPrintStream.NULL_PRINT_STREAM);
-					this.junitExecutor.runFailedwithJEESupport(classJEEExecInfo.failedSeqIds, partition,
+                    this.junitExecutor.runFailedwithJEESupport(classJEEExecInfo.failedSeqIds, partition,
                         className, classJEEExecInfo.seqIdToPartial, classJEEExecInfo.seqIdToRowId,
                         classJEEExecInfo.seqIdToCovInfo, this.seqIdMap, this.extSummary);
                     System.setOut(origSysOut);
                     System.setErr(origSysErr);
                 }
-				
-				if ( ! methodCTDCovInfo.isEmpty()) {
-					classCTDCovInfo.put(className, methodCTDCovInfo);
-				}
 
-				totalTestPlanRows += classTestPlanRows;
-				totalSeqCount += classSeqCount;
+                if (!methodCTDCovInfo.isEmpty()) {
+                    classCTDCovInfo.put(className, methodCTDCovInfo);
+                }
 
-				System.out.println("");
-				System.out.println("*   generated "+classSeqCount+" test sequences");
+                totalTestPlanRows += classTestPlanRows;
+                totalSeqCount += classSeqCount;
+
+                System.out.println("");
+                System.out.println("*   generated " + classSeqCount + " test sequences");
                 System.out.print("*   -- class test-plan coverage rate: ");
                 if (classTestPlanRows > 0) {
                     System.out.print(String.format("%.2f",
-                        ((double)classSeqCount * 100) / ((double)classTestPlanRows))+"% ");
+                        ((double) classSeqCount * 100) / ((double) classTestPlanRows)) + "% ");
                 }
-                System.out.println("("+classSeqCount+"/"+classTestPlanRows+")");
-			});
-			
-			if ( ! classCTDCovInfo.isEmpty()) {
-				ctdCoverageInfo.put(partition, classCTDCovInfo);
-			}
-			
+                System.out.println("(" + classSeqCount + "/" + classTestPlanRows + ")");
+
+                // add diff assertions if option specified
+                if (this.diffAssertions) {
+                    assertionCount += addDiffAssertions(classSeqIdMap.values().stream()
+                        .flatMap(mseq -> mseq.stream())
+                        .collect(Collectors.toList()));
+                }
+
+                // write test sequences to test class file
+                try {
+                    writeTestClass(className, classSeqIdMap, partition);
+                } catch (IOException e) {
+                    logger.warning("Error writing test class for " + className + ": " + e);
+                }
+            });
+
+            if (!classCTDCovInfo.isEmpty()) {
+                ctdCoverageInfo.put(partition, classCTDCovInfo);
+            }
+
 		});
         double totalCovRate = (double)totalSeqCount * 100 / (double)totalTestPlanRows;
         System.out.println("* === total CTD test-plan coverage rate: "+
             String.format("%.2f", totalCovRate)+"% ("+totalSeqCount+"/"+totalTestPlanRows+")");
+        System.out.println("* created "+testClassCount+" test classes in total, with "+
+            testMethodCount+" test methods and "+assertionCount+" assertions");
 
-        // add diff assertions if option specified
-        int assertionCount = 0;
-        if (this.diffAssertions) {
-            assertionCount = this.addDiffAssertions();
-        }
-        
         // write CTD coverage file
-        
         try {
 			writeCTDCoverage();
 		} catch (IOException e) {
@@ -475,7 +506,7 @@ public class TestSequenceExtender {
 
         return this.extTestSeq;
 	}
-	
+
 	private void writeCTDCoverage() throws JsonGenerationException, JsonMappingException, IOException {
 
 		if (ctdCoverageInfo.isEmpty()) {
@@ -525,25 +556,27 @@ public class TestSequenceExtender {
      * @param jeeExecInfo
      * @param methodCovInfo
      * @param methodCTDCovInfo
+     *
+     * @return List of IDs for extended sequences generated for method
      */
-	private int createExtendedSequencesForMethod(String partition, String qualMethodSig,
-                                                 String parseableMethodSig,
-                                                 TypedClassOperation tgtMethodCall,
-                                                 JEEExecutionInfo jeeExecInfo,
-                                                 Map<String, Constants.TestPlanRowCoverage> methodCovInfo,
-                                                 Map<String, Pair<Double, Double>> methodCTDCovInfo) {
+	private List<String> createExtendedSequencesForMethod(String partition, String qualMethodSig,
+                                                          String parseableMethodSig,
+                                                          TypedClassOperation tgtMethodCall,
+                                                          JEEExecutionInfo jeeExecInfo,
+                                                          Map<String, Constants.TestPlanRowCoverage> methodCovInfo,
+                                                          Map<String, Pair<Double, Double>> methodCTDCovInfo) {
 
         logger.info("=========>>> Generating " + currTestPlanRows.length
             + " test cases for proxy method: " + qualMethodSig + " <<<=========");
-        int methodSeqCount = 0;
+        List<String> methodSeqIds = new ArrayList<>();
 
         String className = qualMethodSig.split("::")[0];
-        
+
         boolean[] usedExistingSeq = new boolean[currTestPlanRows.length];
         boolean[] execSeqSuccess = new boolean[currTestPlanRows.length];
-        
+
         boolean hasCompoundTypes = SequenceUtil.hasCompoundTypes(currModelDef);
-        
+
         // iterate over each row of test plan for method
         int rowCtr = 0;
         for (ArrayNode row : currTestPlanRows) {
@@ -555,7 +588,7 @@ public class TestSequenceExtender {
             Pair<Sequence, Boolean> candidateSeqCovPair = getCandidateSequenceForRow(
                 className, qualMethodSig, tgtMethodCall, row
             );
-            
+
             // extend candidate sequence based on the parameter types specified in the test plan row
             Sequence extendedSeq;
             if (candidateSeqCovPair.b) {
@@ -584,7 +617,7 @@ public class TestSequenceExtender {
                     continue;
                 }
             }
-            
+
             // generate sequence ID and add id, sequence to map
             String sequenceID = getSequenceID();
             this.seqIdMap.put(sequenceID, extendedSeq);
@@ -599,23 +632,26 @@ public class TestSequenceExtender {
                     this.extSummary.uncovTestPlanRows__execFail++;
                     methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXEC_FAIL);
                     continue;
-                } 
+                }
             } catch (RuntimeException re) {
                 logger.warning(re.getMessage());
                 this.extSummary.uncovTestPlanRows__excp++;
                 methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXCP);
                 continue;
             }
-            
+
             execSeqSuccess[rowCtr-1] = true;
 
             Map<String, Set<String>> partitionTestSeq = this.extTestSeq.get(partition);
             if (!partitionTestSeq.containsKey(qualMethodSig)) {
                 partitionTestSeq.put(qualMethodSig, new HashSet<>());
             }
-            // add extended sequence to sequence set and mark test plan row as covered
+            // add extended sequence to sequence set, create code string representation of sequence
+            // and mark test plan row as covered
             partitionTestSeq.get(qualMethodSig).add(sequenceID);
-            methodSeqCount++;
+            methodSeqIds.add(sequenceID);
+            this.extSeqStr.put(sequenceID,
+                extendedSeq.toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""));
             if (this.rowPartiallyCovered) {
                 methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.PARTIAL);
                 this.extSummary.covTestPlanRows__partial++;
@@ -624,9 +660,9 @@ public class TestSequenceExtender {
                 this.extSummary.covTestPlanRows__full++;
             }
         }
-        
+
         if (interactionLevel > -1 && currTestPlanRows.length > 1 && ! hasCompoundTypes) {
-        	Pair<Double, Double> ctdCov = CTDCoverageComputer.calcCombinatorialCoverage(parseableMethodSig, currTestPlanRows, 
+        	Pair<Double, Double> ctdCov = CTDCoverageComputer.calcCombinatorialCoverage(parseableMethodSig, currTestPlanRows,
         			execSeqSuccess, usedExistingSeq, interactionLevel);
         	if (ctdCov.a >= 0 && ctdCov.b >= 0) {
         		this.extSummary.totalMethodsOverOneRow++;
@@ -635,10 +671,8 @@ public class TestSequenceExtender {
         		methodCTDCovInfo.put(qualMethodSig.split("::")[1], ctdCov);
         	}
         }
-        
-        
-        
-        return methodSeqCount;
+
+        return methodSeqIds;
     }
 
     /**
@@ -686,85 +720,44 @@ public class TestSequenceExtender {
     }
 
     /**
-	 * Writes all extended sequences to JUnit test class files
-	 *
-	 * @throws IOException
-	 */
-	public void writeTestClasses(boolean withDiffAssertions) throws IOException {
-		String outDirName = this.outputDir;
-		if (outDirName == null) {
-			// if output dir not specified, use default output dir name
-			outDirName = applicationName + "-" + Constants.AMPLIFIED_TEST_CLASSES_OUTDIR;
-		}
-		for (String partition : this.extTestSeq.keySet()) {
-			// create JUnit exporter for class
-			File outDir = new File(outDirName + File.separator + partition);
-			JUnitTestExporter testExporter = new JUnitTestExporter(outDir, withDiffAssertions);
-			Map<String, Set<String>> partTestSeq = this.extTestSeq.get(partition);
+     * Writes extended test sequences for the given class to a test class file.
+     *
+     * @param clsName Class to write test sequences for
+     * @param methodTestSeqIdMap Map from method signature to list of sequences IDs for method
+     * @param partition Partition to which class belongs
+     * @throws IOException
+     */
+    private void writeTestClass(String clsName, Map<String, List<String>> methodTestSeqIdMap,
+                                String partition) throws IOException {
+        // create JUnit exporter for class
+        File outDir = new File(this.outputDir + File.separator + partition);
+        JUnitTestExporter testExporter = new JUnitTestExporter(outDir, this.diffAssertions);
 
-			// group partition test sequences by class and method
-			Map<String, Map<String, List<String>>> clsTestSeq = new HashMap<>();
-			for (String cls : partTestSeq.keySet()) {
-			    String[] classMethod = cls.split("::");
-				String clsName = classMethod[0];
-				String methodSig = classMethod[1];
-				if (!clsTestSeq.containsKey(clsName)) {
-					clsTestSeq.put(clsName, new HashMap<>());
-				}
-				Map<String, List<String>> methodTestSeq = clsTestSeq.get(clsName);
-				if (!methodTestSeq.containsKey(methodSig)) {
-				    methodTestSeq.put(methodSig, new ArrayList<>());
+        Set<String> testImports = new HashSet<>();
+        if (this.sequencePool.classImports.containsKey(clsName)) {
+            testImports.addAll(this.sequencePool.classImports.get(clsName).stream().filter(impName -> {
+                try {
+                    return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") ||
+                        !Modifier.isPrivate(Class.forName(impName).getModifiers());
+                } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                        return true; // treat class as non-private, either way may result in compilation issues for the resulting JUnit test
                 }
-				List<String> testSeq = methodTestSeq.get(methodSig);
-				if (!withDiffAssertions) {
-				    testSeq.addAll(partTestSeq.get(cls).stream()
-                        .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""))
-                        .collect(Collectors.toList())
-                    );
-                }
-				else {
-                    testSeq.addAll(partTestSeq.get(cls).stream()
-                        .map(seqid -> this.seqWithDiffAsserts.get(seqid))
-                        .collect(Collectors.toList())
-                    );
-                }
-//				methodTestSeq.get(methodSig).addAll(partTestSeq.get(cls));
-			}
-
-			// write class sequences to a JUnit test class file
-            int testMethodCount = 0;
-			for (String cls : clsTestSeq.keySet()) {
-                Map<String, List<String>> methodTestSeq = clsTestSeq.get(cls);
-//				for (String methodSig : methodTestSeq.keySet()) {
-//                    List<String> seqList;
-//				    if (!withDiffAssertions) {
-//					    seqList = methodTestSeq.get(methodSig).stream()
-//                            .map(seqid -> this.seqIdMap.get(seqid).toCodeString().replaceAll("<Capture\\d+>", ""))
-//                            .collect(Collectors.toList());
-//    				} else {
-//	    				seqList = methodTestSeq.get(methodSig).stream().map(seqid -> this.seqWithDiffAsserts.get(seqid))
-//		    					.collect(Collectors.toList());
-//				    }
-//                }
-				Set<String> testImports = new HashSet<>();
-				if (this.sequencePool.classImports.containsKey(cls)) {
-					testImports.addAll(this.sequencePool.classImports.get(cls).stream().filter(impName -> {
-						try {
-							return impName.startsWith("org.evosuite") || impName.startsWith("static org.junit") ||
-									! Modifier.isPrivate(Class.forName(impName).getModifiers());
-						} catch (ClassNotFoundException | NoClassDefFoundError e) {
-							return true; // treat class as non-private, either way may result in compilation issues for the resulting JUnit test
-						}
-					}).
-							collect(Collectors.toSet()));
-				}
-				testExporter.writeUnitTest(cls, methodTestSeq, testImports);
-				testMethodCount += methodTestSeq.values().stream().mapToInt(List::size).sum();
-			}
-			System.out.println("* wrote "+clsTestSeq.keySet().size()+" test class files to \""+
-                outDirName+File.separator+partition+"\" with "+testMethodCount+" total test methods");
-		}
-	}
+            }).collect(Collectors.toSet()));
+        }
+        Map<String, List<String>> methodTestSeqStrMap = new HashMap<>();
+        for (String methodSig : methodTestSeqIdMap.keySet()) {
+            methodTestSeqStrMap.put(methodSig, methodTestSeqIdMap.get(methodSig)
+                .stream()
+                .map(seqid -> this.extSeqStr.get(seqid))
+                .collect(Collectors.toList()));
+        }
+        testExporter.writeUnitTest(clsName, methodTestSeqStrMap, testImports);
+        int testMethodCount = methodTestSeqIdMap.values().stream().mapToInt(List::size).sum();
+        System.out.println("*   wrote test class file for " + clsName + " to \"" + outDir +
+            "\" with " + testMethodCount+" test methods");
+        this.testClassCount++;
+        this.testMethodCount += testMethodCount;
+    }
 
 	/**
 	 * Writes coverage information to JSON file
@@ -805,27 +798,25 @@ public class TestSequenceExtender {
 		System.out.println("* wrote CTD test-plan coverage report (JSON)");
 	}
 
-	/**
-	 * Adds diff assertions to all extended sequences that execute successfully.
-	 */
-	private int addDiffAssertions() {
-		DiffAssertionsGenerator diffAssertGen = new DiffAssertionsGenerator(applicationName);
-		for (String seqId : execExtSeq.keySet()) {
-			logger.fine("Adding diff assertions to sequence: " + seqId);
-			String seqStr = seqIdMap.get(seqId).toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", "");
-			SequenceExecutor.SequenceResults seqRes = execExtSeq.get(seqId);
-			// skip failing sequences
-			if (!seqRes.passed) {
-				continue;
-			}
-
-			String seqWithAssertStr = diffAssertGen.addAssertions(seqStr, seqRes);
-			seqWithDiffAsserts.put(seqId, seqWithAssertStr);
-		}
-		int assertionCount = diffAssertGen.getAssertCount();
-		System.out.println("* Added a total of " + assertionCount + " diff assertions across all sequences");
-		return assertionCount;
-	}
+    /**
+     * Add assertions to the given list of sequences.
+     * @param seqIds
+     * @return
+     */
+    private int addDiffAssertions(List<String> seqIds) {
+        DiffAssertionsGenerator diffAssertGen = new DiffAssertionsGenerator(applicationName);
+        for (String seqId : seqIds) {
+            logger.fine("Adding diff assertions to sequence: " + seqId);
+            SequenceExecutor.SequenceResults seqRes = execExtSeq.get(seqId);
+            // skip failing sequences
+            if (!seqRes.passed) {
+                continue;
+            }
+            String seqWithAssertStr = diffAssertGen.addAssertions(this.extSeqStr.get(seqId), seqRes);
+            extSeqStr.put(seqId, seqWithAssertStr);
+        }
+        return diffAssertGen.getAssertCount();
+    }
 
 	/**
 	 * Executes the given (extended) sequence and checks whether execution failed.
@@ -848,7 +839,7 @@ public class TestSequenceExtender {
 					numSeqExecutions);
 			this.execExtSeq.put(sequenceID, execResult);
 			if (!execResult.passed) {
-				// find the exception that caused the sequence to fail and add to the summary 
+				// find the exception that caused the sequence to fail and add to the summary
 				for (int i=0; i<extendedSeq.size();i++) {
 					if (execResult.exception[i] != null) {
 						String excp = execResult.cause[i] != null? execResult.cause[i] : execResult.exception[i];
@@ -1777,7 +1768,7 @@ public class TestSequenceExtender {
 		// option for output directory in which generated tests are written
 		options.addOption(Option.builder("od").longOpt("output-directory").hasArg()
 				.desc("Name of directory to which generate tests are written").type(String.class).build());
-		
+
 		// option for outputing covered type combinations
 				options.addOption(Option.builder("oc").longOpt("output-covered").hasArg()
 						.desc("Output percentage of covered type combinations according to given interaction level").type(Integer.class).build());
@@ -1854,13 +1845,13 @@ public class TestSequenceExtender {
         if (cmd.hasOption("da")) {
             addDiffAsserts = true;
         }
-        
+
         int outputCoveredInteraction = -1;
-        
+
         if (cmd.hasOption("oc")) {
         	outputCoveredInteraction = Integer.parseInt(cmd.getOptionValue("oc"));
         }
- 
+
 		// create extended sequences
 		TestSequenceExtender testSeqExt = new TestSequenceExtender(appName, testPlanFilename,
             testSeqFilename, true,
@@ -1868,7 +1859,7 @@ public class TestSequenceExtender {
 		testSeqExt.createExtendedSequences();
 
 		// write test classes
-		testSeqExt.writeTestClasses(addDiffAsserts);
+//		testSeqExt.writeTestClasses(addDiffAsserts);
 
 		// write coverage file
         testSeqExt.writeTestCoverageFile(appName, coverageFilename);
