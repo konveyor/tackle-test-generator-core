@@ -1,0 +1,61 @@
+{
+  "building_block_sequences_info" : {
+    "base_sequences" : 159,
+    "parsed_base_sequences_full" : 155,
+    "parsed_base_sequences_partial" : 0,
+    "skipped_base_sequences" : 3,
+    "exception_base_sequences" : 1,
+    "method_sequence_pool_keys" : 102,
+    "class_sequence_pool_keys" : 39
+  },
+  "extended_sequences_info" : {
+    "generated_sequences" : 1486,
+    "executed_sequences" : 1471,
+    "failing_sequences" : 268,
+    "final_sequences" : 1203,
+    "diff_assertions" : 20681
+  },
+  "test_plan_coverage_info" : {
+    "test_plan_target_methods" : 4,
+    "test_plan_rows" : 1486,
+    "rows_covered_full" : 1203,
+    "rows_covered_partial" : 0,
+    "rows_covered_full_jee" : 0,
+    "rows_covered_partial_jee" : 0,
+    "rows_covered_bb_sequences" : 282
+  },
+  "uncovered_test_plan_rows_info" : {
+    "no_bb_sequence_for_target_method" : 0,
+    "non_instantiable_param_type" : 0,
+    "execution_failed" : 268,
+    "exception_during_extension" : 15,
+    "exception_info" : {
+      "randoop_operation_parse_exception" : 0,
+      "randoop_illegal_argument_exception" : 0,
+      "class_not_found_exception" : 0,
+      "no_such_method_exception" : 0,
+      "no_array_element_type" : 0,
+      "unsupported_collection_type" : 0,
+      "sequence_exec_invocation_target_exception" : 0,
+      "sequence_exec_illegal_access_exception" : 0,
+      "sequence_exec_illegal_argument_exception" : 0,
+      "sequence_exec_error" : 0,
+      "sequence_exec_other_exception" : 15
+    }
+  },
+  "execution_exception_types_other" : [ "java.lang.StringIndexOutOfBoundsException" ],
+  "parse_exception_types" : {
+    "randoop.sequence.SequenceParseException" : 1
+  },
+  "non_instantiable_types" : [ ],
+  "class_not_found_types" : [ ],
+  "execution_fail_exception_types" : {
+    "java.lang.UnsupportedOperationException" : 15,
+    "java.lang.StackOverflowError" : 16,
+    "java.net.MalformedURLException" : 105,
+    "javax.naming.NoInitialContextException" : 11,
+    "java.lang.NumberFormatException" : 3,
+    "java.lang.ArrayIndexOutOfBoundsException" : 3,
+    "java.lang.NullPointerException" : 115
+  }
+}

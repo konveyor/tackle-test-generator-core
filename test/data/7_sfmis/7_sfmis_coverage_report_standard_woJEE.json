@@ -1,0 +1,326 @@
+{
+  "monolithic" : {
+    "com.hf.sfm.util.BasePara" : {
+      "setOrdersql(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSort(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQueryparams(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSql(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setArr2params(java.lang.String[][])" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "setPaging(boolean)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQueryValue(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDir(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSqlpath(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setStart(int)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setQuerySql(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setGroupsql(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setLimit(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.system.business.Login" : {
+      "doGet(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "doPost(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.sfmis.personinfo.business.PersonInfoMgr" : {
+      "deleteByIds(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "saveOrUpdate(com.hf.sfm.sfmis.personinfo.pdo.APersonInfo)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.util.HibernateSessionFactory" : {
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.system.pdo.AWorker" : {
+      "setFlatid(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPassword(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setIdno(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setGroupid(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setAccount(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.system.pdo.AWorker(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setState(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPersonid(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.system.pdo.Menu" : {
+      "setIdno(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setUrl(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.system.pdo.Menu(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setStatus(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setImg(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOper(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setParentid(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setSort(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.crypt.Base64" : {
+      "byteArrayToAltBase64(byte[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "base64ToByteArray(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "byteArrayToBase64(byte[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "altBase64ToByteArray(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.util.DataSource" : {
+      "getGridData(com.hf.sfm.util.BasePara)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getSession(javax.servlet.http.HttpSession,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPlanarArrData(com.hf.sfm.util.BasePara)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "getComboData(com.hf.sfm.util.BasePara)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo" : {
+      "setSex(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPersontype(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMobile(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setIndate(java.util.Date)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setBirthday(java.util.Date)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPersonid(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setWbm(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.sfmis.personinfo.pdo.APersonInfo(java.lang.String,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.util.Date,java.lang.String,java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setReason(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setOutdate(java.util.Date)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setPym(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setDepartment(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.system.business.MenuManage" : {
+      "del(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "saveOrUpdate(com.hf.sfm.system.pdo.Menu)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.system.pdo.AGroup" : {
+      "setIdno(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMark(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.system.pdo.AGroup(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.sfmis.department.pdo.ADepartment" : {
+      "setIdno(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setMark(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setName(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.sfmis.department.pdo.ADepartment(java.lang.String,java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.util.DaoFactory" : {
+      "decrypt(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "save(java.lang.Object)" : {
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "encrypt(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "update(java.lang.Object)" : {
+        "test_plan_row_6" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_7" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_11" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_8" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_10" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_9" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_2" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_3" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_4" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_5" : "UNCOVERED_EXEC_FAIL",
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.system.business.WorkerMgr" : {
+      "deleteByIds(java.lang.String[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "saveOrUpdate(com.hf.sfm.system.pdo.AWorker)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    },
+    "com.hf.sfm.util.ListRange" : {
+      "setData(java.util.ArrayList)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setTotalSize(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.util.Loader" : {
+      "setRs(java.util.List)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "collectToMap(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setColNames(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "setRange(com.hf.sfm.util.ListRange)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getParams(org.hibernate.Query,java.lang.String[][])" : {
+        "test_plan_row_1" : "UNCOVERED_EXCP"
+      },
+      "run(com.hf.sfm.util.BasePara)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "setTotalCount(int)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.util.OddParamsOfArrayInLoader" : {
+      "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String,java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)" : {
+        "test_plan_row_2" : "COVERED",
+        "test_plan_row_1" : "COVERED"
+      },
+      "com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "com.hf.sfm.filter.setCharacterEncodingFilter" : {
+      "init(javax.servlet.FilterConfig)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "doFilter(javax.servlet.ServletRequest,javax.servlet.ServletResponse,javax.servlet.FilterChain)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "monolithic" : {
+    "net.sourceforge.shp2kml.GeomConverter" : {
+      "convertPolygon(com.vividsolutions.jts.geom.Coordinate[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getLinearRingKML(com.vividsolutions.jts.geom.Coordinate[])" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "convertLine(com.vividsolutions.jts.geom.Coordinate[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "convertLineWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getCoordinatesKML(com.vividsolutions.jts.geom.Coordinate[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "convertPoint(com.vividsolutions.jts.geom.Coordinate[])" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "convertPolygonWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPlacemarkKML(com.vividsolutions.jts.geom.Geometry)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "convertPointWithAltitude(com.vividsolutions.jts.geom.Coordinate[],double)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "getPlacemarkKML(com.vividsolutions.jts.geom.Geometry,java.lang.String,java.lang.String,double)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter" : {
+      "net.sourceforge.shp2kml.Shp2KMLGUI$ShpFileFilter(net.sourceforge.shp2kml.Shp2KMLGUI)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "accept(java.io.File)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "net.sourceforge.shp2kml.Converter" : {
+      "convertShp(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "main(java.lang.String[])" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    },
+    "net.sourceforge.shp2kml.KMLObject" : {
+      "addPlacemark(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      },
+      "net.sourceforge.shp2kml.KMLObject(java.lang.String)" : {
+        "test_plan_row_1" : "COVERED"
+      }
+    }
+  }
+}
