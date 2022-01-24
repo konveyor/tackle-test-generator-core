@@ -3,16 +3,13 @@
 
   <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-core</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Konveyor-Tackle Test Generator Maven Packages</name>
-      <url>https://maven.pkg.github.com/konveyor/tackle-test-generator-core</url>
-      <uniqueVersion>false</uniqueVersion>
-    </repository>
-  </distributionManagement>
+  <version>1.0.0</version>
+  
+  <modules>
+  	<module>tackle-test-generator-unit</module>
+  </modules>
+  
+  <packaging>pom</packaging>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -24,9 +21,6 @@
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <evosuite.version>1.0.7</evosuite.version>
-    <randoop.version>4.2.6</randoop.version>
-    <acts.version>3.2</acts.version>
 
     <!-- JaCoCo thresholds. Increase gradually as you add tests. -->
     <jacoco.unit-tests.limit.instruction-ratio>0%</jacoco.unit-tests.limit.instruction-ratio>
@@ -34,14 +28,6 @@
     <jacoco.unit-tests.limit.class-complexity>20</jacoco.unit-tests.limit.class-complexity>
     <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
   </properties>
-
-  <repositories>
-    <repository>
-      <id>github-sinha108</id>
-      <name>Test Generator Maven Packages</name>
-      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -57,99 +43,9 @@
       <scope>test</scope>
       <classifier>runtime</classifier>
     </dependency>
-    <dependency>
-      <groupId>org.soot-oss</groupId>
-      <artifactId>soot</artifactId>
-      <version>4.1.0</version>
-    </dependency>
-    <dependency>
-  		<groupId>com.fasterxml.jackson.core</groupId>
-  		<artifactId>jackson-databind</artifactId>
-  		<version>2.12.5</version>
-	</dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.4.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>[4.5.13,)</version>
-    </dependency>
-    <dependency>
-      <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-master</artifactId>
-      <version>${evosuite.version}</version>
-	  </dependency>
-	  <dependency>
-      <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-standalone-runtime</artifactId>
-      <version>${evosuite.version}</version>
-  	</dependency>
-    <dependency>
-      <groupId>edu.uta.cse.fireeye.acts</groupId>
-      <artifactId>acts</artifactId>
-      <version>${acts.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/acts_${acts.version}.jar</systemPath>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>edu.uta.cse.fireeye.acts</groupId>
-      <artifactId>ccmcl</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/ccmcl.jar</systemPath>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-    	<groupId>com.github.javaparser</groupId>
-    	<artifactId>javaparser-symbol-solver-core</artifactId>
-    	<version>3.16.1</version>
-	  </dependency>
-    <dependency>
-      <groupId>commons-cli</groupId>
-      <artifactId>commons-cli</artifactId>
-      <version>1.4</version>
-    </dependency>
-  	<dependency>
-      <groupId>randoop</groupId>
-      <artifactId>randoop</artifactId>
-      <version>${randoop.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/download/randoop-all-${randoop.version}.jar</systemPath>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>randoop</groupId>
-      <artifactId>replacecall</artifactId>
-      <version>${randoop.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/download/replacecall-${randoop.version}.jar</systemPath>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-  	<groupId>org.choco-solver</groupId>
-  	  <artifactId>choco-solver</artifactId>
-  	  <version>4.10.6</version>
-	</dependency>
-	<dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
-      <version>1.0.18</version>
-    </dependency>
-	<dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jcommon</artifactId>
-    <version>1.0.24</version>
-</dependency>
     
   </dependencies>
-
   <build>
-    <sourceDirectory>${project.basedir}/src</sourceDirectory>
-    <testSourceDirectory>${project.basedir}/test/java</testSourceDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -172,87 +68,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>com.googlecode.maven-download-plugin</groupId>
-        <artifactId>download-maven-plugin</artifactId>
-        <version>1.6.3</version>
-        <executions>
-          <execution>
-            <id>get-randoop-jar</id>
-            <!--            <phase>process-resources</phase>-->
-            <goals>
-              <goal>wget</goal>
-            </goals>
-            <configuration>
-              <url>
-                https://github.com/randoop/randoop/releases/download/v${randoop.version}/randoop-all-${randoop.version}.jar
-              </url>
-              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>get-replacecall-jar</id>
-            <!--            <phase>process-resources</phase>-->
-            <goals>
-              <goal>wget</goal>
-            </goals>
-            <configuration>
-              <url>
-                https://github.com/randoop/randoop/releases/download/v${randoop.version}/replacecall-${randoop.version}.jar
-              </url>
-              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- Code Coverage report generation -->
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
-              <propertyName>surefire.jacoco.args</propertyName>
-            </configuration>
-          </execution>
-          <execution>
-            <id>merge-execution-data</id>
-            <phase>package</phase>
-            <goals>
-              <goal>merge</goal>
-            </goals>
-            <configuration>
-              <fileSets>
-                <fileSet>
-                  <directory>${project.build.directory}/jacoco-output/</directory>
-                  <includes>
-                    <include>*.exec</include>
-                  </includes>
-                </fileSet>
-              </fileSets>
-              <destFile>${project.build.directory}/jacoco-output/merged.exec</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>generate-code-coverage-report</id>
-            <phase>package</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-            <configuration>
-              <dataFile>${project.build.directory}/jacoco-output/merged.exec</dataFile>
-              <outputDirectory>${project.reporting.outputDirectory}/jacoco-merged-test-coverage-report</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
   <reporting>
     <plugins>
