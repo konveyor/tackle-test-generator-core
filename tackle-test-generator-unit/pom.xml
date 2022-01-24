@@ -4,12 +4,12 @@
   <parent>  	
   <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-core</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   </parent>
 
   <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-unit</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 
   <distributionManagement>
     <repository>
