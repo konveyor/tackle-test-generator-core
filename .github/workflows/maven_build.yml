@@ -30,9 +30,9 @@ jobs:
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
     - name: Download Randoop jars
-      run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
     - name: Build with Maven
-      run: mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package 
+      run: mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
 
   # publish to GitHub Packages if tests pass and the workflow is running on the main branch
   publish:
@@ -53,12 +53,12 @@ jobs:
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
       - name: Download Randoop jars
-        run: mvn --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
       - name: Delete old package version
         uses: actions/delete-package-versions@v1
         with:
-          package-name: 'org.konveyor.tackle-test-generator-core'
+          package-name: 'org.konveyor.tackle-test-generator-unit'
       - name: Publish to GitHub Packages
-        run: mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
+        run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
