@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -1791,6 +1790,7 @@ public class TestSequenceExtender {
 		} catch (ParseException e) {
 			logger.warning(e.getMessage());
 			formatter.printHelp("TestSequenceExtender", options, true);
+			return null;
 		}
 
 		// check whether required options are specified

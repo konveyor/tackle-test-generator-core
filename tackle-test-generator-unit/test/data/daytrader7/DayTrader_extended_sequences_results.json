@@ -70,22 +70,9 @@
                 },
                 "runtime_private_object_state":{
                 }
-            },
-            {
-                "statement_normal_termination":true,
-                "runtime_object_name":"quoteDataBean0",
-                "runtime_object_type":"com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
-                "runtime_object_state":{
-                },
-                "runtime_private_object_state":{
-                    "getVolume":"0.0",
-                    "getLow":"__m2m_null",
-                    "getCompanyName":"__m2m_null",
-                    "getHigh":"__m2m_null",
-                    "getSymbol":"__m2m_null",
-                    "getPrice":"__m2m_null"
-                }
-            },
+            },{
+				"statement_normal_termination" : true
+			},
             {
                 "statement_normal_termination":true,
                 "runtime_object_name":"double7",
@@ -264,18 +251,9 @@
                 },
                 "runtime_private_object_state":{
                 }
-            },
-            {
-                "statement_normal_termination":true,
-                "runtime_object_name":"financialUtils0",
-                "runtime_object_type":"com.ibm.websphere.samples.daytrader.util.FinancialUtils",
-                "runtime_object_state":{
-                    "ROUND":"4",
-                    "SCALE":"2"
-                },
-                "runtime_private_object_state":{
-                }
-            },
+            },{
+				"statement_normal_termination" : true
+			},
             {
                 "statement_normal_termination":true,
                 "runtime_object_name":"bigDecimal2",
@@ -520,84 +498,16 @@
             }
         ]
     },
-    "seq1":{
-        "normal_termination":true,
-        "original_sequence_indices":[
-            0,
-            2
-        ],
-        "per_statement_results":[
-            {
-                "statement_normal_termination":true,
-                "runtime_object_name":"tradeConfig0",
-                "runtime_object_type":"com.ibm.websphere.samples.daytrader.util.TradeConfig",
-                "runtime_object_state":{
-                    "ORDER_PAGE":"6",
-                    "QUOTES_PER_PAGE":"10",
-                    "JSP_Images":"1",
-                    "REGISTER_PAGE":"1",
-                    "QUOTE_PAGE":"3",
-                    "RND_USER":"true",
-                    "KEYBLOCKSIZE":"1000",
-                    "REGISTER_OP":"4",
-                    "DS_NAME":"java:comp/env/jdbc/TradeDataSource",
-                    "PORTFOLIO_OP":"6",
-                    "ASYNCH_2PHASE":"1",
-                    "newUserPrefix":"ru:",
-                    "webInterface":"0",
-                    "JDBC_UID":"__m2m_null",
-                    "PORTFOLIO_PAGE":"2",
-                    "DATASOURCE":"java:comp/env/jdbc/TradeDataSource",
-                    "SELL_OP":"8",
-                    "ACCOUNT_OP":"5",
-                    "MARKET_SUMMARY_PAGE":"9",
-                    "DIRECT":"1",
-                    "STANDARD":"0",
-                    "LOGIN_OP":"2",
-                    "orderProcessingMode":"0",
-                    "JDBC_PWD":"__m2m_null",
-                    "QUOTE_OP":"1",
-                    "JSP":"0",
-                    "ASYNCH_MANAGEDTHREAD":"2",
-                    "JDBCDriverNeedsGlobalTransation":"false",
-                    "verifyPercent":"5",
-                    "HOME_OP":"0",
-                    "ACCOUNT_PAGE":"5",
-                    "BUY_OP":"7",
-                    "runTimeMode":"0",
-                    "STATS_PAGE":"8",
-                    "CONFIG_PAGE":"7",
-                    "HOME_PAGE":"4",
-                    "EJB3":"0",
-                    "SYNCH":"0",
-                    "UPDATEACCOUNT_OP":"9",
-                    "WELCOME_PAGE":"0",
-                    "LOGOUT_OP":"3"
-                },
-                "runtime_private_object_state":{
-                    "getMAX_QUOTES":"10000",
-                    "getScenarioCount":"0",
-                    "getMAX_USERS":"15000",
-                    "getMarketSummaryInterval":"20",
-                    "getUpdateQuotePrices":"true",
-                    "getLongRun":"true",
-                    "getPrimIterations":"1",
-                    "getPublishQuotePriceChange":"true",
-                    "getAccessMode":"0",
-                    "getActionTrace":"false",
-                    "getTrace":"false",
-                    "getMAX_HOLDINGS":"10",
-                    "getPercentSentToWebsocket":"5",
-                    "getDisplayOrderAlerts":"true"
-                }
-            },
-            {
-                "statement_normal_termination":true
-            },
-            {
-                "statement_normal_termination":true
-            }
-        ]
+    "seq1" : {
+    "normal_termination" : true,
+    "original_sequence_indices" : [ 0, 2 ],
+    "per_statement_results" : [ {
+      "statement_normal_termination" : true
+    }, {
+      "statement_normal_termination" : true
+    }, {
+      "statement_normal_termination" : true
+    } ]
     },
     "seq10":{
         "normal_termination":true,
@@ -632,46 +542,20 @@
         ]
     },
     "seq7":{
-        "normal_termination":true,
-        "original_sequence_indices":[
-            0,
-            2
-        ],
-        "per_statement_results":[
-            {
-                "statement_normal_termination":true,
-                "runtime_object_name":"runStatsDataBean0",
-                "runtime_object_type":"com.ibm.websphere.samples.daytrader.beans.RunStatsDataBean",
-                "runtime_object_state":{
-                },
-                "runtime_private_object_state":{
-                    "getSumLogoutCount":"0",
-                    "getTradeUserCount":"0",
-                    "getDeletedOrderCount":"0",
-                    "getTradeStockCount":"0",
-                    "getSellOrderCount":"0",
-                    "getOpenOrderCount":"0",
-                    "getHoldingCount":"0",
-                    "getCancelledOrderCount":"0",
-                    "getNewUserCount":"0",
-                    "getSumLoginCount":"0",
-                    "getBuyOrderCount":"0",
-                    "getOrderCount":"0"
-                }
-            },
-            {
-                "statement_normal_termination":true,
-                "runtime_object_name":"int1",
-                "runtime_object_type":"java.lang.Integer",
-                "runtime_object_state":{
-                    "int1":"-43"
-                },
-                "runtime_private_object_state":{
-                }
-            },
-            {
-                "statement_normal_termination":true
-            }
-        ]
+        "normal_termination" : true,
+    "original_sequence_indices" : [ 0, 2 ],
+    "per_statement_results" : [ {
+      "statement_normal_termination" : true
+    }, {
+      "statement_normal_termination" : true,
+      "runtime_object_name" : "int1",
+      "runtime_object_type" : "java.lang.Integer",
+      "runtime_object_state" : {
+        "int1" : "-43"
+      },
+      "runtime_private_object_state" : { }
+    }, {
+      "statement_normal_termination" : true
+    } ]
     }
 }
