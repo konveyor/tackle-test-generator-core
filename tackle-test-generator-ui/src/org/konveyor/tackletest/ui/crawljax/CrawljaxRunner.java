@@ -41,6 +41,7 @@ public class CrawljaxRunner {
      * @return
      */
     private static BrowserConfiguration createBrowserConfiguration(String browser, int pixelDensity) {
+        // TODO: support phantomjs?
         EmbeddedBrowser.BrowserType browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
         if (browser.equals("chrome")) {
             browserType = EmbeddedBrowser.BrowserType.CHROME;
@@ -48,8 +49,8 @@ public class CrawljaxRunner {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX;
         } else if (browser.equals("firefox_headless")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX_HEADLESS;
-        } else if (browser.equals("phantomjs")) {
-            browserType = EmbeddedBrowser.BrowserType.PHANTOMJS;
+        } else if (browser.equals("remote")) {
+            browserType = EmbeddedBrowser.BrowserType.REMOTE;
         }
         return new BrowserConfiguration(browserType, pixelDensity);
     }

@@ -9,12 +9,23 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-ui</artifactId>
+  <version>0.0.1s</version>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Konveyor-Tackle Test Generator Maven Packages</name>
+      <url>https://maven.pkg.github.com/konveyor/tackle-test-generator-core</url>
+      <uniqueVersion>false</uniqueVersion>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <crawljax.version>5.0-beta</crawljax.version>
+    <crawljax.version>5.0-frag</crawljax.version>
   </properties>
 
   <repositories>
