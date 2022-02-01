@@ -1,0 +1,33 @@
+[general]
+app_name = "test"
+app_url = "localhost:8080"
+test_directory = ""
+verbose = false
+
+[generate]
+browser = "chrome"
+time_limit = 5
+max_states = 0
+add_state_diff_assertions = "none"
+include_iframes = false
+wait_after_event = 500
+wait_after_reload = 500
+click_dont_click_spec_file = ""
+form_data_spec_file = ""
+click_once = true
+click_randomly = true
+clickables = [ "a", "button",]
+dont_click_spec_file = ""
+max_depth = 2
+crawl_hidden_anchors = false
+click_default_elements = true
+form_fill_mode = "random"
+form_fill_order = "normal"
+browser_pixel_density = 1
+rted_similarity_threshold = 0
+
+[execute]
+
+[config.init]
+
+[config.list]
