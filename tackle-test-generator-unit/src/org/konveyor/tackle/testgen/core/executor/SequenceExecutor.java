@@ -64,6 +64,8 @@ import randoop.ExceptionalExecution;
 import randoop.ExecutionOutcome;
 import randoop.ExecutionVisitor;
 import randoop.NormalExecution;
+import randoop.operation.ConstructorCall;
+import randoop.operation.TypedOperation;
 import randoop.org.checkerframework.checker.signature.qual.SignatureBottom;
 import randoop.sequence.ExecutableSequence;
 import randoop.sequence.Sequence;
@@ -467,9 +469,9 @@ public class SequenceExecutor {
 		}
 
 		private void recordResults(ExecutableSequence es, int index) {
-
+			
 			ExecutionOutcome result = es.getResult(index);
-
+			
 			results.normalTermination[index] = (result instanceof NormalExecution);
 
 			if (result instanceof ExceptionalExecution) {
@@ -503,8 +505,21 @@ public class SequenceExecutor {
 				Object runtimeObject = result instanceof NormalExecution
 						? ((NormalExecution) result).getRuntimeValue()
 						: null;
+						
+				boolean isArglessConstr = false;
+				
+				// Skip field value recording if this is an argument-less constructor
+				TypedOperation op = es.sequence.getStatement(index).getOperation();
+				
+				if (op.getOperation() instanceof ConstructorCall) {
+					
+					if (op.getInputTypes().size() == 0) {
+						isArglessConstr = true;
+					}
+				}
 
-				if (runtimeObject != null) {
+				if (runtimeObject != null && ! isArglessConstr) {
+					
 					String receiverName;
 
 					if (isOrigStatement && origStatements != null) {
@@ -552,7 +567,7 @@ public class SequenceExecutor {
 			}
 
 			results.output[index] = result.get_output();
-
+			
 			if (VERBOSE) {
 
 				StringBuilder resultsStr = new StringBuilder();
@@ -579,6 +594,7 @@ public class SequenceExecutor {
 
 				logger.fine(resultsStr.toString());
 			}
+			
 		}
 
 		@Override
