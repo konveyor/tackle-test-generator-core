@@ -14,19 +14,17 @@ package org.konveyor.tackletest.ui.crawljax;
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.configuration.BrowserConfiguration;
 import com.crawljax.core.configuration.CrawlRules;
+import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import com.crawljax.plugins.testcasegenerator.TestConfiguration;
 import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
 import org.apache.commons.cli.*;
 import org.konveyor.tackletest.ui.util.TackleTestLogger;
-import org.tomlj.Toml;
-import org.tomlj.TomlParseResult;
-import org.tomlj.TomlTable;
-
-import com.crawljax.core.configuration.CrawljaxConfiguration;
+import org.tomlj.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -42,9 +40,9 @@ public class CrawljaxRunner {
      */
     private static BrowserConfiguration createBrowserConfiguration(String browser, int pixelDensity) {
         // TODO: support phantomjs?
-        EmbeddedBrowser.BrowserType browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
-        if (browser.equals("chrome")) {
-            browserType = EmbeddedBrowser.BrowserType.CHROME;
+        EmbeddedBrowser.BrowserType browserType = EmbeddedBrowser.BrowserType.CHROME;
+        if (browser.equals("chrome_headless")) {
+            browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
         } else if (browser.equals("firefox")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX;
         } else if (browser.equals("firefox_headless")) {
@@ -55,15 +53,15 @@ public class CrawljaxRunner {
         return new BrowserConfiguration(browserType, pixelDensity);
     }
 
-    // TODO: NONE mode
-
     /**
      * Creates and returns a test configuration for the given state equivalence assertion type.
+     * TODO: NONE mode
      * @param stateAssertion
      * @return
      */
     private static TestConfiguration createTestConfiguration(String stateAssertion) {
-        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.DOM;
+        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode = TestConfiguration
+            .StateEquivalenceAssertionMode.DOM;
         if (stateAssertion.equals("visual")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.VISUAL;
         } else if (stateAssertion.equals("both")) {
@@ -72,6 +70,53 @@ public class CrawljaxRunner {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.HYBRID;
         }
         return new TestConfiguration(stateAssertionMode);
+    }
+
+    /**
+     * Reads the clickables specifination from the given toml file, and updates crawl rules in
+     * the given Crawljax configuration builder with included and excluded web elements to be
+     * crawled.
+     * @param clickableSpecFile
+     * @param builder
+     * @throws IOException
+     */
+    private static void updateClickablesConfiguration(String clickableSpecFile,
+                                                      CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) throws IOException {
+        TomlParseResult clickableSpec = Toml.parse(Paths.get(clickableSpecFile));
+
+        // process click spec, consisting of a list of tags to be treated as clickables
+        String[] clickTags = clickableSpec.getArray("click").toList().toArray(new String[0]);
+        logger.info("adding clickables: "+ Arrays.toString(clickTags));
+        builder.crawlRules().click(clickTags);
+
+        // process don't click element spec
+        TomlTable[] dontclickSpec = clickableSpec.getArray("dont_click.element")
+            .toList()
+            .toArray(new TomlTable[0]);
+        for (TomlTable dontClickElem : dontclickSpec) {
+            String tagName = dontClickElem.getString("tag_name");
+            if (dontClickElem.contains("with_text")) {
+                String withText = dontClickElem.getString("with_text");
+                if (withText != null && !withText.isEmpty()) {
+                    builder.crawlRules().dontClick(tagName).withText(withText);
+                }
+            } else if (dontClickElem.contains("under_xpath")) {
+                String underXpath = dontClickElem.getString("under_xpath");
+                if (underXpath != null && !underXpath.isEmpty()) {
+                    builder.crawlRules().dontClick(tagName).underXPath(underXpath);
+                }
+            } else if (dontClickElem.contains("with_attribute")) {
+                TomlTable withAttribute = dontClickElem.getTable("with_attribute");
+                String attrName = withAttribute.getString("attr_name");
+                String attrValue = withAttribute.getString("attr_value");
+                if (attrName != null && !attrName.isEmpty() && attrValue != null && !attrValue.isEmpty()) {
+                    builder.crawlRules().dontClick(tagName).withAttribute(attrName, attrValue);
+                }
+            }
+        }
+        logger.info("Done processing dont_click.element spec");
+
+        // TODO: process don't click children_of spec
 
     }
 
@@ -82,7 +127,7 @@ public class CrawljaxRunner {
      * @param generateOptions
      * @return
      */
-    private static CrawljaxConfiguration createCrawljaxConfiguration(String url, TomlTable generateOptions) {
+    private static CrawljaxConfiguration createCrawljaxConfiguration(String url, TomlTable generateOptions) throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(url);
 
         // set browser
@@ -150,7 +195,8 @@ public class CrawljaxRunner {
         }
         builder.crawlRules().setFormFillOrder(formFillOrder);
 
-        // TODO: set clickables and dont click rules
+        // set click and don't-click rules
+        updateClickablesConfiguration(generateOptions.getString("clickables_spec_file"), builder);
 
         // TODO: set form data specification
 
@@ -223,10 +269,19 @@ public class CrawljaxRunner {
             System.exit(0);
         }
 
-        // parse toml file
+        // parse toml file and check for errors
         String configFilename = cmd.getOptionValue("cf");
         logger.info("Testgen config plan file: " + configFilename);
         TomlParseResult parsedConfig = Toml.parse(Paths.get(configFilename));
+        if (parsedConfig.hasErrors()) {
+            // print parse errors and exit
+            System.out.println("Error parsing "+configFilename);
+            for (TomlParseError parseError : parsedConfig.errors()) {
+                System.out.println("  - "+parseError.toString());
+            }
+            System.exit(1);
+        }
+
         String appUrl = parsedConfig.getString("general.app_url");
         TomlTable generateOptions = parsedConfig.getTable("generate");
         logger.info("app_url: "+appUrl);
