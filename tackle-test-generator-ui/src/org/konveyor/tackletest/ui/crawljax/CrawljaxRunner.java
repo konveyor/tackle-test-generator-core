@@ -18,10 +18,13 @@ import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import com.crawljax.plugins.testcasegenerator.TestConfiguration;
 import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
+import com.crawljax.stateabstractions.dom.RTEDStateVertexFactory;
+import com.crawljax.stateabstractions.hybrid.HybridStateVertexFactory;
 import org.apache.commons.cli.*;
 import org.konveyor.tackletest.ui.util.TackleTestLogger;
 import org.tomlj.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -76,13 +79,13 @@ public class CrawljaxRunner {
      * Reads the clickables specifination from the given toml file, and updates crawl rules in
      * the given Crawljax configuration builder with included and excluded web elements to be
      * crawled.
-     * @param clickableSpecFile
+     * @param clickablesSpecFile
      * @param builder
      * @throws IOException
      */
-    private static void updateClickablesConfiguration(String clickableSpecFile,
+    private static void updateClickablesConfiguration(String clickablesSpecFile,
                                                       CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) throws IOException {
-        TomlParseResult clickableSpec = Toml.parse(Paths.get(clickableSpecFile));
+        TomlParseResult clickableSpec = Toml.parse(Paths.get(clickablesSpecFile));
 
         // process click spec, consisting of a list of tags to be treated as clickables
         String[] clickTags = clickableSpec.getArray("click").toList().toArray(new String[0]);
@@ -127,7 +130,10 @@ public class CrawljaxRunner {
      * @param generateOptions
      * @return
      */
-    private static CrawljaxConfiguration createCrawljaxConfiguration(String url, TomlTable generateOptions) throws IOException {
+    private static CrawljaxConfiguration createCrawljaxConfiguration(String appName, String url,
+                                                                     String testDir,
+                                                                     TomlTable generateOptions)
+        throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(url);
 
         // set browser
@@ -137,7 +143,8 @@ public class CrawljaxRunner {
         ));
 
         // set max runtime
-        builder.setMaximumRunTime(generateOptions.getLong("time_limit"), TimeUnit.MINUTES);
+        long timeLimit = generateOptions.getLong("time_limit");
+        builder.setMaximumRunTime(timeLimit, TimeUnit.MINUTES);
 
         // set max states
         int maxStates = generateOptions.getLong("max_states").intValue();
@@ -170,8 +177,17 @@ public class CrawljaxRunner {
             builder.crawlRules().clickDefaultElements();
         }
 
-        // TODO: handle include_iframes option
-        builder.crawlRules().crawlFrames(false);
+        // handle include_iframes option: if specified use RTED state abstraction function; otherwise
+        // use fragment-based state abstraction
+        if (generateOptions.getBoolean("include_iframes")) {
+            double rtedSimilarityThreshold = generateOptions.getDouble("rted_similarity_threshold");
+            builder.setStateVertexFactory(new RTEDStateVertexFactory(rtedSimilarityThreshold));
+            builder.crawlRules().crawlFrames(true);
+        }
+        else {
+            builder.setStateVertexFactory(new HybridStateVertexFactory(0, builder, false));
+            builder.crawlRules().crawlFrames(false);
+        }
 
         // form fill mode
         String ffMode = generateOptions.getString("form_fill_mode");
@@ -196,7 +212,10 @@ public class CrawljaxRunner {
         builder.crawlRules().setFormFillOrder(formFillOrder);
 
         // set click and don't-click rules
-        updateClickablesConfiguration(generateOptions.getString("clickables_spec_file"), builder);
+        String clickablesSpecFile = generateOptions.getString("clickables_spec_file");
+        if (clickablesSpecFile != null && !clickablesSpecFile.isEmpty()) {
+            updateClickablesConfiguration(clickablesSpecFile, builder);
+        }
 
         // TODO: set form data specification
 
@@ -204,6 +223,12 @@ public class CrawljaxRunner {
         builder.addPlugin(new CrawlOverview());
         builder.addPlugin(new TestSuiteGenerator(
             createTestConfiguration(generateOptions.getString("add_state_diff_assertions"))));
+
+        // set output directory
+        if (testDir.isEmpty()) {
+            testDir = "tkltest-output-ui-" + appName + File.separator + appName + "_" + timeLimit + "mins";
+        }
+        builder.setOutputDirectory(new File(testDir));
 
         return builder.build();
     }
@@ -275,25 +300,35 @@ public class CrawljaxRunner {
         TomlParseResult parsedConfig = Toml.parse(Paths.get(configFilename));
         if (parsedConfig.hasErrors()) {
             // print parse errors and exit
-            System.out.println("Error parsing "+configFilename);
+            System.out.println("Error parsing "+configFilename+":");
             for (TomlParseError parseError : parsedConfig.errors()) {
                 System.out.println("  - "+parseError.toString());
             }
             System.exit(1);
         }
 
+        String appName = parsedConfig.getString("general.app_name");
         String appUrl = parsedConfig.getString("general.app_url");
+        String testDir = parsedConfig.getString("general.test_directory");
         TomlTable generateOptions = parsedConfig.getTable("generate");
-        logger.info("app_url: "+appUrl);
+        logger.info("app_name="+appName+" app_url="+appUrl+" test_directory="+testDir);
         logger.info("generate options: "+generateOptions.keySet());
 
         // create crawljax configuration
-        CrawljaxConfiguration crawljaxConfig = createCrawljaxConfiguration(appUrl, generateOptions);
-        logger.info("crawljax configuration created: "+crawljaxConfig.toString());
+        CrawljaxConfiguration crawljaxConfig = null;
+        try {
+            crawljaxConfig = createCrawljaxConfiguration(appName, appUrl, testDir, generateOptions);
+            logger.info("Crawljax configuration created: " + crawljaxConfig.toString());
+        }
+        catch (RuntimeException re) {
+            System.out.println("Error creating Crawljax configuration: "+re.getMessage());
+            re.printStackTrace();
+            System.exit(1);
+        }
 
         // run crawljax
         com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
-//        crawljaxRunner.call();
+        crawljaxRunner.call();
 
     }
 }
