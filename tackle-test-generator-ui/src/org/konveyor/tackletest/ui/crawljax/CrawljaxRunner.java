@@ -343,8 +343,8 @@ public class CrawljaxRunner {
         }
 
         // run crawljax
-//        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
-//        crawljaxRunner.call();
+        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
+        crawljaxRunner.call();
 
     }
 }

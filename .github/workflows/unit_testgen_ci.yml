@@ -7,11 +7,13 @@ on:
   push:
     paths-ignore:
       - 'tackle-test-generator-ui/**'
+      - '.github/workflows/ui_testgen_ci.yml'
       - 'doc/**'
       - '**.md'
   pull_request:
     paths-ignore:
       - 'tackle-test-generator-ui/**'
+      - '.github/workflows/ui_testgen_ci.yml'
       - 'doc/**'
       - '**.md'
 
