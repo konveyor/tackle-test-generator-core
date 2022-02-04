@@ -1,5 +1,5 @@
 [general]
-app_name = "test"
+app_name = "_sample"
 app_url = "localhost:8080"
 test_directory = ""
 verbose = false

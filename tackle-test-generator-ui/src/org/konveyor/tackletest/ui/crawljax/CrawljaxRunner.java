@@ -93,10 +93,10 @@ public class CrawljaxRunner {
         builder.crawlRules().click(clickTags);
 
         // process don't click element spec
-        TomlTable[] dontclickSpec = clickableSpec.getArray("dont_click.element")
+        TomlTable[] dontclickElementSpec = clickableSpec.getArray("dont_click.element")
             .toList()
             .toArray(new TomlTable[0]);
-        for (TomlTable dontClickElem : dontclickSpec) {
+        for (TomlTable dontClickElem : dontclickElementSpec) {
             String tagName = dontClickElem.getString("tag_name");
             if (dontClickElem.contains("with_text")) {
                 String withText = dontClickElem.getString("with_text");
@@ -119,8 +119,24 @@ public class CrawljaxRunner {
         }
         logger.info("Done processing dont_click.element spec");
 
-        // TODO: process don't click children_of spec
-
+        // process don't click children_of spec
+        TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of")
+            .toList()
+            .toArray(new TomlTable[0]);
+        for (TomlTable dontClickElem : dontclickChildrenofSpec) {
+            String tagName = dontClickElem.getString("tag_name");
+            if (dontClickElem.contains("with_class")) {
+                String withClass = dontClickElem.getString("with_class");
+                if (withClass != null && !withClass.isEmpty()) {
+                    builder.crawlRules().dontClickChildrenOf(tagName).withClass(withClass);
+                }
+            } else if (dontClickElem.contains("with_id")) {
+                String withId = dontClickElem.getString("with_id");
+                if (withId != null && !withId.isEmpty()) {
+                    builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
+                }
+            }
+        }
     }
 
     /**
@@ -327,8 +343,8 @@ public class CrawljaxRunner {
         }
 
         // run crawljax
-        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
-        crawljaxRunner.call();
+//        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
+//        crawljaxRunner.call();
 
     }
 }
