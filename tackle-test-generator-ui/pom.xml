@@ -11,7 +11,7 @@
 
   <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-ui</artifactId>
-  <version>0.0.1s</version>
+  <version>0.0.1</version>
 
   <distributionManagement>
     <repository>
