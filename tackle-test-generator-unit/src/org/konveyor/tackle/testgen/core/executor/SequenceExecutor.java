@@ -517,51 +517,48 @@ public class SequenceExecutor {
 						isArglessConstr = true;
 					}
 				}
+				
+				// If this is the last statement in the sequence, and it doesn't return an object,
+				// locate the receiver object and record its values, to enable assertion generation 
+				// also for target methods that do not return values
+				
+				boolean isReceiver = false;
+				
+				if (runtimeObject == null && index == es.size()-1 && result instanceof NormalExecution &&
+						 ! op.isStatic()) {
+					if ( ! es.getLastStatementValues().isEmpty()) {
+						runtimeObject = es.getLastStatementValues().get(0).getObjectValue();
+						isReceiver = true;
+					}
+				}
 
 				if (runtimeObject != null && ! isArglessConstr) {
 					
-					String receiverName;
-
-					if (isOrigStatement && origStatements != null) {
-
-						String statement = origStatements[origSeqCounter].trim();
-
-						int spaceIndex = statement.indexOf(' ');
-						int equalsIndex = statement.indexOf(" = ");
-
-						if (equalsIndex == -1) {
-							throw new RuntimeException("cannot locate receive name in statement "+statement);
-						}
-
-						if (spaceIndex > -1) {
-							if (spaceIndex != equalsIndex) {
-								receiverName = statement.substring(spaceIndex+1, equalsIndex);
-							} else {
-								receiverName = statement.substring(0, spaceIndex);
-							}
-						} else {
-							receiverName = statement.substring(0, equalsIndex);
-						}
-
-					} else {
-						receiverName = executedStatements[index].substring(0, executedStatements[index].indexOf(" = "));
-					}
-
-					Map<String, String> objPublicState = new HashMap<String, String>();
-					Map<String, String> objPrivateState = new HashMap<String, String>();
-
-					getObjectState(runtimeObject, receiverName, objPublicState, objPrivateState);
-
-					if ( ! objPublicState.isEmpty() || ! objPrivateState.isEmpty()) {
-
-						results.runtimeObjectName[index] = receiverName;
-						results.runtimeObjectType[index] = runtimeObject.getClass();
-						results.runtimePublicObjectState.set(index, objPublicState);
-						results.runtimePrivateObjectState.set(index, objPrivateState);
-
-					} else {
+					String assignedVarName = getAssignedVarName(isOrigStatement, isReceiver, index);
+					
+					if (assignedVarName == null) {
 						// otherwise we cannot record the state of this object so we skip it (contains only non-public fields)
-						logger.warning("Skipping recording of object "+receiverName+" in sequence "+origSeqCounter+ " because it has no public fields");
+						logger.warning("Skipping recording of object in statement "+es.sequence.getStatement(index)+" because assigned variable could not be located");
+					} else {
+
+						Map<String, String> objPublicState = new HashMap<>();
+						Map<String, String> objPrivateState = new HashMap<>();
+
+						getObjectState(runtimeObject, assignedVarName, objPublicState, objPrivateState);
+
+						if (!objPublicState.isEmpty() || !objPrivateState.isEmpty()) {
+
+							results.runtimeObjectName[index] = assignedVarName;
+							results.runtimeObjectType[index] = runtimeObject.getClass();
+							results.runtimePublicObjectState.set(index, objPublicState);
+							results.runtimePrivateObjectState.set(index, objPrivateState);
+
+						} else {
+							// otherwise we cannot record the state of this object so we skip it (contains
+							// only non-public fields)
+							logger.warning("Skipping recording of object " + assignedVarName + " in sequence "
+									+ origSeqCounter + " because it has no public fields");
+						}
 					}
 				}
 			}
@@ -595,6 +592,66 @@ public class SequenceExecutor {
 				logger.fine(resultsStr.toString());
 			}
 			
+		}
+
+		private String getAssignedVarName(boolean isOrigStatement, boolean isReceiver, int index) {
+			
+			String assignedVarName;
+			
+			if (isOrigStatement && origStatements != null) {
+
+				String statement = origStatements[origSeqCounter].trim();
+				
+				if (isReceiver) {
+					assignedVarName = getReceiverName(statement);
+				}
+
+				int spaceIndex = statement.indexOf(' ');
+				int equalsIndex = statement.indexOf(" = ");
+
+				if (equalsIndex == -1) {
+					return null;
+				}
+
+				if (spaceIndex > -1) {
+					if (spaceIndex != equalsIndex) {
+						assignedVarName = statement.substring(spaceIndex+1, equalsIndex);
+					} else {
+						assignedVarName = statement.substring(0, spaceIndex);
+					}
+				} else {
+					assignedVarName = statement.substring(0, equalsIndex);
+				}
+
+			} else {
+				if (isReceiver) {
+					assignedVarName = getReceiverName(executedStatements[index]);
+				} else {
+					int equalsIndex = executedStatements[index].indexOf(" = ");
+					if (equalsIndex == -1) {
+						return null;
+					}
+					assignedVarName = executedStatements[index].substring(0, equalsIndex);
+				}
+			}
+			
+			return assignedVarName;
+		}
+		
+		// Get identifier name for a receiver object in a Randoop statement.
+		// This should be the first variable in the variables list
+		
+		private String getReceiverName(String statement) {
+			
+			int lastColonIndex = statement.lastIndexOf(':');
+			if (lastColonIndex == -1) {
+				return null;
+			}
+			String varNames = statement.substring(lastColonIndex+1).trim();
+			if (varNames.isEmpty()) {
+				return null;
+			}
+			return varNames.split(" ")[0];
 		}
 
 		@Override
