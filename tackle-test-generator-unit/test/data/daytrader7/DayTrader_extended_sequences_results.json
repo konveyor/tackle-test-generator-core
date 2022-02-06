@@ -361,14 +361,7 @@
                 }
             },
             {
-                "statement_normal_termination":true,
-                "runtime_object_name":"integer0",
-                "runtime_object_type":"java.lang.Integer",
-                "runtime_object_state":{
-                    "integer0":"-1880"
-                },
-                "runtime_private_object_state":{
-                }
+                "statement_normal_termination":true
             },
             {
                 "statement_normal_termination":true,
