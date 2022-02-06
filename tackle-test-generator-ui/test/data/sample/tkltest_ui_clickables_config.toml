@@ -1,0 +1,57 @@
+###
+# specification of web elements to click during crawling (on top of the default elements)
+# this is simply a list of HTML tags
+# (calls Crawljax API builder.crawlRules().click())
+# click = ["tag1", "tag2"]
+###
+
+click = ["div"]
+
+###
+# specification of web elements to not click during crawling
+# add one such entry for each element
+# (calls Crawljax API builder.crawlRules().dontClick())
+# [[dont_click.element]]
+#   # tag name
+#   tag_name = ""
+#   # optionally, specify one of the following to refine the set of elements identified by the tag
+#   with_text = ""
+#   under_xpath = ""
+#   with_attribute = { attr_name = "", attr_value = ""}
+###
+
+[[dont_click.element]]
+  tag_name = "input"
+  with_attribute = { attr_name = "id", attr_value = "Delete records"}
+
+[[dont_click.element]]
+  tag_name = "button"
+  with_attribute = { attr_name = "name", attr_value = "Update record..."}
+
+[[dont_click.element]]
+  tag_name = "a"
+  with_text = "Upload file"
+
+[[dont_click.element]]
+  tag_name = "a"
+  under_xpath = "//*[@id=\"primary-links\"]/li"
+
+###
+# specification of a tree such that all web elements that occur in th tree should not clicked during crawling
+# add one such entry for each tree
+# (calls Crawljax API builder.crawlRules().dontClickChildrenOf())
+# [[dont_click.children_of]]
+#   # tag name
+#   tag_name = ""
+#   # optionally, specify one of the following to refine the set of elements identified by the tag
+#   with_id = ""
+#   with_class = ""
+###
+
+[[dont_click.children_of]]
+  tag_name = "div"
+  with_class = "masthead"
+
+[[dont_click.children_of]]
+  tag_name = "div"
+  with_id = "footer-module"

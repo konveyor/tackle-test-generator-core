@@ -16,7 +16,7 @@ The main capabilities enabled by these tools are:
 
 The tool can be built using `maven`, following these steps:
 
-1. Download Randoop jars
+1. From the folder `tackle-test-generator-unit`, download Randoop jars
    ```dtd
    mvn download:wget@get-randoop-jar download:wget@get-replacecall-jar
    ```
