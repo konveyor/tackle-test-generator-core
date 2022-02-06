@@ -1,0 +1,31 @@
+[general]
+app_name = "_sample"
+app_url = "localhost:8080"
+test_directory = ""
+verbose = false
+
+[generate]
+browser = "chrome"
+time_limit = 5
+max_states = 0
+add_state_diff_assertions = "none"
+include_iframes = false
+wait_after_event = 500
+wait_after_reload = 500
+clickables_spec_file = "./test/data/sample/tkltest_ui_clickables_config.toml"
+form_data_spec_file = ""
+click_once = true
+click_randomly = true
+max_depth = 2
+crawl_hidden_anchors = false
+click_default_elements = true
+form_fill_mode = "random"
+form_fill_order = "normal"
+browser_pixel_density = 1
+rted_similarity_threshold = 0
+
+[execute]
+
+[config.init]
+
+[config.list]
