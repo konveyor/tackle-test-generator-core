@@ -537,7 +537,6 @@ public class SequenceExecutor {
 					String assignedVarName = getAssignedVarName(isOrigStatement, isReceiver, index);
 					
 					if (assignedVarName == null) {
-						// otherwise we cannot record the state of this object so we skip it (contains only non-public fields)
 						logger.warning("Skipping recording of object in statement "+es.sequence.getStatement(index)+" because assigned variable could not be located");
 					} else {
 
