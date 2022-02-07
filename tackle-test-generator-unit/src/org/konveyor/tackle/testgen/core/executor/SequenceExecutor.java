@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -506,17 +507,25 @@ public class SequenceExecutor {
 						? ((NormalExecution) result).getRuntimeValue()
 						: null;
 						
-				boolean isArglessConstr = false;
+				boolean skippedOperation = false;
 				
-				// Skip field value recording if this is an argument-less constructor
+				// Skip field value recording if this is an argument-less or primitive wrapper constructor
+				
 				TypedOperation op = es.sequence.getStatement(index).getOperation();
 				
 				if (op.getOperation() instanceof ConstructorCall) {
 					
 					if (op.getInputTypes().size() == 0) {
-						isArglessConstr = true;
+						skippedOperation = true;
+						logger.info("skipping argument-less constructor "+
+						es.statementToCodeString(index));
+					} else if (ClassUtils.isPrimitiveOrWrapper(((Constructor<?> ) op.getOperation().
+							getReflectionObject()).getDeclaringClass())) {
+							skippedOperation = true;
+							logger.info("skipping primitive wrapper constructor "+
+							es.statementToCodeString(index));
 					}
-				}
+				} 
 				
 				// If this is the last statement in the sequence, and it doesn't return an object,
 				// locate the receiver object and record its values, to enable assertion generation 
@@ -532,7 +541,7 @@ public class SequenceExecutor {
 					}
 				}
 
-				if (runtimeObject != null && ! isArglessConstr) {
+				if (runtimeObject != null && ! skippedOperation) {
 					
 					String assignedVarName = getAssignedVarName(isOrigStatement, isReceiver, index);
 					
@@ -555,8 +564,8 @@ public class SequenceExecutor {
 						} else {
 							// otherwise we cannot record the state of this object so we skip it (contains
 							// only non-public fields)
-							logger.warning("Skipping recording of object " + assignedVarName + " in sequence "
-									+ origSeqCounter + " because it has no public fields");
+							logger.info("Skipping recording of object " + assignedVarName + " in sequence "
+									+ origSeqCounter + " because it has no primitive fields");
 						}
 					}
 				}
