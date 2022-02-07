@@ -42,16 +42,17 @@ public class CrawljaxRunner {
      * @return
      */
     private static BrowserConfiguration createBrowserConfiguration(String browser, int pixelDensity) {
-        // TODO: support phantomjs?
-        EmbeddedBrowser.BrowserType browserType = EmbeddedBrowser.BrowserType.CHROME;
-        if (browser.equals("chrome_headless")) {
+        EmbeddedBrowser.BrowserType browserType;
+        if (browser.equals("chrome")) {
+            browserType = EmbeddedBrowser.BrowserType.CHROME;
+        } else if (browser.equals("chrome_headless")) {
             browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
         } else if (browser.equals("firefox")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX;
         } else if (browser.equals("firefox_headless")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX_HEADLESS;
-        } else if (browser.equals("remote")) {
-            browserType = EmbeddedBrowser.BrowserType.REMOTE;
+        } else {
+            throw new RuntimeException("Unsupported browser: "+browser);
         }
         return new BrowserConfiguration(browserType, pixelDensity);
     }
@@ -137,6 +138,7 @@ public class CrawljaxRunner {
                 }
             }
         }
+        logger.info("Done processing dont_click.children_of spec");
     }
 
     /**

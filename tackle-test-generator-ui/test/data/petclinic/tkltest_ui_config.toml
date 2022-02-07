@@ -5,8 +5,8 @@ test_directory = ""
 verbose = false
 
 [generate]
-browser = "chrome"
-time_limit = 3
+browser = "chrome_headless"
+time_limit = 5
 max_states = 0
 add_state_diff_assertions = "none"
 include_iframes = false
@@ -22,7 +22,7 @@ click_default_elements = true
 form_fill_mode = "random"
 form_fill_order = "normal"
 browser_pixel_density = 2
-rted_similarity_threshold = 0
+rted_similarity_threshold = 0.0
 
 [execute]
 
