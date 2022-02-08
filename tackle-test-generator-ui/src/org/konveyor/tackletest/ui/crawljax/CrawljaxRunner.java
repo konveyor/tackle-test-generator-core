@@ -15,6 +15,7 @@ import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.configuration.BrowserConfiguration;
 import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
+import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import com.crawljax.plugins.testcasegenerator.TestConfiguration;
 import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
@@ -26,6 +27,10 @@ import org.tomlj.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -243,12 +248,46 @@ public class CrawljaxRunner {
             createTestConfiguration(generateOptions.getString("add_state_diff_assertions"))));
 
         // set output directory
-        if (testDir.isEmpty()) {
-            testDir = "tkltest-output-ui-" + appName + File.separator + appName + "_" + timeLimit + "mins";
-        }
         builder.setOutputDirectory(new File(testDir));
 
         return builder.build();
+    }
+
+    /**
+     * Creates and returns name of the output dir path.
+     * @param appName
+     * @param appUri
+     * @param timeLimit
+     * @return
+     */
+    private static String createOutputDirectoryName(String appName, URI appUri, long timeLimit) {
+        return "tkltest-output-ui-" + appName + File.separator + appName + "_" +
+            appUri.getHost() + "_" + timeLimit + "mins";
+    }
+
+    /**
+     * Reorganizes Crawljax's default directory structure by moving the crawl0 directory up one
+     * level to output directory name (removing the intermediate directory named for the app url's
+     * host component).
+     * @param outputDir
+     * @param appUri
+     * @throws IOException
+     */
+    private static void moveDirectory(String outputDir, URI appUri) throws IOException {
+        // source output directory
+        Path srcCrawlPath = Paths.get(outputDir, appUri.getHost(), "crawl0");
+
+        // create the target output directory by finding the highest crawl index
+        Path targetCrawlPath;
+        int i = 0;
+        do {
+            targetCrawlPath = Paths.get(outputDir, "crawl" + i);
+            i++;
+        } while (Files.exists(targetCrawlPath));
+
+        // move the output directory and remove the intermediate url host directory
+        Files.move(srcCrawlPath, targetCrawlPath);
+        Files.delete(Paths.get(outputDir, appUri.getHost()));
     }
 
     /**
@@ -302,7 +341,7 @@ public class CrawljaxRunner {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         // parse command-line options
         CommandLine cmd = parseCommandLineOptions(args);
 
@@ -329,6 +368,12 @@ public class CrawljaxRunner {
         String appUrl = parsedConfig.getString("general.app_url");
         String testDir = parsedConfig.getString("general.test_directory");
         TomlTable generateOptions = parsedConfig.getTable("generate");
+
+        // set output directory if not specified in config
+        URI appUri = URI.create(appUrl);
+        if (testDir == null || testDir.isEmpty()) {
+            testDir = createOutputDirectoryName(appName, appUri, generateOptions.getLong("time_limit"));
+        }
         logger.info("app_name="+appName+" app_url="+appUrl+" test_directory="+testDir);
         logger.info("generate options: "+generateOptions.keySet());
 
@@ -347,6 +392,9 @@ public class CrawljaxRunner {
         // run crawljax
         com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
         crawljaxRunner.call();
+
+        // move directory
+        moveDirectory(testDir, appUri);
 
     }
 }

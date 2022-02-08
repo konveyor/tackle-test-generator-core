@@ -1,6 +1,6 @@
 [general]
 app_name = "petclinic"
-app_url = "http://localhost:3000"
+app_url = "http://localhost:8080"
 test_directory = ""
 verbose = false
 
