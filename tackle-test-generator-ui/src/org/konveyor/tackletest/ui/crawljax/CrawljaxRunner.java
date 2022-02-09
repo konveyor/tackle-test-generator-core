@@ -69,14 +69,17 @@ public class CrawljaxRunner {
      * @return
      */
     private static TestConfiguration createTestConfiguration(String stateAssertion) {
-        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode = TestConfiguration
-            .StateEquivalenceAssertionMode.DOM;
-        if (stateAssertion.equals("visual")) {
+        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode;
+        if (stateAssertion.equals("dom")) {
+            stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.DOM;
+        } else if (stateAssertion.equals("visual")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.VISUAL;
         } else if (stateAssertion.equals("both")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.BOTH;
         } else if (stateAssertion.equals("hybrid")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.HYBRID;
+        } else {
+            throw new RuntimeException("Unknown assertion type: "+stateAssertion);
         }
         return new TestConfiguration(stateAssertionMode);
     }
@@ -214,13 +217,17 @@ public class CrawljaxRunner {
 
         // form fill mode
         String ffMode = generateOptions.getString("form_fill_mode");
-        CrawlRules.FormFillMode formFillMode = CrawlRules.FormFillMode.RANDOM;
-        if (ffMode.equals("normal")) {
+        CrawlRules.FormFillMode formFillMode;
+        if (ffMode.equals("random")) {
+            formFillMode = CrawlRules.FormFillMode.RANDOM;
+        } else if (ffMode.equals("normal")) {
             formFillMode = CrawlRules.FormFillMode.NORMAL;
         } else if (ffMode.equals("training")) {
             formFillMode = CrawlRules.FormFillMode.TRAINING;
         } else if (ffMode.equals("xpath_training")) {
             formFillMode = CrawlRules.FormFillMode.XPATH_TRAINING;
+        } else {
+            throw new RuntimeException("Unknown form fill mode: "+ffMode);
         }
         builder.crawlRules().setFormFillMode(formFillMode);
 
