@@ -15,6 +15,7 @@ import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.configuration.BrowserConfiguration;
 import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
+import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import com.crawljax.plugins.testcasegenerator.TestConfiguration;
 import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
@@ -26,6 +27,10 @@ import org.tomlj.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -42,16 +47,17 @@ public class CrawljaxRunner {
      * @return
      */
     private static BrowserConfiguration createBrowserConfiguration(String browser, int pixelDensity) {
-        // TODO: support phantomjs?
-        EmbeddedBrowser.BrowserType browserType = EmbeddedBrowser.BrowserType.CHROME;
-        if (browser.equals("chrome_headless")) {
+        EmbeddedBrowser.BrowserType browserType;
+        if (browser.equals("chrome")) {
+            browserType = EmbeddedBrowser.BrowserType.CHROME;
+        } else if (browser.equals("chrome_headless")) {
             browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
         } else if (browser.equals("firefox")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX;
         } else if (browser.equals("firefox_headless")) {
             browserType = EmbeddedBrowser.BrowserType.FIREFOX_HEADLESS;
-        } else if (browser.equals("remote")) {
-            browserType = EmbeddedBrowser.BrowserType.REMOTE;
+        } else {
+            throw new RuntimeException("Unsupported browser: "+browser);
         }
         return new BrowserConfiguration(browserType, pixelDensity);
     }
@@ -63,14 +69,17 @@ public class CrawljaxRunner {
      * @return
      */
     private static TestConfiguration createTestConfiguration(String stateAssertion) {
-        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode = TestConfiguration
-            .StateEquivalenceAssertionMode.DOM;
-        if (stateAssertion.equals("visual")) {
+        TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode;
+        if (stateAssertion.equals("dom")) {
+            stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.DOM;
+        } else if (stateAssertion.equals("visual")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.VISUAL;
         } else if (stateAssertion.equals("both")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.BOTH;
         } else if (stateAssertion.equals("hybrid")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.HYBRID;
+        } else {
+            throw new RuntimeException("Unknown assertion type: "+stateAssertion);
         }
         return new TestConfiguration(stateAssertionMode);
     }
@@ -137,6 +146,7 @@ public class CrawljaxRunner {
                 }
             }
         }
+        logger.info("Done processing dont_click.children_of spec");
     }
 
     /**
@@ -207,13 +217,17 @@ public class CrawljaxRunner {
 
         // form fill mode
         String ffMode = generateOptions.getString("form_fill_mode");
-        CrawlRules.FormFillMode formFillMode = CrawlRules.FormFillMode.RANDOM;
-        if (ffMode.equals("normal")) {
+        CrawlRules.FormFillMode formFillMode;
+        if (ffMode.equals("random")) {
+            formFillMode = CrawlRules.FormFillMode.RANDOM;
+        } else if (ffMode.equals("normal")) {
             formFillMode = CrawlRules.FormFillMode.NORMAL;
         } else if (ffMode.equals("training")) {
             formFillMode = CrawlRules.FormFillMode.TRAINING;
         } else if (ffMode.equals("xpath_training")) {
             formFillMode = CrawlRules.FormFillMode.XPATH_TRAINING;
+        } else {
+            throw new RuntimeException("Unknown form fill mode: "+ffMode);
         }
         builder.crawlRules().setFormFillMode(formFillMode);
 
@@ -241,12 +255,46 @@ public class CrawljaxRunner {
             createTestConfiguration(generateOptions.getString("add_state_diff_assertions"))));
 
         // set output directory
-        if (testDir.isEmpty()) {
-            testDir = "tkltest-output-ui-" + appName + File.separator + appName + "_" + timeLimit + "mins";
-        }
         builder.setOutputDirectory(new File(testDir));
 
         return builder.build();
+    }
+
+    /**
+     * Creates and returns name of the output dir path.
+     * @param appName
+     * @param appUri
+     * @param timeLimit
+     * @return
+     */
+    private static String createOutputDirectoryName(String appName, URI appUri, long timeLimit) {
+        return "tkltest-output-ui-" + appName + File.separator + appName + "_" +
+            appUri.getHost() + "_" + timeLimit + "mins";
+    }
+
+    /**
+     * Reorganizes Crawljax's default directory structure by moving the crawl0 directory up one
+     * level to output directory name (removing the intermediate directory named for the app url's
+     * host component).
+     * @param outputDir
+     * @param appUri
+     * @throws IOException
+     */
+    private static void moveDirectory(String outputDir, URI appUri) throws IOException {
+        // source output directory
+        Path srcCrawlPath = Paths.get(outputDir, appUri.getHost(), "crawl0");
+
+        // create the target output directory by finding the highest crawl index
+        Path targetCrawlPath;
+        int i = 0;
+        do {
+            targetCrawlPath = Paths.get(outputDir, "crawl" + i);
+            i++;
+        } while (Files.exists(targetCrawlPath));
+
+        // move the output directory and remove the intermediate url host directory
+        Files.move(srcCrawlPath, targetCrawlPath);
+        Files.delete(Paths.get(outputDir, appUri.getHost()));
     }
 
     /**
@@ -300,7 +348,7 @@ public class CrawljaxRunner {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         // parse command-line options
         CommandLine cmd = parseCommandLineOptions(args);
 
@@ -327,6 +375,12 @@ public class CrawljaxRunner {
         String appUrl = parsedConfig.getString("general.app_url");
         String testDir = parsedConfig.getString("general.test_directory");
         TomlTable generateOptions = parsedConfig.getTable("generate");
+
+        // set output directory if not specified in config
+        URI appUri = URI.create(appUrl);
+        if (testDir == null || testDir.isEmpty()) {
+            testDir = createOutputDirectoryName(appName, appUri, generateOptions.getLong("time_limit"));
+        }
         logger.info("app_name="+appName+" app_url="+appUrl+" test_directory="+testDir);
         logger.info("generate options: "+generateOptions.keySet());
 
@@ -345,6 +399,9 @@ public class CrawljaxRunner {
         // run crawljax
         com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
         crawljaxRunner.call();
+
+        // move directory
+        moveDirectory(testDir, appUri);
 
     }
 }
