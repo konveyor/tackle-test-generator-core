@@ -33,8 +33,20 @@ jobs:
         servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-    - name: Build with Maven
-      run: mvn -f tackle-test-generator-ui -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
+    - name: Pull test webapps
+      run: |
+        - git submodule init
+        - git submodule update
+    - name: Run petclinic webapp for testing
+      run: |
+        - cd tackle-test-generator-ui/test/data/webapps/spring-petclinic-rest
+        - docker run -d -p 9966:9966 --name petclinic-rest springcommunity/spring-petclinic-rest
+        - cd ../spring-petclinic-angular
+        - docker build -t spring-petclinic-angular:latest .
+        - docker run -d -p 8080:8080 --name petclinic-angular spring-petclinic-angular:latest
+        - curl localhost:8080
+    - name: Run maven test
+      run: mvn -f tackle-test-generator-ui -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode test
 
   # publish to GitHub Packages if workflow is running on the main branch
   publish:

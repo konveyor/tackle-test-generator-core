@@ -1,0 +1,3 @@
+[submodule "tackle-test-generator-ui/test/data/webapps"]
+	path = tackle-test-generator-ui/test/data/webapps
+	url = https://github.com/sinha108/tkltest-ui-webapps

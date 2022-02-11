@@ -617,12 +617,12 @@ public class CrawljaxRunner {
             System.exit(1);
         }
 
-//        // run crawljax
-//        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
-//        crawljaxRunner.call();
-//
-//        // move directory
-//        moveDirectory(testDir, appUri);
+        // run crawljax
+        com.crawljax.core.CrawljaxRunner crawljaxRunner = new com.crawljax.core.CrawljaxRunner(crawljaxConfig);
+        crawljaxRunner.call();
+
+        // move directory
+        moveDirectory(testDir, appUri);
 
     }
 }
