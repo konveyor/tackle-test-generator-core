@@ -35,10 +35,6 @@ jobs:
         ]'
     - name: Build with Maven
       run: mvn -f tackle-test-generator-ui -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
-#    - name: Sample TOML processing
-#      run: |
-#        cd tackle-test-generator-ui
-#        mvn exec:java -Dexec.mainClass=org.konveyor.tackletest.ui.crawljax.CrawljaxRunner -Dexec.args='-cf ./test/data/sample/tkltest_ui_config.toml'
 
   # publish to GitHub Packages if workflow is running on the main branch
   publish:

@@ -1,7 +1,7 @@
 # The form data specification consists of a set of tables, one for each form, and each form
 # contains a set of field specifications along with one "before click" element specification
 #
-# A field specification identies a field of a web form with the value to be used for that
+# A field specification identifies a field of a web form with the value to be used for that
 # field; it consists of three parts:
 #   1. input_type: enum with choices text, select, checkbox, radio, email, textarea, password, number
 #   2. identification: consists of two parts
@@ -17,7 +17,6 @@
 #        with_text = "<text>"
 #        under_xpath = "<xpath>"
 #
-[forms.empty_form]
 [forms.add_owner]
 
   [[forms.add_owner.input_fields]]
@@ -81,16 +80,43 @@
     tag_name = "button"
     with_attribute = { attr_name = "value", attr_value = "Update Owner" }
 
-  [[forms.edit_owner.input_fields]]
+[forms.add_vet]
 
-  [[forms.edit_owner.input_fields]]
+  [[forms.add_vet.input_fields]]
+    input_type = "text"
+    identification = { how = "name", value = "firstName"}
+    input_value = "pipi"
+
+  [[forms.add_vet.input_fields]]
+    input_type = "text"
+    identification = { how = "name", value = "lastName"}
+    input_value = "yu"
+
+  [[forms.add_vet.input_fields]]
+    input_type = "select"
+    identification = { how = "name", value = "description"}
+    input_value = "surgery"
+
+  [forms.add_vet.before_click]
+    tag_name = "button"
+    with_text = "Save Vet"
+
+##### empty/incomplete spec
+[forms.empty_form]
+
+[forms.incomplete_spec]
+  [[forms.incomplete_spec.input_fields]]
+
+  [[forms.incomplete_spec.input_fields]]
     identification = { how = "name", value = "address"}
     input_value = "2710"
 
-  [[forms.add_pet.input_fields]]
+  [[forms.incomplete_spec.input_fields]]
     input_type = "text"
     input_value = "water"
 
-  [[forms.add_pet.input_fields]]
+  [[forms.incomplete_spec.input_fields]]
     input_type = "text"
     identification = { how = "name", value = "name"}
+
+  [forms.incomplete_spec.before_click]
