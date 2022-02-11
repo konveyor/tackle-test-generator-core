@@ -70,7 +70,6 @@ public class CrawljaxRunner {
 
     /**
      * Creates and returns a test configuration for the given state equivalence assertion type.
-     * TODO: NONE mode
      * @param stateAssertion
      * @return test configuration object
      */
@@ -79,7 +78,9 @@ public class CrawljaxRunner {
             throw new RuntimeException("Assertion type not specified: "+stateAssertion);
         }
         TestConfiguration.StateEquivalenceAssertionMode stateAssertionMode;
-        if (stateAssertion.equals("dom")) {
+        if (stateAssertion.equals("none")) {
+            stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.NONE;
+        } else if (stateAssertion.equals("dom")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.DOM;
         } else if (stateAssertion.equals("visual")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.VISUAL;
