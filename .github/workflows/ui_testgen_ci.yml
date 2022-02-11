@@ -27,6 +27,10 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Install prerequisites (chromedriver)
+      run: |
+        sudo apt-get install chromium-chromedriver
+        chromedriver --version
     - name: Create maven settings.xml
       uses: s4u/maven-settings-action@v2.4.0
       with:
