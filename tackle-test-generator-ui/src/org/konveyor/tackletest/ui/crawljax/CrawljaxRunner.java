@@ -623,7 +623,7 @@ public class CrawljaxRunner {
         crawljaxRunner.call();
 
         // move directory
-        moveDirectory(testDir, appUri);
+//        moveDirectory(testDir, appUri);
 
     }
 }
