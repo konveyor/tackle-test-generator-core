@@ -6,7 +6,7 @@ verbose = false
 
 [generate]
 browser = "chrome_headless"
-time_limit = 2
+time_limit = 3
 max_states = 0
 add_state_diff_assertions = "none"
 include_iframes = false
