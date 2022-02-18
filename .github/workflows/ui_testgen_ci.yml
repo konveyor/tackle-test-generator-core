@@ -53,7 +53,7 @@ jobs:
         cd tackle-test-generator-ui/test/data/webapps/addressbook && ./deploy_app.sh start && cd ../../../..
         mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
           --batch-mode test -Dtest=CrawljaxRunnerTest#testCrawljaxRunnerAddressbook
-        cd test/data/webapps/petclinic && ./deploy_app.sh stop
+        cd test/data/webapps/addressbook && ./deploy_app.sh stop
 
   # publish to GitHub Packages if workflow is running on the main branch
   publish:
