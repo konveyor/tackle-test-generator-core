@@ -38,6 +38,20 @@ public class CrawljaxRunnerTest {
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
     }
 
+    @Test
+    public void testCrawljaxRunnerAddressbook() throws IOException, URISyntaxException {
+        String configFile = "./test/data/addressbook/tkltest_ui_config.toml";
+        String[] args = {
+            "--config-file", configFile
+        };
+        // run crawljax on app
+        CrawljaxRunner.main(args);
+
+        // assert that the output directory is created
+        String outDir = getOutputDirectoryName(configFile);
+        Assert.assertTrue(Files.exists(Paths.get(outDir)));
+    }
+
     private String getOutputDirectoryName(String configFile) throws IOException {
         TomlParseResult parsedConfig = parseConfig(configFile);
         String appName = parsedConfig.getString("general.app_name");
