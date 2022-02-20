@@ -27,18 +27,33 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Install prerequisites (chromedriver)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk2.0-0 chromium-chromedriver
+        chromedriver --version
     - name: Create maven settings.xml
       uses: s4u/maven-settings-action@v2.4.0
       with:
         servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-    - name: Build with Maven
-      run: mvn -f tackle-test-generator-ui -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
-#    - name: Sample TOML processing
-#      run: |
-#        cd tackle-test-generator-ui
-#        mvn exec:java -Dexec.mainClass=org.konveyor.tackletest.ui.crawljax.CrawljaxRunner -Dexec.args='-cf ./test/data/sample/tkltest_ui_config.toml'
+    - name: Pull test webapps
+      run: |
+        git submodule init
+        git submodule update
+    - name: Run petclinic webapp and test case
+      run: |
+        cd tackle-test-generator-ui/test/data/webapps/petclinic && ./deploy_app.sh start --build && cd ../../../..
+        mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+          --batch-mode test -Dtest=CrawljaxRunnerTest#testCrawljaxRunnerPetclinic
+        cd test/data/webapps/petclinic && ./deploy_app.sh stop
+    - name: Run addressbook webapp and test case
+      run: |
+        cd tackle-test-generator-ui/test/data/webapps/addressbook && ./deploy_app.sh start && cd ../../../..
+        mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+          --batch-mode test -Dtest=CrawljaxRunnerTest#testCrawljaxRunnerAddressbook
+        cd test/data/webapps/addressbook && ./deploy_app.sh stop
 
   # publish to GitHub Packages if workflow is running on the main branch
   publish:
