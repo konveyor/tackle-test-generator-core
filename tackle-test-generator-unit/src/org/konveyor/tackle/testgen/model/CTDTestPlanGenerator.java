@@ -121,9 +121,14 @@ public class CTDTestPlanGenerator {
 		appClasspathEntries = Utils.getClasspathEntries(new File(classpathFile));
 		
 		Set<String> excludedClasses = null;
+		Set<String> targetClasses = null;
 		
 		if (excludedClassList != null) {
 			excludedClasses = new HashSet<String>(Arrays.asList(excludedClassList.split("::")));
+		}
+		
+		if (targetClassList != null) {
+			targetClasses = new HashSet<String>(Arrays.asList(targetClassList.split("::")));
 		}
 		
 		// determine target classes
@@ -131,7 +136,7 @@ public class CTDTestPlanGenerator {
 		if (fileName != null) {
 			targetFetcher = new PartitionTargets(new File(fileName), excludedClasses);
 		} else {
-			targetFetcher = new ClassListTargets(targetClassList, excludedClasses);
+			targetFetcher = new ClassListTargets(targetClasses, excludedClasses);
 		}
 		
 		// determine types instantiated in the app via Rapid Type Analysis (RTA)
@@ -573,6 +578,26 @@ public class CTDTestPlanGenerator {
 			
 			return false;
 		}
+		
+		protected boolean isIncluded(String className, Set<String> targetClasses) {
+			
+			if (targetClasses == null) {
+				return true;
+			}
+			
+			for (String incClass : targetClasses) {
+				
+				if (incClass.equals(className)) {
+					return true;
+				}
+				
+				if (incClass.endsWith(".*") && className.startsWith(incClass.substring(0, incClass.indexOf('*')))) {
+					return true;
+				} 
+			}
+			
+			return false;
+		}
 	}
 
 	private class PartitionTargets extends TargetFetcher {
@@ -727,58 +752,54 @@ public class CTDTestPlanGenerator {
 		
 		private final String ANONYMOUS_CLASS_NAME_PATTERN = ".*\\$\\d+";
 
-		private ClassListTargets(String targetList, Set<String> excludedClasses) throws IOException {
-			
-			if (targetList != null) {
-				targetClasses = Arrays.asList(targetList.split("::"));
-				
-				if (excludedClasses != null) {
-					targetClasses = targetClasses.stream().filter(className -> ! isExcluded(className, excludedClasses)).collect(Collectors.toList());
-				}
-				
-			} else {
+		private ClassListTargets(Set<String> givenTargetClasses, Set<String> excludedClasses) throws IOException {
 
-				targetClasses = new ArrayList<String>();
+			targetClasses = new ArrayList<String>();
 
-				for (String appDirOrJarName : appDirs) {
+			for (String appDirOrJarName : appDirs) {
 
-					File appDirOrJar = new File(appDirOrJarName);
+				File appDirOrJar = new File(appDirOrJarName);
 
-					if (appDirOrJar.getName().endsWith(".jar")) {
+				if (appDirOrJar.getName().endsWith(".jar")) {
 
-						ZipInputStream zip = null;
+					ZipInputStream zip = null;
 
-						try {
-							zip = new ZipInputStream(new FileInputStream(appDirOrJar));
-							for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-								if (!entry.isDirectory() && entry.getName().endsWith(".class") && ! entry.getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX)) {
-									// This ZipEntry represents a class. Now, what class does it represent?
-									String className = entry.getName().replace('/', '.'); // including ".class"
-									className = className.substring(0, className.length() - ".class".length());
-									if (excludedClasses == null || ! isExcluded(className, excludedClasses) && ! isAnonymousClassName(className)) {
-										targetClasses.add(className);
-									}
+					try {
+						zip = new ZipInputStream(new FileInputStream(appDirOrJar));
+						for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+							if (!entry.isDirectory() && entry.getName().endsWith(".class")
+									&& !entry.getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX)) {
+								// This ZipEntry represents a class. Now, what class does it represent?
+								String className = entry.getName().replace('/', '.'); // including ".class"
+								className = className.substring(0, className.length() - ".class".length());
+								if (isIncluded(className, givenTargetClasses) && !isExcluded(className, excludedClasses)
+										&& !isAnonymousClassName(className)) {
+									targetClasses.add(className);
 								}
 							}
-						} finally {
-							if (zip != null) {
-								zip.close();
-							}
 						}
-
-					} else if (appDirOrJar.isDirectory()) {
-						targetClasses.addAll(Files.walk(Paths.get(appDirOrJar.getAbsolutePath()))
-								.filter(path -> path.toFile().isFile() && path.toFile().getName().endsWith(".class") &&
-										! path.toFile().getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX) && 
-										! isAnonymousClassName(path.toFile().getName().substring(0, path.toFile().getName().length() - ".class".length())))
-								.map(path -> Utils.fileToClass(path.toFile().getAbsolutePath(), appDirOrJar.getAbsolutePath(), ".class", File.separator)).
-								collect(Collectors.toList()));
-						if (excludedClasses != null) {
-							targetClasses = targetClasses.stream().filter(className -> ! isExcluded(className, excludedClasses)).collect(Collectors.toList());
+					} finally {
+						if (zip != null) {
+							zip.close();
 						}
-					} else {
-						throw new IllegalArgumentException("Unrecognized app entry type: "+appDirOrJar.getAbsolutePath());
 					}
+
+				} else if (appDirOrJar.isDirectory()) {
+					targetClasses.addAll(Files.walk(Paths.get(appDirOrJar.getAbsolutePath()))
+							.filter(path -> path.toFile().isFile() && path.toFile().getName().endsWith(".class")
+									&& !path.toFile().getName().endsWith(Constants.EXCLUDED_TARGET_CLASS_SUFFIX)
+									&& !isAnonymousClassName(path.toFile().getName().substring(0,
+											path.toFile().getName().length() - ".class".length())))
+							.map(path -> Utils.fileToClass(path.toFile().getAbsolutePath(),
+									appDirOrJar.getAbsolutePath(), ".class", File.separator))
+							.collect(Collectors.toList()));
+					if (givenTargetClasses != null || excludedClasses != null) {
+						targetClasses = targetClasses.stream()
+								.filter(className -> isIncluded(className, givenTargetClasses) && !isExcluded(className, excludedClasses))
+								.collect(Collectors.toList());
+					}
+				} else {
+					throw new IllegalArgumentException("Unrecognized app entry type: " + appDirOrJar.getAbsolutePath());
 				}
 			}
 		}

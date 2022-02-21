@@ -178,6 +178,38 @@ public class CTDModelingTest {
             executeModelingTest(modelerAppUnderTest.appName, modelerAppUnderTest.standardNodeFileForAllClassesButExcludedClassAndPackageTest);
         }
 	}
+	
+	@Test
+	public void testGenerateModelsAndTestPlansForIncludedPackageButExcluded() throws Exception {
+        for (ModelerAppUnderTest modelerAppUnderTest : appsUnderTest) {
+        	
+        	/* Checking on one app under test only to reduce regression time */
+        	
+			if (modelerAppUnderTest.targetClassListForIncludedPackageTest != null) {
+
+				System.out.println(
+						"Current app under test in testGenerateModelsAndTestPlansForIncludedPackageButExcluded: "
+								+ modelerAppUnderTest.appName);
+
+				CTDTestPlanGenerator analyzer = new CTDTestPlanGenerator(modelerAppUnderTest.appName,
+						modelerAppUnderTest.testPlanFilename,
+						modelerAppUnderTest.targetClassListForIncludedPackageTest,
+						modelerAppUnderTest.excludedClassListForIncludedPackageTest,
+						modelerAppUnderTest.partitionsCPPrefix, modelerAppUnderTest.partitionsCPSuffix,
+						modelerAppUnderTest.appPath, modelerAppUnderTest.appClasspathFilename,
+						modelerAppUnderTest.maxNestDepth, modelerAppUnderTest.addLocalRemote, modelerAppUnderTest.level,
+						modelerAppUnderTest.refactoringPrefix, modelerAppUnderTest.partitionsPrefix,
+						modelerAppUnderTest.partitionsSuffix, modelerAppUnderTest.partitionsSeparator);
+
+				analyzer.modelPartitions();
+
+				executeModelingTest(modelerAppUnderTest.appName,
+						modelerAppUnderTest.standardNodeFileForIncludedPackageTest);
+
+			}
+		}
+	}
+
 
 	/*
 	 * We cannot compare the objects in a straightforward way because CTD result
