@@ -621,6 +621,10 @@ public class TestUtils {
         public String excludedClassListForAllClassesButExcludedClassAndPackageTest;
         public String standardNodeFileForAllClassesButExcludedClassAndPackageTest;
         
+        public String targetClassListForIncludedPackageTest;
+        public String excludedClassListForIncludedPackageTest;
+        public String standardNodeFileForIncludedPackageTest;
+        
         public String partitionsCPPrefix;
         public String partitionsCPSuffix;
         public String refactoringPrefix;
@@ -646,7 +650,10 @@ public class TestUtils {
                                    String standardNodeFileForAllClassesButExcludedTest,
                                    String targetClassListForAllClassesButExcludedClassAndPackageTest,
                                    String excludedClassListForAllClassesButExcludedClassAndPackageTest,
-                                   String standardNodeFileForAllClassesButExcludedClassAndPackageTest) {
+                                   String standardNodeFileForAllClassesButExcludedClassAndPackageTest,
+                                   String targetClassListForIncludedPackageTest,
+                                   String excludedClassListForIncludedPackageTest,
+                                   String standardNodeFileForIncludedPackageTest) {
             
             super(appName, appClasspath, appPath, testPlanFilename);
             this.maxNestDepth = maxNestDepth;
@@ -668,6 +675,10 @@ public class TestUtils {
             this.targetClassListForAllClassesButExcludedClassAndPackageTest = targetClassListForAllClassesButExcludedClassAndPackageTest;
             this.excludedClassListForAllClassesButExcludedClassAndPackageTest = excludedClassListForAllClassesButExcludedClassAndPackageTest;
             this.standardNodeFileForAllClassesButExcludedClassAndPackageTest = standardNodeFileForAllClassesButExcludedClassAndPackageTest;
+            
+            this.targetClassListForIncludedPackageTest = targetClassListForIncludedPackageTest;
+            this.excludedClassListForIncludedPackageTest = excludedClassListForIncludedPackageTest;
+            this.standardNodeFileForIncludedPackageTest = standardNodeFileForIncludedPackageTest;
             
             // for added partitions file support: change the input for relevant fields
             this.partitionsCPPrefix = null;
@@ -697,7 +708,10 @@ public class TestUtils {
                 "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded.json",
                 null,
                 "com.ibm.websphere.samples.daytrader.TradeAction::com.ibm.websphere.samples.daytrader.web.websocket.*",
-                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json");
+                "test/data/daytrader7/DayTrader_ctd_models_all_classes_but_excluded_package.json",
+                "com.ibm.websphere.samples.daytrader.entities.*",
+                "com.ibm.websphere.samples.daytrader.entities.HoldingDataBean",
+                "test/data/daytrader7/daytrader7_ctd_models_included_package_but_excluded.json");
         }
 
         public static ModelerAppUnderTest create4_rifModelerAppUnderTest() {
@@ -719,7 +733,8 @@ public class TestUtils {
                 "test/data/4_rif/4_rif_ctd_models_all_classes_but_excluded.json",
                 null,
                 "com.densebrain.rif.client.service.*::com.densebrain.rif.server.transport.WebServiceDescriptor",
-                "test/data/4_rif/4_rif_ctd_models_all_classes_but_excluded_package.json");
+                "test/data/4_rif/4_rif_ctd_models_all_classes_but_excluded_package.json",
+                null, null, null);
         }
 
         public static ModelerAppUnderTest create7_sfmisModelerAppUnderTest() {
@@ -741,7 +756,8 @@ public class TestUtils {
                 "test/data/7_sfmis/7_sfmis_ctd_models_all_classes_but_excluded.json",
                 null,
                 "com.hf.sfm.system.pdo.*::com.hf.sfm.filter.setCharacterEncodingFilter::com.hf.sfm.util.DaoFactoryUtil::com.hf.sfm.util.DaoFactory",
-                "test/data/7_sfmis/7_sfmis_ctd_models_all_classes_but_excluded_package.json");
+                "test/data/7_sfmis/7_sfmis_ctd_models_all_classes_but_excluded_package.json",
+                null, null, null);
         }
 
         public static ModelerAppUnderTest create40_glengineerModelerAppUnderTest() {
@@ -763,7 +779,8 @@ public class TestUtils {
                 "test/data/40_glengineer/40_glengineer_ctd_models_all_classes_but_excluded.json",
                 null,
                 "glengineer.agents.settings.*::glengineer.agents.setters.*::glengineer.positions.HWordPosition",
-                "test/data/40_glengineer/40_glengineer_ctd_models_all_classes_but_excluded_package.json");
+                "test/data/40_glengineer/40_glengineer_ctd_models_all_classes_but_excluded_package.json",
+                null, null, null);
         }
 
         public static ModelerAppUnderTest create53_shp2kmlModelerAppUnderTest() {
@@ -785,7 +802,8 @@ public class TestUtils {
                 "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded.json",
                 null,
                 "net.sourceforge.*",
-                "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded_package.json");
+                "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded_package.json",
+                null, null, null);
         }
         
         public static String getCtdOutfileName(String appName) {
