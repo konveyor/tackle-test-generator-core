@@ -73,11 +73,11 @@ jobs:
           servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-#      - name: Delete old package version
-#        uses: actions/delete-package-versions@v2
+      - name: Delete old package version
+        uses: actions/delete-package-versions@v2
 #        uses: smartsquaregmbh/delete-old-packages@v0.3.3
-#        with:
-#          package-name: 'org.konveyor.tackle-test-generator-ui'
+        with:
+          package-name: 'org.konveyor.tackle-test-generator-ui'
 #          names: 'org.konveyor.tackle-test-generator-ui'
 #          keep: 0
       - name: Publish to GitHub Packages
