@@ -468,7 +468,7 @@ public class TestSequenceExtender {
                 System.out.println("");
                 System.out.println("*   generated " + classSeqCount + " test sequences");
                 if (totalBadPathSeqCount > 0) {
-                	System.out.println("*   generated " + classBadPathSeqCount + " test sequences");
+                	System.out.println("*   generated " + classBadPathSeqCount + " bad path test sequences");
                 }
                 System.out.print("*   -- class test-plan coverage rate: ");
                 if (classTestPlanRows > 0) {
@@ -944,8 +944,6 @@ public class TestSequenceExtender {
 		    System.setErr(NullPrintStream.NULL_PRINT_STREAM);
 			SequenceExecutor.SequenceResults execResult = seqExecutor.executeSequence(sequenceID, extendedSeq,
 					numSeqExecutions);
-			//System.setOut(System.out);
-	        //System.setErr(System.err);
 			this.execExtSeq.put(sequenceID, execResult);
 			if (!execResult.passed) {
 				// find the exception that caused the sequence to fail and add to the summary

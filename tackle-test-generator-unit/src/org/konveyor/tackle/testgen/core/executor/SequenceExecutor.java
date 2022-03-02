@@ -487,6 +487,7 @@ public class SequenceExecutor {
 			results.normalTermination[index] = (result instanceof NormalExecution);
 
 			if (result instanceof ExceptionalExecution) {
+				results.failingIndex = index;
 				Throwable exception =  ((ExceptionalExecution) result).getException();
 				String fullMessage = exception.toString();
 				if (fullMessage.contains(":")) {
