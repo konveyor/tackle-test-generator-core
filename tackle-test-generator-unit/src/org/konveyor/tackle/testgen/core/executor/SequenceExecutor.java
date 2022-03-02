@@ -118,7 +118,7 @@ public class SequenceExecutor {
 		public Class<?>[] runtimeObjectType;
 		public List<Map<String, String>> runtimePublicObjectState;
 		public List<Map<String, String>> runtimePrivateObjectState;
-		Boolean[] normalTermination;
+		public Boolean[] normalTermination;
 		String[] output;
         public String[] exception;
         public String[] exceptionMessage;

@@ -483,6 +483,7 @@ public class TestSequenceExtender {
                             .flatMap(mseq -> mseq.stream())
                             .collect(Collectors.toList());
                 	if (classBadPathSeqCount > 0) {
+                		logger.info("generating assertions for "+badPathSeqIdMap.size()+" bad path sequences");
                 		seqIds.addAll(badPathSeqIdMap.values().stream()
                             .flatMap(mseq -> mseq.stream())
                             .collect(Collectors.toList()));
@@ -917,7 +918,6 @@ public class TestSequenceExtender {
     private int addDiffAssertions(List<String> seqIds) {
         DiffAssertionsGenerator diffAssertGen = new DiffAssertionsGenerator(applicationName);
         for (String seqId : seqIds) {
-            logger.fine("Adding diff assertions to sequence: " + seqId);
             SequenceExecutor.SequenceResults seqRes = execExtSeq.get(seqId);
             String seqWithAssertStr = diffAssertGen.addAssertions(this.extSeqStr.get(seqId), seqRes);
             extSeqStr.put(seqId, seqWithAssertStr);
@@ -932,7 +932,7 @@ public class TestSequenceExtender {
 	 * @param sequenceID Sequence to be executed
 	 * @return boolean indicating whether sequence executes successfully
 	 */
-	private boolean executeSequence(String sequenceID, List<String> badPathSeqMap) {
+	private boolean executeSequence(String sequenceID, List<String> badPathSeqs) {
 		SequenceExecutor seqExecutor = new SequenceExecutor(true);
 		Set<String> errMsgs = new HashSet<>();
 		Sequence extendedSeq = this.seqIdMap.get(sequenceID);
@@ -956,12 +956,11 @@ public class TestSequenceExtender {
 				errMsgs.addAll(Arrays.stream(execResult.exceptionMessage).filter(str -> str != null)
 						.collect(Collectors.toSet()));
 				
-				//System.out.println("Failed execution of "+sequenceID+" with exception "+excp);
-				
 				/* Create bad path tests for failures that caused target method declared exceptions */ 
 				if (generateBadPath && excp != null && execResult.failingIndex == extendedSeq.size()-1 && 
 						isDeclaredException(excp, this.seqTargetMap.get(sequenceID))) {
-					badPathSeqMap.add(sequenceID);
+					logger.info("Failed execution of "+sequenceID+" with declared exception "+excp);
+					badPathSeqs.add(sequenceID);
 					this.extSummary.uncovTestPlanRows__execFailBadPath++;
 				}
 			}
