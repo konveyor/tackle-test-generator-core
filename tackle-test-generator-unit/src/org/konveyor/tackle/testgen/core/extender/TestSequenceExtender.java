@@ -491,21 +491,21 @@ public class TestSequenceExtender {
                 }
 
                 // write test sequences to test class file
-                try {
-                	if (classSeqCount > 0) {
-                		writeTestClass(className, classSeqIdMap, partition, false);
-                	}
-                } catch (IOException e) {
-                    logger.warning("Error writing test class for " + className + ": " + e);
+				if (classSeqCount > 0) {
+					try {
+						writeTestClass(className, classSeqIdMap, partition, false);
+					} catch (IOException e) {
+						logger.warning("Error writing test class for " + className + ": " + e);
+					}
                 }
                 // write test sequences to bad path test class file
-                try {
-                	if (classBadPathSeqCount > 0) {
-                		writeTestClass(className, badPathSeqIdMap, partition, true);
-                	}
-                } catch (IOException e) {
-                    logger.warning("Error writing bad path test class for " + className + ": " + e);
-                }
+				if (classBadPathSeqCount > 0) {
+					try {
+						writeTestClass(className, badPathSeqIdMap, partition, true);
+					} catch (IOException e) {
+						logger.warning("Error writing bad path test class for " + className + ": " + e);
+					}
+				}
             });
 
             if (!classCTDCovInfo.isEmpty()) {
