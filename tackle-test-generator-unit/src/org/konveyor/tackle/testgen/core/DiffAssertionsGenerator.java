@@ -189,18 +189,20 @@ public class DiffAssertionsGenerator {
 
 		STATEMENT_LOOP: for (int i = 0; i < statements.length; i++, resCounter++) {
 			
-			if (results.failingIndex == i) {
+			if ( ! results.normalTermination[resCounter]) {
 				
-				createExceptionHandlingBlock(statements, codeWithAssertions, results);
+				logger.info("Creating fail assertion for statement "+statements[i]);
+				
+				addAssertInExceptionHandlingBlock(statements[i], codeWithAssertions, results);
 				break STATEMENT_LOOP;
 				
 			} else {
-
-				codeWithAssertions.append(statements[i]);
-				codeWithAssertions.append(LINE_SEPARATOR);
-
-				if (results.runtimeObjectType[resCounter] != null) {
-
+				
+				if (results.runtimeObjectType[resCounter] == null) {
+					codeWithAssertions.append(statements[i]);
+					codeWithAssertions.append(LINE_SEPARATOR);
+				} else {
+					
 					/*
 					 * If this runtime object name is not defined in the original sequence then it
 					 * was added by Randoop and we should skip it
@@ -209,10 +211,22 @@ public class DiffAssertionsGenerator {
 					while (!SequenceParser.resolve(results.runtimeObjectName[resCounter], block)) {
 						resCounter++;
 						if (results.runtimeObjectName[resCounter] == null) {
-							// The object created by this statement could not be recorded - hence we skip it
-							continue STATEMENT_LOOP;
+							if ( ! results.normalTermination[resCounter]) {
+								logger.info("Creating fail assertion for statement "+statements[i]);
+								addAssertInExceptionHandlingBlock(statements[i], codeWithAssertions, results);
+								break STATEMENT_LOOP;
+							} else {
+								codeWithAssertions.append(statements[i]);
+								codeWithAssertions.append(LINE_SEPARATOR);
+								continue STATEMENT_LOOP;
+							}
 						}
 					}
+					
+					logger.info("Creating value recording assertion for statement "+statements[i]);
+					
+					codeWithAssertions.append(statements[i]);
+					codeWithAssertions.append(LINE_SEPARATOR);
 
 					Class<?> theClass = results.runtimeObjectType[resCounter];
 
@@ -238,11 +252,11 @@ public class DiffAssertionsGenerator {
 		return codeWithAssertions.toString();
 	}
 
-	private void createExceptionHandlingBlock(String[] statements, StringBuilder codeWithAssertions, SequenceResults results) {
+	private void addAssertInExceptionHandlingBlock(String statement, StringBuilder codeWithAssertions, SequenceResults results) {
 		
 		codeWithAssertions.append("try {");
 		codeWithAssertions.append(LINE_SEPARATOR);
-		codeWithAssertions.append("\t"+statements[results.failingIndex]);
+		codeWithAssertions.append("\t"+statement);
 		codeWithAssertions.append(LINE_SEPARATOR);
 		codeWithAssertions.append("\torg.junit.Assert.fail(\"Expected exception of type "+results.getException()+"\");");
 		codeWithAssertions.append(LINE_SEPARATOR);
@@ -252,6 +266,7 @@ public class DiffAssertionsGenerator {
 		codeWithAssertions.append(LINE_SEPARATOR);
 		codeWithAssertions.append("}");
 		
+		assertCounter++;
 	}
 
 	private void addAssertionsOnPublicFields(Map<String, String> runtimeState, String objName, Class<?> objClass, StringBuilder codeWithAssertions) {
