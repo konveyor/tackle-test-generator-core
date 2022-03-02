@@ -1,0 +1,12 @@
+{
+  "monolithic" : {
+    "failing.Failing" : {
+      "throwUncaughtException(java.lang.String)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      },
+      "throwCaughtException(int)" : {
+        "test_plan_row_1" : "UNCOVERED_EXEC_FAIL"
+      }
+    }
+  }
+}

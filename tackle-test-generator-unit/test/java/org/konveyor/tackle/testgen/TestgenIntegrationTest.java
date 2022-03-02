@@ -126,7 +126,7 @@ public class TestgenIntegrationTest {
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 testApp.appName, testApp.appPath, testApp.appClasspathFilename, testApp.testSeqFilename,
-                testApp.testPlanFilename, null, true,null);
+                testApp.testPlanFilename, null, true, false, null);
 
             // assert that test directory and summary files are created
             assertTrue(testApp.appName, Files.exists(Paths.get(testApp.appOutdir)));
@@ -162,7 +162,7 @@ public class TestgenIntegrationTest {
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 testApp.appName, testApp.appPath, testApp.appClasspathFilename, testApp.testSeqFilename,
-                testApp.testPlanFilename, null, true,null);
+                testApp.testPlanFilename, null, true, false, null);
 
             // assert that test directory and summary files are created
             assertTrue(testApp.appName, Files.exists(Paths.get(testApp.appOutdir)));

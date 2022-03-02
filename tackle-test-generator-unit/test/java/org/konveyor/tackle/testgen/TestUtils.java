@@ -65,7 +65,8 @@ public class TestUtils {
 
     public static void launchProcess(String testClassName, String appName, String appPath,
                                      String appClasspathFileName, String seqFile, String testPlanFile,
-                                     Boolean allResults, Boolean jeeSupport, String resultsFile)
+                                     Boolean allResults, Boolean jeeSupport, Boolean badPath,
+                                     String resultsFile)
         throws IOException, InterruptedException {
         String projectClasspath = "";
 
@@ -122,6 +123,9 @@ public class TestUtils {
             if (jeeSupport) {
                 processArgs.add("-jee");
             }
+            if (badPath) {
+            	processArgs.add("-bp");
+            }
             processArgs.add("-da");
         }
 
@@ -176,6 +180,7 @@ public class TestUtils {
         public int expmin_class_sequence_pool_keys;
         public int expmin_executed_sequences;
         public int expmin_final_sequences;
+        public int expmin_bad_path_final_sequences;
         public int expmin_exception_during_extension;
         public Map<String, String> exp__target_method_coverage;
         public int expmin_test_classes_count;
@@ -254,6 +259,30 @@ public class TestUtils {
                     {"DayTraderUtil::com.ibm.websphere.samples.daytrader.entities.AccountDataBean::login(java.lang.String)::test_plan_row_1", "COVERED"}})
                     .collect(Collectors.toMap(value -> value[0], value -> value[1]));
             appUnderTest.expmin_test_classes_count = 42;
+            return appUnderTest;
+        }
+        
+        public static ExtenderAppUnderTest createFailingAppExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
+            
+            ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("failing",
+                "test/data/failingApp/classpath.txt",
+                "test/data/failingApp/target/classes",
+                testPlanFilename,
+                testSeqFilename,
+                "test/data/failingApp/failing_test_generation_summary_standard.json",
+                "test/data/failingApp/failing_coverage_report_standard.json");
+
+            appUnderTest.expmin_class_sequence_pool_keys = 2;
+            appUnderTest.expmin_executed_sequences = 2;
+            appUnderTest.expmin_final_sequences = 0;
+            appUnderTest.expmin_bad_path_final_sequences = 2;
+            appUnderTest.expmin_exception_during_extension = 0;
+            appUnderTest.exp__target_method_coverage =
+                Stream.of(new String[][]{
+                    {"monolithic::failing.Failing::throwUncaughtException(java.lang.String)::test_plan_row_1", "UNCOVERED_EXEC_FAIL"},
+                    {"monolithic::failing.Failing::throwCaughtException(int)::test_plan_row_1", "UNCOVERED_EXEC_FAIL"}})
+                    .collect(Collectors.toMap(value -> value[0], value -> value[1]));
+            appUnderTest.expmin_test_classes_count = 1;
             return appUnderTest;
         }
         

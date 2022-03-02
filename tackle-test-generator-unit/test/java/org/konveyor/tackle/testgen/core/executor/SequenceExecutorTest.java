@@ -57,6 +57,7 @@ public class SequenceExecutorTest {
             null,
             true,
             null,
+            null,
             null);
 
 		assertTrue(outputFile.exists());

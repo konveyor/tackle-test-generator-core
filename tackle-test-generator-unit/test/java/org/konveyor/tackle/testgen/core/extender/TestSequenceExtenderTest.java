@@ -126,6 +126,7 @@ public class TestSequenceExtenderTest {
         assertEquals(app.appName, extSeqInfoStd.get("generated_sequences").asInt(), extSeqInfo.get("generated_sequences").asInt());
         assertMinimum(app.appName, app.expmin_executed_sequences, extSeqInfo.get("executed_sequences").asInt());
         assertMinimum(app.appName, app.expmin_final_sequences, extSeqInfo.get("final_sequences").asInt());
+        assertMinimum(app.appName, app.expmin_bad_path_final_sequences, extSeqInfo.get("failing_sequences_bad_path").asInt());
 
 		ObjectNode covInfo = (ObjectNode) summaryInfo.get("test_plan_coverage_info");
         ObjectNode covInfoStd = (ObjectNode) summaryInfoStd.get("test_plan_coverage_info");
@@ -222,7 +223,7 @@ public class TestSequenceExtenderTest {
             // generate test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
-                app.testPlanFilename, null, true,null);
+                app.testPlanFilename, null, true, false, null);
 
             // assert over summary file
             assertSummaryFile(app);
@@ -247,7 +248,7 @@ public class TestSequenceExtenderTest {
             // execute test cases via process launcher
             TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
                 app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
-                app.testPlanFilename, null, false,null);
+                app.testPlanFilename, null, false, false, null);
 
             // assert over summary file
             assertSummaryFile(app);
@@ -258,6 +259,33 @@ public class TestSequenceExtenderTest {
             // assert over generated test classes dir
             assertTestClassesDir(app);
         }
+    }
+    
+    @Test
+    public void testGenerateTestsWithBadPath() throws Exception {
+    	
+    	ExtenderAppUnderTest app = ExtenderAppUnderTest.createFailingAppExtenderAppUnderTest(
+                "test/data/failingApp/failing_ctd_models_and_test_plans.json",
+                "test/data/failingApp/failing_EvoSuiteTestGenerator_bb_test_sequences.json,"
+                + "test/data/failingApp/failing_RandoopTestGenerator_bb_test_sequences.json"
+            );
+    	
+    	System.out.println("Current app under test in testGenerateTestsWithBadPath: " + app.appName);
+    	
+    	 // execute test cases via process launcher
+        TestUtils.launchProcess(TestSequenceExtender.class.getSimpleName(),
+            app.appName, app.appPath, app.appClasspathFilename, app.testSeqFilename,
+            app.testPlanFilename, null, false, true, null);
+
+        // assert over summary file
+        assertSummaryFile(app);
+
+        // assert over coverage file
+        assertCoverageFile(app);
+
+        // assert over generated test classes dir
+        assertTestClassesDir(app);
+    	
     }
     
     
