@@ -81,7 +81,7 @@ public class JUnitTestExporter {
 	 * @param outDirParent output path
 	 * @throws IOException
 	 */
-	public JUnitTestExporter(File seqFile, File outDirParent, boolean addAssertMethods) throws IOException, SequenceParseException {
+	public JUnitTestExporter(File seqFile, File outDirParent, boolean addAssertMethods, boolean isBadPath) throws IOException, SequenceParseException {
 
 		this(outDirParent, addAssertMethods);
 
@@ -103,7 +103,7 @@ public class JUnitTestExporter {
                 }
                 testSequences.get(targetMethodSig).add(seqStr);
             }
-			writeUnitTest(clsName, testSequences, entry.getValue().imports);
+			writeUnitTest(clsName, testSequences, entry.getValue().imports, isBadPath);
 		}
 		logger.info("Wrote "+unitFileCounter+" junit test files");
 	}
@@ -140,9 +140,9 @@ public class JUnitTestExporter {
 		return junitTests;
 	}
 
-	public void writeUnitTest(String className, Map<String, List<String>> testSequences, Set<String> testImports) throws IOException {
+	public void writeUnitTest(String className, Map<String, List<String>> testSequences, Set<String> testImports, boolean isBadPath) throws IOException {
 
-		String unitTestClassName = className.replaceAll("\\.", "_")+"_Test";
+		String unitTestClassName = className.replaceAll("\\.", "_")+(isBadPath? "_BadPath" : "")+"_Test";
 		
 		File outputFile;
 		
@@ -180,6 +180,10 @@ public class JUnitTestExporter {
             }
             if ( ! testImports.contains("static org.junit.Assert.assertNull")) {
                 writer.write("import static org.junit.Assert.assertNull;");
+                writer.newLine();
+            }
+            if ( ! testImports.contains("static org.junit.Assert.fail")) {
+                writer.write("import static org.junit.Assert.fail;");
                 writer.newLine();
             }
 			if ( ! testImports.contains("org.junit.Test")) {
@@ -478,7 +482,7 @@ public class JUnitTestExporter {
         logger.info("Sequences file: "+sequencesFile);
         logger.info("Output directory path: "+outputDir);
 
-		new JUnitTestExporter(new File(sequencesFile), new File(outputDir), true);
+		new JUnitTestExporter(new File(sequencesFile), new File(outputDir), true, false);
 	}
 
 }

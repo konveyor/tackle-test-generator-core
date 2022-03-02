@@ -125,6 +125,7 @@ public class SequenceExecutor {
         public String[] cause;
         public String[] causeMessage;
 		public boolean passed;
+		public int failingIndex = -1;
 
 		public SequenceResults(int size) {
 			normalTermination = new Boolean[size];
@@ -157,6 +158,7 @@ public class SequenceExecutor {
 			cause = Arrays.copyOf(other.cause, other.cause.length);
 			causeMessage = Arrays.copyOf(other.causeMessage, other.causeMessage.length);
 			passed = other.passed;
+			failingIndex = other.failingIndex;
 		}
 
 		public SequenceResults(ObjectNode content, Set<Integer> indices) throws ClassNotFoundException {
@@ -178,10 +180,19 @@ public class SequenceExecutor {
 							runtimePublicObjectState.set(k, mapper.convertValue(statementInfo.get("runtime_object_state"), new TypeReference<Map<String, String>>(){}));
 							runtimePrivateObjectState.set(k, mapper.convertValue(statementInfo.get("runtime_private_object_state"), new TypeReference<Map<String, String>>(){}));
 						}
+					} else if (failingIndex == -1) {
+						failingIndex = i;
 					}
 					k++;
 				}
 			}
+		}
+		
+		public String getException() {
+			if (failingIndex == -1) {
+				return null;
+			}
+			return cause[failingIndex] != null? cause[failingIndex] : exception[failingIndex];
 		}
 		
 		public int size() {

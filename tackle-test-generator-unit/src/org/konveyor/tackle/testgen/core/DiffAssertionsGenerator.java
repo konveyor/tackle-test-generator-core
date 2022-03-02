@@ -188,43 +188,70 @@ public class DiffAssertionsGenerator {
 		int resCounter = 0;
 
 		STATEMENT_LOOP: for (int i = 0; i < statements.length; i++, resCounter++) {
+			
+			if (results.failingIndex == i) {
+				
+				createExceptionHandlingBlock(statements, codeWithAssertions, results);
+				break STATEMENT_LOOP;
+				
+			} else {
 
-			codeWithAssertions.append(statements[i]);
-			codeWithAssertions.append(LINE_SEPARATOR);
+				codeWithAssertions.append(statements[i]);
+				codeWithAssertions.append(LINE_SEPARATOR);
 
-			if (results.runtimeObjectType[resCounter] != null) {
+				if (results.runtimeObjectType[resCounter] != null) {
 
-				/* If this runtime object name is not defined in the original sequence then
-				 * it was added by Randoop and we should skip it
-				 */
+					/*
+					 * If this runtime object name is not defined in the original sequence then it
+					 * was added by Randoop and we should skip it
+					 */
 
-				while ( ! SequenceParser.resolve(results.runtimeObjectName[resCounter], block)) {
-					resCounter++;
-					if (results.runtimeObjectName[resCounter] == null) {
-						// The object created by this statement could not be recorded - hence we skip it
-						continue STATEMENT_LOOP;
+					while (!SequenceParser.resolve(results.runtimeObjectName[resCounter], block)) {
+						resCounter++;
+						if (results.runtimeObjectName[resCounter] == null) {
+							// The object created by this statement could not be recorded - hence we skip it
+							continue STATEMENT_LOOP;
+						}
 					}
-				}
 
-				Class<?> theClass = results.runtimeObjectType[resCounter];
+					Class<?> theClass = results.runtimeObjectType[resCounter];
 
-				String assertion = getAssertForSimpleType(theClass, (String) results.runtimePublicObjectState.get(resCounter).
-							get(results.runtimeObjectName[resCounter]), results.runtimeObjectName[resCounter],
-						SequenceParser.isPrimitiveType(results.runtimeObjectName[resCounter], originalCode));
+					String assertion = getAssertForSimpleType(theClass,
+							(String) results.runtimePublicObjectState.get(resCounter)
+									.get(results.runtimeObjectName[resCounter]),
+							results.runtimeObjectName[resCounter],
+							SequenceParser.isPrimitiveType(results.runtimeObjectName[resCounter], originalCode));
 
-				if (assertion != null) {
-					codeWithAssertions.append(assertion);
-				} else {
+					if (assertion != null) {
+						codeWithAssertions.append(assertion);
+					} else {
 
-					addAssertionsOnPublicFields(results.runtimePublicObjectState.get(resCounter), results.runtimeObjectName[resCounter],
-							theClass, codeWithAssertions);
-					addAssertionsOnPrivateFields(theClass, results.runtimePrivateObjectState.get(resCounter), results.runtimeObjectName[resCounter],
-							theClass, codeWithAssertions);
+						addAssertionsOnPublicFields(results.runtimePublicObjectState.get(resCounter),
+								results.runtimeObjectName[resCounter], theClass, codeWithAssertions);
+						addAssertionsOnPrivateFields(theClass, results.runtimePrivateObjectState.get(resCounter),
+								results.runtimeObjectName[resCounter], theClass, codeWithAssertions);
+					}
 				}
 			}
 		}
 
 		return codeWithAssertions.toString();
+	}
+
+	private void createExceptionHandlingBlock(String[] statements, StringBuilder codeWithAssertions, SequenceResults results) {
+		
+		codeWithAssertions.append("try {");
+		codeWithAssertions.append(LINE_SEPARATOR);
+		codeWithAssertions.append("\t"+statements[results.failingIndex]);
+		codeWithAssertions.append(LINE_SEPARATOR);
+		codeWithAssertions.append("\torg.junit.Assert.fail(\"Expected exception of type "+results.getException()+"\");");
+		codeWithAssertions.append(LINE_SEPARATOR);
+		codeWithAssertions.append("} catch ("+results.getException()+" e) {");
+		codeWithAssertions.append(LINE_SEPARATOR);
+		codeWithAssertions.append("\t// Expected exception");
+		codeWithAssertions.append(LINE_SEPARATOR);
+		codeWithAssertions.append("}");
+		
 	}
 
 	private void addAssertionsOnPublicFields(Map<String, String> runtimeState, String objName, Class<?> objClass, StringBuilder codeWithAssertions) {
