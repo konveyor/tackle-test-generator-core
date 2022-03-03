@@ -999,11 +999,8 @@ public class TestSequenceExtender {
     private boolean isDeclaredException(String excp, Object mtdOrCnstr) {
     	
     	if (excp == null || mtdOrCnstr == null) {
-    		System.out.println(excp == null? "excp is null" : "method is null");
     		return false;
     	}
-    	
-    	System.out.println("Searching for exception "+excp);
     	
     	Class<?>[] excps;
     	
