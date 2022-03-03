@@ -46,6 +46,7 @@ public class ExtenderSummary {
     int covTestPlanRows__initSeq = 0;
     int uncovTestPlanRows__noInitSeq = 0;
     public int uncovTestPlanRows__execFail = 0;
+    public int uncovTestPlanRows__execFailBadPath = 0;
     int uncovTestPlanRows__excp = 0;
     int uncovTestPlanRows__excp__OperationParse = 0;
     int uncovTestPlanRows__excp__randoop__IllegalArgument = 0;
@@ -119,6 +120,7 @@ public class ExtenderSummary {
         System.out.println(" Final extended sequences: " + extTestSeq.values().stream()
             .flatMap(clseq -> clseq.values().stream()).mapToInt(seql -> seql.size()).sum());
         System.out.println(" Total failing sequences: " + this.uncovTestPlanRows__execFail);
+        System.out.println(" Total failing sequences with bad path tests: " + this.uncovTestPlanRows__execFailBadPath);
         System.out.println(" Diff assertions added: "+assertionCount);
         System.out.println(" Total test plan rows: " + this.totalTestPlanRows);
         System.out.println(" Covered test plan rows (full): " + this.covTestPlanRows__full);
@@ -189,6 +191,7 @@ public class ExtenderSummary {
         extSeqInfo.put("generated_sequences", seqIdMap.keySet().size());
         extSeqInfo.put("executed_sequences", execExtSeq.keySet().size());
         extSeqInfo.put("failing_sequences", this.uncovTestPlanRows__execFail);
+        extSeqInfo.put("failing_sequences_bad_path", this.uncovTestPlanRows__execFailBadPath);
         extSeqInfo.put("final_sequences", extTestSeq.values().stream()
             .flatMap(clseq -> clseq.values().stream())
             .mapToInt(seql -> seql.size())

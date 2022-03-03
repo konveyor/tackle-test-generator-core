@@ -56,6 +56,7 @@ public class DiffAssertionGeneratorTest {
             null,
             null,
             null,
+            null,
             "test/data/daytrader7/DayTrader_extended_sequences_results.json");
 
 		assertTrue(outputFile.exists());

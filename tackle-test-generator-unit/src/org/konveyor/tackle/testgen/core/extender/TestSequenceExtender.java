@@ -49,6 +49,7 @@ import org.konveyor.tackle.testgen.core.executor.SequenceExecutor;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
+import org.konveyor.tackle.testgen.util.Utils;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -108,6 +109,10 @@ public class TestSequenceExtender {
 
 	// map from sequence ID to extended sequence
 	private HashMap<String, Sequence> seqIdMap = new HashMap<>();
+	
+	
+	// map from sequence ID to target method or constructor
+	private HashMap<String, Object> seqTargetMap = new HashMap<>();
 
 	// map from sequence ID to code string representation of extended sequence
 	// the string representation contains assertions if the assertion option is specified
@@ -144,13 +149,17 @@ public class TestSequenceExtender {
 	int classTestPlanRows = 0;
 
 	int classSeqCount = 0;
+	int classBadPathSeqCount = 0;
 
 	int totalSeqCount = 0;
+	int totalBadPathSeqCount = 0;
     int totalTestPlanRows = 0;
 
 	private final boolean jeeSupport;
 
 	private final boolean diffAssertions;
+	
+	private final boolean generateBadPath;
 
 	private final int numSeqExecutions;
 
@@ -194,10 +203,11 @@ public class TestSequenceExtender {
 	 */
 	public TestSequenceExtender(String appName, String testPlanFilename, String testSeqFilename,
                                 boolean mineConstructorSequences, String outputDir, boolean jee, int numExecutions,
-                                boolean diffAssertions, int outputCoveredInteraction) throws IOException {
+                                boolean diffAssertions, int outputCoveredInteraction, boolean badPath) throws IOException {
 
 		this.applicationName = appName;
 		this.jeeSupport = jee;
+		this.generateBadPath = badPath;
 		this.numSeqExecutions = numExecutions;
 		this.diffAssertions = diffAssertions;
 		interactionLevel = outputCoveredInteraction;
@@ -337,6 +347,7 @@ public class TestSequenceExtender {
 
                 System.out.print("*   " + classTestPlan.size() + " methods ");
                 classSeqCount = 0;
+                classBadPathSeqCount = 0;
                 classTestPlanRows = 0;
 
                 // initialize data structures needed for JEE trial for failing extended sequences for class
@@ -347,6 +358,10 @@ public class TestSequenceExtender {
 
                 // map from method signatures to sequence IDs for methods in the class
                 Map<String, List<String>> classSeqIdMap = new HashMap<>();
+                
+               // Map from method signatures to bad path sequence IDs 
+                
+                Map<String, List<String>> badPathSeqIdMap = new HashMap<>(); 
 
                 // iterate over each method in class
                 classTestPlan.fieldNames().forEachRemaining(methodSig -> {
@@ -417,8 +432,9 @@ public class TestSequenceExtender {
 
                     // create extended test sequences for method
                     List<String> methodSeqIds = createExtendedSequencesForMethod(partition, qualMethodSig,
-                        parseableMethodSig, tgtMethodCall, classJEEExecInfo, methodCovInfo, methodCTDCovInfo);
+                        parseableMethodSig, tgtMethodCall, classJEEExecInfo, badPathSeqIdMap, methodCovInfo, methodCTDCovInfo);
                     classSeqCount += methodSeqIds.size();
+                    classBadPathSeqCount += badPathSeqIdMap.containsKey(methodSig)? badPathSeqIdMap.get(methodSig).size() : 0;
 
                     // create string representation of sequences and add to class sequence map
 //                    List<String> methodSeqStr = methodSeqIds.stream()
@@ -447,9 +463,13 @@ public class TestSequenceExtender {
 
                 totalTestPlanRows += classTestPlanRows;
                 totalSeqCount += classSeqCount;
+                totalBadPathSeqCount += classBadPathSeqCount;
 
                 System.out.println("");
                 System.out.println("*   generated " + classSeqCount + " test sequences");
+                if (totalBadPathSeqCount > 0) {
+                	System.out.println("*   generated " + classBadPathSeqCount + " bad path test sequences");
+                }
                 System.out.print("*   -- class test-plan coverage rate: ");
                 if (classTestPlanRows > 0) {
                     System.out.print(String.format("%.2f",
@@ -459,17 +479,34 @@ public class TestSequenceExtender {
 
                 // add diff assertions if option specified
                 if (this.diffAssertions) {
-                    assertionCount += addDiffAssertions(classSeqIdMap.values().stream()
-                        .flatMap(mseq -> mseq.stream())
-                        .collect(Collectors.toList()));
+                	List<String> seqIds = classSeqIdMap.values().stream()
+                            .flatMap(mseq -> mseq.stream())
+                            .collect(Collectors.toList());
+                	if (classBadPathSeqCount > 0) {
+                		logger.info("generating assertions for "+badPathSeqIdMap.size()+" bad path sequences");
+                		seqIds.addAll(badPathSeqIdMap.values().stream()
+                            .flatMap(mseq -> mseq.stream())
+                            .collect(Collectors.toList()));
+                	}
+                    assertionCount += addDiffAssertions(seqIds);
                 }
 
                 // write test sequences to test class file
-                try {
-                    writeTestClass(className, classSeqIdMap, partition);
-                } catch (IOException e) {
-                    logger.warning("Error writing test class for " + className + ": " + e);
+				if (classSeqCount > 0) {
+					try {
+						writeTestClass(className, classSeqIdMap, partition, false);
+					} catch (IOException e) {
+						logger.warning("Error writing test class for " + className + ": " + e);
+					}
                 }
+                // write test sequences to bad path test class file
+				if (classBadPathSeqCount > 0) {
+					try {
+						writeTestClass(className, badPathSeqIdMap, partition, true);
+					} catch (IOException e) {
+						logger.warning("Error writing bad path test class for " + className + ": " + e);
+					}
+				}
             });
 
             if (!classCTDCovInfo.isEmpty()) {
@@ -562,6 +599,7 @@ public class TestSequenceExtender {
                                                           String parseableMethodSig,
                                                           TypedClassOperation tgtMethodCall,
                                                           JEEExecutionInfo jeeExecInfo,
+                                                          Map<String, List<String>> badPathMtdSeqMap,
                                                           Map<String, Constants.TestPlanRowCoverage> methodCovInfo,
                                                           Map<String, Pair<Double, Double>> methodCTDCovInfo) {
 
@@ -570,11 +608,14 @@ public class TestSequenceExtender {
         List<String> methodSeqIds = new ArrayList<>();
 
         String className = qualMethodSig.split("::")[0];
+        String methodSig = qualMethodSig.split("::")[1];
 
         boolean[] usedExistingSeq = new boolean[currTestPlanRows.length];
         boolean[] execSeqSuccess = new boolean[currTestPlanRows.length];
 
         boolean hasCompoundTypes = SequenceUtil.hasCompoundTypes(currModelDef);
+        
+        List<String> badPathSeqs = new ArrayList<>();
 
         // iterate over each row of test plan for method
         int rowCtr = 0;
@@ -620,16 +661,28 @@ public class TestSequenceExtender {
             // generate sequence ID and add id, sequence to map
             String sequenceID = getSequenceID();
             this.seqIdMap.put(sequenceID, extendedSeq);
+            Object mtdOrCnstr = getMethodOrConstructor(className, methodSig, tgtMethodCall.isMethodCall());
+            if (mtdOrCnstr != null) {
+            	this.seqTargetMap.put(sequenceID, mtdOrCnstr);
+            } else {
+            	logger.warning("Unable to locate "+(tgtMethodCall.isMethodCall()? "method" : "constructor ")+
+            			" for signature "+parseableMethodSig);
+            }
             jeeExecInfo.seqIdToRowId.put(sequenceID, testPlanRowId);
             jeeExecInfo.seqIdToPartial.put(sequenceID, this.rowPartiallyCovered);
             jeeExecInfo.seqIdToCovInfo.put(sequenceID, methodCovInfo);
 
             // check whether extended sequence can be executed
             try {
-                if (executeSequence(sequenceID) == false) {
+                if (executeSequence(sequenceID, badPathSeqs) == false) {
                     jeeExecInfo.failedSeqIds.add(sequenceID);
                     this.extSummary.uncovTestPlanRows__execFail++;
                     methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXEC_FAIL);
+                    if (badPathSeqs.contains(sequenceID)) {
+                    	// sequence execution failed, but it raised a declared exception, so we want to keep it for bad path testing
+                    	this.extSeqStr.put(sequenceID,
+                                extendedSeq.toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""));
+                    }
                     continue;
                 }
             } catch (RuntimeException re) {
@@ -659,6 +712,12 @@ public class TestSequenceExtender {
                 this.extSummary.covTestPlanRows__full++;
             }
         }
+        
+        // record bad path sequences
+        
+        if ( ! badPathSeqs.isEmpty()) {
+        	badPathMtdSeqMap.put(methodSig, badPathSeqs);
+        }
 
         if (interactionLevel > -1 && currTestPlanRows.length > 1 && ! hasCompoundTypes) {
         	Pair<Double, Double> ctdCov = CTDCoverageComputer.calcCombinatorialCoverage(parseableMethodSig, currTestPlanRows,
@@ -674,7 +733,61 @@ public class TestSequenceExtender {
         return methodSeqIds;
     }
 
-    /**
+	// Get method or constructor by its signature
+	
+    private Object getMethodOrConstructor(String className, String mtdOrCnstrSig, boolean isMethod) {
+    	
+    	Class<?> tgtClass = null;
+    	
+    	try {
+			tgtClass = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			logger.warning("unable to locate target class "+className);
+			return null;
+		}
+    	
+    	if (isMethod) {
+    		Method[] methods;
+    		try {
+    			methods = tgtClass.getDeclaredMethods();
+    		} catch (NoClassDefFoundError e) {
+    			return null;
+    		}
+    		String methodName = mtdOrCnstrSig.substring(0,  mtdOrCnstrSig.indexOf('('));
+    		for (Method method : methods) {
+				if (method.getName().equals(methodName)) {
+					try {
+						if (Utils.getSignature(method).equals(mtdOrCnstrSig)) {
+							return method;
+						}
+					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+							| IllegalAccessException e) {
+						continue;
+					}
+				}
+    		}
+    		return null;
+    	} else {
+    		Constructor<?>[] constructors; 
+    		try {
+    			constructors = tgtClass.getConstructors();
+    		} catch (NoClassDefFoundError e) {
+    			return null;
+    		}
+    		for (Constructor<?> constructor : constructors) {
+    			try {
+					if (Utils.getSignature(constructor).equals(mtdOrCnstrSig)) {
+						return constructor;
+					}
+				} catch (SecurityException | IllegalArgumentException e) {
+						continue;
+				} 
+    		}
+    		return null;
+    	}
+	}
+
+	/**
      * Created mapping from qualified method signatures to output-formatted method signatures
      * @return
      */
@@ -727,7 +840,7 @@ public class TestSequenceExtender {
      * @throws IOException
      */
     private void writeTestClass(String clsName, Map<String, List<String>> methodTestSeqIdMap,
-                                String partition) throws IOException {
+                                String partition, boolean isBadPath) throws IOException {
         // create JUnit exporter for class
         File outDir = new File(this.outputDir + File.separator + partition);
         JUnitTestExporter testExporter = new JUnitTestExporter(outDir, this.diffAssertions);
@@ -750,9 +863,9 @@ public class TestSequenceExtender {
                 .map(seqid -> this.extSeqStr.get(seqid))
                 .collect(Collectors.toList()));
         }
-        testExporter.writeUnitTest(clsName, methodTestSeqStrMap, testImports);
+        testExporter.writeUnitTest(clsName, methodTestSeqStrMap, testImports, isBadPath);
         int testMethodCount = methodTestSeqIdMap.values().stream().mapToInt(List::size).sum();
-        System.out.println("*   wrote test class file for " + clsName + " to \"" + outDir +
+        System.out.println("*   wrote"+(isBadPath? " bad path" : "")+" test class file for " + clsName + " to \"" + outDir +
             "\" with " + testMethodCount+" test methods");
         this.testClassCount++;
         this.testMethodCount += testMethodCount;
@@ -805,12 +918,7 @@ public class TestSequenceExtender {
     private int addDiffAssertions(List<String> seqIds) {
         DiffAssertionsGenerator diffAssertGen = new DiffAssertionsGenerator(applicationName);
         for (String seqId : seqIds) {
-            logger.fine("Adding diff assertions to sequence: " + seqId);
             SequenceExecutor.SequenceResults seqRes = execExtSeq.get(seqId);
-            // skip failing sequences
-            if (!seqRes.passed) {
-                continue;
-            }
             String seqWithAssertStr = diffAssertGen.addAssertions(this.extSeqStr.get(seqId), seqRes);
             extSeqStr.put(seqId, seqWithAssertStr);
         }
@@ -824,7 +932,7 @@ public class TestSequenceExtender {
 	 * @param sequenceID Sequence to be executed
 	 * @return boolean indicating whether sequence executes successfully
 	 */
-	private boolean executeSequence(String sequenceID) {
+	private boolean executeSequence(String sequenceID, List<String> badPathSeqs) {
 		SequenceExecutor seqExecutor = new SequenceExecutor(true);
 		Set<String> errMsgs = new HashSet<>();
 		Sequence extendedSeq = this.seqIdMap.get(sequenceID);
@@ -839,19 +947,22 @@ public class TestSequenceExtender {
 			this.execExtSeq.put(sequenceID, execResult);
 			if (!execResult.passed) {
 				// find the exception that caused the sequence to fail and add to the summary
-				for (int i=0; i<extendedSeq.size();i++) {
-					if (execResult.exception[i] != null) {
-						String excp = execResult.cause[i] != null? execResult.cause[i] : execResult.exception[i];
-						Integer count = this.extSummary.seqFailExcp.get(excp);
-						this.extSummary.seqFailExcp.put(excp, count == null? 1: count+1);
-						break;
-					}
-				}
+				String excp = execResult.getException();
+				Integer count = this.extSummary.seqFailExcp.get(excp);
+				this.extSummary.seqFailExcp.put(excp, count == null? 1: count+1);
 				errMsgs.add("Error executing sequence");
 				errMsgs.addAll(
 						Arrays.stream(execResult.causeMessage).filter(str -> str != null).collect(Collectors.toSet()));
 				errMsgs.addAll(Arrays.stream(execResult.exceptionMessage).filter(str -> str != null)
 						.collect(Collectors.toSet()));
+				
+				/* Create bad path tests for failures that caused target method declared exceptions */ 
+				if (generateBadPath && excp != null && execResult.failingIndex == extendedSeq.size()-1 && 
+						isDeclaredException(excp, this.seqTargetMap.get(sequenceID))) {
+					logger.info("Failed execution of "+sequenceID+" with declared exception "+excp);
+					badPathSeqs.add(sequenceID);
+					this.extSummary.uncovTestPlanRows__execFailBadPath++;
+				}
 			}
 			return execResult.passed;
 		} catch (RuntimeException re) {
@@ -884,8 +995,32 @@ public class TestSequenceExtender {
             System.setErr(origSysErr);
         }
 	}
+	
+    private boolean isDeclaredException(String excp, Object mtdOrCnstr) {
+    	
+    	if (excp == null || mtdOrCnstr == null) {
+    		return false;
+    	}
+    	
+    	Class<?>[] excps;
+    	
+		if (mtdOrCnstr instanceof Method) {
+			excps = ((Method) mtdOrCnstr).getExceptionTypes();
+		} else {
+			excps = ((Constructor<?>) mtdOrCnstr).getExceptionTypes();
+		}
+		
+		for (Class<?> ex : excps) {
+			if (ex.getCanonicalName().equals(excp)) {
+				System.out.println("Found declared exception "+excp);
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
-    /**
+	/**
      * Given a target method and test plan row, returns pair consisting of a candidate sequence
      * from the method or class sequence pools and a boolean indicating whether the sequence
      * actually covers the test plan row.
@@ -1771,6 +1906,10 @@ public class TestSequenceExtender {
 		// option for outputing covered type combinations
 				options.addOption(Option.builder("oc").longOpt("output-covered").hasArg()
 						.desc("Output percentage of covered type combinations according to given interaction level").type(Integer.class).build());
+				
+		// option for generating bad path test cases
+		options.addOption(Option.builder("bp").longOpt("bad-path")
+							.desc("Generating bad path test cases for failing sequences").build());		
 
 		// help option
 		options.addOption(Option.builder("h").longOpt("help").desc("Print this help message").build());
@@ -1851,11 +1990,18 @@ public class TestSequenceExtender {
         if (cmd.hasOption("oc")) {
         	outputCoveredInteraction = Integer.parseInt(cmd.getOptionValue("oc"));
         }
+        
+        boolean badPath = false;
+        
+        if (cmd.hasOption("bp")) {
+        	badPath = true;
+        	logger.info("Generating also bad path test cases");
+        }
 
 		// create extended sequences
 		TestSequenceExtender testSeqExt = new TestSequenceExtender(appName, testPlanFilename,
             testSeqFilename, true,
-				outputDir, jee, numExecutions, addDiffAsserts, outputCoveredInteraction);
+				outputDir, jee, numExecutions, addDiffAsserts, outputCoveredInteraction, badPath);
 		testSeqExt.createExtendedSequences();
 
 		// write test classes
