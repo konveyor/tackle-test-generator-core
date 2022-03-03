@@ -449,7 +449,7 @@ public class CrawljaxRunner {
             builder.crawlRules().crawlFrames(true);
         }
         else {
-            builder.setStateVertexFactory(new HybridStateVertexFactory(0, builder, false));
+            builder.setStateVertexFactory(new HybridStateVertexFactory(0, builder, true));
             builder.crawlRules().crawlFrames(false);
         }
 
