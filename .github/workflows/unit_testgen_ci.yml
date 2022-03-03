@@ -59,9 +59,12 @@ jobs:
       - name: Download Randoop jars
         run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
       - name: Delete old package version
-        uses: actions/delete-package-versions@v1
+#        uses: actions/delete-package-versions@v1
+        uses: smartsquaregmbh/delete-old-packages@v0.4.0
         with:
-          package-name: 'org.konveyor.tackle-test-generator-unit'
+#          package-name: 'org.konveyor.tackle-test-generator-unit'
+          names: 'org.konveyor.tackle-test-generator-unit'
+          keep: 0
       - name: Publish to GitHub Packages
         run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
         env:
