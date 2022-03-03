@@ -63,7 +63,7 @@ jobs:
         uses: smartsquaregmbh/delete-old-packages@v0.4.0
         with:
 #          package-name: 'org.konveyor.tackle-test-generator-unit'
-          names: 'org.konveyor.tackle-test-generator-ui'
+          names: 'org.konveyor.tackle-test-generator-unit'
           keep: 0
       - name: Publish to GitHub Packages
         run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
