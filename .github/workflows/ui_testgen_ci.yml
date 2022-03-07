@@ -38,6 +38,10 @@ jobs:
         servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
+    - name: Run crawljax config test case on sample data
+      run: |
+        mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+          --batch-mode test -Dtest=CrawljaxRunnerTest#testCreateCrawljaxConfigurationSample
     - name: Pull test webapps
       run: |
         git submodule init
