@@ -10,10 +10,13 @@ limitations under the License.
 */
 package org.konveyor.tackletest.ui.crawljax;
 
+import com.crawljax.core.configuration.CrawlRules;
+import com.crawljax.core.configuration.CrawljaxConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.tomlj.Toml;
 import org.tomlj.TomlParseResult;
+import org.tomlj.TomlTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +26,32 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class CrawljaxRunnerTest {
+
+    @Test
+    public void testCreateCrawljaxConfigurationSample() throws IOException {
+        // sample app config
+        String configFile = "./test/data/sample/tkltest_ui_config.toml";
+        TomlParseResult parsedConfig = Toml.parse(Paths.get(configFile));
+        String appUrl = parsedConfig.getString("general.app_url");
+        String testDir = parsedConfig.getString("general.test_directory");
+        TomlTable generateOptions = parsedConfig.getTable("generate");
+
+        // call method for creating crawljax config
+        CrawljaxConfiguration crawljaxConfig = CrawljaxRunner.createCrawljaxConfiguration(appUrl, testDir, generateOptions);
+
+        // assert on created config
+        Assert.assertNotNull(crawljaxConfig);
+        Assert.assertEquals(appUrl, crawljaxConfig.getUrl().toString());
+        Assert.assertTrue(crawljaxConfig.getOutputDir().toString().endsWith(
+            testDir+File.separator+"localhost"+File.separator+"crawl0"));
+        Assert.assertEquals(0, crawljaxConfig.getMaximumStates());
+        Assert.assertEquals(2, crawljaxConfig.getMaximumDepth());
+        CrawlRules crawlRules = crawljaxConfig.getCrawlRules();
+        Assert.assertEquals(8, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(29, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+        Assert.assertEquals(500, crawlRules.getWaitAfterEvent());
+        Assert.assertEquals(500, crawlRules.getWaitAfterReloadUrl());
+    }
 
     @Test
     public void testCrawljaxRunnerPetclinic() throws IOException, URISyntaxException {

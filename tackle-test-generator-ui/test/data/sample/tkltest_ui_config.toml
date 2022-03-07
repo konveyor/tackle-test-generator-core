@@ -1,7 +1,7 @@
 [general]
 app_name = "_sample"
-app_url = "localhost:8080"
-test_directory = ""
+app_url = "http://localhost:8080"
+test_directory = "_sample"
 verbose = false
 
 [generate]

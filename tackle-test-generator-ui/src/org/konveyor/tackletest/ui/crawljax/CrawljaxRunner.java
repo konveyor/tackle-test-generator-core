@@ -176,6 +176,50 @@ public class CrawljaxRunner {
         return optionVal.booleanValue();
     }
 
+    private static void handleClickablesElementSpec(TomlTable[] clickablesElemSpec, boolean dontClick,
+                                                    CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
+        for (TomlTable elem : clickablesElemSpec) {
+            String tagName = elem.getString("tag_name");
+            if (elem.contains("with_text")) {
+                String withText = elem.getString("with_text");
+                if (withText != null && !withText.isEmpty()) {
+                    if (dontClick) {
+                        builder.crawlRules().dontClick(tagName).withText(withText);
+                    } else {
+                        builder.crawlRules().click(tagName).withText(withText);
+                    }
+                }
+            } else if (elem.contains("under_xpath")) {
+                String underXpath = elem.getString("under_xpath");
+                if (underXpath != null && !underXpath.isEmpty()) {
+                    if (dontClick) {
+                        builder.crawlRules().dontClick(tagName).underXPath(underXpath);
+                    } else {
+                        builder.crawlRules().click(tagName).underXPath(underXpath);
+                    }
+                }
+            } else if (elem.contains("with_attribute")) {
+                TomlTable withAttribute = elem.getTable("with_attribute");
+                String attrName = withAttribute.getString("attr_name");
+                String attrValue = withAttribute.getString("attr_value");
+                if (attrName != null && !attrName.isEmpty() && attrValue != null && !attrValue.isEmpty()) {
+                    if (dontClick) {
+                        builder.crawlRules().dontClick(tagName).withAttribute(attrName, attrValue);
+                    } else {
+                        builder.crawlRules().click(tagName).withAttribute(attrName, attrValue);
+                    }
+                }
+            } else {
+                // no text, attribute, or xpath specified; set click or don't click on the tag
+                if (dontClick) {
+                    builder.crawlRules().dontClick(tagName);
+                } else {
+                    builder.crawlRules().click(tagName);
+                }
+            }
+        }
+    }
+
     /**
      * Reads the clickables specifination from the given toml file, and updates crawl rules in
      * the given Crawljax configuration builder with included and excluded web elements to be
@@ -188,37 +232,20 @@ public class CrawljaxRunner {
                                                       CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) throws IOException {
         TomlParseResult clickableSpec = Toml.parse(Paths.get(clickablesSpecFile));
 
-        // process click spec, consisting of a list of tags to be treated as clickables
-        String[] clickTags = clickableSpec.getArray("click").toList().toArray(new String[0]);
-        logger.info("adding clickables: "+ Arrays.toString(clickTags));
-        builder.crawlRules().click(clickTags);
+        // process click spec
+        TomlTable[] clickElementSpec = clickableSpec.getArray("click.element")
+            .toList()
+            .toArray(new TomlTable[0]);
+        logger.info("adding click element spec for " + clickElementSpec.length + " elements");
+        handleClickablesElementSpec(clickElementSpec, false, builder);
 
         // process don't click element spec
         TomlTable[] dontclickElementSpec = clickableSpec.getArray("dont_click.element")
             .toList()
             .toArray(new TomlTable[0]);
-        for (TomlTable dontClickElem : dontclickElementSpec) {
-            String tagName = dontClickElem.getString("tag_name");
-            if (dontClickElem.contains("with_text")) {
-                String withText = dontClickElem.getString("with_text");
-                if (withText != null && !withText.isEmpty()) {
-                    builder.crawlRules().dontClick(tagName).withText(withText);
-                }
-            } else if (dontClickElem.contains("under_xpath")) {
-                String underXpath = dontClickElem.getString("under_xpath");
-                if (underXpath != null && !underXpath.isEmpty()) {
-                    builder.crawlRules().dontClick(tagName).underXPath(underXpath);
-                }
-            } else if (dontClickElem.contains("with_attribute")) {
-                TomlTable withAttribute = dontClickElem.getTable("with_attribute");
-                String attrName = withAttribute.getString("attr_name");
-                String attrValue = withAttribute.getString("attr_value");
-                if (attrName != null && !attrName.isEmpty() && attrValue != null && !attrValue.isEmpty()) {
-                    builder.crawlRules().dontClick(tagName).withAttribute(attrName, attrValue);
-                }
-            }
-        }
-        logger.info("Done processing dont_click.element spec");
+        logger.info("adding don't click element spec for " + dontclickElementSpec.length + " elements");
+        handleClickablesElementSpec(dontclickElementSpec, true, builder);
+        logger.info("Done processing click/dont_click.element spec");
 
         // process don't click children_of spec
         TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of")
@@ -236,6 +263,9 @@ public class CrawljaxRunner {
                 if (withId != null && !withId.isEmpty()) {
                     builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
                 }
+            } else {
+                // no id or class specified; set don't click on the tag
+                builder.crawlRules().dontClickChildrenOf(tagName);
             }
         }
         logger.info("Done processing dont_click.children_of spec");
@@ -393,7 +423,7 @@ public class CrawljaxRunner {
      * @param generateOptions
      * @return
      */
-    private static CrawljaxConfiguration createCrawljaxConfiguration(String appUrl, String testDir,
+    public static CrawljaxConfiguration createCrawljaxConfiguration(String appUrl, String testDir,
                                                                      TomlTable generateOptions)
         throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(appUrl);
@@ -468,8 +498,11 @@ public class CrawljaxRunner {
         }
 
         // set form input specification
-        InputSpecification inputSpec = getFormInputSpecification(generateOptions.getString("form_data_spec_file"));
-        builder.crawlRules().setInputSpec(inputSpec);
+        String formDataSpecFile = generateOptions.getString("form_data_spec_file");
+        if (formDataSpecFile != null && !formDataSpecFile.isEmpty()) {
+            InputSpecification inputSpec = getFormInputSpecification(formDataSpecFile);
+            builder.crawlRules().setInputSpec(inputSpec);
+        }
 
         // add crawl-overview and test-generator plugins
         builder.addPlugin(new CrawlOverview());
