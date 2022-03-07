@@ -1,6 +1,6 @@
 ###
 # specification of web elements to click during crawling (on top of the default elements)
-# this can be simply a list of HTML tags or specific elements identified using attributes, text, or xpath
+# elements are identified by an HTML tag and optionally using attributes, text, or xpath for that tag
 # [[click.element]]
 #   # tag name
 #   tag_name = ""
@@ -10,8 +10,9 @@
 #   with_attribute = { attr_name = "", attr_value = ""}
 ###
 
-# click all elements with tag "div" and "tag1"
-click = ["div", "tag1"]
+# click all elements with tag "tag1"
+[[click.element]]
+  tag_name = "tag1"
 
 # click div elements with id "is_clickable"
 [[click.element]]
@@ -30,8 +31,8 @@ click = ["div", "tag1"]
 
 ###
 # specification of web elements to not click during crawling
-# this can be simply a list of HTML tags or specific elements identified using attributes, text, or xpath
-# add one such entry for each such element
+# elements are identified by an HTML tag and optionally using attributes, text, or xpath for that tag
+# add one such entry for each such set of elements
 # [[dont_click.element]]
 #   # tag name
 #   tag_name = ""
@@ -43,7 +44,8 @@ click = ["div", "tag1"]
 
 # do not click any anchor element
 # (do not click spec for all occurrences of a tag is unlikely to be used but is supported)
-dont_click_element = ["a"]
+[[dont_click.element]]
+  tag_name = "a"
 
 # do not click input elements with id "Delete records"
 [[dont_click.element]]
@@ -67,7 +69,7 @@ dont_click_element = ["a"]
 
 ###
 # specification of a tree such that all web elements that occur in the tree should not clicked during crawling
-# this can be simply a list of HTML tags or specific elements identified using id and class attributes
+# elements are identified by an HTML tag and optionally using id and class attributes for that tag
 # add one such entry for each tree
 # [[dont_click.children_of]]
 #   # tag name
@@ -79,7 +81,8 @@ dont_click_element = ["a"]
 
 # do not click any element in tree rooted at an anchor element
 # (unlikely to be used but is supported)
-dont_click_children_of = ["a"]
+[[dont_click.children_of]]
+  tag_name = "a"
 
 # do not click any element that occurs in the tree under the div element with class "masthead"
 [[dont_click.children_of]]
