@@ -40,6 +40,7 @@ jobs:
         ]'
     - name: Run crawljax config test case on sample data
       run: |
+        cd tackle-test-generator-ui
         mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
           --batch-mode test -Dtest=CrawljaxRunnerTest#testCreateCrawljaxConfigurationSample
     - name: Pull test webapps
