@@ -66,30 +66,3 @@
 [[dont_click.element]]
   tag_name = "a"
   under_xpath = "//*[@id=\"primary-links\"]/li"
-
-###
-# specification of a tree such that all web elements that occur in the tree should not clicked during crawling
-# elements are identified by an HTML tag and optionally using id and class attributes for that tag
-# add one such entry for each tree
-# [[dont_click.children_of]]
-#   # tag name
-#   tag_name = ""
-#   # optionally, specify one of the following to refine the set of elements identified by the tag
-#   with_id = ""
-#   with_class = ""
-###
-
-# do not click any element in tree rooted at an anchor element
-# (unlikely to be used but is supported)
-[[dont_click.children_of]]
-  tag_name = "a"
-
-# do not click any element that occurs in the tree under the div element with class "masthead"
-[[dont_click.children_of]]
-  tag_name = "div"
-  with_class = "masthead"
-
-# do not click any element that occurs in the tree under the div element with id "footer-module"
-[[dont_click.children_of]]
-  tag_name = "div"
-  with_id = "footer-module"
