@@ -55,7 +55,7 @@ public class CrawljaxRunnerTest {
     }
 
     @Test
-    public void testUpdateClickablesConfiguration() {
+    public void testUpdateClickablesConfigurationSample() {
         String newLine = System.getProperty("line.separator");
         String clickablesSpec = String.join(newLine,
             "[[click.element]]", "  tag_name = \"div\"",
