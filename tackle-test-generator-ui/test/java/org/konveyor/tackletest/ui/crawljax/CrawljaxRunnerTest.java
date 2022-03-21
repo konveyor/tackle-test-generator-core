@@ -45,6 +45,7 @@ public class CrawljaxRunnerTest {
         Assert.assertTrue(crawljaxConfig.getOutputDir().toString().endsWith(
             testDir+File.separator+"localhost"+File.separator+"crawl0"));
         Assert.assertEquals(0, crawljaxConfig.getMaximumStates());
+        Assert.assertEquals(2, crawljaxConfig.getCrawlRules().getMaxRepeatExploredActions());
         Assert.assertEquals(2, crawljaxConfig.getMaximumDepth());
         CrawlRules crawlRules = crawljaxConfig.getCrawlRules();
         Assert.assertEquals(8, crawlRules.getPreCrawlConfig().getIncludedElements().size());
