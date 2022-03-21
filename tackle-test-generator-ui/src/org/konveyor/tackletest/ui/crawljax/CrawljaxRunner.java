@@ -220,31 +220,34 @@ public class CrawljaxRunner {
     }
 
     /**
-     * Reads the clickables specifination from the given toml file, and updates crawl rules in
+     * Reads the clickables specification from the given parsed dpec, and updates crawl rules in
      * the given Crawljax configuration builder with included and excluded web elements to be
      * crawled.
-     * @param clickablesSpecFile
+     * @param clickableSpec
      * @param builder
-     * @throws IOException
      */
-    private static void updateClickablesConfiguration(String clickablesSpecFile,
-                                                      CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) throws IOException {
-        TomlParseResult clickableSpec = Toml.parse(Paths.get(clickablesSpecFile));
+    public static void updateClickablesConfiguration(TomlParseResult clickableSpec,
+                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
+//        TomlParseResult clickableSpec = Toml.parse(Paths.get(clickablesSpecFile));
 
         // process click spec
-        TomlTable[] clickElementSpec = clickableSpec.getArray("click.element")
-            .toList()
-            .toArray(new TomlTable[0]);
-        logger.info("adding click element spec for " + clickElementSpec.length + " elements");
-        handleClickablesElementSpec(clickElementSpec, false, builder);
+        if (clickableSpec.contains("click.element")) {
+            TomlTable[] clickElementSpec = clickableSpec.getArray("click.element")
+                .toList()
+                .toArray(new TomlTable[0]);
+            logger.info("adding click element spec for " + clickElementSpec.length + " elements");
+            handleClickablesElementSpec(clickElementSpec, false, builder);
+        }
 
         // process don't click element spec
-        TomlTable[] dontclickElementSpec = clickableSpec.getArray("dont_click.element")
-            .toList()
-            .toArray(new TomlTable[0]);
-        logger.info("adding don't click element spec for " + dontclickElementSpec.length + " elements");
-        handleClickablesElementSpec(dontclickElementSpec, true, builder);
-        logger.info("Done processing click/dont_click.element spec");
+        if (clickableSpec.contains("dont_click.element")) {
+            TomlTable[] dontclickElementSpec = clickableSpec.getArray("dont_click.element")
+                .toList()
+                .toArray(new TomlTable[0]);
+            logger.info("adding don't click element spec for " + dontclickElementSpec.length + " elements");
+            handleClickablesElementSpec(dontclickElementSpec, true, builder);
+            logger.info("Done processing click/dont_click.element spec");
+        }
 
         // process don't click children_of spec
 //        TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of")
@@ -423,7 +426,7 @@ public class CrawljaxRunner {
      * @return
      */
     public static CrawljaxConfiguration createCrawljaxConfiguration(String appUrl, String testDir,
-                                                                     TomlTable generateOptions)
+                                                                    TomlTable generateOptions)
         throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(appUrl);
 
@@ -445,7 +448,7 @@ public class CrawljaxRunner {
         else {
             builder.setMaximumStates(maxStates);
         }
-        
+
         // set max explore action
         int maxExploreAction = getIntTypeOption(generateOptions, "max_explore_action");
         if (maxExploreAction > 1) {
@@ -499,7 +502,7 @@ public class CrawljaxRunner {
         // set click and don't-click rules
         String clickablesSpecFile = generateOptions.getString("clickables_spec_file");
         if (clickablesSpecFile != null && !clickablesSpecFile.isEmpty()) {
-            updateClickablesConfiguration(clickablesSpecFile, builder);
+            updateClickablesConfiguration(Toml.parse(Paths.get(clickablesSpecFile)), builder);
         }
 
         // set form input specification

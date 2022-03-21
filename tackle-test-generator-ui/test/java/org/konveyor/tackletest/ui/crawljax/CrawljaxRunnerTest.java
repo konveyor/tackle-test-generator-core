@@ -55,6 +55,50 @@ public class CrawljaxRunnerTest {
     }
 
     @Test
+    public void testUpdateClickablesConfigurationSample() {
+        String newLine = System.getProperty("line.separator");
+        String clickablesSpec = String.join(newLine,
+            "[[click.element]]", "  tag_name = \"div\"",
+            "[[dont_click.element]]", "  tag_name = \"a\"",
+            "[[dont_click.element]]", "  tag_name = \"tag1\"", "  with_text = \"some text\""
+        );
+        CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+        CrawlRules crawlRules = builder.build().getCrawlRules();
+        Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(2, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+
+        // click specified, dont_click not specified
+        clickablesSpec = String.join(newLine,
+            "[[click.element]]", "  tag_name = \"div\""
+        );
+        builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+        crawlRules = builder.build().getCrawlRules();
+        Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(0, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+
+        // dont_click specified, click not specified
+        clickablesSpec = String.join(newLine,
+            "[[dont_click.element]]", "  tag_name = \"a\""
+        );
+        builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+        crawlRules = builder.build().getCrawlRules();
+        Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+
+        // neither click nor dont_click specified
+        clickablesSpec = "";
+        builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+        crawlRules = builder.build().getCrawlRules();
+        Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(0, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+
+    }
+
+    @Test
     public void testCrawljaxRunnerPetclinic() throws IOException, URISyntaxException {
         String configFile = "./test/data/petclinic/tkltest_ui_config.toml";
         String[] args = {
