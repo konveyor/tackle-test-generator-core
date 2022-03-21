@@ -34,7 +34,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -445,6 +444,12 @@ public class CrawljaxRunner {
         }
         else {
             builder.setMaximumStates(maxStates);
+        }
+        
+        // set max explore action
+        int maxExploreAction = getIntTypeOption(generateOptions, "max_explore_action");
+        if (maxExploreAction > 1) {
+        	builder.crawlRules().skipExploredActions(false, maxExploreAction);
         }
 
         // set max depth
