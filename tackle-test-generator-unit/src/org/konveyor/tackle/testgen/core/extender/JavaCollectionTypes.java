@@ -213,6 +213,15 @@ public class JavaCollectionTypes {
             );
         }
 
+        // for a queue type, by default, create instantiation info for java.util.LinkedList
+        if (java.util.Queue.class.isAssignableFrom(typeClass)) {
+            return new InstantiationInfo(getInstantiatedType(
+                JDKTypes.LINKED_LIST_TYPE, typeArgument),
+                LinkedList.class.getConstructor(),
+                LinkedList.class.getMethod("add", Object.class)
+            );
+        }
+
         // by default, create instantiation info for java.util.ArrayList
         return new InstantiationInfo(
             getInstantiatedType(JDKTypes.ARRAY_LIST_TYPE, typeArgument),
@@ -231,7 +240,7 @@ public class JavaCollectionTypes {
      */
     static InstantiationInfo getMapTypeInstantiationInfo(String type, ReferenceType keyTypeArgument,
                                                          ReferenceType valueTypeArgument)
-        throws NoSuchMethodException {
+        throws NoSuchMethodException, ClassNotFoundException {
 
         // for specific types, create related instantiation info
         if (type.equals("java.util.concurrent.ConcurrentHashMap")) {
@@ -293,6 +302,16 @@ public class JavaCollectionTypes {
         if (type.equals("java.util.WeakHashMap")) {
             return new InstantiationInfo(
                 getInstantiatedType(JDKTypes.WEAK_HASH_MAP_TYPE, keyTypeArgument, valueTypeArgument),
+                WeakHashMap.class.getConstructor(),
+                WeakHashMap.class.getMethod("put", Object.class, Object.class)
+            );
+        }
+
+        Class<?> typeClass = Class.forName(type);
+        // for subtypes of java.util.Properties, use instantiated type for that type
+        if (java.util.Properties.class.isAssignableFrom(typeClass)) {
+            return new InstantiationInfo(
+                (InstantiatedType) InstantiatedType.forName(type),
                 WeakHashMap.class.getConstructor(),
                 WeakHashMap.class.getMethod("put", Object.class, Object.class)
             );
