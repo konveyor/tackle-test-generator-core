@@ -48,8 +48,8 @@ public class CrawljaxRunnerTest {
         Assert.assertEquals(2, crawljaxConfig.getCrawlRules().getMaxRepeatExploredActions());
         Assert.assertEquals(2, crawljaxConfig.getMaximumDepth());
         CrawlRules crawlRules = crawljaxConfig.getCrawlRules();
-        Assert.assertEquals(8, crawlRules.getPreCrawlConfig().getIncludedElements().size());
-        Assert.assertEquals(5, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+        Assert.assertEquals(9, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(6, crawlRules.getPreCrawlConfig().getExcludedElements().size());
         Assert.assertEquals(500, crawlRules.getWaitAfterEvent());
         Assert.assertEquals(500, crawlRules.getWaitAfterReloadUrl());
     }
