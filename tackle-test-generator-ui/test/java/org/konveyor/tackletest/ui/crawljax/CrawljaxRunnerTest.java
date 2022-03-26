@@ -58,9 +58,9 @@ public class CrawljaxRunnerTest {
     public void testUpdateClickablesConfigurationSample() {
         String newLine = System.getProperty("line.separator");
         String clickablesSpec = String.join(newLine,
-            "[[click.element]]", "  tag_name = \"div\"",
-            "[[dont_click.element]]", "  tag_name = \"a\"",
-            "[[dont_click.element]]", "  tag_name = \"tag1\"", "  with_text = \"some text\""
+            "[[click.element]]", "  tag_name = [\"div\"]",
+            "[[dont_click.element]]", "  tag_name = [\"a\"]",
+            "[[dont_click.element]]", "  tag_name = [\"tag1\"]", "  with_text = \"some text\""
         );
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
@@ -70,7 +70,7 @@ public class CrawljaxRunnerTest {
 
         // click specified, dont_click not specified
         clickablesSpec = String.join(newLine,
-            "[[click.element]]", "  tag_name = \"div\""
+            "[[click.element]]", "  tag_name = [\"div\"]"
         );
         builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
@@ -80,7 +80,7 @@ public class CrawljaxRunnerTest {
 
         // dont_click specified, click not specified
         clickablesSpec = String.join(newLine,
-            "[[dont_click.element]]", "  tag_name = \"a\""
+            "[[dont_click.element]]", "  tag_name = [\"a\"]"
         );
         builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
