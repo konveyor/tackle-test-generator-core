@@ -3,7 +3,7 @@
 # elements are identified by one or more HTML tags and optionally using attributes, text, or xpath for that tag
 # [[click.element]]
 #   # tag name(s)
-#   tag_name = [""]
+#   tag_name = [""] or ""
 #   # optionally, specify one of the following to refine the set of elements identified by the tag
 #   with_text = ""
 #   under_xpath = ""
@@ -12,7 +12,7 @@
 
 # click all elements with tag "tag1"
 [[click.element]]
-  tag_name = ["tag1"]
+  tag_name = "tag1"
 
 # click div elements with id "is_clickable"
 [[click.element]]
@@ -26,7 +26,7 @@
 
 # click div elements that occur under the matching xpath
 [[click.element]]
-  tag_name = ["div"]
+  tag_name = "div"
   under_xpath = "//*[@id=\"primary-links\"]/li"
 
 ###
@@ -35,7 +35,7 @@
 # add one such entry for each such set of elements
 # [[dont_click.element]]
 #   # tag name(s)
-#   tag_name = [""]
+#   tag_name = [""] or ""
 #   # optionally, specify one of the following to refine the set of elements identified by the tag
 #   with_text = ""
 #   under_xpath = ""
@@ -54,12 +54,12 @@
 
 # do not click button elements with name "Update record..."
 [[dont_click.element]]
-  tag_name = ["button"]
+  tag_name = "button"
   with_attribute = { attr_name = "name", attr_value = "Update record..."}
 
 # do not click anchor elements with text "Upload file"
 [[dont_click.element]]
-  tag_name = ["a"]
+  tag_name = "a"
   with_text = "Upload file"
 
 # do not click div and tag123 elements that occur under the matching xpath

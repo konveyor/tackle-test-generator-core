@@ -178,9 +178,16 @@ public class CrawljaxRunner {
                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
         for (TomlTable elem : clickablesElemSpec) {
             List<String> tags = new ArrayList<>();
-            TomlArray tagList = elem.getArray("tag_name");
-            for (int i = 0; i < elem.getArray("tag_name").size(); i++) {
-                tags.add(tagList.getString(i));
+            try {
+                // parse tag_name as a string
+                tags.add(elem.getString("tag_name"));
+            }
+            catch (TomlInvalidTypeException e) {
+                // if type error occurs, parse tag_name as an array
+                TomlArray tagList = elem.getArray("tag_name");
+                for (int i = 0; i < elem.getArray("tag_name").size(); i++) {
+                    tags.add(tagList.getString(i));
+                }
             }
             if (elem.contains("with_text")) {
                 String withText = elem.getString("with_text");
