@@ -14,6 +14,7 @@ import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 import org.tomlj.Toml;
 import org.tomlj.TomlParseResult;
 import org.tomlj.TomlTable;
@@ -95,7 +96,32 @@ public class CrawljaxRunnerTest {
         crawlRules = builder.build().getCrawlRules();
         Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
         Assert.assertEquals(0, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+    }
 
+    @Test
+    public void testUpdateClickablesConfigurationClickSpecExcpSample() {
+        // click spec with no tag_name property
+        final String clickablesSpec = "[[click.element]]";
+        final CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        Assert.assertThrows(RuntimeException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+            }
+        });
+    }
+
+    @Test
+    public void testUpdateClickablesConfigurationDontclickSpecExcpSample() {
+        // dont_click spec with no tag_name property
+        final String clickablesSpec = "[[dont_click.element]]";
+        final CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        Assert.assertThrows(RuntimeException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+            }
+        });
     }
 
     @Test

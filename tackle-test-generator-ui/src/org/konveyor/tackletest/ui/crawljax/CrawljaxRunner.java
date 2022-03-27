@@ -177,6 +177,10 @@ public class CrawljaxRunner {
     private static void handleClickablesElementSpec(TomlTable[] clickablesElemSpec, boolean dontClick,
                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
         for (TomlTable elem : clickablesElemSpec) {
+            if (!elem.contains("tag_name")) {
+                throw new RuntimeException("Invalid " + (dontClick ? "dont_click" : "click") +
+                    " specification: \"tag_name\" must be provided as a string or list of strings");
+            }
             List<String> tags = new ArrayList<>();
             try {
                 // parse tag_name as a string
