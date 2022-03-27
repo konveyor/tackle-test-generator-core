@@ -1,9 +1,9 @@
 ###
 # specification of web elements to click during crawling (on top of the default elements)
-# elements are identified by an HTML tag and optionally using attributes, text, or xpath for that tag
+# elements are identified by one or more HTML tags and optionally using attributes, text, or xpath for that tag
 # [[click.element]]
-#   # tag name
-#   tag_name = ""
+#   # tag name(s)
+#   tag_name = [""] or ""
 #   # optionally, specify one of the following to refine the set of elements identified by the tag
 #   with_text = ""
 #   under_xpath = ""
@@ -16,12 +16,12 @@
 
 # click div elements with id "is_clickable"
 [[click.element]]
-  tag_name = "div"
+  tag_name = ["div"]
   with_attribute = { attr_name = "id", attr_value = "is_clickable"}
 
-# click tag1 elements with text "some text"
+# click tag1 and tag2 elements with text "some text"
 [[click.element]]
-  tag_name = "tag1"
+  tag_name = ["tag1", "tag2"]
   with_text = "some text"
 
 # click div elements that occur under the matching xpath
@@ -31,11 +31,11 @@
 
 ###
 # specification of web elements to not click during crawling
-# elements are identified by an HTML tag and optionally using attributes, text, or xpath for that tag
+# elements are identified by one or more HTML tags and optionally using attributes, text, or xpath for that tag
 # add one such entry for each such set of elements
 # [[dont_click.element]]
-#   # tag name
-#   tag_name = ""
+#   # tag name(s)
+#   tag_name = [""] or ""
 #   # optionally, specify one of the following to refine the set of elements identified by the tag
 #   with_text = ""
 #   under_xpath = ""
@@ -45,11 +45,11 @@
 # do not click any anchor element
 # (do not click spec for all occurrences of a tag is unlikely to be used but is supported)
 [[dont_click.element]]
-  tag_name = "a"
+  tag_name = ["a"]
 
 # do not click input elements with id "Delete records"
 [[dont_click.element]]
-  tag_name = "input"
+  tag_name = ["input"]
   with_attribute = { attr_name = "id", attr_value = "Delete records"}
 
 # do not click button elements with name "Update record..."
@@ -62,7 +62,7 @@
   tag_name = "a"
   with_text = "Upload file"
 
-# do not click anchor elements that occur under the matching xpath
+# do not click div and tag123 elements that occur under the matching xpath
 [[dont_click.element]]
-  tag_name = "a"
+  tag_name = ["div", "tag123"]
   under_xpath = "//*[@id=\"primary-links\"]/li"

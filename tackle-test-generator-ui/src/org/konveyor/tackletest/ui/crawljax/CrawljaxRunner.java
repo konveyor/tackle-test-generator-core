@@ -22,10 +22,7 @@ import com.crawljax.stateabstractions.dom.RTEDStateVertexFactory;
 import com.crawljax.stateabstractions.hybrid.HybridStateVertexFactory;
 import org.apache.commons.cli.*;
 import org.konveyor.tackletest.ui.util.TackleTestLogger;
-import org.tomlj.Toml;
-import org.tomlj.TomlParseError;
-import org.tomlj.TomlParseResult;
-import org.tomlj.TomlTable;
+import org.tomlj.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +31,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -178,42 +177,75 @@ public class CrawljaxRunner {
     private static void handleClickablesElementSpec(TomlTable[] clickablesElemSpec, boolean dontClick,
                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
         for (TomlTable elem : clickablesElemSpec) {
-            String tagName = elem.getString("tag_name");
+            if (!elem.contains("tag_name")) {
+                throw new RuntimeException("Invalid " + (dontClick ? "dont_click" : "click") +
+                    " specification: \"tag_name\" must be provided as a string or list of strings");
+            }
+            List<String> tags = new ArrayList<>();
+            try {
+                // parse tag_name as a string
+                tags.add(elem.getString("tag_name"));
+            }
+            catch (TomlInvalidTypeException e) {
+                // if type error occurs, parse tag_name as an array
+                TomlArray tagList = elem.getArray("tag_name");
+                for (int i = 0; i < elem.getArray("tag_name").size(); i++) {
+                    tags.add(tagList.getString(i));
+                }
+            }
             if (elem.contains("with_text")) {
                 String withText = elem.getString("with_text");
                 if (withText != null && !withText.isEmpty()) {
                     if (dontClick) {
-                        builder.crawlRules().dontClick(tagName).withText(withText);
+                        for (String tag: tags) {
+                            builder.crawlRules().dontClick(tag).withText(withText);
+                        }
                     } else {
-                        builder.crawlRules().click(tagName).withText(withText);
+                        for (String tag: tags) {
+                            builder.crawlRules().click(tag).withText(withText);
+                        }
                     }
                 }
-            } else if (elem.contains("under_xpath")) {
+            }
+            else if (elem.contains("under_xpath")) {
                 String underXpath = elem.getString("under_xpath");
                 if (underXpath != null && !underXpath.isEmpty()) {
                     if (dontClick) {
-                        builder.crawlRules().dontClick(tagName).underXPath(underXpath);
+                        for (String tag: tags) {
+                            builder.crawlRules().dontClick(tag).underXPath(underXpath);
+                        }
                     } else {
-                        builder.crawlRules().click(tagName).underXPath(underXpath);
+                        for (String tag: tags) {
+                            builder.crawlRules().click(tag).underXPath(underXpath);
+                        }
                     }
                 }
-            } else if (elem.contains("with_attribute")) {
+            }
+            else if (elem.contains("with_attribute")) {
                 TomlTable withAttribute = elem.getTable("with_attribute");
                 String attrName = withAttribute.getString("attr_name");
                 String attrValue = withAttribute.getString("attr_value");
                 if (attrName != null && !attrName.isEmpty() && attrValue != null && !attrValue.isEmpty()) {
                     if (dontClick) {
-                        builder.crawlRules().dontClick(tagName).withAttribute(attrName, attrValue);
+                        for (String tag: tags) {
+                            builder.crawlRules().dontClick(tag).withAttribute(attrName, attrValue);
+                        }
                     } else {
-                        builder.crawlRules().click(tagName).withAttribute(attrName, attrValue);
+                        for (String tag: tags) {
+                            builder.crawlRules().click(tag).withAttribute(attrName, attrValue);
+                        }
                     }
                 }
             } else {
                 // no text, attribute, or xpath specified; set click or don't click on the tag
                 if (dontClick) {
-                    builder.crawlRules().dontClick(tagName);
+                    for (String tag: tags) {
+                        builder.crawlRules().dontClick(tag);
+                    }
                 } else {
-                    builder.crawlRules().click(tagName);
+                    for (String tag: tags) {
+                        builder.crawlRules().click(tag);
+                    }
                 }
             }
         }

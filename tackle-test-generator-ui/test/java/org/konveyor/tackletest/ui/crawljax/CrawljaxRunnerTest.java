@@ -14,6 +14,7 @@ import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 import org.tomlj.Toml;
 import org.tomlj.TomlParseResult;
 import org.tomlj.TomlTable;
@@ -48,8 +49,8 @@ public class CrawljaxRunnerTest {
         Assert.assertEquals(2, crawljaxConfig.getCrawlRules().getMaxRepeatExploredActions());
         Assert.assertEquals(2, crawljaxConfig.getMaximumDepth());
         CrawlRules crawlRules = crawljaxConfig.getCrawlRules();
-        Assert.assertEquals(8, crawlRules.getPreCrawlConfig().getIncludedElements().size());
-        Assert.assertEquals(5, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+        Assert.assertEquals(9, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(6, crawlRules.getPreCrawlConfig().getExcludedElements().size());
         Assert.assertEquals(500, crawlRules.getWaitAfterEvent());
         Assert.assertEquals(500, crawlRules.getWaitAfterReloadUrl());
     }
@@ -58,9 +59,9 @@ public class CrawljaxRunnerTest {
     public void testUpdateClickablesConfigurationSample() {
         String newLine = System.getProperty("line.separator");
         String clickablesSpec = String.join(newLine,
-            "[[click.element]]", "  tag_name = \"div\"",
-            "[[dont_click.element]]", "  tag_name = \"a\"",
-            "[[dont_click.element]]", "  tag_name = \"tag1\"", "  with_text = \"some text\""
+            "[[click.element]]", "  tag_name = [\"div\"]",
+            "[[dont_click.element]]", "  tag_name = [\"a\"]",
+            "[[dont_click.element]]", "  tag_name = [\"tag1\"]", "  with_text = \"some text\""
         );
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
@@ -70,7 +71,7 @@ public class CrawljaxRunnerTest {
 
         // click specified, dont_click not specified
         clickablesSpec = String.join(newLine,
-            "[[click.element]]", "  tag_name = \"div\""
+            "[[click.element]]", "  tag_name = [\"div\"]"
         );
         builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
@@ -80,7 +81,7 @@ public class CrawljaxRunnerTest {
 
         // dont_click specified, click not specified
         clickablesSpec = String.join(newLine,
-            "[[dont_click.element]]", "  tag_name = \"a\""
+            "[[dont_click.element]]", "  tag_name = [\"a\"]"
         );
         builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
@@ -95,7 +96,32 @@ public class CrawljaxRunnerTest {
         crawlRules = builder.build().getCrawlRules();
         Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
         Assert.assertEquals(0, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+    }
 
+    @Test
+    public void testUpdateClickablesConfigurationClickSpecExcpSample() {
+        // click spec with no tag_name property
+        final String clickablesSpec = "[[click.element]]";
+        final CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        Assert.assertThrows(RuntimeException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+            }
+        });
+    }
+
+    @Test
+    public void testUpdateClickablesConfigurationDontclickSpecExcpSample() {
+        // dont_click spec with no tag_name property
+        final String clickablesSpec = "[[dont_click.element]]";
+        final CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        Assert.assertThrows(RuntimeException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+            }
+        });
     }
 
     @Test
