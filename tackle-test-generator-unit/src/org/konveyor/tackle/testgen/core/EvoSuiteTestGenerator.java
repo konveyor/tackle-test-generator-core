@@ -148,7 +148,7 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 		ProcessBuilder evosuitePB = new ProcessBuilder(args);
 		evosuitePB.inheritIO();
 		
-		// Temporarily set jdkPath to default JDK because EvoSuite requires it to be the default
+		// In the child process set jdkPath to default JDK because EvoSuite requires it to be the default
 		// Java AND the JDK pointed to in JAVA_HOME. Otherwise might invoke the wrong JDK...
 		
 		Map<String, String> envVars = evosuitePB.environment();
