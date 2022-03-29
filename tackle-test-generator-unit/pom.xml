@@ -31,7 +31,7 @@
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 	<evosuite.version>1.2.0</evosuite.version>
-    <randoop.version>4.2.6</randoop.version>
+    <randoop.version>4.3.0</randoop.version>
     <acts.version>3.2</acts.version>
 
     <!-- JaCoCo thresholds. Increase gradually as you add tests. -->
@@ -71,7 +71,7 @@
     <dependency>
   		<groupId>com.fasterxml.jackson.core</groupId>
   		<artifactId>jackson-databind</artifactId>
-  		<version>2.12.5</version>
+  		<version>2.12.6.1</version>
 	</dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
