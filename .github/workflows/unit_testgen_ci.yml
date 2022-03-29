@@ -27,8 +27,8 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
-    - uses: AdoptOpenJDK/install-jdk@v1
     - name: Install JDK 11
+      uses: AdoptOpenJDK/install-jdk@v1
       with:
         version: '11'
         targets: 'JDK11_HOME'    
