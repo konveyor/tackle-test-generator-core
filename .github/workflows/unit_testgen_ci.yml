@@ -33,8 +33,8 @@ jobs:
         servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-    - name: Download Randoop jars
-      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+    - name: Download Randoop and EvoSuite jars
+      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
     - name: Build with Maven
       run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
 
@@ -56,8 +56,8 @@ jobs:
           servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-      - name: Download Randoop jars
-        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      - name: Download Randoop and EvoSuite jars 
+        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
       - name: Delete old package version
 #        uses: actions/delete-package-versions@v1
         uses: smartsquaregmbh/delete-old-packages@v0.4.0
