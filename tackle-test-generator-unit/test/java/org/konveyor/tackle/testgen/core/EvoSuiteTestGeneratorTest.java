@@ -50,7 +50,7 @@ public class EvoSuiteTestGeneratorTest {
 		Map<String, String> config = new HashMap<>();
 		config.put(EvoSuiteTestGenerator.Options.SEARCH_BUDGET.name(), "30");
 		config.put(EvoSuiteTestGenerator.Options.ASSERTIONS.name(), "false");
-		config.put(EvoSuiteTestGenerator.Options.CRITERION.name(), "METHOD");
+		config.put(EvoSuiteTestGenerator.Options.CRITERION.name(), "BRANCH");
 		evosuoiteTestgen.configure(config);
 		evosuoiteTestgen.addCoverageTarget("com.ibm.websphere.samples.daytrader.TradeAction");
 		evosuoiteTestgen.generateTests();
