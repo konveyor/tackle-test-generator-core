@@ -17,12 +17,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.FileUtils;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,7 +68,7 @@ public class TestSequenceInitializerTest {
                 sequenceInitializerAppUnderTest.testGenName,
                 sequenceInitializerAppUnderTest.timeLimit,
                 sequenceInitializerAppUnderTest.targetMethods,
-                sequenceInitializerAppUnderTest.baseAssertions);
+                sequenceInitializerAppUnderTest.baseAssertions, "");
 
             seqInitializer.createInitialTests();
 
@@ -81,8 +83,10 @@ public class TestSequenceInitializerTest {
 
             ObjectNode sequencesObject = (ObjectNode) resultNode.get("test_sequences");
 
-            @SuppressWarnings("unchecked")
-            Set<String> reachedClasses = new HashSet<String>(IteratorUtils.toList(sequencesObject.fieldNames()));
+            Set<String> reachedClasses = StreamSupport.stream(
+    				Spliterators.spliteratorUnknownSize(sequencesObject.fieldNames(), 
+    						Spliterator.ORDERED), false)
+    		  .collect(Collectors.toSet());
 
             assertTrue(reachedClasses.equals(sequenceInitializerAppUnderTest.targetClasses));
         }

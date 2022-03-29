@@ -17,11 +17,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.FileUtils;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
@@ -44,7 +46,6 @@ public class DiffAssertionGeneratorTest {
 		FileUtils.deleteQuietly(outputFile);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testDiffAssertionGenerator() throws Exception {
 
@@ -63,9 +64,18 @@ public class DiffAssertionGeneratorTest {
 
 		ObjectNode mainObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(outputFile);
 		ObjectNode standardObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_with_assertions.json"));
-
-		Set<String> seqKeys = new HashSet<String>(IteratorUtils.toList(mainObject.fieldNames()));
-		Set<String> seqStandardKeys = new HashSet<String>(IteratorUtils.toList(standardObject.fieldNames()));
+		
+		
+		Set<String> seqKeys = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(mainObject.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+		
+		Set<String> seqStandardKeys = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(standardObject.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+		
 		assertEquals(seqStandardKeys, seqKeys);
 		
 		mainObject.fieldNames().forEachRemaining(key -> {

@@ -162,13 +162,39 @@ public class Utils {
 	    soot.options.Options.v().set_allow_phantom_refs(true);
 	    soot.options.Options.v().set_include_all(true);
 	    Scene.v().releaseFastHierarchy();
-	    if (classpath != null) {
-	    	Scene.v().setSootClassPath(classpath);
+	    
+	    StringBuilder currentClassPath = new StringBuilder();
+	    
+	    if (getJavaVersion() >= 9) {
+	    	currentClassPath.append("VIRTUAL_FS_FOR_JDK");
+	    	currentClassPath.append(File.pathSeparator);
 	    }
+	    if (classpath != null) {
+	    	currentClassPath.append(classpath);
+	    }
+	    
+	    if (currentClassPath.length() > 0) {
+	    	Scene.v().setSootClassPath(currentClassPath.toString());
+	    }
+	    
 	    Scene.v().loadNecessaryClasses();
 	}
 
-    public static boolean isPrivateInnerClass(Class<?> theClass) {
+    public static int getJavaVersion() {
+    	String version = System.getProperty("java.version");
+        if (version.startsWith("1.")) {
+            version = version.substring(2, 3);
+        } else {
+            int dot = version.indexOf(".");
+            if (dot != -1) { 
+            	version = version.substring(0, dot); 
+            }
+        } 
+        
+        return Integer.parseInt(version);
+	}
+
+	public static boolean isPrivateInnerClass(Class<?> theClass) {
 
 		return theClass.getEnclosingClass() != null && Modifier.isPrivate(theClass.getModifiers());
 	}

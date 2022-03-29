@@ -25,7 +25,7 @@ public class TackleTestLogger {
             "[%1$tF %1$tT] [%4$-7s] [%2$s] %5$s %n");
     }
 
-    private static Level DEFAULT_LOG_LEVEL = Level.OFF;
+    private static Level DEFAULT_LOG_LEVEL = Level.ALL;
 
     public static Logger getLogger(Class<?> cls) {
         Logger logger = Logger.getLogger(cls.getSimpleName());

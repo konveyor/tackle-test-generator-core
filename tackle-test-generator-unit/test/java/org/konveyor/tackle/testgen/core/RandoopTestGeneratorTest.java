@@ -39,7 +39,8 @@ public class RandoopTestGeneratorTest {
     @Test
     public void testGenerateTests() throws Exception {
         String classpath = "test/data/daytrader7/monolith/bin";
-        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(Collections.singletonList(classpath), "DayTrader");
+        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(Collections.singletonList(classpath), 
+        		"DayTrader", System.getProperty("java.home"));
         randoopTestgen.setProjectClasspath(classpath);
 
         // set configuration options

@@ -18,11 +18,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.FileUtils;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -217,8 +220,6 @@ public class CTDModelingTest {
 	 * other.
 	 */
 
-	@SuppressWarnings("unchecked")
-    
     private void executeModelingTest(String appName, String standardNodeFile) throws Exception {
         // assert that output file for CTD modeling is created
         File outfile = new File(ModelerAppUnderTest.getCtdOutfileName(appName));
@@ -232,9 +233,19 @@ public class CTDModelingTest {
 	private void compareModels(String appName, JsonNode resultObject, JsonNode standardObject) {
 		ObjectNode resultObjects = (ObjectNode) resultObject.get("models_and_test_plans");
 		ObjectNode standardObjects = (ObjectNode) standardObject.get("models_and_test_plans");
+		
+		Set<String> standardSet = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(standardObjects.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+		
+		
+		Set<String> resultSet = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(resultObjects.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
 
-		assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardObjects.fieldNames())),
-			new HashSet<String>(IteratorUtils.toList(resultObjects.fieldNames())));
+		assertEquals(appName, standardSet, resultSet);
 
 		resultObjects.fieldNames().forEachRemaining(partition -> {
 
@@ -245,9 +256,19 @@ public class CTDModelingTest {
 			assert (standardClassesObject != null);
 			
 			assertEquals(appName, standardClassesObject.size(), classesObject.size());
+			
+			Set<String> standardClasses = StreamSupport.stream(
+					Spliterators.spliteratorUnknownSize(standardClassesObject.fieldNames(), 
+							Spliterator.ORDERED), false)
+			  .collect(Collectors.toSet());
+			
+			
+			Set<String> reachedClasses = StreamSupport.stream(
+					Spliterators.spliteratorUnknownSize(classesObject.fieldNames(), 
+							Spliterator.ORDERED), false)
+			  .collect(Collectors.toSet());
 
-			assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardClassesObject.fieldNames())),
-					new HashSet<String>(IteratorUtils.toList(classesObject.fieldNames())));
+			assertEquals(appName, standardClasses, reachedClasses);
 
 			classesObject.fieldNames().forEachRemaining(className -> {
 
@@ -258,9 +279,19 @@ public class CTDModelingTest {
 				assert (standardMethodsObject != null);
 				
 				assertEquals(appName, standardMethodsObject.size(), methodsObject.size());
+				
+				Set<String> standardMethods = StreamSupport.stream(
+						Spliterators.spliteratorUnknownSize(standardMethodsObject.fieldNames(), 
+								Spliterator.ORDERED), false)
+				  .collect(Collectors.toSet());
+				
+				
+				Set<String> reachedMethods = StreamSupport.stream(
+						Spliterators.spliteratorUnknownSize(methodsObject.fieldNames(), 
+								Spliterator.ORDERED), false)
+				  .collect(Collectors.toSet());
 
-				assertEquals(appName, new HashSet<String>(IteratorUtils.toList(standardMethodsObject.fieldNames())),
-						new HashSet<String>(IteratorUtils.toList(methodsObject.fieldNames())));
+				assertEquals(appName, standardMethods, reachedMethods);
 
 				methodsObject.fieldNames().forEachRemaining(methodName -> {
 

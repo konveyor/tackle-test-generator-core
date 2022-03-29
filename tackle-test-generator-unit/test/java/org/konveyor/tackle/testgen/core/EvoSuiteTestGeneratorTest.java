@@ -42,7 +42,8 @@ public class EvoSuiteTestGeneratorTest {
 	public void testGenerateTests() throws Exception {
 		String classpath = "test/data/daytrader7/externalJars/javax.json-api-1.0.jar"+File.pathSeparator+
 				"test/data/daytrader7/externalJars/javax.jms-api-2.0.1.jar";
-		EvoSuiteTestGenerator evosuoiteTestgen = new EvoSuiteTestGenerator(Collections.singletonList("test/data/daytrader7/monolith/bin"), "DayTrader");
+		EvoSuiteTestGenerator evosuoiteTestgen = new EvoSuiteTestGenerator(Collections.singletonList("test/data/daytrader7/monolith/bin"), "DayTrader",
+												System.getProperty("java.home"));
 		evosuoiteTestgen.setProjectClasspath(classpath);
 
 		// set configuration options

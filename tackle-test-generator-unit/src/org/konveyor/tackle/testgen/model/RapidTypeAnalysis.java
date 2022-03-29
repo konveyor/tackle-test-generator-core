@@ -75,7 +75,11 @@ public class RapidTypeAnalysis {
 			}
 		}
 
-		classpath.add(System.getProperty("java.home")+File.separator+"lib"+File.separator+"rt.jar");
+		if (Utils.getJavaVersion() < 9) {
+			classpath.add(System.getProperty("java.home")+File.separator+"lib"+File.separator+"rt.jar");
+		} else {
+			classpath.add(System.getProperty("java.home")+File.separator+"lib"+File.separator+"jrt-fs.jar");
+		}
 
 		Utils.initSootClasses(classesDirs, Utils.entriesToClasspath(classpath));
 

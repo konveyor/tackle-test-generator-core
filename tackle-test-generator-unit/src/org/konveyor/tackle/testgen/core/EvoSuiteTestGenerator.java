@@ -33,17 +33,19 @@ import java.util.logging.Logger;
 
 public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 
-	public EvoSuiteTestGenerator(List<String> targetPath, String appName) {
-		super(targetPath);
-		this.appName = appName;
-		evosuiteOutputDir = new File(appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
-	}
-
 	private final String appName;
+	private final String jdkPath;
 	private boolean generateAssertions = false;
     private File evosuiteOutputDir;
     private int timeLimit = 0;
 	private CoverageCriterion criterion = null;
+	
+	public EvoSuiteTestGenerator(List<String> targetPath, String appName, String jdkPath) {
+		super(targetPath);
+		this.appName = appName;
+		this.jdkPath = jdkPath;
+		evosuiteOutputDir = new File(appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
+	}
 
 	private static final Logger logger = TackleTestLogger.getLogger(EvoSuiteTestGenerator.class);
 
@@ -88,7 +90,7 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 		}
 
         List<String> args = new ArrayList<String>();
-		args.add(System.getProperty("java.home")+File.separator+"bin"+File.separator+"java");
+		args.add(jdkPath+File.separator+"bin"+File.separator+"java");
 		args.add("-jar");
 		args.add(Utils.getJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
 		if (methodTargetList != null) {
