@@ -88,7 +88,7 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 			methodTargetList = methodTargets.substring(0, methodTargets.length()-1);
 			logger.fine("Evosuite method targets list: "+methodTargetList);
 		}
-
+		
         List<String> args = new ArrayList<String>();
 		args.add(jdkPath+File.separator+"bin"+File.separator+"java");
 		args.add("-jar");
@@ -147,6 +147,20 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 
 		ProcessBuilder evosuitePB = new ProcessBuilder(args);
 		evosuitePB.inheritIO();
+		
+		// Temporarily set jdkPath to default JDK because EvoSuite requires it to be the default
+		// Java AND the JDK pointed to in JAVA_HOME. Otherwise might invoke the wrong JDK...
+		
+		Map<String, String> envVars = evosuitePB.environment();
+		
+		if (envVars.containsKey("PATH")) {
+			envVars.put("PATH", jdkPath+File.pathSeparator+envVars.get("PATH"));
+		}
+		
+		if (envVars.containsKey("JAVA_HOME")) {
+			envVars.put("JAVA_HOME", jdkPath);
+		}
+		
 		long startTime = System.currentTimeMillis();
 		Process evosuiteP = evosuitePB.start();
 		evosuiteP.waitFor();
