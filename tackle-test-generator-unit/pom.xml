@@ -30,7 +30,7 @@
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <evosuite.version>1.0.7</evosuite.version>
+	<evosuite.version>1.2.0</evosuite.version>
     <randoop.version>4.2.6</randoop.version>
     <acts.version>3.2</acts.version>
 
@@ -85,13 +85,17 @@
     </dependency>
     <dependency>
       <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-master</artifactId>
+	  <artifactId>evosuite</artifactId>
       <version>${evosuite.version}</version>
+	   <scope>system</scope>
+	  <systemPath>${project.basedir}/lib/download/evosuite-${evosuite.version}.jar</systemPath>
 	  </dependency>
 	  <dependency>
       <groupId>org.evosuite</groupId>
       <artifactId>evosuite-standalone-runtime</artifactId>
       <version>${evosuite.version}</version>
+	   <scope>system</scope>
+	  <systemPath>${project.basedir}/lib/download/evosuite-standalone-runtime-${evosuite.version}.jar</systemPath>
   	</dependency>
     <dependency>
       <groupId>edu.uta.cse.fireeye.acts</groupId>
@@ -206,6 +210,32 @@
             <configuration>
               <url>
                 https://github.com/randoop/randoop/releases/download/v${randoop.version}/replacecall-${randoop.version}.jar
+              </url>
+              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>get-evosuite-jar</id>
+            <!--            <phase>process-resources</phase>-->
+            <goals>
+              <goal>wget</goal>
+            </goals>
+            <configuration>
+              <url>
+                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-${evosuite.version}.jar
+              </url>
+              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>get-evosuite-runtime-jar</id>
+            <!--            <phase>process-resources</phase>-->
+            <goals>
+              <goal>wget</goal>
+            </goals>
+            <configuration>
+              <url>
+                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-standalone-runtime-${evosuite.version}.jar
               </url>
               <outputDirectory>${project.basedir}/lib/download</outputDirectory>
             </configuration>

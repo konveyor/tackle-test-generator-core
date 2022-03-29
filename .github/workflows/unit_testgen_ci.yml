@@ -27,14 +27,19 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Install JDK 11
+      uses: AdoptOpenJDK/install-jdk@v1
+      with:
+        version: '11'
+        targets: 'JDK11_HOME'    
     - name: Create maven settings.xml
       uses: s4u/maven-settings-action@v2.4.0
       with:
         servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-    - name: Download Randoop jars
-      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+    - name: Download Randoop and EvoSuite jars
+      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
     - name: Build with Maven
       run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
 
@@ -56,8 +61,8 @@ jobs:
           servers: '[
           {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
         ]'
-      - name: Download Randoop jars
-        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar
+      - name: Download Randoop and EvoSuite jars 
+        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
       - name: Delete old package version
 #        uses: actions/delete-package-versions@v1
         uses: smartsquaregmbh/delete-old-packages@v0.4.0

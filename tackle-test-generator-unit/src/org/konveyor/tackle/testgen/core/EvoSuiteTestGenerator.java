@@ -33,17 +33,19 @@ import java.util.logging.Logger;
 
 public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 
-	public EvoSuiteTestGenerator(List<String> targetPath, String appName) {
-		super(targetPath);
-		this.appName = appName;
-		evosuiteOutputDir = new File(appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
-	}
-
 	private final String appName;
+	private final String jdkPath;
 	private boolean generateAssertions = false;
     private File evosuiteOutputDir;
     private int timeLimit = 0;
 	private CoverageCriterion criterion = null;
+	
+	public EvoSuiteTestGenerator(List<String> targetPath, String appName, String jdkPath) {
+		super(targetPath);
+		this.appName = appName;
+		this.jdkPath = jdkPath;
+		evosuiteOutputDir = new File(appName + Constants.EVOSUITE_OUTPUT_DIR_NAME_SUFFIX);
+	}
 
 	private static final Logger logger = TackleTestLogger.getLogger(EvoSuiteTestGenerator.class);
 
@@ -86,9 +88,9 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 			methodTargetList = methodTargets.substring(0, methodTargets.length()-1);
 			logger.fine("Evosuite method targets list: "+methodTargetList);
 		}
-
+		
         List<String> args = new ArrayList<String>();
-		args.add(System.getProperty("java.home")+File.separator+"bin"+File.separator+"java");
+		args.add(jdkPath+File.separator+"bin"+File.separator+"java");
 		args.add("-jar");
 		args.add(Utils.getJarPath(Constants.EVOSUITE_MASTER_JAR_NAME));
 		if (methodTargetList != null) {
@@ -145,6 +147,20 @@ public class EvoSuiteTestGenerator extends AbstractTestGenerator {
 
 		ProcessBuilder evosuitePB = new ProcessBuilder(args);
 		evosuitePB.inheritIO();
+		
+		// In the child process set jdkPath to default JDK because EvoSuite requires it to be the default
+		// Java AND the JDK pointed to in JAVA_HOME. Otherwise might invoke the wrong JDK...
+		
+		Map<String, String> envVars = evosuitePB.environment();
+		
+		if (envVars.containsKey("PATH")) {
+			envVars.put("PATH", jdkPath+File.pathSeparator+envVars.get("PATH"));
+		}
+		
+		if (envVars.containsKey("JAVA_HOME")) {
+			envVars.put("JAVA_HOME", jdkPath);
+		}
+		
 		long startTime = System.currentTimeMillis();
 		Process evosuiteP = evosuitePB.start();
 		evosuiteP.waitFor();

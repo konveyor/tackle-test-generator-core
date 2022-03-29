@@ -23,8 +23,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,7 +36,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.konveyor.tackle.testgen.core.extender.SequenceUtil;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
@@ -41,7 +43,6 @@ import org.konveyor.tackle.testgen.util.TackleTestLogger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import randoop.sequence.Sequence;
@@ -114,7 +115,6 @@ public class JUnitTestExporter {
 		testOutDir.mkdirs();
 	}
 
-	@SuppressWarnings("unchecked")
 	private Map<String, TestClass> readSequences(File seqFile) throws JsonProcessingException, IOException {
 
 		JsonNode mainNode = TackleTestJson.getObjectMapper().readTree(seqFile);
@@ -132,8 +132,12 @@ public class JUnitTestExporter {
 				junitTests.put(className, currentTests);
 			}
 			
-			currentTests.imports.addAll(new HashSet<String>(IteratorUtils.
-					toList(((ArrayNode) seqObj.get("imports")).elements())));
+			List<String> importList = StreamSupport.stream(
+					Spliterators.spliteratorUnknownSize(seqObj.get("imports").elements(), 
+							Spliterator.ORDERED), false)
+			  .map(element -> element.textValue()).collect(Collectors.toList());
+			
+			currentTests.imports.addAll(importList);
 			currentTests.sequences.add(seqObj.get("sequence").asText());
 		});
 		

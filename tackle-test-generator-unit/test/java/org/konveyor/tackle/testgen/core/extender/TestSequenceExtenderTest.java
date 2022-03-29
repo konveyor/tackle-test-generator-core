@@ -24,9 +24,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -97,7 +97,6 @@ public class TestSequenceExtenderTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
 	private void assertSummaryFile(ExtenderAppUnderTest app) throws JsonProcessingException, IOException {
         Path summaryFilePath = Paths.get(ExtenderAppUnderTest.getSummaryFileJsonName(app.appName));
         assertTrue(app.appName, Files.exists(summaryFilePath));
@@ -162,8 +161,17 @@ public class TestSequenceExtenderTest {
 		ObjectNode parseExcpTypes = (ObjectNode) summaryInfo.get("parse_exception_types");
         ObjectNode parseExcpTypesStd = (ObjectNode) summaryInfoStd.get("parse_exception_types");
         
-		assertEquals(app.appName, new HashSet<String>(IteratorUtils.toList(parseExcpTypesStd.fieldNames())),
-            new HashSet<String>(IteratorUtils.toList(parseExcpTypes.fieldNames())));
+        Set<String> reachedExp = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(parseExcpTypes.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+        
+        Set<String> expStanard = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(parseExcpTypesStd.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+        
+		assertEquals(app.appName, expStanard, reachedExp);
 		if (parseExcpTypesStd.has("randoop.sequence.SequenceParseException")) {
             assertEquals(app.appName, parseExcpTypesStd.get("randoop.sequence.SequenceParseException").asInt(),
                 parseExcpTypes.get("randoop.sequence.SequenceParseException").asInt());

@@ -35,7 +35,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.evosuite.shaded.org.springframework.util.ClassUtils;
 import org.konveyor.tackle.testgen.util.Constants;
 import org.konveyor.tackle.testgen.util.TackleTestJson;
 import org.konveyor.tackle.testgen.util.TackleTestLogger;
@@ -70,7 +69,7 @@ public class TestSequenceInitializer {
 	private final boolean targetSpecificMethods;
 	
 	private final boolean addBaseAssertions;
-
+	
 	public static final int DEFAULT_TIME_LIMIT = -1;
 
 	private static final Logger logger = TackleTestLogger.getLogger(AbstractJUnitTestImporter.class);
@@ -80,7 +79,7 @@ public class TestSequenceInitializer {
 	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
-			boolean targetMethods, boolean baseAssertions)
+			boolean targetMethods, boolean baseAssertions, String jdk)
 			throws IOException {
 
 		monolithAppPath = appPath;
@@ -89,6 +88,12 @@ public class TestSequenceInitializer {
 		this.timeLimit = timeLimit;
 		targetSpecificMethods = targetMethods;
 		addBaseAssertions = baseAssertions;
+		
+		String jdkPath = jdk;
+		
+		if (jdkPath.isEmpty()) {
+			jdkPath = System.getProperty("java.home");
+		} 
 
 		File file = new File(ctdModelsFileName);
 		if (!file.isFile()) {
@@ -107,12 +112,12 @@ public class TestSequenceInitializer {
 		List<String> monoEntries = Arrays.asList(monolithAppPath.split(File.pathSeparator));
 
 		if (testGeneratorName.equals(EvoSuiteTestGenerator.class.getSimpleName())) {
-			testGenerators.add(new EvoSuiteTestGenerator(monoEntries, appName));
+			testGenerators.add(new EvoSuiteTestGenerator(monoEntries, appName, jdkPath));
 		} else if (testGeneratorName.equals(RandoopTestGenerator.class.getSimpleName())) {
-			testGenerators.add(new RandoopTestGenerator(monoEntries, appName));
+			testGenerators.add(new RandoopTestGenerator(monoEntries, appName, jdkPath));
 		} else if (testGeneratorName.equals(Constants.COMBINED_TEST_GENERATOR_NAME)) {
-			testGenerators.add(new EvoSuiteTestGenerator(monoEntries, appName));
-			testGenerators.add(new RandoopTestGenerator(monoEntries, appName));
+			testGenerators.add(new EvoSuiteTestGenerator(monoEntries, appName, jdkPath));
+			testGenerators.add(new RandoopTestGenerator(monoEntries, appName, jdkPath));
 		} else {
 			throw new IllegalArgumentException("Unknown test generator: "+testGeneratorName);
 		}
@@ -142,7 +147,7 @@ public class TestSequenceInitializer {
     			Class<?> receiverClass;
 
     			try {
-    				receiverClass = ClassUtils.forName(receiverClassName, classLoader);
+    				receiverClass = classLoader.loadClass(receiverClassName);
     			} catch (Throwable e) {
     				logger.warning("Unable to load target class "+receiverClassName+": "+e.getMessage());
     				return;
@@ -277,7 +282,7 @@ public class TestSequenceInitializer {
 						if (!targetClass.endsWith("[]") && !Utils.isJavaType(targetClass)) {
 							Class<?> theClass;
 							try {
-								theClass = ClassUtils.forName(targetClass, classLoader);
+								theClass = classLoader.loadClass(targetClass);
 							} catch (Throwable e) {
 								logger.warning("Unable to load target class "+targetClass+": "+e.getMessage());
 			    				continue;
@@ -482,6 +487,16 @@ public class TestSequenceInitializer {
                 .type(Boolean.class)
                 .build()
         );
+        
+     // option for JDK path
+        options.addOption(Option.builder("jdk")
+                .longOpt("jdk-path")
+                .hasArg()
+                .desc("Path to JDK for running EvoSuite and Randoop. If empty, JAVA_HOME content is used.")
+                .type(String.class)
+                .build()
+        );
+
 
         // help option
         options.addOption(Option.builder("h")
@@ -557,6 +572,12 @@ public class TestSequenceInitializer {
         if (cmd.hasOption("ba")) {
         	baseAssertions = true;
         }
+        
+        String jdkPath = "";
+        
+        if (cmd.hasOption("jdk")) {
+        	jdkPath = cmd.getOptionValue("jdk");
+        }
 
         logger.info("Application name: "+appName);
         logger.info("CTD test plan file: "+testPlanFilename);
@@ -571,7 +592,8 @@ public class TestSequenceInitializer {
         	logger.info("Adding assertions to base tests");
         }
 
-		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, timeLimit, targetMethods, baseAssertions).
+		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, 
+				timeLimit, targetMethods, baseAssertions, jdkPath).
 		createInitialTests();
 	}
 

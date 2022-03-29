@@ -17,11 +17,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.FileUtils;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.konveyor.tackle.testgen.TestUtils;
@@ -45,7 +47,6 @@ public class SequenceExecutorTest {
 		FileUtils.deleteQuietly(outputFile);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testExecuteSequences() throws Exception {
 
@@ -64,9 +65,17 @@ public class SequenceExecutorTest {
 
 		ObjectNode mainObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(outputFile);
 		ObjectNode standardObject = (ObjectNode) TackleTestJson.getObjectMapper().readTree(new File("test/data/daytrader7/DayTrader_extended_sequences_results.json"));
+		
+		Set<String> seqKeys = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(mainObject.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
+		
+		Set<String> seqStandardKeys = StreamSupport.stream(
+				Spliterators.spliteratorUnknownSize(standardObject.fieldNames(), 
+						Spliterator.ORDERED), false)
+		  .collect(Collectors.toSet());
 
-		Set<String> seqKeys = new HashSet<String>(IteratorUtils.toList(mainObject.fieldNames()));
-		Set<String> seqStandardKeys = new HashSet<String>(IteratorUtils.toList(standardObject.fieldNames()));
 		assertEquals(seqKeys, seqStandardKeys);
 		
 		
@@ -88,12 +97,21 @@ public class SequenceExecutorTest {
 				assertEquals(standardArray.get(i).get("statement_normal_termination").asBoolean(), normalTermination);
 
 				if (normalTermination) {
+					
+					Set<String> currrentFields = StreamSupport.stream(
+							Spliterators.spliteratorUnknownSize(currentArray.get(i).fieldNames(), 
+									Spliterator.ORDERED), false)
+					  .collect(Collectors.toSet());
 
-					if (IteratorUtils.toList(currentArray.get(i).fieldNames()).contains("runtime_object_name")) {
+					if (currrentFields.contains("runtime_object_name")) {
 						assertEquals(standardArray.get(i).get("runtime_object_name").asText(), currentArray.get(i).get("runtime_object_name").asText());
 						assertEquals(standardArray.get(i).get("runtime_object_type").asText(), currentArray.get(i).get("runtime_object_type").asText());
 					} else {
-						assertTrue( ! IteratorUtils.toList(standardArray.get(i).fieldNames()).contains("runtime_object_name"));
+						Set<String> standardFields = StreamSupport.stream(
+								Spliterators.spliteratorUnknownSize(standardArray.get(i).fieldNames(), 
+										Spliterator.ORDERED), false)
+						  .collect(Collectors.toSet());
+						assertTrue( ! standardFields.contains("runtime_object_name"));
 					}
 				} else {
 					assertEquals(standardArray.get(i).get("exception").asText(), currentArray.get(i).get("exception").asText());

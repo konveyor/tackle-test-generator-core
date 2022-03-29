@@ -32,6 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,6 +41,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -47,7 +51,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.evosuite.shaded.org.apache.commons.collections.IteratorUtils;
 import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.SequenceParser;
 import org.konveyor.tackle.testgen.util.Constants;
@@ -174,7 +177,10 @@ public class SequenceExecutor {
 					ObjectNode statementInfo = (ObjectNode) statementResults.get(i);
 					normalTermination[k] = statementInfo.get("statement_normal_termination").asBoolean();
 					if (normalTermination[k]) {
-						if (IteratorUtils.toList(statementInfo.fieldNames()).contains("runtime_object_name")) {
+						List<String> fieldList = StreamSupport.stream(
+								Spliterators.spliteratorUnknownSize(statementInfo.fieldNames(), 
+										Spliterator.ORDERED), false).collect(Collectors.toList());
+						if (fieldList.contains("runtime_object_name")) {
 							runtimeObjectName[k] = statementInfo.get("runtime_object_name").asText();
 							runtimeObjectType[k] = Class.forName(statementInfo.get("runtime_object_type").asText());
 							runtimePublicObjectState.set(k, mapper.convertValue(statementInfo.get("runtime_object_state"), new TypeReference<Map<String, String>>(){}));

@@ -26,9 +26,10 @@ import java.util.logging.Logger;
 
 public class RandoopTestGenerator extends AbstractTestGenerator {
 
-    public RandoopTestGenerator(List<String> targetPath, String appName) {
+    public RandoopTestGenerator(List<String> targetPath, String appName, String jdkPath) {
 		super(targetPath);
 		randoopOutputDir = new File(appName+RANDOOP_OUTPUT_DIR_NAME_SUFFIX);
+		this.jdkPath = jdkPath;
 	}
 
 	// public constants
@@ -54,6 +55,7 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
     private boolean regressionAssertions = true;  // defualt: regression assertions are generated
     private boolean compilable = true;  // default: compile check performed on sequemces
     private int timeLimit = 100;  // default time limit: 100s (randoop default)
+    private final String jdkPath;
 
     private static final Logger logger = TackleTestLogger.getLogger(RandoopTestGenerator.class);
 
@@ -100,7 +102,7 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			String classpath = this.projectClasspath + File.pathSeparator + RANDOOP_JAR + File.pathSeparator;
 			classpath += Utils.entriesToClasspath(targetClassesPath);
 			List<String> randoopOpts = new ArrayList<String>(
-					Arrays.asList(System.getProperty("java.home")+File.separator+"bin"+File.separator+"java", "-Xmx3000m", "-Xbootclasspath/a:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
+					Arrays.asList(jdkPath+File.separator+"bin"+File.separator+"java", "-Xmx3000m", "-Xbootclasspath/a:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
 							"-javaagent:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
 							"-classpath", classpath, "randoop.main.Main", "gentests"));
 			randoopOpts.add("--testclass=" + className);
@@ -279,7 +281,8 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
         String appName = args[1];
         logger.info("application name: "+appName);
         List<String> classpathEntries = Arrays.asList(classpath.split(File.pathSeparator));
-        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(classpathEntries, appName);
+        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(classpathEntries, appName, 
+        		System.getProperty("java.home"));
         randoopTestgen.setProjectClasspath(classpath);
 
         // set configuration options
