@@ -16,6 +16,7 @@ package org.konveyor.tackle.testgen.model;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -171,9 +172,16 @@ public class JavaMethodModel {
 		Set<SootClass>  classes = typeAnalysisResults.getSubClasses(paramType);
 
 		if (classes == null) {
-		
-			classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
-			classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
+			
+			if (paramClass.resolvingLevel() == SootClass.DANGLING) {
+				
+				logger.warning("Unable to analyze class hierarchy for "+paramClass.getName());
+				classes = Collections.emptySet();
+			} else {
+				classes = new HashSet<>(classHierarchy.getSubclassesOf(paramClass));
+				classes.addAll(classHierarchy.getAllImplementersOfInterface(paramClass));
+			}
+			
 			typeAnalysisResults.setSubClasses(paramType, classes);
 		}
 		
@@ -219,7 +227,7 @@ public class JavaMethodModel {
 		
 		Class<?> theParamClass = classLoader.loadClass(paramClass.toString());
 		
-		if (paramClass.isConcrete() && Utils.canBeInstantiated(theParamClass,targetClass)) {
+		if ( ! Modifier.isAbstract(theParamClass.getModifiers()) && Utils.canBeInstantiated(theParamClass,targetClass)) {
 			allConcreteTypes.add(theParamClass);
 			resultTypes.add(theParamClass);
 		}
