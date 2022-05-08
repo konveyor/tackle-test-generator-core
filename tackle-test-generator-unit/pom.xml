@@ -10,6 +10,11 @@
   <groupId>org.konveyor</groupId>
   <artifactId>tackle-test-generator-unit</artifactId>
   <version>1.1.0</version>
+  <organization>
+    <name>Konveyor</name>
+    <url>https://konveyor.io/</url>
+  </organization>
+  <inceptionYear>2021</inceptionYear>
 
   <distributionManagement>
     <repository>
