@@ -551,6 +551,7 @@ public class CrawljaxRunner {
 
         // add crawl-overview and test-generator plugins
         builder.addPlugin(new CrawlOverview());
+        builder.addPlugin(new TestSuiteGenerator(createTestConfiguration("none")));
 //        builder.addPlugin(new TestSuiteGenerator(
 //            createTestConfiguration(generateOptions.getString("add_state_diff_assertions"))));
 
