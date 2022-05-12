@@ -683,8 +683,7 @@ public class TestSequenceExtender {
                     methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.UNCOVERED_EXEC_FAIL);
                     if (badPathSeqs.contains(sequenceID)) {
                     	// sequence execution failed, but it raised a declared exception, so we want to keep it for bad path testing
-                    	this.extSeqStr.put(sequenceID,
-                                extendedSeq.toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""));
+                    	this.extSeqStr.put(sequenceID, getCodeString(extendedSeq));
                     }
                     continue;
                 }
@@ -705,8 +704,7 @@ public class TestSequenceExtender {
             // and mark test plan row as covered
             partitionTestSeq.get(qualMethodSig).add(sequenceID);
             methodSeqIds.add(sequenceID);
-            this.extSeqStr.put(sequenceID,
-                extendedSeq.toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", ""));
+            this.extSeqStr.put(sequenceID, getCodeString(extendedSeq));
             if (this.rowPartiallyCovered) {
                 methodCovInfo.put(testPlanRowId, Constants.TestPlanRowCoverage.PARTIAL);
                 this.extSummary.covTestPlanRows__partial++;
@@ -735,6 +733,20 @@ public class TestSequenceExtender {
 
         return methodSeqIds;
     }
+	
+	// returns sequence string ready for use as code after cleaning wildcard capture types
+	
+	private String getCodeString(Sequence seq) {
+		
+		String codeStr = seq.toCodeString().replaceAll("<Capture\\d+(,Capture\\d+)*>", "");
+		
+		// now handle the cases that only beginning/end types are wildcard capture
+		
+		codeStr = codeStr.replaceAll(",Capture\\d+>", ",?>");
+		codeStr = codeStr.replaceAll("<Capture\\d+,", "<?,");
+		
+		return codeStr;
+	}
 
 	// Get method or constructor by its signature
 
