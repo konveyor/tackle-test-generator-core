@@ -30,7 +30,8 @@
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <crawljax.version>fe19c4caa2</crawljax.version>
+    <crawljax.version>frag-SNAPSHOT</crawljax.version>
+<!--    <crawljax.version>5.0-frag</crawljax.version>-->
   </properties>
 
   <repositories>
@@ -52,6 +53,16 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.crawljax</groupId>-->
+<!--      <artifactId>crawljax-examples</artifactId>-->
+<!--      <version>${crawljax.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>com.github.crawljax</groupId>-->
+<!--      <artifactId>crawljax</artifactId>-->
+<!--      <version>${crawljax.version}</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>com.github.crawljax.crawljax</groupId>
       <artifactId>crawljax-core</artifactId>
