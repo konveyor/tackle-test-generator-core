@@ -30,14 +30,18 @@
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <crawljax.version>5.0-frag</crawljax.version>
+    <crawljax.version>fe19c4caa2</crawljax.version>
   </properties>
 
   <repositories>
+<!--    <repository>-->
+<!--      <id>github-sinha108</id>-->
+<!--      <name>Test Generator Maven Packages</name>-->
+<!--      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>-->
+<!--    </repository>-->
     <repository>
-      <id>github-sinha108</id>
-      <name>Test Generator Maven Packages</name>
-      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
@@ -49,8 +53,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.crawljax</groupId>
-      <artifactId>crawljax-examples</artifactId>
+      <groupId>com.github.crawljax.crawljax</groupId>
+      <artifactId>crawljax-core</artifactId>
+      <version>${crawljax.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.crawljax.crawljax</groupId>
+      <artifactId>crawloverview-plugin</artifactId>
+      <version>${crawljax.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.crawljax.crawljax</groupId>
+      <artifactId>testcasegenerator</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
     <dependency>

@@ -35,7 +35,7 @@
     <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-	<evosuite.version>1.2.0</evosuite.version>
+	  <evosuite.version>1.2.0</evosuite.version>
     <randoop.version>4.3.0</randoop.version>
     <acts.version>3.2</acts.version>
 
@@ -47,10 +47,14 @@
   </properties>
 
   <repositories>
+<!--    <repository>-->
+<!--      <id>github-sinha108</id>-->
+<!--      <name>Test Generator Maven Packages</name>-->
+<!--      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>-->
+<!--    </repository>-->
     <repository>
-      <id>github-sinha108</id>
-      <name>Test Generator Maven Packages</name>
-      <url>https://maven.pkg.github.com/sinha108/maven-packages</url>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
@@ -88,20 +92,31 @@
       <artifactId>httpclient</artifactId>
       <version>[4.5.13,)</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.evosuite</groupId>-->
+<!--	  <artifactId>evosuite</artifactId>-->
+<!--      <version>${evosuite.version}</version>-->
+<!--	   <scope>system</scope>-->
+<!--	  <systemPath>${project.basedir}/lib/download/evosuite-${evosuite.version}.jar</systemPath>-->
+<!--	  </dependency>-->
+<!--	  <dependency>-->
+<!--      <groupId>org.evosuite</groupId>-->
+<!--      <artifactId>evosuite-standalone-runtime</artifactId>-->
+<!--      <version>${evosuite.version}</version>-->
+<!--	   <scope>system</scope>-->
+<!--	  <systemPath>${project.basedir}/lib/download/evosuite-standalone-runtime-${evosuite.version}.jar</systemPath>-->
+<!--  	</dependency>-->
+
     <dependency>
-      <groupId>org.evosuite</groupId>
-	  <artifactId>evosuite</artifactId>
-      <version>${evosuite.version}</version>
-	   <scope>system</scope>
-	  <systemPath>${project.basedir}/lib/download/evosuite-${evosuite.version}.jar</systemPath>
-	  </dependency>
-	  <dependency>
-      <groupId>org.evosuite</groupId>
-      <artifactId>evosuite-standalone-runtime</artifactId>
-      <version>${evosuite.version}</version>
-	   <scope>system</scope>
-	  <systemPath>${project.basedir}/lib/download/evosuite-standalone-runtime-${evosuite.version}.jar</systemPath>
-  	</dependency>
+      <groupId>com.github.evosuite</groupId>
+      <artifactId>evosuite</artifactId>
+      <version>v1.2.0</version>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.github.evosuite.evosuite</groupId>-->
+<!--      <artifactId>evosuite-standalone-runtime</artifactId>-->
+<!--      <version>v1.2.0</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>edu.uta.cse.fireeye.acts</groupId>
       <artifactId>acts</artifactId>
@@ -128,22 +143,27 @@
       <artifactId>commons-cli</artifactId>
       <version>1.4</version>
     </dependency>
-  	<dependency>
-      <groupId>randoop</groupId>
-      <artifactId>randoop</artifactId>
-      <version>${randoop.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/download/randoop-all-${randoop.version}.jar</systemPath>
-      <optional>true</optional>
-    </dependency>
+<!--  	<dependency>-->
+<!--      <groupId>randoop</groupId>-->
+<!--      <artifactId>randoop</artifactId>-->
+<!--      <version>${randoop.version}</version>-->
+<!--      <scope>system</scope>-->
+<!--      <systemPath>${project.basedir}/lib/download/randoop-all-${randoop.version}.jar</systemPath>-->
+<!--      <optional>true</optional>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>randoop</groupId>
-      <artifactId>replacecall</artifactId>
-      <version>${randoop.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/download/replacecall-${randoop.version}.jar</systemPath>
-      <optional>true</optional>
+      <groupId>com.github.randoop</groupId>
+      <artifactId>randoop</artifactId>
+      <version>v4.3.0</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>randoop</groupId>-->
+<!--      <artifactId>replacecall</artifactId>-->
+<!--      <version>${randoop.version}</version>-->
+<!--      <scope>system</scope>-->
+<!--      <systemPath>${project.basedir}/lib/download/replacecall-${randoop.version}.jar</systemPath>-->
+<!--      <optional>true</optional>-->
+<!--    </dependency>-->
     <dependency>
   	<groupId>org.choco-solver</groupId>
   	  <artifactId>choco-solver</artifactId>
