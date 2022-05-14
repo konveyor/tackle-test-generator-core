@@ -2,11 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<!--  <parent>-->
-<!--    <artifactId>tackle-test-generator-core</artifactId>-->
-<!--    <groupId>org.konveyor</groupId>-->
-<!--    <version>1.1.0</version>-->
-<!--  </parent>-->
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.konveyor</groupId>
@@ -31,7 +26,6 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <crawljax.version>frag-SNAPSHOT</crawljax.version>
-<!--    <crawljax.version>5.0-frag</crawljax.version>-->
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
   </properties>
 
@@ -49,16 +43,6 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.crawljax</groupId>-->
-<!--      <artifactId>crawljax-examples</artifactId>-->
-<!--      <version>${crawljax.version}</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.github.crawljax</groupId>-->
-<!--      <artifactId>crawljax</artifactId>-->
-<!--      <version>${crawljax.version}</version>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>com.github.crawljax.crawljax</groupId>
       <artifactId>crawljax-core</artifactId>
