@@ -136,12 +136,13 @@ public class Constants {
 
     /** Randoop used version **/
 
-    public static final String RANDOOP_VERSION = "v4.3.0";
+    public static final String RANDOOP_VERSION = "4.3.0";
+    public static final String RANDOOP_JAR_NAME = "randoop-v"+ RANDOOP_VERSION + ".jar";
 
     /** Evosuite used version **/
 
     public static final String EVOSUITE_VERSION = "v1.2.0";
-    public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-"+ EVOSUITE_VERSION+".jar";
+    public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-master-"+ EVOSUITE_VERSION+".jar";
     public static final String EVOSUITE_RUNTIME_JAR_NAME = "evosuite-standalone-runtime-"+ EVOSUITE_VERSION+".jar";
     public static final String CCM_JAR_NAME = "ccmcl.jar";
 
