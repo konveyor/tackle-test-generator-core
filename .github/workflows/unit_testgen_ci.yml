@@ -31,46 +31,46 @@ jobs:
       uses: AdoptOpenJDK/install-jdk@v1
       with:
         version: '11'
-        targets: 'JDK11_HOME'    
-    - name: Create maven settings.xml
-      uses: s4u/maven-settings-action@v2.4.0
-      with:
-        servers: '[
-          {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
-        ]'
-    - name: Download Randoop and EvoSuite jars
+        targets: 'JDK11_HOME'
+#    - name: Create maven settings.xml
+#      uses: s4u/maven-settings-action@v2.4.0
+#      with:
+#        servers: '[
+#          {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
+#        ]'
+    - name: Download Randoop replacecall jar
       run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
     - name: Build with Maven
       run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode package
 
   # publish to GitHub Packages if tests pass and the workflow is running on the main branch
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Java for publishing to GitHub Packages
-        uses: actions/setup-java@v2
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-      - name: Create maven settings.xml
-        uses: s4u/maven-settings-action@v2.4.0
-        with:
-          servers: '[
-          {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
-        ]'
-      - name: Download Randoop and EvoSuite jars 
-        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
-      - name: Delete old package version
-#        uses: actions/delete-package-versions@v1
-        uses: smartsquaregmbh/delete-old-packages@v0.4.0
-        with:
-#          package-name: 'org.konveyor.tackle-test-generator-unit'
-          names: 'org.konveyor.tackle-test-generator-unit'
-          keep: 0
-      - name: Publish to GitHub Packages
-        run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  publish:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    if: github.ref == 'refs/heads/main'
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Set up Java for publishing to GitHub Packages
+#        uses: actions/setup-java@v2
+#        with:
+#          java-version: '8'
+#          distribution: 'adopt'
+#      - name: Create maven settings.xml
+#        uses: s4u/maven-settings-action@v2.4.0
+#        with:
+#          servers: '[
+#          {"id": "github-sinha108", "username": "$GITHUB_ACTOR", "password": "${{ secrets.TKLTEST_PKGS_PAT }}"}
+#        ]'
+#      - name: Download Randoop and EvoSuite jars
+#        run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
+#      - name: Delete old package version
+##        uses: actions/delete-package-versions@v1
+#        uses: smartsquaregmbh/delete-old-packages@v0.4.0
+#        with:
+##          package-name: 'org.konveyor.tackle-test-generator-unit'
+#          names: 'org.konveyor.tackle-test-generator-unit'
+#          keep: 0
+#      - name: Publish to GitHub Packages
+#        run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --batch-mode deploy -Dmaven.test.skip=true
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

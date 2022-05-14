@@ -213,19 +213,19 @@
         <artifactId>download-maven-plugin</artifactId>
         <version>1.6.3</version>
         <executions>
-          <execution>
-            <id>get-randoop-jar</id>
-            <!--            <phase>process-resources</phase>-->
-            <goals>
-              <goal>wget</goal>
-            </goals>
-            <configuration>
-              <url>
-                https://github.com/randoop/randoop/releases/download/v${randoop.version}/randoop-all-${randoop.version}.jar
-              </url>
-              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
-            </configuration>
-          </execution>
+<!--          <execution>-->
+<!--            <id>get-randoop-jar</id>-->
+<!--            &lt;!&ndash;            <phase>process-resources</phase>&ndash;&gt;-->
+<!--            <goals>-->
+<!--              <goal>wget</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <url>-->
+<!--                https://github.com/randoop/randoop/releases/download/v${randoop.version}/randoop-all-${randoop.version}.jar-->
+<!--              </url>-->
+<!--              <outputDirectory>${project.basedir}/lib/download</outputDirectory>-->
+<!--            </configuration>-->
+<!--          </execution>-->
           <execution>
             <id>get-replacecall-jar</id>
             <!--            <phase>process-resources</phase>-->
@@ -239,32 +239,32 @@
               <outputDirectory>${project.basedir}/lib/download</outputDirectory>
             </configuration>
           </execution>
-          <execution>
-            <id>get-evosuite-jar</id>
-            <!--            <phase>process-resources</phase>-->
-            <goals>
-              <goal>wget</goal>
-            </goals>
-            <configuration>
-              <url>
-                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-${evosuite.version}.jar
-              </url>
-              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>get-evosuite-runtime-jar</id>
-            <!--            <phase>process-resources</phase>-->
-            <goals>
-              <goal>wget</goal>
-            </goals>
-            <configuration>
-              <url>
-                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-standalone-runtime-${evosuite.version}.jar
-              </url>
-              <outputDirectory>${project.basedir}/lib/download</outputDirectory>
-            </configuration>
-          </execution>
+<!--          <execution>-->
+<!--            <id>get-evosuite-jar</id>-->
+<!--            &lt;!&ndash;            <phase>process-resources</phase>&ndash;&gt;-->
+<!--            <goals>-->
+<!--              <goal>wget</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <url>-->
+<!--                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-${evosuite.version}.jar-->
+<!--              </url>-->
+<!--              <outputDirectory>${project.basedir}/lib/download</outputDirectory>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--          <execution>-->
+<!--            <id>get-evosuite-runtime-jar</id>-->
+<!--            &lt;!&ndash;            <phase>process-resources</phase>&ndash;&gt;-->
+<!--            <goals>-->
+<!--              <goal>wget</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <url>-->
+<!--                https://github.com/EvoSuite/evosuite/releases/download/v${evosuite.version}/evosuite-standalone-runtime-${evosuite.version}.jar-->
+<!--              </url>-->
+<!--              <outputDirectory>${project.basedir}/lib/download</outputDirectory>-->
+<!--            </configuration>-->
+<!--          </execution>-->
         </executions>
       </plugin>
       <!-- Code Coverage report generation -->
