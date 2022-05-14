@@ -136,7 +136,7 @@ public class Constants {
 
     /** Randoop used version **/
 
-    public static final String RANDOOP_VERSION = "4.3.0";
+    public static final String RANDOOP_VERSION = "v4.3.0";
 
     /** Evosuite used version **/
 
