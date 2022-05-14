@@ -55,9 +55,9 @@ public class TestgenIntegrationTest {
         appsUnderTest.add(IntegrationAppUnderTest.createDaytrader7IntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create4_rifIntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create7_sfmisIntegrationAppUnderTest());
-        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest()); 
+        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create53_shp2kmlIntegrationAppUnderTest());
-        
+
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class TestgenIntegrationTest {
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName)));
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName)));
         }
-        
+
         for (String outdir : OUTDIRS) {
             if (Files.exists(Paths.get(outdir))) {
                 Files.walk(Paths.get(outdir))
@@ -118,7 +118,9 @@ public class TestgenIntegrationTest {
             TestSequenceInitializer seqInitializer = new TestSequenceInitializer(testApp.appName,
                 testApp.testPlanFilename, testApp.appPath, testApp.appClasspathFilename,
                 Constants.COMBINED_TEST_GENERATOR_NAME, 5, false, false, "");
-            seqInitializer.createInitialTests();
+            try {
+                seqInitializer.createInitialTests();
+            } catch (IOException ioe) {}
 
             // assert that test sequences files are created
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
