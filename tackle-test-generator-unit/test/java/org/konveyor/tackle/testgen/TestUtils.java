@@ -164,8 +164,8 @@ public class TestUtils {
         public String appPath;
         public String appClasspathFilename;
         public String testPlanFilename;
-        
-        
+
+
         public AppUnderTest(String appName, String appClasspath, String appPath, String testPlanFilename) {
             this.appName = appName;
             this.appClasspathFilename = appClasspath;
@@ -175,7 +175,7 @@ public class TestUtils {
         }
     }
 
-    
+
     public static class ExtenderAppUnderTest extends AppUnderTest {
         public String testSeqFilename;
         public String summaryStandardFilename;
@@ -187,7 +187,7 @@ public class TestUtils {
         public int expmin_exception_during_extension;
         public Map<String, String> exp__target_method_coverage;
         public int expmin_test_classes_count;
-        
+
         public ExtenderAppUnderTest(String appName,
                                     String appClasspath,
                                     String appPath,
@@ -212,7 +212,7 @@ public class TestUtils {
         }
 
         public static ExtenderAppUnderTest createIrsExtenderAppUnderTest(String testPlanFilename, String testSeqFilename){
-            
+
             ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("irs",
                 "test/data/irs/irsMonoClasspath.txt",
                 "test/data/irs/monolith/target/classes",
@@ -220,7 +220,7 @@ public class TestUtils {
                 testSeqFilename,
                 "test/data/irs/irs_test_generation_summary_standard_woJEE.json",
                 "test/data/irs/irs_coverage_report_standard_woJEE.json");
-            
+
             appUnderTest.expmin_class_sequence_pool_keys = 5;
             appUnderTest.expmin_executed_sequences = 25;
             appUnderTest.expmin_final_sequences = 23;
@@ -242,7 +242,7 @@ public class TestUtils {
         }
 
         public static ExtenderAppUnderTest createDaytrader7ExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
-            
+
             ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("daytrader7",
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
                 "test/data/daytrader7/monolith/bin",
@@ -264,9 +264,9 @@ public class TestUtils {
             appUnderTest.expmin_test_classes_count = 42;
             return appUnderTest;
         }
-        
+
         public static ExtenderAppUnderTest createFailingAppExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
-            
+
             ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("failing",
                 "test/data/failingApp/classpath.txt",
                 "test/data/failingApp/target/classes",
@@ -288,7 +288,7 @@ public class TestUtils {
             appUnderTest.expmin_test_classes_count = 1;
             return appUnderTest;
         }
-        
+
         public static ExtenderAppUnderTest create4_rifExtenderAppUnderTest(String testPlanFilename, String testSeqFilename) {
 
             ExtenderAppUnderTest appUnderTest = new ExtenderAppUnderTest("4_rif",
@@ -338,7 +338,7 @@ public class TestUtils {
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::deserializeObject(byte[])::test_plan_row_1", "COVERED"},
                 {"monolithic::com.densebrain.rif.util.ObjectUtility::encodeBytes(byte[])::test_plan_row_1", "COVERED"}
             }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
-            
+
             appUnderTest.expmin_test_classes_count = 6;
             return appUnderTest;
         }
@@ -428,7 +428,7 @@ public class TestUtils {
                 {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.Throwable)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.hf.sfm.util.OddParamsOfArrayInLoader::com.hf.sfm.util.OddParamsOfArrayInLoader(java.lang.String)::test_plan_row_1", "COVERED"},
                 {"monolithic::com.hf.sfm.filter.setCharacterEncodingFilter::init(javax.servlet.FilterConfig)::test_plan_row_1", "COVERED"}
-                
+
             }).collect(Collectors.toMap(value -> value[0], value -> value[1]));
 
             appUnderTest.expmin_test_classes_count = 13;
@@ -629,10 +629,10 @@ public class TestUtils {
             return appName + Constants.COVERAGE_FILE_JSON_SUFFIX;
         }
     }
-    
+
 
     public static class ModelerAppUnderTest extends AppUnderTest {
-        
+
         public int maxNestDepth;
         public boolean addLocalRemote;
         public int level;
@@ -652,11 +652,11 @@ public class TestUtils {
         public String targetClassListForAllClassesButExcludedClassAndPackageTest;
         public String excludedClassListForAllClassesButExcludedClassAndPackageTest;
         public String standardNodeFileForAllClassesButExcludedClassAndPackageTest;
-        
+
         public String targetClassListForIncludedPackageTest;
         public String excludedClassListForIncludedPackageTest;
         public String standardNodeFileForIncludedPackageTest;
-        
+
         public String partitionsCPPrefix;
         public String partitionsCPSuffix;
         public String refactoringPrefix;
@@ -686,7 +686,7 @@ public class TestUtils {
                                    String targetClassListForIncludedPackageTest,
                                    String excludedClassListForIncludedPackageTest,
                                    String standardNodeFileForIncludedPackageTest) {
-            
+
             super(appName, appClasspath, appPath, testPlanFilename);
             this.maxNestDepth = maxNestDepth;
             this.addLocalRemote = addLocalRemote;
@@ -707,11 +707,11 @@ public class TestUtils {
             this.targetClassListForAllClassesButExcludedClassAndPackageTest = targetClassListForAllClassesButExcludedClassAndPackageTest;
             this.excludedClassListForAllClassesButExcludedClassAndPackageTest = excludedClassListForAllClassesButExcludedClassAndPackageTest;
             this.standardNodeFileForAllClassesButExcludedClassAndPackageTest = standardNodeFileForAllClassesButExcludedClassAndPackageTest;
-            
+
             this.targetClassListForIncludedPackageTest = targetClassListForIncludedPackageTest;
             this.excludedClassListForIncludedPackageTest = excludedClassListForIncludedPackageTest;
             this.standardNodeFileForIncludedPackageTest = standardNodeFileForIncludedPackageTest;
-            
+
             // for added partitions file support: change the input for relevant fields
             this.partitionsCPPrefix = null;
             this.partitionsCPSuffix = null;
@@ -837,7 +837,7 @@ public class TestUtils {
                 "test/data/53_shp2kml/53_shp2kml_ctd_models_all_classes_but_excluded_package.json",
                 null, null, null);
         }
-        
+
         public static String getCtdOutfileName(String appName) {
             return appName + "_" + Constants.CTD_OUTFILE_SUFFIX;
         }
@@ -868,7 +868,7 @@ public class TestUtils {
             this.baseAssertions = baseAssertions;
             this.targetClasses = targetClasses;
         }
-        
+
         public static SequenceInitializerAppUnderTest createDaytrader7SequenceInitializerAppUnderTest() {
             Set<String> targetClassesOfDaytrader7 = new HashSet<>();
             targetClassesOfDaytrader7.addAll(Arrays.asList(new String[] {
@@ -877,7 +877,7 @@ public class TestUtils {
                 "com.ibm.websphere.samples.daytrader.entities.AccountDataBean",
                 "com.ibm.websphere.samples.daytrader.entities.QuoteDataBean",
                 "com.ibm.websphere.samples.daytrader.entities.OrderDataBean"}));
-            
+
             return new SequenceInitializerAppUnderTest("daytrader7",
                 "test/data/daytrader7/daytrader7MonoClasspath.txt",
                 "test/data/daytrader7/monolith/bin",
@@ -902,8 +902,8 @@ public class TestUtils {
                 Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
         }
     }
-    
-    
+
+
     public static class IntegrationAppUnderTest extends AppUnderTest {
         public String targetClassList;
         public String testSeqFilename;
@@ -917,12 +917,12 @@ public class TestUtils {
             super(appName, appClasspath, appPath, appName + "_" + Constants.CTD_OUTFILE_SUFFIX);
             this.testSeqFilename = testSeqFilename;
             this.targetClassList = targetClassList;
-            
+
             if (this.testSeqFilename == null) {
                 this.testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
-                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX + "," +
-                    appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
                     Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
+//                    + "," + appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
+//                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
             }
         }
 

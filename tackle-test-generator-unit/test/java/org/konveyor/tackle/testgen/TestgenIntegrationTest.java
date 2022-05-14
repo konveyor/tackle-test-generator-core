@@ -19,6 +19,7 @@ package org.konveyor.tackle.testgen;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
@@ -117,10 +118,8 @@ public class TestgenIntegrationTest {
             // create building-block test sequences using combined test generator
             TestSequenceInitializer seqInitializer = new TestSequenceInitializer(testApp.appName,
                 testApp.testPlanFilename, testApp.appPath, testApp.appClasspathFilename,
-                Constants.COMBINED_TEST_GENERATOR_NAME, 5, false, false, "");
-            try {
-                seqInitializer.createInitialTests();
-            } catch (IOException ioe) {}
+                EvoSuiteTestGenerator.class.getSimpleName(), 5, false, false, "");
+            seqInitializer.createInitialTests();
 
             // assert that test sequences files are created
             String[] testSeqFilenames = testApp.testSeqFilename.split(",");
