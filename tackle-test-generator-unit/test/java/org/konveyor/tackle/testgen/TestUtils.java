@@ -920,9 +920,9 @@ public class TestUtils {
 
             if (this.testSeqFilename == null) {
                 this.testSeqFilename = appName + "_" + EvoSuiteTestGenerator.class.getSimpleName() + "_" +
+                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX
+                    + "," + appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
                     Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
-//                    + "," + appName + "_" + RandoopTestGenerator.class.getSimpleName() + "_" +
-//                    Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX;
             }
         }
 
