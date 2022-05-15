@@ -48,7 +48,7 @@ public class RandoopTestGeneratorTest {
 
         // set configuration options
         Map<String, String> config = new HashMap<>();
-        config.put("TIME_LIMIT", "10");
+        config.put("TIME_LIMIT", "5");
         randoopTestgen.configure(config);
         randoopTestgen.addCoverageTarget("com.ibm.websphere.samples.daytrader.TradeAction");
         randoopTestgen.generateTests();
