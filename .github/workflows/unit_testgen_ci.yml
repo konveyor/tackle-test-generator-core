@@ -42,8 +42,7 @@ jobs:
       run: mvn -f tackle-test-generator-unit --no-transfer-progress --batch-mode download:wget@get-replacecall-jar
 #      run: mvn -f tackle-test-generator-unit --batch-mode download:wget@get-randoop-jar download:wget@get-replacecall-jar download:wget@get-evosuite-jar download:wget@get-evosuite-runtime-jar
     - name: Build with Maven
-      run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-        --no-transfer-progress --batch-mode test
+      run: mvn -f tackle-test-generator-unit -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 --no-transfer-progress --batch-mode test
 
   # publish to GitHub Packages if tests pass and the workflow is running on the main branch
 #  publish:
