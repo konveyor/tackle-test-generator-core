@@ -87,7 +87,7 @@ public class Constants {
 
     /** Name of JSON file to which extender summary information is written */
     public static final String EXTENDER_SUMMARY_FILE_JSON_SUFFIX = "_test_generation_summary.json";
-    
+
     /** Name of JSON file to which extender CTD coverage is written */
     public static final String CTD_COVERAGE_FILE_JSON_SUFFIX = "_ctd_coverage_report.json";
 
@@ -123,11 +123,11 @@ public class Constants {
     public static final String EVOSUITE_HELP_CLASS_SUFFIX = "_ESTest_scaffolding";
 
     public static final String EVOSUITE_HELP_FILE_SUFFIX = EVOSUITE_HELP_CLASS_SUFFIX+JAVA_FILE_SUFFIX;
-    
+
     public static final String EVOSUITE_OUTPUT_DIR_NAME_SUFFIX = "-evosuite-tests";
-    
+
     public static final String EVOSUITE_TARGET_DIR_NAME_SUFFIX = "-evosuite-targets";
-    
+
     public static final String EVOSUITE_APP_COPY_DIR_NAME_SUFFIX = "-evosuite-app-copy";
 
     /** Java classes to be excluded from coverage target list - contain only package info */
@@ -137,11 +137,12 @@ public class Constants {
     /** Randoop used version **/
 
     public static final String RANDOOP_VERSION = "4.3.0";
+    public static final String RANDOOP_JAR_NAME = "randoop-v"+ RANDOOP_VERSION + ".jar";
 
     /** Evosuite used version **/
 
-    public static final String EVOSUITE_VERSION = "1.2.0";
-    public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-"+ EVOSUITE_VERSION+".jar";
+    public static final String EVOSUITE_VERSION = "v1.2.0";
+    public static final String EVOSUITE_MASTER_JAR_NAME = "evosuite-master-"+ EVOSUITE_VERSION+".jar";
     public static final String EVOSUITE_RUNTIME_JAR_NAME = "evosuite-standalone-runtime-"+ EVOSUITE_VERSION+".jar";
     public static final String CCM_JAR_NAME = "ccmcl.jar";
 

@@ -19,6 +19,7 @@ package org.konveyor.tackle.testgen;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.konveyor.tackle.testgen.core.EvoSuiteTestGenerator;
 import org.konveyor.tackle.testgen.core.TestSequenceInitializer;
 import org.konveyor.tackle.testgen.core.extender.TestSequenceExtender;
 import org.konveyor.tackle.testgen.model.CTDTestPlanGenerator;
@@ -55,9 +56,9 @@ public class TestgenIntegrationTest {
         appsUnderTest.add(IntegrationAppUnderTest.createDaytrader7IntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create4_rifIntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create7_sfmisIntegrationAppUnderTest());
-        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest()); 
+        appsUnderTest.add(IntegrationAppUnderTest.create40_glengineerIntegrationAppUnderTest());
         appsUnderTest.add(IntegrationAppUnderTest.create53_shp2kmlIntegrationAppUnderTest());
-        
+
         OUTDIRS = appsUnderTest.stream()
             .map(app -> app.appOutdir)
             .collect(Collectors.toList());
@@ -86,7 +87,7 @@ public class TestgenIntegrationTest {
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getSummaryFileJsonName(testApp.appName)));
             Files.deleteIfExists(Paths.get(TestUtils.ExtenderAppUnderTest.getCoverageFileJsonName(testApp.appName)));
         }
-        
+
         for (String outdir : OUTDIRS) {
             if (Files.exists(Paths.get(outdir))) {
                 Files.walk(Paths.get(outdir))

@@ -40,7 +40,6 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
     public static final String RANDOOP_METHODLIST_FILE_NAME = "randoop-methodlist.txt";
     public static final String RANDOOP_CLASSLIST_FILE_NAME = "randoop-classlist.txt";
 
-    private static final String RANDOOP_JAR = "lib/download"+File.separator+"randoop-all-"+ Constants.RANDOOP_VERSION+".jar";
     private File randoopOutputDir;
     //private Map<String, SootClass> appSootClasses = new HashMap<>();
 
@@ -102,7 +101,8 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 
         for (String className : this.targets.keySet()) {
 
-			String classpath = this.projectClasspath + File.pathSeparator + RANDOOP_JAR + File.pathSeparator;
+//            String classpath = this.projectClasspath + File.pathSeparator + RANDOOP_JAR + File.pathSeparator;
+            String classpath = this.projectClasspath + File.pathSeparator + Utils.getJarPath(Constants.RANDOOP_JAR_NAME) + File.pathSeparator;
 			classpath += Utils.entriesToClasspath(targetClassesPath);
 			List<String> randoopOpts = new ArrayList<String>(
 					Arrays.asList(jdkPath+File.separator+"bin"+File.separator+"java", "-Xmx3000m", "-Xbootclasspath/a:lib/download/replacecall-"+Constants.RANDOOP_VERSION+".jar",
@@ -115,7 +115,7 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			Set<String> methodlist = this.targets.get(className);
 	        logger.info("method list size: "+methodlist.size());
 	        if ( ! methodlist.isEmpty()) {
-	        	FileUtils.writeLines(new File(RANDOOP_METHODLIST_FILE_NAME), methodlist);	        
+	        	FileUtils.writeLines(new File(RANDOOP_METHODLIST_FILE_NAME), methodlist);
 	        	randoopOpts.add("--methodlist=" + RANDOOP_METHODLIST_FILE_NAME);
 	        }
 			randoopOpts.add("--time-limit=" + Integer.toString(this.timeLimit));
@@ -132,18 +132,18 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
 			randoopProcBld.inheritIO();
 			logger.info("Running Randoop process: " + randoopProcBld.command());
 			Process randoopProc = randoopProcBld.start();
-			boolean terminated = randoopProc.waitFor(this.timeLimit*3, TimeUnit.SECONDS); 
+			boolean terminated = randoopProc.waitFor(this.timeLimit*3, TimeUnit.SECONDS);
 			String classBaseName = className.replaceAll("\\.", "_");
-			if ( ! terminated) { 
+			if ( ! terminated) {
 				// kill randoop process and remove all test files for this class because they may start hanging threads
-				
+
 				logger.warning("randoop timeout on class: " + className);
-				
+
 				randoopProc.destroyForcibly();
-				
+
 				int i=0;
 				File testFile = new File(randoopOutputDir.getAbsolutePath(), classBaseName+i+".java");
-				
+
 				while (testFile.isFile()) {
 					logger.warning("Deleting randoop-created test file: " + testFile.getAbsolutePath());
 					FileUtils.deleteQuietly(testFile);
@@ -284,7 +284,7 @@ public class RandoopTestGenerator extends AbstractTestGenerator {
         String appName = args[1];
         logger.info("application name: "+appName);
         List<String> classpathEntries = Arrays.asList(classpath.split(File.pathSeparator));
-        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(classpathEntries, appName, 
+        RandoopTestGenerator randoopTestgen = new RandoopTestGenerator(classpathEntries, appName,
         		System.getProperty("java.home"));
         randoopTestgen.setProjectClasspath(classpath);
 
