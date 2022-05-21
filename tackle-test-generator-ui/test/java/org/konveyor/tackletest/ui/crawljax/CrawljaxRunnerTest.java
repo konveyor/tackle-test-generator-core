@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class CrawljaxRunnerTest {
 
@@ -142,7 +144,7 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
-        Files.delete(Paths.get(outDir));
+        deleteDir(outDir);
     }
 
     @Test
@@ -171,7 +173,7 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
-        Files.delete(Paths.get(outDir));
+        deleteDir(outDir);
     }
 
     @Test
@@ -199,6 +201,16 @@ public class CrawljaxRunnerTest {
 
     private TomlParseResult parseConfig(String configFile) throws IOException {
         return Toml.parse(Paths.get(configFile));
+    }
+
+    private void deleteDir(String dir) throws IOException {
+        if (Files.exists(Paths.get(dir))) {
+            Files.walk(Paths.get(dir))
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+        }
+
     }
 
 }
