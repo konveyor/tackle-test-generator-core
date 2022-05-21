@@ -159,6 +159,7 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
     }
 
     @Test
@@ -188,6 +189,7 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
     }
 
     private String getOutputDirectoryName(String configFile) throws IOException {
