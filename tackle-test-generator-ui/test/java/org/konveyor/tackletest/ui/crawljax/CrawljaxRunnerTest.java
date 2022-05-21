@@ -142,11 +142,41 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        Files.delete(Paths.get(outDir));
+    }
+
+    @Test
+    public void testCrawljaxRunnerNonFragPetclinic() throws IOException, URISyntaxException {
+        String configFile = "./test/data/petclinic/tkltest_ui_config_nonfrag.toml";
+        String[] args = {
+            "--config-file", configFile
+        };
+        // run crawljax on app
+        CrawljaxRunner.main(args);
+
+        // assert that the output directory is created
+        String outDir = getOutputDirectoryName(configFile);
+        Assert.assertTrue(Files.exists(Paths.get(outDir)));
     }
 
     @Test
     public void testCrawljaxRunnerAddressbook() throws IOException, URISyntaxException {
         String configFile = "./test/data/addressbook/tkltest_ui_config.toml";
+        String[] args = {
+            "--config-file", configFile
+        };
+        // run crawljax on app
+        CrawljaxRunner.main(args);
+
+        // assert that the output directory is created
+        String outDir = getOutputDirectoryName(configFile);
+        Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        Files.delete(Paths.get(outDir));
+    }
+
+    @Test
+    public void testCrawljaxRunnerNonFragAddressbook() throws IOException, URISyntaxException {
+        String configFile = "./test/data/addressbook/tkltest_ui_config_nonfrag.toml";
         String[] args = {
             "--config-file", configFile
         };
