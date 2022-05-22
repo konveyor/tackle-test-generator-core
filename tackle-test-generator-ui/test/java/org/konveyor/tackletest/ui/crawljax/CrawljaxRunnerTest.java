@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class CrawljaxRunnerTest {
 
@@ -142,6 +144,22 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
+    }
+
+    @Test
+    public void testCrawljaxRunnerNonFragPetclinic() throws IOException, URISyntaxException {
+        String configFile = "./test/data/petclinic/tkltest_ui_config_nonfrag.toml";
+        String[] args = {
+            "--config-file", configFile
+        };
+        // run crawljax on app
+        CrawljaxRunner.main(args);
+
+        // assert that the output directory is created
+        String outDir = getOutputDirectoryName(configFile);
+        Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
     }
 
     @Test
@@ -156,6 +174,22 @@ public class CrawljaxRunnerTest {
         // assert that the output directory is created
         String outDir = getOutputDirectoryName(configFile);
         Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
+    }
+
+    @Test
+    public void testCrawljaxRunnerNonFragAddressbook() throws IOException, URISyntaxException {
+        String configFile = "./test/data/addressbook/tkltest_ui_config_nonfrag.toml";
+        String[] args = {
+            "--config-file", configFile
+        };
+        // run crawljax on app
+        CrawljaxRunner.main(args);
+
+        // assert that the output directory is created
+        String outDir = getOutputDirectoryName(configFile);
+        Assert.assertTrue(Files.exists(Paths.get(outDir)));
+        deleteDir(outDir);
     }
 
     private String getOutputDirectoryName(String configFile) throws IOException {
@@ -169,6 +203,16 @@ public class CrawljaxRunnerTest {
 
     private TomlParseResult parseConfig(String configFile) throws IOException {
         return Toml.parse(Paths.get(configFile));
+    }
+
+    private void deleteDir(String dir) throws IOException {
+        if (Files.exists(Paths.get(dir))) {
+            Files.walk(Paths.get(dir))
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+        }
+
     }
 
 }
