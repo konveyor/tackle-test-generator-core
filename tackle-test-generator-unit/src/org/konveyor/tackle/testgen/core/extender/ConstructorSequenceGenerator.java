@@ -246,19 +246,28 @@ public class ConstructorSequenceGenerator {
             }
             return sequence.extend(colInstOper);
         }
-
+        
         if (SequenceUtil.isMapType(paramType)) {
+        	
             List<ReferenceType> typeArgs = ExtenderUtil.getTypeArguments(paramType);
             ReferenceType keyTypeArg = null, valTypeArg = null;
             if (!typeArgs.isEmpty()) {
                 keyTypeArg = typeArgs.get(0);
                 valTypeArg = typeArgs.get(1);
             }
-            JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
-                .getMapTypeInstantiationInfo(typeName, keyTypeArg, valTypeArg);
-            Substitution mapSubst = instInfo.instantiatedType.getTypeSubstitution();
-            TypedOperation mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
-                .substitute(mapSubst);
+            
+            TypedOperation mapInstOper;
+            
+            if (paramType instanceof NonParameterizedType) {
+            	mapInstOper = TypedOperation.forConstructor(Class.forName(typeName).getConstructor());
+            } else {
+            
+            	JavaCollectionTypes.InstantiationInfo instInfo = JavaCollectionTypes
+            			.getMapTypeInstantiationInfo(typeName, keyTypeArg, valTypeArg);
+            	Substitution mapSubst = instInfo.instantiatedType.getTypeSubstitution();
+            	mapInstOper = TypedOperation.forConstructor(instInfo.typeConstructor)
+            			.substitute(mapSubst);
+            }
             return sequence.extend(mapInstOper);
         }
 
