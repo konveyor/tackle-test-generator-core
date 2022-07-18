@@ -432,6 +432,9 @@ public class CrawljaxRunner {
 
             // process before click event spec
             TomlTable formBeforeEvent = formInfo.getTable("before_click");
+            if (formBeforeEvent == null) {
+            	throw new RuntimeException("'before_click' section not specified in "+formName+" data form specification");
+            }
             String beforeTag = formBeforeEvent.getString("tag_name");
             if (formBeforeEvent.contains("with_text")) {
                 String withText = formBeforeEvent.getString("with_text");
