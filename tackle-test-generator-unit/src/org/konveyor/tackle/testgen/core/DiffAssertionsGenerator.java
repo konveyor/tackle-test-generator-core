@@ -183,7 +183,7 @@ public class DiffAssertionsGenerator {
 
     		block = StaticJavaParser.parseBlock("{"+originalCode+"}");
     	} catch (ParseProblemException e) {
-    		throw new RuntimeException("Failed to parse sequence: "+e.getMessage());
+    		throw new RuntimeException("Failed to parse sequence: "+originalCode+"\n"+e.getMessage());
     	}
 
 		StringBuilder codeWithAssertions = new StringBuilder();

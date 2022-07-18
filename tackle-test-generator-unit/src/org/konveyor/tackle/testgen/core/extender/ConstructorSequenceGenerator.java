@@ -29,6 +29,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -151,11 +153,23 @@ public class ConstructorSequenceGenerator {
 
         // list to store variables holding constructor parameter values
         List<Integer> ctorParamVarsIdx = new ArrayList<>();
-
+        
+        Pattern pTypeReg = Pattern.compile(".*? extends ParameterType \\[ "+Constants.CLASS_NAME_PATTERN+
+        		", "+Constants.CLASS_NAME_PATTERN+" \\]>");
+        
         // create sequence for instantiation each constructor parameter
         boolean paramSeqCreated = true;
         for (Type paramType : paramTypes) {
-            Sequence extSeq = createConstructorParameter(paramType, ctorSequence, createDefaultNull,
+        	Type correctedType = paramType;
+        	String paramTypeName = paramType.getFqName();
+        	Matcher matcher = pTypeReg.matcher(paramTypeName);
+        	if (matcher.matches()) {
+        		// skip group 2 because that's the prefix of the first class match
+        		String correctedTypeName = paramTypeName.replace(" extends ParameterType [ "+
+        				matcher.group(1)+", "+matcher.group(3)+" ]", " extends "+matcher.group(3));
+        		correctedType = Type.forName(correctedTypeName);
+        	}
+            Sequence extSeq = createConstructorParameter(correctedType, ctorSequence, createDefaultNull,
                 sequencePool, currNestingDepth);
             if (extSeq.size() > ctorSequence.size()) {
                 ctorParamVarsIdx.add(extSeq.getLastVariable().getDeclIndex());
@@ -163,7 +177,7 @@ public class ConstructorSequenceGenerator {
             } else {
                 // sequence could not be extended for parameter
                 logger.warning("Error creating constructor sequence for: " + ctor
-                    + "\n    could not create sequence for parameter type " + paramType.getBinaryName());
+                    + "\n    could not create sequence for parameter type " + correctedType.getBinaryName());
                 paramSeqCreated = false;
                 break;
             }
