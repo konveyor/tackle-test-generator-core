@@ -68,7 +68,7 @@ public class CrawljaxRunner {
             throw new RuntimeException("Unsupported browser: "+browser+
                 "\n  must be one of [chrome, chrome_headless, firefox, firefox_headless]");
         }
-        return new BrowserConfiguration(browserType, pixelDensity);
+        return new BrowserConfiguration(browserType, 1, new BrowserOptions(pixelDensity));
     }
 
     /**
