@@ -152,4 +152,8 @@ public class Constants {
 
 	public static final String MAP_VALUE_TAG = "_value";
 
+	/** Regular expression for a valid fully qualified class name (including inner classes) */
+	
+	public static final String CLASS_NAME_PATTERN = "(([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*)";
+
 }
