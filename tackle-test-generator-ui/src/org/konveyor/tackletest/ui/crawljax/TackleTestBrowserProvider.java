@@ -1,0 +1,34 @@
+package org.konveyor.tackletest.ui.crawljax;
+
+import com.crawljax.browser.EmbeddedBrowser;
+import com.crawljax.browser.WebDriverBackedEmbeddedBrowser;
+import com.google.inject.Provider;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+/**
+ * Browser provider for TackleTest: creates web driver instance, sets browser configuration
+ * options, and returns an embedded browser
+ */
+public class TackleTestBrowserProvider implements Provider<EmbeddedBrowser> {
+
+    private final EmbeddedBrowser.BrowserType browserType;
+
+    public TackleTestBrowserProvider(EmbeddedBrowser.BrowserType browserType) {
+        this.browserType = browserType;
+    }
+
+    @Override
+    public EmbeddedBrowser get() {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--ignore-certificate-errors");
+        if (browserType == EmbeddedBrowser.BrowserType.CHROME_HEADLESS) {
+            chromeOptions.addArguments("--headless");
+        }
+        WebDriver chromeDriver = new ChromeDriver(chromeOptions);
+        chromeDriver.manage().window().setSize(new Dimension(1200, 890));
+        return WebDriverBackedEmbeddedBrowser.withDriver(chromeDriver);
+    }
+}
