@@ -2,10 +2,11 @@ package org.konveyor.tackletest.ui.crawljax;
 
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.browser.WebDriverBackedEmbeddedBrowser;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.konveyor.tackletest.ui.util.DriverProvider;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 /**
@@ -16,6 +17,7 @@ public class TackleTestBrowserProvider implements Provider<EmbeddedBrowser> {
 
     private final EmbeddedBrowser.BrowserType browserType;
 
+    @Inject
     public TackleTestBrowserProvider(EmbeddedBrowser.BrowserType browserType) {
         this.browserType = browserType;
     }
@@ -27,7 +29,7 @@ public class TackleTestBrowserProvider implements Provider<EmbeddedBrowser> {
         if (browserType == EmbeddedBrowser.BrowserType.CHROME_HEADLESS) {
             chromeOptions.addArguments("--headless");
         }
-        WebDriver chromeDriver = new ChromeDriver(chromeOptions);
+        WebDriver chromeDriver = DriverProvider.getInstance().getDriver(chromeOptions);
         chromeDriver.manage().window().setSize(new Dimension(1200, 890));
         return WebDriverBackedEmbeddedBrowser.withDriver(chromeDriver);
     }
