@@ -15,6 +15,7 @@ wait_after_event = 500
 wait_after_reload = 500
 clickables_spec_file = "./test/data/sample/tkltest_ui_clickables_config.toml"
 form_data_spec_file = ""
+precrawl_actions_spec_file = "test/data/sample/tkltest_ui_precrawl_actions_config.toml"
 click_once = true
 click_randomly = true
 max_depth = 2
