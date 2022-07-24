@@ -1,0 +1,28 @@
+###
+# Specification of pre-crawl actions to perform. The specification consists of the following properties
+#   - action_type: type of action to perform (click, enter)
+#   - one of the following element locator properties: by_id, by_name, under_xpath, with_text, by_css_selector
+#   - if action_type is "enter", the following property
+#     - input_value: value to be entered in text box
+###
+
+[[precrawl_action]]
+  action_type = "click"
+  by_id = "id"
+
+[[precrawl_action]]
+  action_type = "click"
+  by_name = "name"
+
+[[precrawl_action]]
+  action_type = "click"
+  under_xpath = "//*[@id=\"primary-links\"]/li"
+
+[[precrawl_action]]
+  action_type = "click"
+  with_text = "Upload file"
+
+[[precrawl_action]]
+  action_type = "enter"
+  by_name = "firstName"
+  input_value = "pipi"

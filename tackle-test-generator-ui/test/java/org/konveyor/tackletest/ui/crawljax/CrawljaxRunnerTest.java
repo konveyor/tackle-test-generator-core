@@ -18,9 +18,12 @@ package org.konveyor.tackletest.ui.crawljax;
 
 import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
+import com.crawljax.core.plugin.Plugin;
+import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
+import org.konveyor.tackletest.ui.crawljax.plugins.TackleTestOnUrlFirstLoadPlugin;
 import org.tomlj.Toml;
 import org.tomlj.TomlParseResult;
 import org.tomlj.TomlTable;
@@ -61,6 +64,11 @@ public class CrawljaxRunnerTest {
         Assert.assertEquals(6, crawlRules.getPreCrawlConfig().getExcludedElements().size());
         Assert.assertEquals(500, crawlRules.getWaitAfterEvent());
         Assert.assertEquals(500, crawlRules.getWaitAfterReloadUrl());
+
+        // pre-crawl plugin assertions
+        ImmutableList<Plugin> plugins = crawljaxConfig.getPlugins();
+        Assert.assertEquals(4, plugins.size());
+        Assert.assertTrue(plugins.stream().anyMatch(plugin -> plugin instanceof TackleTestOnUrlFirstLoadPlugin));
     }
 
     @Test

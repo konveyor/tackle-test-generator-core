@@ -26,6 +26,7 @@ import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
 import com.crawljax.stateabstractions.dom.RTEDStateVertexFactory;
 import com.crawljax.stateabstractions.hybrid.HybridStateVertexFactory;
 import org.apache.commons.cli.*;
+import org.konveyor.tackletest.ui.crawljax.plugins.TackleTestOnUrlFirstLoadPlugin;
 import org.konveyor.tackletest.ui.util.TackleTestLogger;
 import org.tomlj.*;
 
@@ -318,6 +319,23 @@ public class CrawljaxRunner {
     }
 
     /**
+     * Processes specification of pre-crawl actions. Creates an instance of pre-crawl plugin object
+     * with the specified actions in the spec.
+     * @param precrawlActionsSpec
+     * @param builder
+     */
+    private static void processPreCrawlActions(TomlParseResult precrawlActionsSpec,
+                                               CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
+        if (precrawlActionsSpec.contains("precrawl_action")) {
+            TomlTable[] preCrawlActions = precrawlActionsSpec.getArray("precrawl_action")
+                .toList()
+                .toArray(new TomlTable[0]);
+            logger.info("creating pre-crawl plugin for " + preCrawlActions.length + " actions");
+            builder.addPlugin(new TackleTestOnUrlFirstLoadPlugin(preCrawlActions));
+        }
+    }
+
+    /**
      * Computes and returns crawljax identification object for a form field.
      * @param fieldIdent
      * @return
@@ -557,6 +575,12 @@ public class CrawljaxRunner {
         if (formDataSpecFile != null && !formDataSpecFile.isEmpty()) {
             InputSpecification inputSpec = getFormInputSpecification(formDataSpecFile);
             builder.crawlRules().setInputSpec(inputSpec);
+        }
+
+        // process pre-crawl actions via onUrlFirstLoad plugin
+        String precrawlActionsSpecFile = generateOptions.getString("precrawl_actions_spec_file");
+        if (precrawlActionsSpecFile != null && !precrawlActionsSpecFile.isEmpty()) {
+            processPreCrawlActions(Toml.parse(Paths.get(precrawlActionsSpecFile)), builder);
         }
 
         // add crawl-overview and test-generator plugins
