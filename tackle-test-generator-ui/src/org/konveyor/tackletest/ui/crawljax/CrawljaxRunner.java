@@ -60,15 +60,22 @@ public class CrawljaxRunner {
             browserType = EmbeddedBrowser.BrowserType.CHROME;
         } else if (browser.equals("chrome_headless")) {
             browserType = EmbeddedBrowser.BrowserType.CHROME_HEADLESS;
-        } else if (browser.equals("firefox")) {
-            browserType = EmbeddedBrowser.BrowserType.FIREFOX;
-        } else if (browser.equals("firefox_headless")) {
-            browserType = EmbeddedBrowser.BrowserType.FIREFOX_HEADLESS;
-        } else {
+        }
+//        else if (browser.equals("firefox")) {
+//            browserType = EmbeddedBrowser.BrowserType.FIREFOX;
+//        } else if (browser.equals("firefox_headless")) {
+//            browserType = EmbeddedBrowser.BrowserType.FIREFOX_HEADLESS;
+//        }
+        else {
             throw new RuntimeException("Unsupported browser: "+browser+
                 "\n  must be one of [chrome, chrome_headless, firefox, firefox_headless]");
         }
-        return new BrowserConfiguration(browserType, 1, new BrowserOptions(pixelDensity));
+        BrowserConfiguration browserConfiguration = new BrowserConfiguration(
+            browserType, 1, new TackleTestBrowserProvider(browserType)
+        );
+        browserConfiguration.setBrowserOptions(new BrowserOptions(pixelDensity));
+        return browserConfiguration;
+//        return new BrowserConfiguration(browserType, 1, new BrowserOptions(pixelDensity));
     }
 
     /**
