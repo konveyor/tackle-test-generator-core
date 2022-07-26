@@ -521,7 +521,13 @@ public class CrawljaxRunner {
         }
 
         // set max depth
-        builder.setMaximumDepth(getIntTypeOption(generateOptions, "max_depth"));
+        int maxDepth = getIntTypeOption(generateOptions, "max_depth");
+        if (maxDepth == 0) {
+            builder.setUnlimitedCrawlDepth();
+        }
+        else {
+            builder.setMaximumDepth(maxDepth);
+        }
 
         // set click rules
         builder.crawlRules().clickOnce(Boolean.TRUE.equals(
