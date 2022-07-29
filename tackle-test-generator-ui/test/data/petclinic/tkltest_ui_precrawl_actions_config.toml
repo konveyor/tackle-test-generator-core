@@ -3,6 +3,7 @@
 #   - action_type: type of action to perform (click, enter)
 #   - one of the following element locator properties: by_id, by_name, under_xpath, with_text, by_css_selector
 #   - if action_type is "enter", the following property
+#     - input_value_env_var: name of environment variable from which to read the value to entered in text box
 #     - input_value: value to be entered in text box
 ###
 
@@ -18,6 +19,11 @@
   action_type = "enter"
   under_xpath = "//*[@id=\"name\"]"
   input_value = "cardiology"
+
+[[precrawl_action]]
+  action_type = "enter"
+  under_xpath = "//*[@id=\"name\"]"
+  input_value_env_var = "specialty"
 
 [[precrawl_action]]
   action_type = "click"

@@ -79,8 +79,18 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                     driverWait.until(ExpectedConditions.elementToBeClickable(locator)).click();
                 }
                 else if (actionType.equals("enter")) {
-                    driverWait.until(ExpectedConditions.elementToBeClickable(locator))
-                        .sendKeys(action.getString("input_value"));
+                    String inputValue = null;
+                    if (action.contains("input_value")) {
+                        inputValue = action.getString("input_value");
+                    }
+                    // read input value from environment variable
+                    else if (action.contains("input_value_env_var")) {
+                        inputValue = System.getenv(action.getString("input_value_env_var"));
+                    }
+                    if (inputValue != null) {
+                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator))
+                            .sendKeys(inputValue);
+                    }
                 }
                 else {
                     throw new RuntimeException("Unsupported pre-crawl action type: "+actionType+

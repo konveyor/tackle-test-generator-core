@@ -51,7 +51,7 @@ jobs:
       run: |
         cd tackle-test-generator-ui/test/data/webapps/petclinic && ./deploy_app.sh start --build && cd ../../../..
         mvn -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-          --no-transfer-progress --batch-mode test -Dtest=CrawljaxRunnerTest#testCrawljaxRunnerPetclinic
+          --no-transfer-progress --batch-mode test -Dtest=CrawljaxRunnerTest#testCrawljaxRunnerPetclinic -Dspecialty=neurology
         cd test/data/webapps/petclinic && ./deploy_app.sh stop
     - name: Run addressbook webapp and test case
       run: |
