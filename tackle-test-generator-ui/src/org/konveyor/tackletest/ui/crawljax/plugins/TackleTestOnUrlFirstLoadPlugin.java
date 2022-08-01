@@ -72,9 +72,12 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                     locator = By.cssSelector(elemCssSelector);
                 }
             }
-            // perform the specified action type (click or enter) if locator is non-null
+            // perform the specified action type (click, enter) if locator is non-null, or accept alert
             String actionType = action.getString("action_type");
-            if (locator != null) {
+            if (actionType.equals("accept_alert")) {
+        		driver.switchTo().alert().accept();
+        	} 
+            else if (locator != null) {
                 if (actionType.equals("click")) {
                     driverWait.until(ExpectedConditions.elementToBeClickable(locator)).click();
                 }
@@ -94,9 +97,9 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                 }
                 else {
                     throw new RuntimeException("Unsupported pre-crawl action type: "+actionType+
-                        "\n  must be one of [click, enter]");
+                        "\n  must be one of [click, enter, accept_alert]");
                 }
-            }
+            } 
         }
     }
 
