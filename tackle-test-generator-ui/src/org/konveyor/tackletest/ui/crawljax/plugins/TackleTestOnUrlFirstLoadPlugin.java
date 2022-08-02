@@ -4,6 +4,7 @@ import com.crawljax.core.CrawlerContext;
 import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.tomlj.TomlTable;
@@ -75,8 +76,8 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
             // perform the specified action type (click, enter) if locator is non-null, or alert accept
             String actionType = action.getString("action_type");
             if (actionType.equals("alert_accept")) {
-        		driver.switchTo().alert().accept();
-        	} 
+                driver.switchTo().alert().accept();
+            }
             else if (locator != null) {
                 if (actionType.equals("click")) {
                     driverWait.until(ExpectedConditions.elementToBeClickable(locator)).click();
@@ -91,16 +92,16 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                         inputValue = System.getenv(action.getString("input_value_env_var"));
                     }
                     if (inputValue != null) {
-                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator)).clear();
-                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator)).
-                        sendKeys(inputValue);
+                        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                        element.clear();
+                        element.sendKeys(inputValue);
                     }
                 }
                 else {
                     throw new RuntimeException("Unsupported pre-crawl action type: "+actionType+
                         "\n  must be one of [click, enter, alert_accept]");
                 }
-            } 
+            }
         }
     }
 
