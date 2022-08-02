@@ -72,9 +72,9 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                     locator = By.cssSelector(elemCssSelector);
                 }
             }
-            // perform the specified action type (click, enter) if locator is non-null, or accept alert
+            // perform the specified action type (click, enter) if locator is non-null, or alert accept
             String actionType = action.getString("action_type");
-            if (actionType.equals("accept_alert")) {
+            if (actionType.equals("alert_accept")) {
         		driver.switchTo().alert().accept();
         	} 
             else if (locator != null) {
@@ -91,13 +91,14 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
                         inputValue = System.getenv(action.getString("input_value_env_var"));
                     }
                     if (inputValue != null) {
-                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator))
-                            .sendKeys(inputValue);
+                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator)).clear();
+                        driverWait.until(ExpectedConditions.presenceOfElementLocated(locator)).
+                        sendKeys(inputValue);
                     }
                 }
                 else {
                     throw new RuntimeException("Unsupported pre-crawl action type: "+actionType+
-                        "\n  must be one of [click, enter, accept_alert]");
+                        "\n  must be one of [click, enter, alert_accept]");
                 }
             } 
         }
