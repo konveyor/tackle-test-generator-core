@@ -295,27 +295,27 @@ public class CrawljaxRunner {
         }
 
         // process don't click children_of spec
-//        TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of")
-//            .toList()
-//            .toArray(new TomlTable[0]);
-//        for (TomlTable dontClickElem : dontclickChildrenofSpec) {
-//            String tagName = dontClickElem.getString("tag_name");
-//            if (dontClickElem.contains("with_class")) {
-//                String withClass = dontClickElem.getString("with_class");
-//                if (withClass != null && !withClass.isEmpty()) {
-//                    builder.crawlRules().dontClickChildrenOf(tagName).withClass(withClass);
-//                }
-//            } else if (dontClickElem.contains("with_id")) {
-//                String withId = dontClickElem.getString("with_id");
-//                if (withId != null && !withId.isEmpty()) {
-//                    builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
-//                }
-//            } else {
-//                // no id or class specified; set don't click on the tag
-//                builder.crawlRules().dontClickChildrenOf(tagName);
-//            }
-//        }
-//        logger.info("Done processing dont_click.children_of spec");
+        TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of")
+            .toList()
+            .toArray(new TomlTable[0]);
+        for (TomlTable dontClickElem : dontclickChildrenofSpec) {
+            String tagName = dontClickElem.getString("tag_name");
+            if (dontClickElem.contains("with_class")) {
+                String withClass = dontClickElem.getString("with_class");
+                if (withClass != null && !withClass.isEmpty()) {
+                    builder.crawlRules().dontClickChildrenOf(tagName).withClass(withClass);
+                }
+            } else if (dontClickElem.contains("with_id")) {
+                String withId = dontClickElem.getString("with_id");
+                if (withId != null && !withId.isEmpty()) {
+                    builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
+                }
+            } else {
+                // no id or class specified; set don't click on the tag
+                builder.crawlRules().dontClickChildrenOf(tagName);
+            }
+        }
+        logger.info("Done processing dont_click.children_of spec");
     }
 
     /**
