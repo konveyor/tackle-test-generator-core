@@ -113,7 +113,7 @@ public class CrawljaxRunnerTest {
         CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
         crawlRules = builder.build().getCrawlRules();
         Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
-        Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+        Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getExcludedElements().size());
 
         // neither click nor dont_click specified
         clickablesSpec = "";
