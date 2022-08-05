@@ -104,6 +104,16 @@ public class CrawljaxRunnerTest {
         crawlRules = builder.build().getCrawlRules();
         Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
         Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getExcludedElements().size());
+        
+        // dont_click.children_of specified, click and dont_click not specified
+        clickablesSpec = String.join(newLine,
+            "[[dont_click.children_of]]", "  tag_name = [\"div\"]"
+        );
+        builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+        crawlRules = builder.build().getCrawlRules();
+        Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
+        Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getExcludedElements().size());
 
         // neither click nor dont_click specified
         clickablesSpec = "";
@@ -139,6 +149,20 @@ public class CrawljaxRunnerTest {
             }
         });
     }
+    
+    @Test
+    public void testUpdateClickablesConfigurationDontclickChildrenOfSpecExcpSample() {
+        // dont_click spec with no tag_name property
+        final String clickablesSpec = "[[dont_click.children_of]]";
+        final CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor("http://localhost:8080");
+        Assert.assertThrows(RuntimeException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                CrawljaxRunner.updateClickablesConfiguration(Toml.parse(clickablesSpec), builder);
+            }
+        });
+    }
+
 
     @Test
     public void testCrawljaxRunnerPetclinic() throws IOException, URISyntaxException {

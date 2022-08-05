@@ -190,22 +190,9 @@ public class CrawljaxRunner {
     private static void handleClickablesElementSpec(TomlTable[] clickablesElemSpec, boolean dontClick,
                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
         for (TomlTable elem : clickablesElemSpec) {
-            if (!elem.contains("tag_name")) {
-                throw new RuntimeException("Invalid " + (dontClick ? "dont_click" : "click") +
-                    " specification: \"tag_name\" must be provided as a string or list of strings");
-            }
-            List<String> tags = new ArrayList<>();
-            try {
-                // parse tag_name as a string
-                tags.add(elem.getString("tag_name"));
-            }
-            catch (TomlInvalidTypeException e) {
-                // if type error occurs, parse tag_name as an array
-                TomlArray tagList = elem.getArray("tag_name");
-                for (int i = 0; i < elem.getArray("tag_name").size(); i++) {
-                    tags.add(tagList.getString(i));
-                }
-            }
+        	
+            List<String> tags = getTags(elem, dontClick ? "dont_click" : "click");
+            
             if (elem.contains("with_text")) {
                 String withText = elem.getString("with_text");
                 if (withText != null && !withText.isEmpty()) {
@@ -299,24 +286,47 @@ public class CrawljaxRunner {
 			TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of").toList()
 					.toArray(new TomlTable[0]);
 			for (TomlTable dontClickElem : dontclickChildrenofSpec) {
-				String tagName = dontClickElem.getString("tag_name");
-				if (dontClickElem.contains("with_class")) {
-					String withClass = dontClickElem.getString("with_class");
-					if (withClass != null && !withClass.isEmpty()) {
-						builder.crawlRules().dontClickChildrenOf(tagName).withClass(withClass);
+				
+				List<String> tags = getTags(dontClickElem, "dont_click.children_of");
+				for (String tagName : tags) {
+					if (dontClickElem.contains("with_class")) {
+						String withClass = dontClickElem.getString("with_class");
+						if (withClass != null && !withClass.isEmpty()) {
+							builder.crawlRules().dontClickChildrenOf(tagName).withClass(withClass);
+						}
+					} else if (dontClickElem.contains("with_id")) {
+						String withId = dontClickElem.getString("with_id");
+						if (withId != null && !withId.isEmpty()) {
+							builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
+						}
+					} else {
+						// no id or class specified; set don't click on the tag
+						builder.crawlRules().dontClickChildrenOf(tagName);
 					}
-				} else if (dontClickElem.contains("with_id")) {
-					String withId = dontClickElem.getString("with_id");
-					if (withId != null && !withId.isEmpty()) {
-						builder.crawlRules().dontClickChildrenOf(tagName).withId(withId);
-					}
-				} else {
-					// no id or class specified; set don't click on the tag
-					builder.crawlRules().dontClickChildrenOf(tagName);
 				}
 			}
 		}
         logger.info("Done processing dont_click.children_of spec");
+    }
+    
+    
+    private static List<String> getTags(TomlTable elem, String specName) {
+    	if ( ! elem.contains("tag_name")) {
+			throw new RuntimeException(
+					"Invalid "+specName+" specification: \"tag_name\" must be provided as a string or list of strings");
+		}
+		List<String> tags = new ArrayList<>();
+		try {
+			// parse tag_name as a string
+			tags.add(elem.getString("tag_name"));
+		} catch (TomlInvalidTypeException e) {
+			// if type error occurs, parse tag_name as an array
+			TomlArray tagList = elem.getArray("tag_name");
+			for (int i = 0; i < elem.getArray("tag_name").size(); i++) {
+				tags.add(tagList.getString(i));
+			}
+		}
+		return tags;
     }
 
     /**
