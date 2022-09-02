@@ -67,3 +67,6 @@ The primary components among these are:
     The extender can, optionally, also add assertions to test cases. To do this, the extender executes a sequence in-memory (via reflection), accesses the public states of objects constructed during test execution, and creates assertions on those states. Assertions are added after every statement of the sequence which creates new objects. To handle non-determinism in run-time state, a sequence can be executed multiple times (via a configurable option) and an assertion on an object field is created only if the same value is seen in all executions.
 
     The output from the extender consists of JUnit test classes and summary reports.
+
+## Code of Conduct
+Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
