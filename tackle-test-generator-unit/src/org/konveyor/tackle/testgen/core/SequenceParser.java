@@ -414,9 +414,6 @@ public class SequenceParser {
 
         for (int i = 0; i < methodDec.getNumberOfParams(); i++) {
             ResolvedParameterDeclaration resolvedParamDecl = methodDec.getParam(i);
-            if (resolvedParamDecl.getType().isTypeVariable()) {
-                System.out.println("is type parameter");
-            }
             argTypes.add(methodDec.getParam(i));
         }
 
