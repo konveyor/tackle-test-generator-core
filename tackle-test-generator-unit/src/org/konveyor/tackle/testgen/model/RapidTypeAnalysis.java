@@ -113,9 +113,13 @@ public class RapidTypeAnalysis {
 					if (method.isAbstract() || method.isNative()) {
 						continue;
 					}
-					
-					Body body = method.retrieveActiveBody();
-					
+					Body body = null;
+					try {
+						body = method.retrieveActiveBody();
+						//to figure out what is the problem
+					} catch (RuntimeException e) {
+						continue;
+					}
 					Iterator<Unit> unitIter = body.getUnits().snapshotIterator();
 					
 					while (unitIter.hasNext()) {

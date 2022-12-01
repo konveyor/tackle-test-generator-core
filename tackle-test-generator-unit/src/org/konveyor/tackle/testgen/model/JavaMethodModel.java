@@ -217,6 +217,9 @@ public class JavaMethodModel {
 			} catch (ClassNotFoundException | NoClassDefFoundError e) {
 				logger.warning(e.getMessage());
 				continue;
+			} catch (ClassFormatError e) {
+				logger.warning(e.getMessage());
+				continue;
 			}
 
 			if (currentSootClass.isConcrete() &&  Utils.canBeInstantiated(currentClass, targetClass)) {
