@@ -214,7 +214,7 @@ public class JavaMethodModel {
 			Class<?> currentClass;
 			try {
 				currentClass = classLoader.loadClass(currentSootClass.toString());
-			} catch (ClassNotFoundException | NoClassDefFoundError e) {
+			} catch (ClassNotFoundException | NoClassDefFoundError  | ClassFormatError e) { // todo - last Exception should be revisited
 				logger.warning(e.getMessage());
 				continue;
 			}
