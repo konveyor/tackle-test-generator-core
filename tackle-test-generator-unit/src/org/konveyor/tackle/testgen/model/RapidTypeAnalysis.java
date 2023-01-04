@@ -118,6 +118,7 @@ public class RapidTypeAnalysis {
 						body = method.retrieveActiveBody();
 						//to figure out what is the problem
 					} catch (RuntimeException e) { // todo - Exception should be revisited
+						logger.warning("method " + method.getName() + " body could not be retrieved");
 						continue;
 					}
 					Iterator<Unit> unitIter = body.getUnits().snapshotIterator();
