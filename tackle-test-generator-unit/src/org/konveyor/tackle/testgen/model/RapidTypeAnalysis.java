@@ -117,7 +117,7 @@ public class RapidTypeAnalysis {
 					try {
 						body = method.retrieveActiveBody();
 						//to figure out what is the problem
-					} catch (RuntimeException e) {
+					} catch (RuntimeException e) { // todo - Exception should be revisited
 						continue;
 					}
 					Iterator<Unit> unitIter = body.getUnits().snapshotIterator();

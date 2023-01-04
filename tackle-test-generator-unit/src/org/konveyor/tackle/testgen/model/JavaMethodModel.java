@@ -217,7 +217,7 @@ public class JavaMethodModel {
 			} catch (ClassNotFoundException | NoClassDefFoundError e) {
 				logger.warning(e.getMessage());
 				continue;
-			} catch (ClassFormatError e) {
+			} catch (ClassFormatError e) { // todo - Exception should be revisited
 				logger.warning(e.getMessage());
 				continue;
 			}

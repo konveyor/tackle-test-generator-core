@@ -1217,13 +1217,13 @@ public class TestSequenceExtender {
                 logger.warning(errmsg);
                 this.extSummary.uncovTestPlanRows__excp__NoSuchMethod++;
                 throw new RuntimeException(errmsg, nsme);
-            } catch (NonInstantiableTypeException nite){
+            } catch (NonInstantiableTypeException nite){ // todo - Exception should be revisited
                 String errmsg = "type is not instrumented for type: " + paramType + "in signature "
                         + tgtMethodSig + "\n" + nite;
                 logger.warning(errmsg);
                 this.extSummary.uncovTestPlanRows__excp__NonInstantiableType++;
                 throw new RuntimeException(nite.getMessage(), nite);
-            } catch (IllegalArgumentException iae){
+            } catch (IllegalArgumentException iae){ // todo - Exception should be revisited
                 String errmsg = "argument is not legal for type: " + paramType + "in signature "
                         + tgtMethodSig + "\n" + iae;
                 logger.warning(errmsg);
@@ -1817,9 +1817,9 @@ public class TestSequenceExtender {
                 this.extSummary.classNotFoundTypes.add(cnfe.getMessage());
             } catch (IllegalArgumentException iae) {
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + iae.getMessage());
-            } catch (ClassCastException  cce) {
+            } catch (ClassCastException  cce) { // todo - Exception should be revisited
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + cce.getMessage());
-            } catch ( ExceptionInInitializerError eie) {
+            } catch ( ExceptionInInitializerError eie) { // todo - Exception should be revisited
                 logger.warning("Error creating constructor sequence for " + clsName + ": " + eie.getMessage());
             }
 		}
