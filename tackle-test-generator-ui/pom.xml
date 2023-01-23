@@ -68,6 +68,11 @@
       <artifactId>tomlj</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.bastiaanjansen</groupId>
+      <artifactId>otp-java</artifactId>
+      <version>1.3.2</version>
+    </dependency>
   </dependencies>
 
   <build>
