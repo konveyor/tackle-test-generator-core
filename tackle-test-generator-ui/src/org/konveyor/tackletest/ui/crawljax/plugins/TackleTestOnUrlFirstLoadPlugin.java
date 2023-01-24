@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
 
     private static final Logger logger = TackleTestLogger.getLogger(TackleTestOnUrlFirstLoadPlugin.class);
+
     private TomlTable[] preCrawlActions;
 
     private static final int MAX_SUBMIT_TOTP_ATTEMPTS = 3;
@@ -34,6 +35,10 @@ public class TackleTestOnUrlFirstLoadPlugin implements OnUrlFirstLoadPlugin {
      */
     public TackleTestOnUrlFirstLoadPlugin(TomlTable[] preCrawlActions) {
         this.preCrawlActions = preCrawlActions;
+    }
+
+    public TomlTable[] getPreCrawlActions() {
+        return preCrawlActions;
     }
 
     /**

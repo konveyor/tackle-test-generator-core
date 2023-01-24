@@ -26,3 +26,13 @@
   action_type = "enter"
   by_name = "firstName"
   input_value = "pipi"
+
+[[precrawl_action]]
+  action_type = "submit_totp"
+  totp_secret_env_var = "TKLTESTUI_TOTP_SECRET"
+  optional = true
+  max_attempts = 2
+  [precrawl_action.enter]
+    by_id = "totp_input"
+  [precrawl_action.click]
+    by_id = "submit"
