@@ -25,7 +25,7 @@
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <crawljax.version>frag-SNAPSHOT</crawljax.version>
+    <crawljax.version>c1a6dfc223c80e600380f04651aab3cb4c0c2b00</crawljax.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
   </properties>
 
