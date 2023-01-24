@@ -36,6 +36,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CrawljaxRunnerTest {
 
@@ -69,6 +73,22 @@ public class CrawljaxRunnerTest {
         ImmutableList<Plugin> plugins = crawljaxConfig.getPlugins();
         Assert.assertEquals(4, plugins.size());
         Assert.assertTrue(plugins.stream().anyMatch(plugin -> plugin instanceof TackleTestOnUrlFirstLoadPlugin));
+        TackleTestOnUrlFirstLoadPlugin precrawlPlugin = (TackleTestOnUrlFirstLoadPlugin) plugins
+            .stream()
+            .filter(plugin -> plugin instanceof TackleTestOnUrlFirstLoadPlugin)
+            .findFirst()
+            .get();
+        // assert on submit_totp action
+        TomlTable[] precrawlActions = precrawlPlugin.getPreCrawlActions();
+        Assert.assertEquals(6, precrawlActions.length);
+        Set<String> expKeySet = Stream
+            .of("action_type", "max_attempts", "optional", "totp_secret_env_var", "enter", "click")
+            .collect(Collectors.toSet());
+        Assert.assertEquals(expKeySet, precrawlActions[5].keySet());
+        Assert.assertEquals("submit_totp", precrawlActions[5].getString("action_type"));
+        Assert.assertEquals("TKLTESTUI_TOTP_SECRET", precrawlActions[5].getString("totp_secret_env_var"));
+        Assert.assertEquals(true, precrawlActions[5].getBoolean("optional"));
+        Assert.assertEquals(2, precrawlActions[5].getLong("max_attempts").intValue());
     }
 
     @Test
@@ -104,7 +124,7 @@ public class CrawljaxRunnerTest {
         crawlRules = builder.build().getCrawlRules();
         Assert.assertEquals(4, crawlRules.getPreCrawlConfig().getIncludedElements().size());
         Assert.assertEquals(1, crawlRules.getPreCrawlConfig().getExcludedElements().size());
-        
+
         // dont_click.children_of specified, click and dont_click not specified
         clickablesSpec = String.join(newLine,
             "[[dont_click.children_of]]", "  tag_name = [\"div\"]"
@@ -149,7 +169,7 @@ public class CrawljaxRunnerTest {
             }
         });
     }
-    
+
     @Test
     public void testUpdateClickablesConfigurationDontclickChildrenOfSpecExcpSample() {
         // dont_click spec with no tag_name property
