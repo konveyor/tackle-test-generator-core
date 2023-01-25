@@ -571,10 +571,12 @@ public class CTDTestPlanGenerator {
 			for (String excClass : excludedClasses) {
 				
 				if (excClass.equals(className)) {
+					logger.info("Excluding class "+className+" from target classes due to direct rule");
 					return true;
 				}
 				
 				if (excClass.endsWith(".*") && className.startsWith(excClass.substring(0, excClass.indexOf('*')))) {
+					logger.info("Excluding class "+className+" from target classes due to implicit rule: "+excClass);
 					return true;
 				} 
 			}
