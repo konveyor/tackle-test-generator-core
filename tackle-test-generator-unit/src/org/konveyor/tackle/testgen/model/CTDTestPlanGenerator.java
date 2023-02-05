@@ -1082,6 +1082,9 @@ public class CTDTestPlanGenerator {
 
         if (cmd.hasOption("cl")) {
         	targetClassList = cmd.getOptionValue("cl");
+        	if (targetClassList.startsWith("'") && targetClassList.endsWith("'")) {
+        		targetClassList = targetClassList.substring(1, targetClassList.length()-1);
+        	}
         	logger.info("Target class list: "+targetClassList);
         }
         
@@ -1089,6 +1092,9 @@ public class CTDTestPlanGenerator {
 
         if (cmd.hasOption("el")) {
         	excludedClassList = cmd.getOptionValue("el");
+        	if (excludedClassList.startsWith("'") && excludedClassList.endsWith("'")) {
+        		excludedClassList = excludedClassList.substring(1, excludedClassList.length()-1);
+        	}
         	logger.info("Excluded class list: "+excludedClassList);
         }
 
