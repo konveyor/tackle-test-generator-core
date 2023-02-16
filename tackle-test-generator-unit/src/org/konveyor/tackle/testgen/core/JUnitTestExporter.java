@@ -206,11 +206,15 @@ public class JUnitTestExporter {
 			for (String methodSig : testSequences.keySet()) {
 			    List<String> methodSequences = testSequences.get(methodSig);
 			    String methodName = methodSig.split("\\(")[0];
+			    // handle constructors
                 if (methodName.equals("<init>")) {
                     String[] clsNameTokens = className.split("\\.");
                     methodName = clsNameTokens[clsNameTokens.length-1];
                 }
-
+			    // remove parameter type from method name in case of a parameterized method
+			    if (methodName.contains("<")) {
+			    	methodName = methodName.substring(0, methodName.indexOf('<'));
+			    }			    
                 int testCounter = 0;
 			    if (methodTestCounters.containsKey(methodName)) {
                     testCounter = methodTestCounters.get(methodName);
