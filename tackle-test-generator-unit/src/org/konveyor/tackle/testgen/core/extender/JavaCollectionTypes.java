@@ -16,12 +16,44 @@
 
 package org.konveyor.tackle.testgen.core.extender;
 
-import randoop.types.*;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Stack;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.util.WeakHashMap;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
+
+import randoop.types.GenericClassType;
+import randoop.types.InstantiatedType;
+import randoop.types.JDKTypes;
+import randoop.types.ParameterBound;
+import randoop.types.ParameterizedType;
+import randoop.types.ReferenceBound;
+import randoop.types.ReferenceType;
+import randoop.types.Type;
 
 /**
  * Utility class for computing instantiation information for different Java collection types.
@@ -329,9 +361,22 @@ public class JavaCollectionTypes {
     }
 
     private static InstantiatedType getInstantiatedType(GenericClassType genericType,
-                                                        ReferenceType typeArgument) {
+                                                        ReferenceType typeArgument) throws ClassNotFoundException {
         if (typeArgument != null) {
-            return genericType.instantiate(typeArgument);
+        	if (typeArgument.isParameterized()) {
+        		// since default lower bound is null, we take the upper bound type for this type argument
+        		ParameterBound typeTypeArg = ExtenderUtil.getTypeArguments(typeArgument).get(0).getTypeParameters().get(0).getUpperTypeBound();
+        		ReferenceType boundType = null;
+        		if (typeTypeArg instanceof ReferenceBound) {
+        			boundType = ((ReferenceBound) typeTypeArg).getBoundType();
+        		} else {
+        			throw new UnsupportedOperationException("cannot resolve nested parameterized types");
+        		}
+                InstantiatedType instType = ((ParameterizedType) typeArgument).getGenericClassType().instantiate(boundType);
+                return genericType.instantiate(instType);
+        	} else {
+        		return genericType.instantiate(typeArgument);
+        	}
         }
         // if type argument is unspecified, use java.lang.Object
         return genericType.instantiate(ReferenceType.forClass(Object.class));
