@@ -50,6 +50,7 @@ import randoop.types.GenericClassType;
 import randoop.types.InstantiatedType;
 import randoop.types.JDKTypes;
 import randoop.types.ParameterBound;
+import randoop.types.ParameterType;
 import randoop.types.ParameterizedType;
 import randoop.types.ReferenceBound;
 import randoop.types.ReferenceType;
@@ -364,19 +365,24 @@ public class JavaCollectionTypes {
                                                         ReferenceType typeArgument) throws ClassNotFoundException {
         if (typeArgument != null) {
         	if (typeArgument.isParameterized()) {
-        		// since default lower bound is null, we take the upper bound type for this type argument
-        		ParameterBound typeTypeArg = ExtenderUtil.getTypeArguments(typeArgument).get(0).getTypeParameters().get(0).getUpperTypeBound();
-        		ReferenceType boundType = null;
-        		if (typeTypeArg instanceof ReferenceBound) {
-        			boundType = ((ReferenceBound) typeTypeArg).getBoundType();
-        		} else {
-        			throw new UnsupportedOperationException("cannot resolve nested parameterized types");
-        		}
-                InstantiatedType instType = ((ParameterizedType) typeArgument).getGenericClassType().instantiate(boundType);
-                return genericType.instantiate(instType);
-        	} else {
-        		return genericType.instantiate(typeArgument);
-        	}
+        		ReferenceType refType = ExtenderUtil.getTypeArguments(typeArgument).get(0);
+				if (refType instanceof ParameterType) {
+					// since default lower bound is null, we take the upper bound type for this type
+					// argument
+					ParameterBound typeTypeArg = refType.getTypeParameters().get(0).getUpperTypeBound();
+					ReferenceType boundType = null;
+					if (typeTypeArg instanceof ReferenceBound) {
+						boundType = ((ReferenceBound) typeTypeArg).getBoundType();
+					} else {
+						throw new UnsupportedOperationException(
+								"cannot resolve nested parameterized types with variables");
+					}
+					InstantiatedType instType = ((ParameterizedType) typeArgument).getGenericClassType()
+							.instantiate(boundType);
+					return genericType.instantiate(instType);
+				} // else we will just instantiate as is, similarly to the non parameterized case
+        	} 
+        	return genericType.instantiate(typeArgument);
         }
         // if type argument is unspecified, use java.lang.Object
         return genericType.instantiate(ReferenceType.forClass(Object.class));
