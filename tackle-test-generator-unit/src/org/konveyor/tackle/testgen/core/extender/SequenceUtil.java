@@ -130,7 +130,7 @@ public class SequenceUtil {
      * @param typedOperation operation to perform type substitution on
      * @return updated operation with type parameters replaced with instantiated types
      */
-    static TypedOperation performTypeSubstitution(TypedOperation typedOperation) {
+    static TypedOperation performOutputTypeSubstitution(TypedOperation typedOperation) {
         Type outputType = typedOperation.getOutputType();
         if (outputType.isGeneric()) {
             List<TypeVariable> typeVars = ((GenericClassType)outputType).getTypeParameters();
@@ -151,11 +151,11 @@ public class SequenceUtil {
      * @param sequence
      * @return
      */
-    static Sequence performTypeSubstitution(Sequence sequence) {
+    static Sequence performOutputTypeSubstitution(Sequence sequence) {
         Sequence newSequence = new Sequence();
         for (int i = 0; i < sequence.size(); i++) {
             TypedOperation typedOperation = sequence.getStatement(i).getOperation();
-            typedOperation = performTypeSubstitution(typedOperation);
+            typedOperation = performOutputTypeSubstitution(typedOperation);
             Sequence finalSeq = newSequence;
             List<Variable> inputVars = sequence.getInputs(i).stream()
                 .map(var -> new Variable(finalSeq, var.getDeclIndex()))

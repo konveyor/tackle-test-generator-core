@@ -202,7 +202,7 @@ public class ConstructorSequenceGenerator {
             ctorCallOper = ctorCallOper.substitute(((InstantiatedType)type).getTypeSubstitution());
         }
         else {
-            ctorCallOper = (TypedClassOperation) SequenceUtil.performTypeSubstitution(ctorCallOper);
+            ctorCallOper = (TypedClassOperation) SequenceUtil.performOutputTypeSubstitution(ctorCallOper);
         }
         ctorSequence = ctorSequence.extend(ctorCallOper, ctorParamVars);
 

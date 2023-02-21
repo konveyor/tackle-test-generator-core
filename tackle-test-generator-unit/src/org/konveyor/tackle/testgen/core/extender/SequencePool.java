@@ -196,7 +196,7 @@ class SequencePool {
 
                         // if the sequence has generic output types, perform type substitution
                         if (hasGenericTypesOutputType(randoopSeq)) {
-                            randoopSeq = SequenceUtil.performTypeSubstitution(randoopSeq);
+                            randoopSeq = SequenceUtil.performOutputTypeSubstitution(randoopSeq);
                         }
 
                         // mine all constructor sequences and add them to the class sequence pool
