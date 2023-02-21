@@ -344,7 +344,7 @@ public class TestSequenceExtender {
             partitionTestPlan.fieldNames().forEachRemaining(className -> {
 
                 System.out.println("* Processing class " + className);
-
+                
                 // get test plan info for class
                 ObjectNode classTestPlan = (ObjectNode) partitionTestPlan.get(className);
 
@@ -368,9 +368,9 @@ public class TestSequenceExtender {
 
                 // iterate over each method in class
                 classTestPlan.fieldNames().forEachRemaining(methodSig -> {
-
+                	
                     System.out.print(".");
-
+                    
                     // get test plan rows for method
                     ObjectNode methodTestPlan = (ObjectNode) classTestPlan.get(methodSig);
                     currTestPlanRows = mapper.convertValue(methodTestPlan.get("test_plan"), new TypeReference<ArrayNode[]>() {
@@ -1242,9 +1242,23 @@ public class TestSequenceExtender {
 
 		// apply capture conversion for params of target methods
 		tgtMethodCall = tgtMethodCall.applyCaptureConversion();
-
-		// apply substitution if type parameters occur in the method call
-        tgtMethodCall = (TypedClassOperation)SequenceUtil.performTypeSubstitution(tgtMethodCall);
+		
+		// apply substitution if type parameters occur in the method call input -
+		// required for casting operations in method call
+        
+		for (Type input : tgtMethodCall.getInputTypes()) {
+			if (input.isParameterized() && input.isGeneric() && input.isReferenceType()) {
+				List<TypeVariable> typeVars = ((ReferenceType) input).getTypeParameters();
+		        List<ReferenceType> typeRefs = typeVars.stream()
+		            .map(typeVar -> ReferenceType.forClass(Object.class))
+		            .collect(Collectors.toList());
+		        Substitution typeSubst = new Substitution(typeVars, typeRefs);
+		        tgtMethodCall = tgtMethodCall.substitute(typeSubst);
+			}
+		}
+		
+		// apply substitution if type parameters occur in the method call output
+        tgtMethodCall = (TypedClassOperation)SequenceUtil.performOutputTypeSubstitution(tgtMethodCall);
 
 		// extend sequence with call to the target method
 		seq = seq.extend(tgtMethodCall, inputVars);
