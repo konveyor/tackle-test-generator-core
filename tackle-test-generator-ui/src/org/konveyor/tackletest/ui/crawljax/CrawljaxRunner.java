@@ -24,7 +24,7 @@ import com.crawljax.plugins.crawloverview.CrawlOverview;
 import com.crawljax.plugins.testcasegenerator.TestConfiguration;
 import com.crawljax.plugins.testcasegenerator.TestSuiteGenerator;
 import com.crawljax.stateabstractions.dom.RTEDStateVertexFactory;
-import com.crawljax.stateabstractions.hybrid.HybridStateVertexFactory;
+import com.crawljax.stateabstractions.hybrid.FragGenStateVertexFactory;
 import org.apache.commons.cli.*;
 import org.konveyor.tackletest.ui.crawljax.plugins.TackleTestOnUrlFirstLoadPlugin;
 import org.konveyor.tackletest.ui.util.TackleTestLogger;
@@ -98,7 +98,7 @@ public class CrawljaxRunner {
         } else if (stateAssertion.equals("both")) {
             stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.BOTH;
         } else if (stateAssertion.equals("hybrid")) {
-            stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.HYBRID;
+            stateAssertionMode = TestConfiguration.StateEquivalenceAssertionMode.FRAG;
         } else {
             throw new RuntimeException("Unknown assertion type: "+stateAssertion+
                 "\n  must be one of [dom, visual, both, hybrid]");
@@ -190,9 +190,9 @@ public class CrawljaxRunner {
     private static void handleClickablesElementSpec(TomlTable[] clickablesElemSpec, boolean dontClick,
                                                     CrawljaxConfiguration.CrawljaxConfigurationBuilder builder) {
         for (TomlTable elem : clickablesElemSpec) {
-        	
+
             List<String> tags = getTags(elem, dontClick ? "dont_click" : "click");
-            
+
             if (elem.contains("with_text")) {
                 String withText = elem.getString("with_text");
                 if (withText != null && !withText.isEmpty()) {
@@ -286,7 +286,7 @@ public class CrawljaxRunner {
 			TomlTable[] dontclickChildrenofSpec = clickableSpec.getArray("dont_click.children_of").toList()
 					.toArray(new TomlTable[0]);
 			for (TomlTable dontClickElem : dontclickChildrenofSpec) {
-				
+
 				List<String> tags = getTags(dontClickElem, "dont_click.children_of");
 				for (String tagName : tags) {
 					if (dontClickElem.contains("with_class")) {
@@ -308,8 +308,8 @@ public class CrawljaxRunner {
 		}
         logger.info("Done processing dont_click.children_of spec");
     }
-    
-    
+
+
     private static List<String> getTags(TomlTable elem, String specName) {
     	if ( ! elem.contains("tag_name")) {
 			throw new RuntimeException(
@@ -569,7 +569,7 @@ public class CrawljaxRunner {
             builder.crawlRules().crawlFrames(true);
         }
         else {
-            builder.setStateVertexFactory(new HybridStateVertexFactory(0, builder, true));
+            builder.setStateVertexFactory(new FragGenStateVertexFactory(0, builder, true));
             builder.crawlRules().crawlFrames(false);
         }
 

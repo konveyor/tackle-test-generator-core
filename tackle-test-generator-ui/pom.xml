@@ -23,9 +23,9 @@
   </distributionManagement>
 
   <properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
-    <crawljax.version>c1a6dfc223c80e600380f04651aab3cb4c0c2b00</crawljax.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <crawljax.version>5.0</crawljax.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
   </properties>
 
@@ -44,17 +44,17 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.crawljax.crawljax</groupId>
+      <groupId>com.crawljax</groupId>
       <artifactId>crawljax-core</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.github.crawljax.crawljax</groupId>
+      <groupId>com.crawljax.plugins</groupId>
       <artifactId>crawloverview-plugin</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.github.crawljax.crawljax</groupId>
+      <groupId>com.crawljax.plugins</groupId>
       <artifactId>testcasegenerator</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
