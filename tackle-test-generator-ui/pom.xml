@@ -25,7 +25,7 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <crawljax.version>5.0</crawljax.version>
+    <crawljax.version>77e4d46320cac388346161904ff006e207ee69a7</crawljax.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
   </properties>
 
@@ -36,6 +36,16 @@
     </repository>
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.14.2</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -44,17 +54,20 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.crawljax</groupId>
+<!--      <groupId>com.crawljax</groupId>-->
+      <groupId>com.github.crawljax.crawljax</groupId>
       <artifactId>crawljax-core</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.crawljax.plugins</groupId>
+<!--      <groupId>com.crawljax.plugins</groupId>-->
+      <groupId>com.github.crawljax.crawljax</groupId>
       <artifactId>crawloverview-plugin</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.crawljax.plugins</groupId>
+<!--      <groupId>com.crawljax.plugins</groupId>-->
+      <groupId>com.github.crawljax.crawljax</groupId>
       <artifactId>testcasegenerator</artifactId>
       <version>${crawljax.version}</version>
     </dependency>
