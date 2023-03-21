@@ -26,6 +26,7 @@ public class TackleTestBrowserProvider implements Provider<EmbeddedBrowser> {
     public EmbeddedBrowser get() {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--ignore-certificate-errors");
+        chromeOptions.addArguments("--remote-allow-origins=*");
         if (browserType == EmbeddedBrowser.BrowserType.CHROME_HEADLESS) {
             chromeOptions.addArguments("--headless");
         }
