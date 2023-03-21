@@ -25,7 +25,8 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <crawljax.version>77e4d46320cac388346161904ff006e207ee69a7</crawljax.version>
+    <!-- Crawljax commit from 20230320 -->
+    <crawljax.version>4bc71e0ab5e7c194b42ee905069ac8d1bf32a350</crawljax.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
   </properties>
 
@@ -110,6 +111,28 @@
       </plugins>
     </pluginManagement>
 
+<!--    <plugins>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-assembly-plugin</artifactId>-->
+<!--        <version>2.4.1</version>-->
+<!--        <configuration>-->
+<!--          <descriptorRefs>-->
+<!--            <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--          </descriptorRefs>-->
+<!--          <outputDirectory>${project.basedir}</outputDirectory>&ndash;&gt;-->
+<!--        </configuration>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>make-assembly</id>-->
+<!--            <phase>package</phase>-->
+<!--            <goals>-->
+<!--              <goal>single</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+<!--    </plugins>-->
   </build>
 
 
