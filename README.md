@@ -1,4 +1,6 @@
 # Tackle Test Generator Core
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-test-generator-core.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-test-generator-core?ref=badge_shield)
+
 
 This repository contains the core components of the Tackle-Test tooling for performing automated test generation and differential testing on two application versions (in the context of application modernization). These components are invoked via the [Tackle-Test CLI](https://github.com/konveyor/tackle-test-generator-cli).
 
@@ -70,3 +72,7 @@ The primary components among these are:
 
 ## Code of Conduct
 Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-test-generator-core.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-test-generator-core?ref=badge_large)
