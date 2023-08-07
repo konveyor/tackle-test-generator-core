@@ -68,17 +68,17 @@ public class TestSequenceInitializer {
 	private final String applicationName;
 
 	private final int timeLimit;
-	
+
 	private final boolean targetSpecificMethods;
-	
+
 	private final boolean addBaseAssertions;
-	
+
 	public static final int DEFAULT_TIME_LIMIT = -1;
 
 	private static final Logger logger = TackleTestLogger.getLogger(AbstractJUnitTestImporter.class);
 
 	private volatile Map<String, String> threadsErrorMessages = new HashMap<>();
-	
+
 	private static ObjectMapper mapper = TackleTestJson.getObjectMapper();
 
 	public TestSequenceInitializer(String appName, String ctdModelsFileName, String appPath, String appClasspathFileName, String testGenName, int timeLimit,
@@ -91,12 +91,12 @@ public class TestSequenceInitializer {
 		this.timeLimit = timeLimit;
 		targetSpecificMethods = targetMethods;
 		addBaseAssertions = baseAssertions;
-		
+
 		String jdkPath = jdk;
-		
+
 		if (jdkPath.isEmpty()) {
 			jdkPath = System.getProperty("java.home");
-		} 
+		}
 
 		File file = new File(ctdModelsFileName);
 		if (!file.isFile()) {
@@ -138,13 +138,13 @@ public class TestSequenceInitializer {
 		ObjectNode modelsNode = (ObjectNode) mainNode.get("models_and_test_plans");
 
         Set<String> reachedClasses = new HashSet<String>();
-        
+
         modelsNode.elements().forEachRemaining(classesNode -> {
-        	
+
         	classesNode.fieldNames().forEachRemaining(receiverClassName -> {
-        		
+
         		ObjectNode classNode = (ObjectNode) classesNode.get(receiverClassName);
-        		
+
         		// Note: we are targeting not only the target method but also its receiver class, because the extender will reuse the receiver object generation
     			// to invoke the target method with different parameter combinations
     			Class<?> receiverClass;
@@ -156,7 +156,7 @@ public class TestSequenceInitializer {
     				return;
     			}
     			Constructor<?>[] receiverConstructors = null;
-    			
+
     			if ( ! targetSpecificMethods) {
     				for (AbstractTestGenerator testGenerator : testGenerators) {
     					testGenerator.addCoverageTarget(receiverClassName);
@@ -176,23 +176,23 @@ public class TestSequenceInitializer {
 						return;
 					}
 				}
-    			
+
     			classNode.fieldNames().forEachRemaining(methodSig -> {
     				ObjectNode methodNode = (ObjectNode) classNode.get(methodSig);
-    				
+
         			if (targetSpecificMethods) {
         				for (AbstractTestGenerator testGenerator : testGenerators) {
         					testGenerator.addCoverageTarget(receiverClassName, methodSig);
         				}
         			}
         			addParameterTargets(methodNode, reachedClasses);
-    				
+
     			});
-    			
+
         	});
-        	
+
         });
-        
+
         for (AbstractTestGenerator testGenerator : testGenerators) {
         	testGenerator.setProjectClasspath(Utils.entriesToClasspath(appClasspath));
         }
@@ -232,7 +232,10 @@ public class TestSequenceInitializer {
                     if (splitStrInd!=-1) {
                         threadName = threadName.substring(0,splitStrInd);
                     }
-                    threadsErrorMessages.put(threadName, ex.getMessage());
+                    // ignore message if no tests generated; this can occur sometimes for Randoop
+                    if (!ex.getMessage().contains("Test generator failed to generate any tests")) {
+                        threadsErrorMessages.put(threadName, ex.getMessage());
+                    }
                 }
             };
 			TestGeneratorInvoker thread = new TestGeneratorInvoker(testGenerator);
@@ -403,7 +406,7 @@ public class TestSequenceInitializer {
 			object.set("test_sequences", sequencesObject);
 
 			object.put("test_generation_tool", testGenerator.getName());
-			
+
 			mapper.writeValue(new File(applicationName+"_"+testGenerator.getName()+"_"+
 					Constants.INITIALIZER_OUTPUT_FILE_NAME_SUFFIX), object);
 
@@ -473,7 +476,7 @@ public class TestSequenceInitializer {
                 .type(Integer.class)
                 .build()
         );
-        
+
      // option for targeting specific methods
         options.addOption(Option.builder("tm")
                 .longOpt("target-methods")
@@ -481,8 +484,8 @@ public class TestSequenceInitializer {
                 .type(Boolean.class)
                 .build()
         );
-        
-        
+
+
      // option for adding assertions to base tests
         options.addOption(Option.builder("ba")
                 .longOpt("base-tests-assertions")
@@ -490,7 +493,7 @@ public class TestSequenceInitializer {
                 .type(Boolean.class)
                 .build()
         );
-        
+
      // option for JDK path
         options.addOption(Option.builder("jdk")
                 .longOpt("jdk-path")
@@ -563,21 +566,21 @@ public class TestSequenceInitializer {
         if (cmd.hasOption("tl")) {
         	timeLimit = Integer.valueOf(cmd.getOptionValue("tl"));
         }
-        
+
         boolean targetMethods = false;
-        
+
         if (cmd.hasOption("tm")) {
         	targetMethods = true;
         }
-        
+
         boolean baseAssertions = false;
-        
+
         if (cmd.hasOption("ba")) {
         	baseAssertions = true;
         }
-        
+
         String jdkPath = "";
-        
+
         if (cmd.hasOption("jdk")) {
         	jdkPath = cmd.getOptionValue("jdk");
         }
@@ -595,7 +598,7 @@ public class TestSequenceInitializer {
         	logger.info("Adding assertions to base tests");
         }
 
-		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator, 
+		new TestSequenceInitializer(appName, testPlanFilename, appPath, classpathFilename, testGenerator,
 				timeLimit, targetMethods, baseAssertions, jdkPath).
 		createInitialTests();
 	}
