@@ -17,7 +17,7 @@ public class DriverProvider {
     }
 
     private DriverProvider() {
-        WebDriverManager.chromedriver().setup();
+//        WebDriverManager.chromedriver().setup();
         System.setProperty("webdriver.chrome.silentOutput", "true");
         Logger.getLogger("org.openqa.selenium.remote").setLevel(Level.OFF);
     }
